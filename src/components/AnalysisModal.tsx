@@ -1,6 +1,44 @@
 // src/components/AnalysisModal.tsx
 import { useState, useEffect } from 'react';
-import { analyzeStock } from '../lib/api';
+import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
+
+// ── Watchlist Button ──────────────────────────────────────────────────────
+function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
+  const [inWatchlist, setInWatchlist] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getWatchlist().then(res => {
+      const tickers = res.data.watchlist.map((w: any) => w.ticker);
+      setInWatchlist(tickers.includes(ticker));
+    }).catch(() => {});
+  }, [ticker]);
+
+  const toggle = async () => {
+    setLoading(true);
+    try {
+      if (inWatchlist) {
+        await removeFromWatchlist(ticker);
+        setInWatchlist(false);
+      } else {
+        await addToWatchlist(ticker, companyName);
+        setInWatchlist(true);
+      }
+    } catch (e) { console.error(e); }
+    setLoading(false);
+  };
+
+  return (
+    <button onClick={toggle} disabled={loading}
+      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition ${
+        inWatchlist
+          ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50'
+          : 'bg-slate-700 text-slate-400 border border-slate-600 hover:border-yellow-500 hover:text-yellow-400'
+      }`}>
+      {loading ? '⏳' : inWatchlist ? '★ Watching' : '☆ Watchlist'}
+    </button>
+  );
+}
 
 export default function AnalysisModal({ stock, onClose }: { stock: any; onClose: () => void }) {
   const [result, setResult] = useState<any>(null);
@@ -31,14 +69,31 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
         className="bg-slate-900 border border-slate-700 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 bg-slate-900">
-          <div>
-            <h2 className="font-bold text-xl text-white">{stock.display_ticker}</h2>
-            <p className="text-slate-400 text-sm">{stock.company_name}</p>
-          </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white text-2xl">✕</button>
-        </div>
+{/* Header */}
+<div className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 bg-slate-900">
+  <div>
+    <h2 className="font-bold text-xl text-white">{stock.display_ticker}</h2>
+    <p className="text-slate-400 text-sm">{stock.company_name}</p>
+  </div>
+  <button onClick={onClose} className="text-slate-400 hover:text-white text-2xl">✕</button>
+</div>
+
+{/* Live Price Bar */}
+<div className="px-4 py-3 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
+  <div className="flex items-center gap-3">
+    <span className="text-2xl font-black text-white">
+      ₹{stock.current_price?.toLocaleString('en-IN')}
+    </span>
+    <span className={`text-sm font-semibold px-2 py-0.5 rounded-full ${
+      stock.price_change >= 0
+        ? 'bg-green-500/20 text-green-400'
+        : 'bg-red-500/20 text-red-400'
+    }`}>
+      {stock.price_change >= 0 ? '▲' : '▼'} {Math.abs(stock.price_change_pct)}%
+    </span>
+  </div>
+  <WatchlistButton ticker={stock.display_ticker} companyName={stock.company_name} />
+</div>
 
         <div className="p-4">
           {/* Loading */}
