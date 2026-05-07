@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getTopStocks, getWatchlist, searchStocks, getStock } from '../lib/api';
 import StockCard from './StockCard';
 import AnalysisModal from './AnalysisModal';
+import LatestSignals from './LatestSignals';
 
 export default function Dashboard() {
   const [stocks, setStocks] = useState<any[]>([]);
@@ -87,7 +88,9 @@ export default function Dashboard() {
           </button>
         ))}
       </div>
-
+     
+{/* Latest AI Signals Banner */}
+<LatestSignals />
       {/* Stocks grid */}
       <div className="p-4 max-w-4xl mx-auto">
         {loading ? (
