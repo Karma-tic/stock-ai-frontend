@@ -1,0 +1,193 @@
+// src/components/AnalysisModal.tsx
+import { useState, useEffect } from 'react';
+import { analyzeStock } from '../lib/api';
+
+export default function AnalysisModal({ stock, onClose }: { stock: any; onClose: () => void }) {
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await analyzeStock(stock.display_ticker);
+        setResult(res.data);
+      } catch (e: any) {
+        setError(e?.response?.data?.detail || 'Analysis failed');
+      }
+      setLoading(false);
+    };
+    run();
+  }, [stock]);
+
+  const signal = result?.signal?.signal;
+const colorMap: Record<string, string> = { BUY: 'text-green-400', HOLD: 'text-yellow-400', SELL: 'text-red-400' };
+const bgMap: Record<string, string> = { BUY: 'bg-green-500/20 border-green-500', HOLD: 'bg-yellow-500/20 border-yellow-500', SELL: 'bg-red-500/20 border-red-500' };
+const signalColor = colorMap[signal] || 'text-white';
+const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
+  return (
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+      <div
+        className="bg-slate-900 border border-slate-700 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 bg-slate-900">
+          <div>
+            <h2 className="font-bold text-xl text-white">{stock.display_ticker}</h2>
+            <p className="text-slate-400 text-sm">{stock.company_name}</p>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-white text-2xl">✕</button>
+        </div>
+
+        <div className="p-4">
+          {/* Loading */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="text-4xl mb-4 animate-pulse">🤖</div>
+              <p className="text-slate-400">AI is analyzing {stock.display_ticker}...</p>
+              <p className="text-slate-500 text-sm mt-2">Scraping news + running analysis</p>
+            </div>
+          )}
+
+          {/* Error */}
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 rounded-xl p-4 text-red-400">
+              ❌ {error}
+            </div>
+          )}
+
+          {/* Results */}
+          {result && !loading && (
+            <div className="space-y-4">
+              {/* Signal */}
+              <div className={`border rounded-xl p-4 text-center ${signalBg}`}>
+                <p className={`text-4xl font-black ${signalColor}`}>{signal}</p>
+                <p className="text-slate-400 text-sm mt-1">Confidence: {result.signal?.confidence}%</p>
+                <p className="text-slate-300 text-sm mt-2">{result.signal?.analysis?.short_summary}</p>
+              </div>
+
+              {/* Price targets */}
+              <div className="bg-slate-800 rounded-xl p-4">
+                <h3 className="font-semibold text-white mb-3">📊 Price Targets</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-blue-400' },
+                    { label: 'Target 1', value: `₹${result.signal?.entry_strategy?.target_price_1}`, color: 'text-green-400' },
+                    { label: 'Target 2', value: `₹${result.signal?.entry_strategy?.target_price_2}`, color: 'text-green-300' },
+                    { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-400' },
+                  ].map(item => (
+                    <div key={item.label} className="bg-slate-900 rounded-lg p-3">
+                      <p className="text-slate-500 text-xs">{item.label}</p>
+                      <p className={`font-bold ${item.color}`}>{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <div className="bg-slate-900 rounded-lg p-3">
+                    <p className="text-slate-500 text-xs">Upside</p>
+                    <p className="font-bold text-green-400">+{result.signal?.entry_strategy?.upside_pct}%</p>
+                  </div>
+                  <div className="bg-slate-900 rounded-lg p-3">
+                    <p className="text-slate-500 text-xs">Downside Risk</p>
+                    <p className="font-bold text-red-400">-{result.signal?.entry_strategy?.downside_risk_pct}%</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quantity guide */}
+              <div className="bg-slate-800 rounded-xl p-4">
+                <h3 className="font-semibold text-white mb-3">🛒 How Many Shares to Buy</h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: '₹10,000', value: result.signal?.quantity_guide?.for_10000_inr },
+                    { label: '₹25,000', value: result.signal?.quantity_guide?.for_25000_inr },
+                    { label: '₹50,000', value: result.signal?.quantity_guide?.for_50000_inr },
+                  ].map(item => (
+                    <div key={item.label} className="bg-slate-900 rounded-lg p-3 text-center">
+                      <p className="text-slate-500 text-xs">{item.label}</p>
+                      <p className="font-bold text-white text-lg">{item.value}</p>
+                      <p className="text-slate-500 text-xs">shares</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                  <p className="text-blue-400 text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
+                  <p className="text-slate-400 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
+                </div>
+              </div>
+
+              {/* Ratings */}
+              <div className="bg-slate-800 rounded-xl p-4">
+                <h3 className="font-semibold text-white mb-3">⭐ Ratings</h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: 'Dividend', value: result.signal?.ratings?.dividend_potential },
+                    { label: 'Growth', value: result.signal?.ratings?.growth_potential },
+                    { label: 'Risk', value: result.signal?.ratings?.risk_level },
+                  ].map(item => {
+                    const ratingMap: Record<string, string> = { HIGH: item.label === 'Risk' ? 'text-red-400' : 'text-green-400', MEDIUM: 'text-yellow-400', LOW: item.label === 'Risk' ? 'text-green-400' : 'text-red-400' };
+const color = ratingMap[item.value] || 'text-white';
+                    return (
+                      <div key={item.label} className="bg-slate-900 rounded-lg p-3 text-center">
+                        <p className="text-slate-500 text-xs">{item.label}</p>
+                        <p className={`font-bold text-sm ${color}`}>{item.value}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  <div className="bg-slate-900 rounded-lg p-2 text-center">
+                    <p className="text-slate-500 text-xs">Sentiment</p>
+                    <p className="text-sm font-bold text-white">{result.signal?.ratings?.news_sentiment}</p>
+                  </div>
+                  <div className="bg-slate-900 rounded-lg p-2 text-center">
+                    <p className="text-slate-500 text-xs">Value</p>
+                    <p className="text-sm font-bold text-yellow-400">{result.signal?.ratings?.value_score}/10</p>
+                  </div>
+                  <div className="bg-slate-900 rounded-lg p-2 text-center">
+                    <p className="text-slate-500 text-xs">Momentum</p>
+                    <p className="text-sm font-bold text-blue-400">{result.signal?.ratings?.momentum_score}/10</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bull/Bear */}
+              <div className="grid grid-cols-1 gap-3">
+                <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                  <p className="text-green-400 font-semibold text-sm mb-1">🟢 Bull Case</p>
+                  <p className="text-slate-300 text-sm">{result.signal?.analysis?.bull_case}</p>
+                </div>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+                  <p className="text-red-400 font-semibold text-sm mb-1">🔴 Bear Case</p>
+                  <p className="text-slate-300 text-sm">{result.signal?.analysis?.bear_case}</p>
+                </div>
+              </div>
+
+              {/* News */}
+              {result.news?.news?.length > 0 && (
+                <div className="bg-slate-800 rounded-xl p-4">
+                  <h3 className="font-semibold text-white mb-3">📰 Latest News</h3>
+                  <div className="space-y-2">
+                    {result.news.news.slice(0, 5).map((item: any, i: number) => (
+                      <a key={i} href={item.link} target="_blank" rel="noreferrer"
+                        className="block bg-slate-900 rounded-lg p-3 hover:bg-slate-700 transition">
+                        <p className="text-slate-300 text-xs">{item.title}</p>
+                        <p className="text-slate-500 text-xs mt-1">{item.source}</p>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Disclaimer */}
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
+                <p className="text-yellow-400 text-xs">⚠️ {result.signal?.disclaimer}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
