@@ -25,13 +25,17 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  const loadWatchlist = async () => {
-    try {
-      const res = await getWatchlist();
-      setWatchlistStocks(res.data.watchlist);
-      setWatchlist(res.data.watchlist.map((w: any) => w.ticker));
-    } catch (e) { console.error(e); }
-  };
+const loadWatchlist = async () => {
+  try {
+    const res = await getWatchlist();
+    setWatchlistStocks(res.data.watchlist);
+    setWatchlist(
+      res.data.watchlist.map((w: any) =>
+        (w.ticker || '').toUpperCase().replace('.NS','').replace('.BO','')
+      )
+    );
+  } catch (e) { console.error(e); }
+};
 
   const handleSearch = async (q: string) => {
     setSearch(q);
@@ -106,14 +110,19 @@ export default function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayStocks.map((stock: any) => (
-              <StockCard
-                key={stock.display_ticker}
-                stock={stock}
-                onAnalyze={setSelected}
-                inWatchlist={watchlist.includes(stock.display_ticker || stock.ticker)}
-                onWatchlistChange={loadWatchlist}
-              />
-            ))}
+  <StockCard
+    key={stock.display_ticker || stock.ticker}
+    stock={stock}
+    onAnalyze={setSelected}
+    inWatchlist={watchlist.includes(
+      (stock.display_ticker || stock.ticker || '')
+        .toUpperCase()
+        .replace('.NS','')
+        .replace('.BO','')
+    )}
+    onWatchlistChange={loadWatchlist}
+  />
+))}
           </div>
         )}
       </div>

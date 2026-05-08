@@ -11,78 +11,106 @@ interface Props {
 
 export default function StockCard({ stock, onAnalyze, inWatchlist, onWatchlistChange }: Props) {
   const [loading, setLoading] = useState(false);
-  const isUp = stock.price_change >= 0;
+  const [localWatchlist, setLocalWatchlist] = useState(inWatchlist || false);
+  const isUp = (stock.price_change || 0) >= 0;
 
-  const toggleWatchlist = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const getTicker = () => {
+    return (stock.display_ticker || stock.ticker || '')
+      .toUpperCase()
+      .replace('.NS', '')
+      .replace('.BO', '')
+      .trim();
+  };
+
+  const handleWatchlist = async () => {
+    if (loading) return;
+    const ticker = getTicker();
+    console.log('Watchlist clicked:', ticker, '| currently in watchlist:', localWatchlist);
     setLoading(true);
+
     try {
-      if (inWatchlist) {
-        const cleanTicker = (stock.display_ticker || stock.ticker || '')
-  .replace('.NS','').replace('.BO','');
-await removeFromWatchlist(cleanTicker);
+      if (localWatchlist) {
+        console.log('Removing:', ticker);
+        const res = await removeFromWatchlist(ticker);
+        console.log('Remove response:', res.data);
+        setLocalWatchlist(false);
       } else {
-        await addToWatchlist(stock.display_ticker, stock.company_name);
+        console.log('Adding:', ticker);
+        const res = await addToWatchlist(ticker, stock.company_name || ticker);
+        console.log('Add response:', res.data);
+        setLocalWatchlist(true);
       }
       onWatchlistChange?.();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error('Watchlist error:', err?.response?.data || err.message);
     }
     setLoading(false);
   };
 
   return (
-    <div
-      onClick={() => onAnalyze(stock)}
-      className="bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-blue-500 rounded-xl p-4 cursor-pointer transition-all hover:shadow-lg hover:shadow-blue-500/10 active:scale-95"
-    >
+    <div className="bg-slate-800 border border-slate-700 hover:border-blue-500 rounded-xl p-4 transition-all">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
-        <div>
+        <div
+          className="flex-1 cursor-pointer"
+          onClick={() => onAnalyze(stock)}
+        >
           <div className="flex items-center gap-2">
             <span className="font-bold text-white text-lg">{stock.display_ticker}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-              {isUp ? '▲' : '▼'} {Math.abs(stock.price_change_pct)}%
+              {isUp ? '▲' : '▼'} {Math.abs(stock.price_change_pct || 0)}%
             </span>
           </div>
           <p className="text-slate-400 text-xs mt-0.5 truncate max-w-[150px]">{stock.company_name}</p>
         </div>
+
+        {/* Star button — completely isolated from card click */}
         <button
-          onClick={toggleWatchlist}
+          type="button"
           disabled={loading}
-          className={`text-xl transition ${inWatchlist ? 'text-yellow-400' : 'text-slate-600 hover:text-yellow-400'}`}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleWatchlist();
+          }}
+          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-700 transition"
         >
-          {loading ? '⏳' : inWatchlist ? '★' : '☆'}
+          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-slate-500 hover:text-yellow-400'}`}>
+            {loading ? '⏳' : localWatchlist ? '★' : '☆'}
+          </span>
         </button>
       </div>
 
-      {/* Price */}
-      <div className="mb-3">
-        <span className="text-2xl font-bold text-white">₹{stock.current_price?.toLocaleString('en-IN')}</span>
+      {/* Price — clickable */}
+      <div className="mb-3 cursor-pointer" onClick={() => onAnalyze(stock)}>
+        <span className="text-2xl font-bold text-white">
+          ₹{(stock.current_price || 0).toLocaleString('en-IN')}
+        </span>
         <span className={`ml-2 text-sm ${isUp ? 'text-green-400' : 'text-red-400'}`}>
-          {isUp ? '+' : ''}{stock.price_change}
+          {isUp ? '+' : ''}{stock.price_change || 0}
         </span>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="bg-slate-900 rounded-lg p-2">
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-2 text-center" onClick={() => onAnalyze(stock)}>
+        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
           <p className="text-slate-500 text-xs">PE</p>
           <p className="text-white text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
         </div>
-        <div className="bg-slate-900 rounded-lg p-2">
+        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
           <p className="text-slate-500 text-xs">Div%</p>
-          <p className="text-green-400 text-sm font-semibold">{stock.dividend_yield_pct}%</p>
+          <p className="text-green-400 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
         </div>
-        <div className="bg-slate-900 rounded-lg p-2">
+        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
           <p className="text-slate-500 text-xs">52W%</p>
-          <p className="text-blue-400 text-sm font-semibold">{stock.position_in_52w}%</p>
+          <p className="text-blue-400 text-sm font-semibold">{stock.position_in_52w || 0}%</p>
         </div>
       </div>
 
       {/* Analyze button */}
       <button
-        onClick={(e) => { e.stopPropagation(); onAnalyze(stock); }}
+        type="button"
+        onClick={() => onAnalyze(stock)}
         className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-white text-sm py-2 rounded-lg font-semibold transition"
       >
         🤖 AI Analysis

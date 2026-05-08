@@ -7,26 +7,33 @@ function WatchlistButton({ ticker, companyName }: { ticker: string; companyName:
   const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Clean ticker once at component level
+  const clean = ticker.toUpperCase().replace('.NS', '').replace('.BO', '').trim();
+
   useEffect(() => {
     getWatchlist().then(res => {
-      const tickers = res.data.watchlist.map((w: any) => w.ticker);
-      setInWatchlist(tickers.includes(ticker));
+      const tickers = res.data.watchlist.map((w: any) =>
+        (w.ticker || '').toUpperCase().replace('.NS', '').replace('.BO', '')
+      );
+      console.log('Watchlist tickers:', tickers, '| checking:', clean);
+      setInWatchlist(tickers.includes(clean));
     }).catch(() => {});
-  }, [ticker]);
+  }, [clean]);
 
   const toggle = async () => {
     setLoading(true);
     try {
+      console.log('WatchlistButton toggle:', clean, '| inWatchlist:', inWatchlist);
       if (inWatchlist) {
-        const clean = ticker.replace('.NS','').replace('.BO','');
-await removeFromWatchlist(clean);
+        await removeFromWatchlist(clean);
         setInWatchlist(false);
       } else {
-        const clean = ticker.replace('.NS','').replace('.BO','');
-await addToWatchlist(clean, companyName);
+        await addToWatchlist(clean, companyName);
         setInWatchlist(true);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error('WatchlistButton error:', e);
+    }
     setLoading(false);
   };
 
