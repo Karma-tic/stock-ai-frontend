@@ -18,7 +18,9 @@ export default function StockCard({ stock, onAnalyze, inWatchlist, onWatchlistCh
     setLoading(true);
     try {
       if (inWatchlist) {
-        await removeFromWatchlist(stock.display_ticker);
+        const cleanTicker = (stock.display_ticker || stock.ticker || '')
+  .replace('.NS','').replace('.BO','');
+await removeFromWatchlist(cleanTicker);
       } else {
         await addToWatchlist(stock.display_ticker, stock.company_name);
       }

@@ -18,10 +18,12 @@ function WatchlistButton({ ticker, companyName }: { ticker: string; companyName:
     setLoading(true);
     try {
       if (inWatchlist) {
-        await removeFromWatchlist(ticker);
+        const clean = ticker.replace('.NS','').replace('.BO','');
+await removeFromWatchlist(clean);
         setInWatchlist(false);
       } else {
-        await addToWatchlist(ticker, companyName);
+        const clean = ticker.replace('.NS','').replace('.BO','');
+await addToWatchlist(clean, companyName);
         setInWatchlist(true);
       }
     } catch (e) { console.error(e); }
