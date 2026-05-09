@@ -6,8 +6,13 @@ import AnalysisModal from './AnalysisModal';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
+import { usePlan } from '../lib/usePlan';
+import UpgradeModal from './UpgradeModal';
 
 export default function Dashboard() {
+  const { isPro } = usePlan();
+const [showUpgrade, setShowUpgrade] = useState(false);
+const [analysisCount, setAnalysisCount] = useState(0);
   const [stocks, setStocks] = useState<any[]>([]);
   const [watchlist, setWatchlist] = useState<string[]>([]);
   const [selected, setSelected] = useState<any>(null);
@@ -39,14 +44,16 @@ const loadWatchlist = async () => {
   } catch (e) { console.error(e); }
 };
 
-  const handleSearch = async (q: string) => {
-    setSearch(q);
-    if (q.length < 2) { setSearchResults([]); return; }
-    try {
-      const res = await searchStocks(q);
-      setSearchResults(res.data.results);
-    } catch (e) { setSearchResults([]); }
-  };
+const handleSearch = async (q: string) => {
+  setSearch(q);
+  if (q.length < 2) { setSearchResults([]); return; }
+  try {
+    const res = await searchStocks(q);
+    // Free users see only 1 result
+    const results = isPro ? res.data.results : res.data.results.slice(0, 1);
+    setSearchResults(results);
+  } catch (e) { setSearchResults([]); }
+};
 
   const handleSearchSelect = async (symbol: string) => {
     setSearch('');
@@ -56,6 +63,17 @@ const loadWatchlist = async () => {
       setSelected(res.data);
     } catch (e) { console.error(e); }
   };
+
+  const handleAnalyze = (stock: any) => {
+  // Free users: max 2 analyses/day
+  if (!isPro && analysisCount >= 2) {
+    setShowUpgrade(true);
+    return;
+  }
+
+  setAnalysisCount(prev => prev + 1);
+  setSelected(stock);
+};
 
   const displayStocks = tab === 'market' ? stocks : watchlistStocks;
 
@@ -116,18 +134,20 @@ const loadWatchlist = async () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 {displayStocks.map((stock: any, index: number) => (
   <>
-    <StockCard
-      key={stock.display_ticker || stock.ticker}
-      stock={stock}
-      onAnalyze={setSelected}
-      inWatchlist={watchlist.includes(
-        (stock.display_ticker || stock.ticker || '')
-          .toUpperCase()
-          .replace('.NS', '')
-          .replace('.BO', '')
-      )}
-      onWatchlistChange={loadWatchlist}
-    />
+<StockCard
+  key={stock.display_ticker || stock.ticker}
+  stock={stock}
+  onAnalyze={handleAnalyze}
+  inWatchlist={watchlist.includes(
+    (stock.display_ticker || stock.ticker || '')
+      .toUpperCase()
+      .replace('.NS', '')
+      .replace('.BO', '')
+  )}
+  onWatchlistChange={loadWatchlist}
+  onUpgradeNeeded={() => setShowUpgrade(true)}
+  canAddToWatchlist={isPro || watchlist.length < 3}
+/>
 
     {index === 5 && (
       <div className="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -140,8 +160,22 @@ const loadWatchlist = async () => {
   )}
 </div>
 
-      {/* Analysis Modal */}
-      {selected && <AnalysisModal stock={selected} onClose={() => setSelected(null)} />}
-    </div>
-  );
+{/* Analysis Modal */}
+{selected && (
+  <AnalysisModal
+    stock={selected}
+    onClose={() => setSelected(null)}
+  />
+)}
+
+{/* Upgrade Modal */}
+{showUpgrade && (
+  <UpgradeModal
+    onClose={() => setShowUpgrade(false)}
+    onSuccess={() => window.location.reload()}
+  />
+)}
+
+</div>
+);
 }

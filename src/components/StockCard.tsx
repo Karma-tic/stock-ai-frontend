@@ -8,9 +8,18 @@ interface Props {
   onAnalyze: (stock: any) => void;
   inWatchlist?: boolean;
   onWatchlistChange?: () => void;
+  onUpgradeNeeded?: () => void;
+  canAddToWatchlist?: boolean;
 }
 
-export default function StockCard({ stock, onAnalyze, inWatchlist, onWatchlistChange }: Props) {
+export default function StockCard({
+  stock,
+  onAnalyze,
+  inWatchlist,
+  onWatchlistChange,
+  onUpgradeNeeded,
+  canAddToWatchlist
+}: Props) {
   const [loading, setLoading] = useState(false);
   const [localWatchlist, setLocalWatchlist] = useState(inWatchlist || false);
   const isUp = (stock.price_change || 0) >= 0;
@@ -23,9 +32,15 @@ export default function StockCard({ stock, onAnalyze, inWatchlist, onWatchlistCh
       .trim();
   };
 
-  const handleWatchlist = async () => {
-    if (loading) return;
-    const ticker = getTicker();
+const handleWatchlist = async () => {
+  if (loading) return;
+  const ticker = getTicker();
+
+  // If trying to add and limit reached
+  if (!localWatchlist && !canAddToWatchlist) {
+    onUpgradeNeeded?.();
+    return;
+  }
     console.log('Watchlist clicked:', ticker, '| currently in watchlist:', localWatchlist);
     setLoading(true);
 
@@ -113,6 +128,7 @@ ReactGA.event({
           <p className="text-slate-500 text-xs">52W%</p>
           <p className="text-blue-400 text-sm font-semibold">{stock.position_in_52w || 0}%</p>
         </div>
+        
       </div>
 
       {/* Analyze button */}
@@ -123,6 +139,7 @@ ReactGA.event({
       >
         🤖 AI Analysis
       </button>
+      
     </div>
   );
 }
