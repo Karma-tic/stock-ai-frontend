@@ -12,7 +12,7 @@ import UpgradeModal from './UpgradeModal';
 export default function Dashboard() {
   const { isPro } = usePlan();
 const [showUpgrade, setShowUpgrade] = useState(false);
-const [analysisCount, setAnalysisCount] = useState(0);
+//const [analysisCount, setAnalysisCount] = useState(0);
   const [stocks, setStocks] = useState<any[]>([]);
   const [watchlist, setWatchlist] = useState<string[]>([]);
   const [selected, setSelected] = useState<any>(null);
@@ -49,10 +49,10 @@ const handleSearch = async (q: string) => {
   if (q.length < 2) { setSearchResults([]); return; }
   try {
     const res = await searchStocks(q);
-    // Free users see only 1 result
-    const results = isPro ? res.data.results : res.data.results.slice(0, 1);
-    setSearchResults(results);
-  } catch (e) { setSearchResults([]); }
+    setSearchResults(res.data.results); // backend already limits
+  } catch (e) {
+    setSearchResults([]);
+  }
 };
 
   const handleSearchSelect = async (symbol: string) => {
@@ -64,14 +64,7 @@ const handleSearch = async (q: string) => {
     } catch (e) { console.error(e); }
   };
 
-  const handleAnalyze = (stock: any) => {
-  // Free users: max 2 analyses/day
-  if (!isPro && analysisCount >= 2) {
-    setShowUpgrade(true);
-    return;
-  }
-
-  setAnalysisCount(prev => prev + 1);
+const handleAnalyze = (stock: any) => {
   setSelected(stock);
 };
 

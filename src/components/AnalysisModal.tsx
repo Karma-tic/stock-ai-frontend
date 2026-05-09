@@ -2,11 +2,14 @@
 import { useState, useEffect } from 'react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
 import ReactGA from 'react-ga4';
+import UpgradeModal from './UpgradeModal';
 
 // ── Watchlist Button ──────────────────────────────────────────────────────
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
-  const [inWatchlist, setInWatchlist] = useState(false);
+const [result, setResult] = useState<any>(null);
+ const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
 
   // Clean ticker once at component level
   const clean = ticker.toUpperCase().replace('.NS', '').replace('.BO', '').trim();
@@ -54,26 +57,42 @@ export default function AnalysisModal({ stock, onClose }: { stock: any; onClose:
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const res = await analyzeStock(stock.display_ticker);
-setResult(res.data);
+useEffect(() => {
+  const run = async () => {
+    try {
+      const res = await analyzeStock(stock.display_ticker);
+      setResult(res.data);
 
-// Track stock analysis event
-ReactGA.event({
-  category: "Analysis",
-  action: "stock_analyzed",
-  label: stock.display_ticker
-});
-      } catch (e: any) {
+      // Track stock analysis event
+      ReactGA.event({
+        category: "Analysis",
+        action: "stock_analyzed",
+        label: stock.display_ticker
+      });
+
+    } catch (e: any) {
+      const detail = e?.response?.data?.detail;
+
+      if (detail === 'DAILY_LIMIT_REACHED') {
+        setError('🔒 You have used your 2 free analyses today. Upgrade to Pro for unlimited analysis.');
+        setShowUpgrade(true);
+
+      } else if (detail === 'FREE_LIMIT_REACHED') {
+        setError('🔒 Free plan limit reached. Upgrade to Pro.');
+        setShowUpgrade(true);
+
+      } else {
         setError(e?.response?.data?.detail || 'Analysis failed');
       }
-      setLoading(false);
-    };
-    run();
-  }, [stock]);
+    }
+
+    setLoading(false);
+  };
+
+  run();
+}, [stock]);
 
   const signal = result?.signal?.signal;
 const colorMap: Record<string, string> = { BUY: 'text-green-400', HOLD: 'text-yellow-400', SELL: 'text-red-400' };
@@ -258,8 +277,18 @@ const color = ratingMap[item.value] || 'text-white';
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </div>
-  );
+{showUpgrade && (
+  <UpgradeModal
+    onClose={() => {
+      setShowUpgrade(false);
+      onClose();
+    }}
+    onSuccess={() => window.location.reload()}
+  />
+)}
+
+</div>
+</div>
+</div>
+);
 }
