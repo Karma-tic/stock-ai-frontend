@@ -4,6 +4,7 @@ import { getTopStocks, getWatchlist, searchStocks, getStock } from '../lib/api';
 import StockCard from './StockCard';
 import AnalysisModal from './AnalysisModal';
 import LatestSignals from './LatestSignals';
+import Portfolio from './Portfolio';
 
 export default function Dashboard() {
   const [stocks, setStocks] = useState<any[]>([]);
@@ -12,7 +13,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [tab, setTab] = useState<'market' | 'watchlist'>('market');
+  const [tab, setTab] = useState<'market' | 'watchlist' | 'portfolio'>('market');
   const [watchlistStocks, setWatchlistStocks] = useState<any[]>([]);
 
   useEffect(() => { loadTopStocks(); loadWatchlist(); }, []);
@@ -84,48 +85,49 @@ const loadWatchlist = async () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 bg-slate-900">
-        {(['market', 'watchlist'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)}
-            className={`flex-1 py-3 text-sm font-semibold capitalize transition ${tab === t ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'}`}>
-            {t === 'market' ? '📊 Market' : `⭐ Watchlist (${watchlist.length})`}
-          </button>
-        ))}
-      </div>
+
+<div className="flex border-b border-slate-800 bg-slate-900">
+  {(['market', 'watchlist', 'portfolio'] as const).map(t => (
+    <button key={t} onClick={() => setTab(t)}
+      className={`flex-1 py-3 text-sm font-semibold capitalize transition ${tab === t ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'}`}>
+      {t === 'market' ? '📊 Market' : t === 'watchlist' ? `⭐ Watchlist (${watchlist.length})` : '💼 Portfolio'}
+    </button>
+  ))}
+</div>
      
 {/* Latest AI Signals Banner */}
 <LatestSignals />
-      {/* Stocks grid */}
-      <div className="p-4 max-w-4xl mx-auto">
-        {loading ? (
-          <div className="text-center py-20">
-            <div className="text-4xl mb-4 animate-pulse">📊</div>
-            <p className="text-slate-400">Loading live market data...</p>
-          </div>
-        ) : displayStocks.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-4xl mb-4">☆</div>
-            <p className="text-slate-400">{tab === 'watchlist' ? 'No stocks in watchlist yet. Add some from Market tab!' : 'No stocks found.'}</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {displayStocks.map((stock: any) => (
-  <StockCard
-    key={stock.display_ticker || stock.ticker}
-    stock={stock}
-    onAnalyze={setSelected}
-    inWatchlist={watchlist.includes(
-      (stock.display_ticker || stock.ticker || '')
-        .toUpperCase()
-        .replace('.NS','')
-        .replace('.BO','')
-    )}
-    onWatchlistChange={loadWatchlist}
-  />
-))}
-          </div>
-        )}
-      </div>
+{/* Stocks grid or Portfolio */}
+<div className="p-4 max-w-4xl mx-auto">
+  {tab === 'portfolio' ? (
+    <Portfolio />
+  ) : loading ? (
+    <div className="text-center py-20">
+      <div className="text-4xl mb-4 animate-pulse">📊</div>
+      <p className="text-slate-400">Loading live market data...</p>
+    </div>
+  ) : displayStocks.length === 0 ? (
+    <div className="text-center py-20">
+      <div className="text-4xl mb-4">☆</div>
+      <p className="text-slate-400">{tab === 'watchlist' ? 'No stocks in watchlist yet.' : 'No stocks found.'}</p>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {displayStocks.map((stock: any) => (
+        <StockCard
+          key={stock.display_ticker || stock.ticker}
+          stock={stock}
+          onAnalyze={setSelected}
+          inWatchlist={watchlist.includes(
+            (stock.display_ticker || stock.ticker || '')
+              .toUpperCase().replace('.NS','').replace('.BO','')
+          )}
+          onWatchlistChange={loadWatchlist}
+        />
+      ))}
+    </div>
+  )}
+</div>
 
       {/* Analysis Modal */}
       {selected && <AnalysisModal stock={selected} onClose={() => setSelected(null)} />}
