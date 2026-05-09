@@ -1,6 +1,7 @@
 // src/components/UpgradeModal.tsx
 import { useState } from 'react';
 import axios from 'axios';
+import { supabase } from '../lib/supabase';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -14,48 +15,85 @@ export default function UpgradeModal({ onClose, onSuccess }: {
 }) {
   const [loading, setLoading] = useState(false);
 
-  const handlePayment = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem('sb_token');
-      const res = await axios.post(`${BASE}/api/payment/create-subscription`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+const handlePayment = async () => {
+  setLoading(true);
+  try {
+    const { data: session } = await supabase.auth.getSession();
+    const token = session.session?.access_token;
 
-      const { subscription_id, key } = res.data;
+    if (!token) {
+      alert('Please login again');
+      setLoading(false);
+      return;
+    }
 
-      const options = {
-        key,
-        subscription_id,
-        name:        'Stock AI',
-        description: 'Pro Plan — ₹99/month',
-        image:       'https://byteplay.org/logo.png',
-        handler: async (response: any) => {
-          try {
-            await axios.post(`${BASE}/api/payment/verify`, {
+    console.log('Creating subscription...');
+    const res = await axios.post(
+      `${BASE}/api/payment/create-subscription`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    console.log('Subscription created:', res.data);
+    const { subscription_id, key } = res.data;
+
+    if (!window.Razorpay) {
+      alert('Razorpay failed to load. Please refresh the page.');
+      setLoading(false);
+      return;
+    }
+
+    const options = {
+      key,
+      subscription_id,
+      name:        'Stock AI',
+      description: 'Pro Plan — ₹49/month',
+      handler: async (response: any) => {
+        console.log('Payment response:', response);
+        try {
+          const verifyRes = await axios.post(
+            `${BASE}/api/payment/verify`,
+            {
               razorpay_payment_id:      response.razorpay_payment_id,
               razorpay_subscription_id: response.razorpay_subscription_id,
               razorpay_signature:       response.razorpay_signature,
-            }, {
-              headers: { Authorization: `Bearer ${token}` }
-            });
-            onSuccess();
-            onClose();
-          } catch (e) {
-            alert('Payment verification failed. Contact support.');
-          }
-        },
-        prefill: { contact: '', email: '' },
-        theme: { color: '#3b82f6' }
-      };
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          console.log('Verify response:', verifyRes.data);
+          alert('🎉 Upgraded to Pro successfully!');
+          onSuccess();
+          onClose();
+        } catch (e: any) {
+          console.error('Verify error:', e?.response?.data);
+          alert('Payment done but verification failed. Contact support@byteplay.org');
+        }
+      },
+      modal: {
+        ondismiss: () => {
+          console.log('Payment modal dismissed');
+          setLoading(false);
+        }
+      },
+      prefill:  { contact: '', email: '' },
+      theme:    { color: '#3b82f6' }
+    };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (e) {
-      console.error(e);
-    }
+    console.log('Opening Razorpay with options:', options);
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', (response: any) => {
+      console.error('Payment failed:', response.error);
+      alert(`Payment failed: ${response.error.description}`);
+      setLoading(false);
+    });
+    rzp.open();
+
+  } catch (e: any) {
+    console.error('Payment setup error:', e?.response?.data || e.message);
+    alert(`Error: ${e?.response?.data?.detail || e.message}`);
     setLoading(false);
-  };
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">

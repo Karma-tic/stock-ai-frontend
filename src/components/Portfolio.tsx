@@ -1,8 +1,12 @@
 // src/components/Portfolio.tsx
 import { useState, useEffect } from 'react';
 import { getPortfolio, addToPortfolio, removeFromPortfolio } from '../lib/api';
+import { usePlan } from '../lib/usePlan';
+import UpgradeModal from './UpgradeModal';
 
 export default function Portfolio() {
+    const { isPro } = usePlan();
+const [showUpgrade, setShowUpgrade] = useState(false);
   const [portfolio, setPortfolio] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>({});
   const [loading, setLoading] = useState(true);
@@ -29,6 +33,14 @@ export default function Portfolio() {
   };
 
   const handleAdd = async () => {
+     if (!isPro && portfolio.length >= 3) {
+    setShowUpgrade(true);
+    return;
+  }
+
+  if (!form.ticker || !form.quantity || !form.avg_buy_price) {
+    setError('All fields required'); return;
+  }
     if (!form.ticker || !form.quantity || !form.avg_buy_price) {
       setError('All fields required'); return;
     }
@@ -85,15 +97,28 @@ export default function Portfolio() {
       )}
 
       {/* Add Stock Button */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white font-bold text-lg">💼 My Portfolio</h2>
-        <button
-          onClick={() => setShowAdd(!showAdd)}
-          className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg font-semibold transition"
-        >
-          {showAdd ? '✕ Cancel' : '+ Add Stock'}
-        </button>
-      </div>
+<div className="flex justify-between items-center mb-4">
+  <h2 className="text-white font-bold text-lg">💼 My Portfolio</h2>
+  <div className="flex items-center gap-2">
+    {!isPro && (
+      <span className="text-slate-500 text-xs">
+        {portfolio.length}/3 free
+      </span>
+    )}
+    <button
+      onClick={() => {
+        if (!isPro && portfolio.length >= 3) {
+          setShowUpgrade(true);
+          return;
+        }
+        setShowAdd(!showAdd);
+      }}
+      className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg font-semibold transition"
+    >
+      {showAdd ? '✕ Cancel' : '+ Add Stock'}
+    </button>
+  </div>
+</div>
 
       {/* Add Stock Form */}
       {showAdd && (
@@ -238,6 +263,12 @@ export default function Portfolio() {
       <p className="text-slate-600 text-xs text-center mt-6">
         ⚠️ P&L is indicative only. Not SEBI-registered advice.
       </p>
+      {showUpgrade && (
+  <UpgradeModal
+    onClose={() => setShowUpgrade(false)}
+    onSuccess={() => window.location.reload()}
+  />
+)}
     </div>
   );
 }
