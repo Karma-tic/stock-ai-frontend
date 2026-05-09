@@ -1,6 +1,7 @@
 // src/components/AnalysisModal.tsx
 import { useState, useEffect } from 'react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
+import ReactGA from 'react-ga4';
 
 // ── Watchlist Button ──────────────────────────────────────────────────────
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
@@ -58,7 +59,14 @@ export default function AnalysisModal({ stock, onClose }: { stock: any; onClose:
     const run = async () => {
       try {
         const res = await analyzeStock(stock.display_ticker);
-        setResult(res.data);
+setResult(res.data);
+
+// Track stock analysis event
+ReactGA.event({
+  category: "Analysis",
+  action: "stock_analyzed",
+  label: stock.display_ticker
+});
       } catch (e: any) {
         setError(e?.response?.data?.detail || 'Analysis failed');
       }

@@ -1,6 +1,7 @@
 // src/components/StockCard.tsx
 import { useState } from 'react';
 import { addToWatchlist, removeFromWatchlist } from '../lib/api';
+import ReactGA from 'react-ga4';
 
 interface Props {
   stock: any;
@@ -37,8 +38,15 @@ export default function StockCard({ stock, onAnalyze, inWatchlist, onWatchlistCh
       } else {
         console.log('Adding:', ticker);
         const res = await addToWatchlist(ticker, stock.company_name || ticker);
-        console.log('Add response:', res.data);
-        setLocalWatchlist(true);
+console.log('Add response:', res.data);
+setLocalWatchlist(true);
+
+// Track watchlist add
+ReactGA.event({
+  category: "Watchlist",
+  action: "stock_added",
+  label: ticker
+});
       }
       onWatchlistChange?.();
     } catch (err: any) {

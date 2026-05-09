@@ -4,8 +4,12 @@ import { supabase } from './lib/supabase';
 import LoginPage from './components/LoginPage';
 import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
+import ReactGA from 'react-ga4';
 
 export default function App() {
+  useEffect(() => {
+  ReactGA.send({ hitType: "pageview", page: "/", title: "Home" });
+}, []);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
