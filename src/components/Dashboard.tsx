@@ -5,6 +5,7 @@ import StockCard from './StockCard';
 import AnalysisModal from './AnalysisModal';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
+import AdBanner from './AdBanner';
 
 export default function Dashboard() {
   const [stocks, setStocks] = useState<any[]>([]);
@@ -113,18 +114,28 @@ const loadWatchlist = async () => {
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {displayStocks.map((stock: any) => (
-        <StockCard
-          key={stock.display_ticker || stock.ticker}
-          stock={stock}
-          onAnalyze={setSelected}
-          inWatchlist={watchlist.includes(
-            (stock.display_ticker || stock.ticker || '')
-              .toUpperCase().replace('.NS','').replace('.BO','')
-          )}
-          onWatchlistChange={loadWatchlist}
-        />
-      ))}
+{displayStocks.map((stock: any, index: number) => (
+  <>
+    <StockCard
+      key={stock.display_ticker || stock.ticker}
+      stock={stock}
+      onAnalyze={setSelected}
+      inWatchlist={watchlist.includes(
+        (stock.display_ticker || stock.ticker || '')
+          .toUpperCase()
+          .replace('.NS', '')
+          .replace('.BO', '')
+      )}
+      onWatchlistChange={loadWatchlist}
+    />
+
+    {index === 5 && (
+      <div className="col-span-1 sm:col-span-2 lg:col-span-3">
+        <AdBanner slot="YOUR_AD_SLOT_ID" />
+      </div>
+    )}
+  </>
+))}
     </div>
   )}
 </div>
