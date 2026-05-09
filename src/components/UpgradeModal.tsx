@@ -80,7 +80,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
         </div>
 
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-center mb-4">
-          <p className="text-blue-400 font-bold text-2xl">₹99<span className="text-sm font-normal">/month</span></p>
+          <p className="text-blue-400 font-bold text-2xl">₹49<span className="text-sm font-normal">/month</span></p>
           <p className="text-slate-400 text-xs mt-1">Less than one cup of coffee ☕</p>
         </div>
 
@@ -89,7 +89,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
           disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition"
         >
-          {loading ? 'Loading...' : '🔓 Upgrade Now — ₹99/month'}
+          {loading ? 'Loading...' : '🔓 Upgrade Now — ₹49/month'}
         </button>
 
         <button onClick={onClose} className="w-full text-slate-500 text-sm mt-3">
