@@ -1,5 +1,8 @@
+import PageLayout from './PageLayout';
+
 export default function TermsOfService() {
   return (
+    <PageLayout>
     <div className="min-h-screen bg-slate-950 p-8 max-w-3xl mx-auto">
       <h1 className="text-white text-3xl font-bold mb-2">Terms &amp; Conditions</h1>
       <p className="text-slate-400 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
@@ -48,5 +51,6 @@ export default function TermsOfService() {
         </div>
       ))}
     </div>
+    </PageLayout>
   );
 }

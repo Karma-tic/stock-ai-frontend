@@ -1,8 +1,11 @@
+import PageLayout from './PageLayout';
+
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-slate-950 p-8 max-w-3xl mx-auto">
-      <h1 className="text-white text-3xl font-bold mb-2">Contact Us</h1>
-      <p className="text-slate-400 text-sm mb-8">BytePlay Technologies — Stock AI</p>
+    <PageLayout>
+      <div className="min-h-screen bg-slate-950 p-8 max-w-3xl mx-auto">
+        <h1 className="text-white text-3xl font-bold mb-2">Contact Us</h1>
+        <p className="text-slate-400 text-sm mb-8">BytePlay Technologies — Stock AI</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         {[
@@ -46,5 +49,6 @@ export default function Contact() {
         </p>
       </div>
     </div>
+    </PageLayout>
   );
 }

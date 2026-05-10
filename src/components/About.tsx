@@ -1,5 +1,8 @@
+import PageLayout from './PageLayout';
+
 export default function About() {
   return (
+    <PageLayout>
     <div className="min-h-screen bg-slate-950 p-8 max-w-3xl mx-auto">
       <h1 className="text-white text-3xl font-bold mb-6">About Stock AI</h1>
 
@@ -30,5 +33,6 @@ export default function About() {
         Built by Karmatix. Contact: contact@karmatix.in
       </p>
     </div>
+    </PageLayout>
   );
 }
