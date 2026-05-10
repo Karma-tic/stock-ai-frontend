@@ -10,13 +10,15 @@ export default function LoginPage({ onLogin }: { onLogin: (token: string, user: 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const loginWithGoogle = async () => {
-    setLoading(true);
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin }
-    });
-  };
+const loginWithGoogle = async () => {
+  setLoading(true);
+  await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://byteplay.org'
+    }
+  });
+};
 
   const sendOtp = async () => {
     setLoading(true); setError('');
