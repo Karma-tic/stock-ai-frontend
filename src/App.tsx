@@ -6,21 +6,50 @@ import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import RefundPolicy from './components/RefundPolicy';
+import Disclaimer from './components/Disclaimer';
+import Contact from './components/Contact';
 import About from './components/About';
 
 function Footer() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 py-6 mt-8">
-      <div className="max-w-4xl mx-auto px-4 flex flex-wrap justify-between items-center gap-4">
-        <p className="text-slate-500 text-sm">© 2026 BytePlay. Stock AI.</p>
-        <div className="flex gap-4">
-          <Link to="/about" className="text-slate-500 hover:text-white text-sm transition">About</Link>
-          <Link to="/privacy" className="text-slate-500 hover:text-white text-sm transition">Privacy Policy</Link>
-          <Link to="/terms" className="text-slate-500 hover:text-white text-sm transition">Terms of Service</Link>
+    <footer className="bg-slate-900 border-t border-slate-800 py-8 mt-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div>
+            <p className="text-white font-semibold mb-2">Stock AI</p>
+            <p className="text-slate-500 text-xs">AI-powered Indian stock market intelligence platform.</p>
+          </div>
+          <div>
+            <p className="text-slate-400 font-semibold text-sm mb-2">Company</p>
+            <div className="space-y-1">
+              <Link to="/about" className="block text-slate-500 hover:text-white text-xs transition">About</Link>
+              <Link to="/contact" className="block text-slate-500 hover:text-white text-xs transition">Contact</Link>
+            </div>
+          </div>
+          <div>
+            <p className="text-slate-400 font-semibold text-sm mb-2">Legal</p>
+            <div className="space-y-1">
+              <Link to="/privacy" className="block text-slate-500 hover:text-white text-xs transition">Privacy Policy</Link>
+              <Link to="/terms" className="block text-slate-500 hover:text-white text-xs transition">Terms & Conditions</Link>
+              <Link to="/refund" className="block text-slate-500 hover:text-white text-xs transition">Refund Policy</Link>
+            </div>
+          </div>
+          <div>
+            <p className="text-slate-400 font-semibold text-sm mb-2">Support</p>
+            <div className="space-y-1">
+              <Link to="/disclaimer" className="block text-slate-500 hover:text-white text-xs transition">Disclaimer</Link>
+              <a href="mailto:contact@karmatix.in" className="block text-slate-500 hover:text-white text-xs transition">contact@karmatix.in</a>
+            </div>
+          </div>
         </div>
-        <p className="text-slate-600 text-xs w-full">
-          ⚠️ Not SEBI-registered. AI signals for educational purposes only.
-        </p>
+
+        <div className="border-t border-slate-800 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <p className="text-slate-600 text-xs">© 2026 BytePlay Technologies. All rights reserved.</p>
+          <p className="text-slate-600 text-xs text-center">
+            ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -70,12 +99,19 @@ export default function App() {
     );
   }
 
+  const publicLayout = (Component: React.ComponentType) => (
+    <><Component /><Footer /></>
+  );
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/privacy" element={<><PrivacyPolicy /><Footer /></>} />
-        <Route path="/terms" element={<><TermsOfService /><Footer /></>} />
-        <Route path="/about" element={<><About /><Footer /></>} />
+        <Route path="/privacy"    element={publicLayout(PrivacyPolicy)} />
+        <Route path="/terms"      element={publicLayout(TermsOfService)} />
+        <Route path="/refund"     element={publicLayout(RefundPolicy)} />
+        <Route path="/disclaimer" element={publicLayout(Disclaimer)} />
+        <Route path="/contact"    element={publicLayout(Contact)} />
+        <Route path="/about"      element={publicLayout(About)} />
         <Route path="*" element={
           user
             ? <MainApp user={user} />
