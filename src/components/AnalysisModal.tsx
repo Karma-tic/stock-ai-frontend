@@ -6,9 +6,11 @@ import UpgradeModal from './UpgradeModal';
 
 // ── Watchlist Button ──────────────────────────────────────────────────────
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const [result, setResult] = useState<any>(null);
  const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(false);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars  
 const [error, setError] = useState('');
 
   // Clean ticker once at component level
