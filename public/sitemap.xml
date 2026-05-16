@@ -8,4 +8,15 @@
   <url><loc>https://byteplay.org/terms</loc><priority>0.5</priority></url>
   <url><loc>https://byteplay.org/refund</loc><priority>0.5</priority></url>
   <url><loc>https://byteplay.org/disclaimer</loc><priority>0.6</priority></url>
+  <url>
+  <loc>
+    https://byteplay.org/blog/irfc-share-price-target-2026.html
+  </loc>
+</url>
+
+<url>
+  <loc>
+    https://byteplay.org/blog/reliance-share-price-target-2026.html
+  </loc>
+</url>
 </urlset>
