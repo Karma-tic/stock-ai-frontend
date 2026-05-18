@@ -1,7 +1,7 @@
 // src/components/AnalysisModal.tsx
 import { useState, useEffect } from 'react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
-import ReactGA from 'react-ga4';
+
 import UpgradeModal from './UpgradeModal';
 
 // ── Watchlist Button ──────────────────────────────────────────────────────
