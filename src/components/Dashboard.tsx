@@ -124,14 +124,7 @@ const handleAnalyze = (stock: any) => {
   ))}
 </div>
 
-<div className="flex border-b border-slate-800 bg-slate-900">
-  {(['market', 'watchlist', 'portfolio'] as const).map(t => (
-    <button key={t} onClick={() => setTab(t)}
-      className={`flex-1 py-3 text-sm font-semibold capitalize transition ${tab === t ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'}`}>
-      {t === 'market' ? '📊 Market' : t === 'watchlist' ? `⭐ Watchlist (${watchlist.length})` : '💼 Portfolio'}
-    </button>
-  ))}
-</div>
+
      
 {/* Latest AI Signals Banner */}
 <LatestSignals />
