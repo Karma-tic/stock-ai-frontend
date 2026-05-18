@@ -10,7 +10,7 @@ export default function PennyStocks() {
   const [stocks, setStocks]   = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<any>(null);
-  const [watchlist, setWatchlist] = useState<string[]>([]);
+ const [watchlist] = useState<string[]>([]);
 
   useEffect(() => { loadPennyStocks(); }, []);
 
