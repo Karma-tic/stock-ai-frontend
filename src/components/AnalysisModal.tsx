@@ -56,45 +56,31 @@ const [error, setError] = useState('');
 }
 
 export default function AnalysisModal({ stock, onClose }: { stock: any; onClose: () => void }) {
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult]   = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError]     = useState('');
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [cached, setCached]   = useState(false);
 
-useEffect(() => {
-  const run = async () => {
-    try {
-      const res = await analyzeStock(stock.display_ticker);
-      setResult(res.data);
-
-      // Track stock analysis event
-      ReactGA.event({
-        category: "Analysis",
-        action: "stock_analyzed",
-        label: stock.display_ticker
-      });
-
-    } catch (e: any) {
-      const detail = e?.response?.data?.detail;
-
-      if (detail === 'DAILY_LIMIT_REACHED') {
-        setError('🔒 You have used your 2 free analyses today. Upgrade to Pro for unlimited analysis.');
-        setShowUpgrade(true);
-
-      } else if (detail === 'FREE_LIMIT_REACHED') {
-        setError('🔒 Free plan limit reached. Upgrade to Pro.');
-        setShowUpgrade(true);
-
-      } else {
-        setError(e?.response?.data?.detail || 'Analysis failed');
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await analyzeStock(stock.display_ticker);
+        setResult(res.data);
+        setCached(res.data.cached || false);
+      } catch (e: any) {
+        const detail = e?.response?.data?.detail;
+        if (detail === 'DAILY_LIMIT_REACHED') {
+          setError('🔒 You have used your 2 free analyses today.');
+          setShowUpgrade(true);
+        } else {
+          setError(detail || 'Analysis failed');
+        }
       }
-    }
-
-    setLoading(false);
-  };
-
-  run();
-}, [stock]);
+      setLoading(false);
+    };
+    run();
+  }, [stock]);
 
   const signal = result?.signal?.signal;
 const colorMap: Record<string, string> = { BUY: 'text-green-400', HOLD: 'text-yellow-400', SELL: 'text-red-400' };
@@ -118,10 +104,12 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
 
 {/* Live Price Bar */}
 <div className="px-4 py-3 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
+
   <div className="flex items-center gap-3">
     <span className="text-2xl font-black text-white">
       ₹{stock.current_price?.toLocaleString('en-IN')}
     </span>
+
     <span className={`text-sm font-semibold px-2 py-0.5 rounded-full ${
       stock.price_change >= 0
         ? 'bg-green-500/20 text-green-400'
@@ -129,8 +117,18 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
     }`}>
       {stock.price_change >= 0 ? '▲' : '▼'} {Math.abs(stock.price_change_pct)}%
     </span>
+
+    {cached && (
+      <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
+        ⚡ Cached — updated {new Date().toLocaleTimeString()}
+      </span>
+    )}
   </div>
-  <WatchlistButton ticker={stock.display_ticker} companyName={stock.company_name} />
+
+  <WatchlistButton
+    ticker={stock.display_ticker}
+    companyName={stock.company_name}
+  />
 </div>
 
         <div className="p-4">

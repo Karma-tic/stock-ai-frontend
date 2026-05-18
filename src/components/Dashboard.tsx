@@ -8,6 +8,7 @@ import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
+import PennyStocks from './PennyStocks';
 
 export default function Dashboard() {
   const { isPro } = usePlan();
@@ -19,8 +20,18 @@ const [showUpgrade, setShowUpgrade] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [tab, setTab] = useState<'market' | 'watchlist' | 'portfolio'>('market');
-  const [watchlistStocks, setWatchlistStocks] = useState<any[]>([]);
+ const [tab, setTab] = useState<'market' | 'watchlist' | 'portfolio' | 'penny'>('market');
+ const [watchlistStocks, setWatchlistStocks] = useState<any[]>([]);
+
+  useEffect(() => {
+  // Preload stock data in background
+  const preload = async () => {
+    try {
+      await getTopStocks();
+    } catch {}
+  };
+  preload();
+}, []);
 
   useEffect(() => { loadTopStocks(); loadWatchlist(); }, []);
 
@@ -97,6 +108,21 @@ const handleAnalyze = (stock: any) => {
       </div>
 
       {/* Tabs */}
+<div className="flex border-b border-slate-800 bg-slate-900 overflow-x-auto">
+  {[
+    { id: 'market',    label: '📊 Market' },
+    { id: 'watchlist', label: `⭐ Watchlist (${watchlist.length})` },
+    { id: 'portfolio', label: '💼 Portfolio' },
+    { id: 'penny',     label: '💸 Penny Stocks' },
+  ].map(t => (
+    <button key={t.id} onClick={() => setTab(t.id as any)}
+      className={`flex-shrink-0 flex-1 py-3 text-sm font-semibold transition px-3 ${
+        tab === t.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'
+      }`}>
+      {t.label}
+    </button>
+  ))}
+</div>
 
 <div className="flex border-b border-slate-800 bg-slate-900">
   {(['market', 'watchlist', 'portfolio'] as const).map(t => (
@@ -111,7 +137,9 @@ const handleAnalyze = (stock: any) => {
 <LatestSignals />
 {/* Stocks grid or Portfolio */}
 <div className="p-4 max-w-4xl mx-auto">
-  {tab === 'portfolio' ? (
+  {tab === 'penny' ? (
+    <PennyStocks />
+  ) : tab === 'portfolio' ? (
     <Portfolio />
   ) : loading ? (
     <div className="text-center py-20">
