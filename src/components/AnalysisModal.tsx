@@ -118,11 +118,7 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
       {stock.price_change >= 0 ? '▲' : '▼'} {Math.abs(stock.price_change_pct)}%
     </span>
 
-    {cached && (
-      <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
-        ⚡ Cached — updated {new Date().toLocaleTimeString()}
-      </span>
-    )}
+    
   </div>
 
   <WatchlistButton
