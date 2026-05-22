@@ -49,26 +49,36 @@ const handlePayment = async () => {
       name:        'Stock AI',
       description: 'Pro Plan — ₹49/month',
       handler: async (response: any) => {
-        console.log('Payment response:', response);
-        try {
-          const verifyRes = await axios.post(
-            `${BASE}/api/payment/verify`,
-            {
-              razorpay_payment_id:      response.razorpay_payment_id,
-              razorpay_subscription_id: response.razorpay_subscription_id,
-              razorpay_signature:       response.razorpay_signature,
-            },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          console.log('Verify response:', verifyRes.data);
-          alert('🎉 Upgraded to Pro successfully!');
-          onSuccess();
-          onClose();
-        } catch (e: any) {
-          console.error('Verify error:', e?.response?.data);
-          alert('Payment done but verification failed. Contact support@byteplay.org');
-        }
+  console.log('Payment response:', response);
+  
+  // Get fresh session
+  const { data: sessionData } = await supabase.auth.getSession();
+  const freshToken = sessionData.session?.access_token;
+  
+  if (!freshToken) {
+    alert('Session expired. Please log in again and contact support.');
+    return;
+  }
+  
+  try {
+    const verifyRes = await axios.post(
+      `${BASE}/api/payment/verify`,
+      {
+        razorpay_payment_id:      response.razorpay_payment_id,
+        razorpay_subscription_id: response.razorpay_subscription_id,
+        razorpay_signature:       response.razorpay_signature,
       },
+      { headers: { Authorization: `Bearer ${freshToken}` } }
+    );
+    console.log('Verify response:', verifyRes.data);
+    alert('🎉 You are now Pro!');
+    onSuccess();
+    onClose();
+  } catch (e: any) {
+    console.error('Verify failed:', e?.response?.data);
+    alert(`Payment received but upgrade failed. Email contact@karmatix.in with payment ID: ${response.razorpay_payment_id}`);
+  }
+},
       modal: {
         ondismiss: () => {
           console.log('Payment modal dismissed');
