@@ -10,6 +10,7 @@ import RefundPolicy from './components/RefundPolicy';
 import Disclaimer from './components/Disclaimer';
 import Contact from './components/Contact';
 import About from './components/About';
+import LandingPage from './components/LandingPage';
 
 function Footer() {
   return (
@@ -66,8 +67,9 @@ function MainApp({ user }: { user: any }) {
 }
 
 export default function App() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+const [user, setUser] = useState<any>(null);
+const [loading, setLoading] = useState(true);
+const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -112,14 +114,24 @@ export default function App() {
         <Route path="/disclaimer" element={publicLayout(Disclaimer)} />
         <Route path="/contact"    element={publicLayout(Contact)} />
         <Route path="/about"      element={publicLayout(About)} />
-        <Route path="*" element={
-          user
-            ? <MainApp user={user} />
-            : <LoginPage onLogin={(token, u) => {
-                localStorage.setItem('sb_token', token);
-                setUser(u);
-              }} />
-        } />
+        <Route
+  path="*"
+  element={
+    user ? (
+      <MainApp user={user} />
+    ) : showLogin ? (
+      <LoginPage
+        onLogin={(token, u) => {
+          localStorage.setItem('sb_token', token);
+          setUser(u);
+          setShowLogin(false);
+        }}
+      />
+    ) : (
+      <LandingPage onGetStarted={() => setShowLogin(true)} />
+    )
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

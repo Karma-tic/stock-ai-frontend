@@ -36,12 +36,13 @@ const [showUpgrade, setShowUpgrade] = useState(false);
   useEffect(() => { loadTopStocks(); loadWatchlist(); }, []);
 
   const loadTopStocks = async () => {
-    try {
-      const res = await getTopStocks();
-      setStocks(res.data.stocks);
-    } catch (e) { console.error(e); }
-    setLoading(false);
-  };
+  setLoading(true);
+  try {
+    const res = await getTopStocks();
+    setStocks(res.data.stocks);
+  } catch (e) { console.error(e); }
+  setLoading(false);
+};
 
 const loadWatchlist = async () => {
   try {
