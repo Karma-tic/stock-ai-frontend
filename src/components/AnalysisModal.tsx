@@ -60,14 +60,13 @@ export default function AnalysisModal({ stock, onClose }: { stock: any; onClose:
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState('');
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const [cached, setCached]   = useState(false);
 
   useEffect(() => {
     const run = async () => {
       try {
         const res = await analyzeStock(stock.display_ticker);
         setResult(res.data);
-        setCached(res.data.cached || false);
+        
       } catch (e: any) {
         const detail = e?.response?.data?.detail;
         if (detail === 'DAILY_LIMIT_REACHED') {

@@ -9,6 +9,9 @@ export default function LoginPage({ onLogin }: { onLogin: (token: string, user: 
   const [step, setStep] = useState<'input' | 'verify'>('input');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [collectEmail, setCollectEmail] = useState(false);
+const [userEmail, setUserEmail] = useState('');
+const [savingEmail, setSavingEmail] = useState(false);
 
 const loginWithGoogle = async () => {
   setLoading(true);
@@ -30,15 +33,40 @@ const loginWithGoogle = async () => {
   };
 
   const verifyOtp = async () => {
-    setLoading(true); setError('');
-    const formatted = phone.startsWith('+') ? phone : `+91${phone}`;
-    const { data, error } = await supabase.auth.verifyOtp({ phone: formatted, token: otp, type: 'sms' });
-    if (error) { setError(error.message); setLoading(false); return; }
-    const token = data.session?.access_token || '';
-    localStorage.setItem('sb_token', token);
-    onLogin(token, data.user);
+  setLoading(true); setError('');
+  const formatted = phone.startsWith('+') ? phone : `+91${phone}`;
+  const { data, error } = await supabase.auth.verifyOtp({
+    phone: formatted, token: otp, type: 'sms'
+  });
+  if (error) { setError(error.message); setLoading(false); return; }
+
+  const token = data.session?.access_token || '';
+  localStorage.setItem('sb_token', token);
+
+  // Check if user has email — if not, ask for it
+  if (!data.user?.email) {
+    setCollectEmail(true);
     setLoading(false);
-  };
+    return;
+  }
+
+  onLogin(token, data.user);
+  setLoading(false);
+};
+const saveEmail = async () => {
+  if (!userEmail || !userEmail.includes('@')) {
+    setError('Please enter a valid email'); return;
+  }
+  setSavingEmail(true);
+  try {
+    await supabase.auth.updateUser({ email: userEmail });
+    const { data } = await supabase.auth.getSession();
+    onLogin(data.session?.access_token || '', data.session?.user);
+  } catch (e: any) {
+    setError(e.message);
+  }
+  setSavingEmail(false);
+};
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
@@ -105,7 +133,42 @@ const loginWithGoogle = async () => {
               )}
             </div>
           )}
-
+           {/* Email collection after phone OTP */}
+{collectEmail && (
+  <div className="space-y-3">
+    <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3">
+      <p className="text-blue-400 text-sm font-semibold mb-1">
+        📧 One last step
+      </p>
+      <p className="text-slate-400 text-xs">
+        Add your email to receive daily AI stock signals at 8:30 AM
+      </p>
+    </div>
+    <input
+      type="email"
+      value={userEmail}
+      onChange={e => setUserEmail(e.target.value)}
+      placeholder="your@email.com"
+      className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+    />
+    <button
+      onClick={saveEmail}
+      disabled={savingEmail}
+      className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition"
+    >
+      {savingEmail ? 'Saving...' : '✅ Save & Continue'}
+    </button>
+    <button
+      onClick={() => {
+        const token = localStorage.getItem('sb_token') || '';
+        onLogin(token, null);
+      }}
+      className="w-full text-slate-500 text-sm"
+    >
+      Skip for now
+    </button>
+  </div>
+)}
           {error && <p className="text-red-400 text-sm text-center mt-3">{error}</p>}
         </div>
 

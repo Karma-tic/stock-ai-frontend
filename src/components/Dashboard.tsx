@@ -60,8 +60,10 @@ const handleSearch = async (q: string) => {
   if (q.length < 2) { setSearchResults([]); return; }
   try {
     const res = await searchStocks(q);
-    setSearchResults(res.data.results); // backend already limits
-  } catch (e) {
+    console.log('Search results:', res.data); // add this temporarily
+    setSearchResults(res.data.results || []);
+  } catch (e: any) {
+    console.error('Search error:', e?.response?.data);
     setSearchResults([]);
   }
 };
