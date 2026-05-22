@@ -7,23 +7,50 @@ interface Props {
 
 export default function LandingPage({ onGetStarted }: Props) {
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-950 overflow-x-hidden">
 
       {/* Navigation */}
-      <nav className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">📈</span>
-          <span className="font-bold text-xl text-white">Stock AI</span>
-          <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold">LIVE</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link to="/about" className="text-slate-400 hover:text-white text-sm transition">About</Link>
-          <Link to="/blog" className="text-slate-400 hover:text-white text-sm transition">Blog</Link>
-          <Link to="/contact" className="text-slate-400 hover:text-white text-sm transition">Contact</Link>
-          <button onClick={onGetStarted}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-            Get Started Free
+      <nav className="bg-slate-900 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+          
+          {/* Logo */}
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-2xl shrink-0">📈</span>
+            <span className="font-bold text-xl text-white whitespace-nowrap">
+              Stock AI
+            </span>
+            <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
+              LIVE
+            </span>
+          </div>
+
+          {/* Right Nav (hidden on mobile) */}
+          <div className="hidden sm:flex items-center gap-4">
+            <Link to="/about" className="text-slate-400 hover:text-white text-sm transition">
+              About
+            </Link>
+            <Link to="/blog" className="text-slate-400 hover:text-white text-sm transition">
+              Blog
+            </Link>
+            <Link to="/contact" className="text-slate-400 hover:text-white text-sm transition">
+              Contact
+            </Link>
+            <button
+              onClick={onGetStarted}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap"
+            >
+              Get Started Free
+            </button>
+          </div>
+
+          {/* Mobile CTA */}
+          <button
+            onClick={onGetStarted}
+            className="sm:hidden bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap"
+          >
+            Get Started
           </button>
+
         </div>
       </nav>
 
