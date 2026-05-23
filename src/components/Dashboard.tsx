@@ -138,11 +138,33 @@ const handleAnalyze = (stock: any) => {
   ) : tab === 'portfolio' ? (
     <Portfolio />
   ) : loading ? (
-    <div className="text-center py-20">
-      <div className="text-4xl mb-4 animate-pulse">📊</div>
-      <p className="text-slate-400">Loading live market data...</p>
-    </div>
-  ) : displayStocks.length === 0 ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {[...Array(6)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-slate-800 border border-slate-700 rounded-xl p-4 animate-pulse motion-reduce:animate-none"
+      >
+        <div className="flex justify-between mb-3">
+          <div>
+            <div className="h-5 w-24 bg-slate-700 rounded mb-2" />
+            <div className="h-3 w-32 bg-slate-700 rounded" />
+          </div>
+          <div className="h-8 w-8 bg-slate-700 rounded-lg" />
+        </div>
+
+        <div className="h-8 w-28 bg-slate-700 rounded mb-3" />
+
+        <div className="grid grid-cols-3 gap-2">
+          <div className="h-12 bg-slate-700 rounded-lg" />
+          <div className="h-12 bg-slate-700 rounded-lg" />
+          <div className="h-12 bg-slate-700 rounded-lg" />
+        </div>
+
+        <div className="h-9 bg-slate-700 rounded-lg mt-3" />
+      </div>
+    ))}
+  </div>
+) : displayStocks.length === 0 ? (
     <div className="text-center py-20">
       <div className="text-4xl mb-4">☆</div>
       <p className="text-slate-400">{tab === 'watchlist' ? 'No stocks in watchlist yet.' : 'No stocks found.'}</p>

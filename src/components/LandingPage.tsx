@@ -57,7 +57,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
         <div className="inline-block bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1 text-blue-400 text-sm mb-6">
-          🤖 AI-Powered NSE/BSE Stock Analysis
+          AI-Powered NSE/BSE Stock Analysis
         </div>
         <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 leading-tight">
           Stop Guessing.<br />
