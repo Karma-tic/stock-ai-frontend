@@ -23,33 +23,42 @@ export default function LoginPage({ onLogin, onBack }: Props) {
     });
   };
 
-  const sendEmailOtp = async () => {
-    if (!email || !email.includes('@')) {
-      setError('Please enter a valid email'); return;
-    }
-    setLoading(true); setError('');
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: true }
-    });
-    if (error) setError(error.message);
-    else setStep('verify');
-    setLoading(false);
-  };
+const sendEmailOtp = async () => {
+  if (!email || !email.includes('@')) {
+    setError('Please enter a valid email'); return;
+  }
+  setLoading(true); setError('');
 
-  const verifyEmailOtp = async () => {
-    setLoading(true); setError('');
-    const { data, error } = await supabase.auth.verifyOtp({
-      email,
-      token: otp,
-      type:  'email'
-    });
-    if (error) { setError(error.message); setLoading(false); return; }
-    const token = data.session?.access_token || '';
-    localStorage.setItem('sb_token', token);
-    onLogin(token, data.user);
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: true,
+      emailRedirectTo:  undefined,
+    }
+  });
+
+  if (error) setError(error.message);
+  else setStep('verify');
+  setLoading(false);
+};
+
+const verifyEmailOtp = async () => {
+  setLoading(true); setError('');
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: otp,
+    type:  'email',
+  });
+  if (error) {
+    setError('Invalid or expired code. Please try again.');
     setLoading(false);
-  };
+    return;
+  }
+  const token = data.session?.access_token || '';
+  localStorage.setItem('sb_token', token);
+  onLogin(token, data.user);
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">

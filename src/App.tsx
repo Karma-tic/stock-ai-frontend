@@ -71,27 +71,30 @@ const [user, setUser] = useState<any>(null);
 const [loading, setLoading] = useState(true);
 const [showLogin, setShowLogin] = useState(false);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) {
-        localStorage.setItem('sb_token', data.session.access_token);
-        setUser(data.session.user);
-      }
-      setLoading(false);
-    });
+useEffect(() => {
+  // Handle magic link redirect — URL contains access_token in hash
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) {
+      localStorage.setItem('sb_token', data.session.access_token);
+      setUser(data.session.user);
+    }
+    setLoading(false);
+  });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        localStorage.setItem('sb_token', session.access_token);
-        setUser(session.user);
-      } else {
-        setUser(null);
-        localStorage.removeItem('sb_token');
-      }
-    });
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    console.log('Auth event:', event, session?.user?.email);
+    if (session) {
+      localStorage.setItem('sb_token', session.access_token);
+      setUser(session.user);
+      setShowLogin(false); // ← make sure this is here
+    } else {
+      setUser(null);
+      localStorage.removeItem('sb_token');
+    }
+  });
 
-    return () => subscription.unsubscribe();
-  }, []);
+  return () => subscription.unsubscribe();
+}, []);
 
   if (loading) {
     return (
