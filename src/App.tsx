@@ -119,15 +119,16 @@ const [showLogin, setShowLogin] = useState(false);
   element={
     user ? (
       <MainApp user={user} />
-    ) : showLogin ? (
-      <LoginPage
-        onLogin={(token, u) => {
-          localStorage.setItem('sb_token', token);
-          setUser(u);
-          setShowLogin(false);
-        }}
-      />
-    ) : (
+) : showLogin ? (
+  <LoginPage
+    onLogin={(token, u) => {
+      localStorage.setItem('sb_token', token);
+      setUser(u);
+      setShowLogin(false);
+    }}
+    onBack={() => setShowLogin(false)}  // ← add this
+  />
+) : (
       <LandingPage onGetStarted={() => setShowLogin(true)} />
     )
   }
