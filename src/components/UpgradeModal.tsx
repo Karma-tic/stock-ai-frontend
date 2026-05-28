@@ -19,11 +19,18 @@ export default function UpgradeModal({ onClose, onSuccess }: {
 }) {
   const [loading, setLoading]     = useState(false);
   const [selected, setSelected]   = useState<PlanType>(null);
-
+    const features = [
+    'Unlimited AI analysis',
+    'Search 500+ stocks',
+    'Unlimited watchlist',
+    'Portfolio tracker',
+    'Morning email digest',
+    'Hourly signals',
+  ];
   const plans = [
     {
       id:       'trial' as PlanType,
-      emoji:    <Target className="w-5 h-5 text-yellow-400" />,
+    
       title:    '1 Day Trial',
       price:    '₹1',
       period:   'one time',
@@ -37,7 +44,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'onetime' as PlanType,
-      emoji:    <Unlock className="w-5 h-5 text-blue-400" />,
+  
       title:    '1 Month Access',
       price:    '₹49',
       period:   'no auto-renewal',
@@ -51,7 +58,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'subscription' as PlanType,
-      emoji:    <RefreshCw className="w-5 h-5 text-green-400" />,
+  
       title:    'Monthly Plan',
       price:    '₹49',
       period:   'auto-renews monthly',
@@ -64,6 +71,11 @@ export default function UpgradeModal({ onClose, onSuccess }: {
       popular:  false,
     },
   ];
+  const planIcons: Record<PlanType, JSX.Element | null> = {
+  trial: <Target className="w-5 h-5 text-yellow-400" />,
+  onetime: <Unlock className="w-5 h-5 text-blue-400" />,
+  subscription: <RefreshCw className="w-5 h-5 text-green-400" />
+};
 
   const handlePayment = async (plan: typeof plans[0]) => {
     setLoading(true);
@@ -158,20 +170,21 @@ export default function UpgradeModal({ onClose, onSuccess }: {
         </div>
 
         {/* Features */}
-        <div className="px-6 py-4 border-b border-slate-700">
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              '✅ Unlimited AI analysis',
-              '✅ Search 500+ stocks',
-              '✅ Unlimited watchlist',
-              '✅ Portfolio tracker',
-              '✅ Morning email digest',
-              '✅ Hourly signals',
-            ].map(f => (
-              <p key={f} className="text-slate-300 text-xs">{f}</p>
-            ))}
-          </div>
-        </div>
+       const features = [
+  'Unlimited AI analysis',
+  'Search 500+ stocks',
+  'Unlimited watchlist',
+  'Portfolio tracker',
+  'Morning email digest',
+  'Hourly signals',
+];
+
+       {features.map(f => (
+  <div key={f} className="flex items-center gap-2">
+    <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+    <p className="text-slate-300 text-xs">{f}</p>
+  </div>
+))}
 
         {/* Plan Cards */}
         <div className="p-4 space-y-3">
@@ -201,7 +214,10 @@ export default function UpgradeModal({ onClose, onSuccess }: {
                     )}
                   </div>
                   <div>
-                    <p className="text-white font-semibold">{plan.emoji} {plan.title}</p>
+                    <p className="text-white font-semibold flex items-center gap-2">
+  {planIcons[plan.id]}
+  {plan.title}
+</p>
                     <p className="text-slate-400 text-xs">{plan.desc}</p>
                     <p className="text-slate-500 text-xs">{plan.period}</p>
                   </div>
