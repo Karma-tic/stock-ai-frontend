@@ -44,7 +44,6 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'onetime' as PlanType,
-  
       title:    '1 Month Access',
       price:    '₹49',
       period:   'no auto-renewal',
@@ -58,7 +57,6 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'subscription' as PlanType,
-  
       title:    'Monthly Plan',
       price:    '₹49',
       period:   'auto-renews monthly',

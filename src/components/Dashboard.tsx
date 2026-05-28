@@ -115,7 +115,6 @@ const handleAnalyze = (stock: any) => {
 
       {/* Tabs */}
 <div className="flex border-b border-slate-800 bg-slate-900 overflow-x-auto">
-  {/* Tabs */}
 {[
   { id: 'market',    label: 'Market',       icon: <BarChart2 className="w-4 h-4" /> },
   { id: 'watchlist', label: `Watchlist (${watchlist.length})`, icon: <Star className="w-4 h-4" /> },

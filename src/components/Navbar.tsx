@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import UpgradeModal from './UpgradeModal';
 import axios from 'axios';
-import { TrendingUp, Star, Briefcase, DollarSign, BarChart2 } from 'lucide-react';
+import { TrendingUp, Star } from 'lucide-react';
 
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
