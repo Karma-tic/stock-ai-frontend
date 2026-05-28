@@ -30,9 +30,9 @@ export default function LatestSignals() {
 
   return (
     <div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
-      <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
-        🤖 Latest AI Signals
-      </p>
+     <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
+  AI Signals
+</p>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {signals.map((s, i) => {
           const colors: Record<string, string> = {

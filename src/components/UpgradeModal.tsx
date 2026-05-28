@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { supabase } from '../lib/supabase';
+import { Target, Unlock, RefreshCw, Check } from 'lucide-react';
+
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -21,7 +23,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
   const plans = [
     {
       id:       'trial' as PlanType,
-      emoji:    '🎯',
+      emoji:    <Target className="w-5 h-5 text-yellow-400" />,
       title:    '1 Day Trial',
       price:    '₹1',
       period:   'one time',
@@ -35,7 +37,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'onetime' as PlanType,
-      emoji:    '🔓',
+      emoji:    <Unlock className="w-5 h-5 text-blue-400" />,
       title:    '1 Month Access',
       price:    '₹49',
       period:   'no auto-renewal',
@@ -49,7 +51,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     },
     {
       id:       'subscription' as PlanType,
-      emoji:    '♾️',
+      emoji:    <RefreshCw className="w-5 h-5 text-green-400" />,
       title:    'Monthly Plan',
       price:    '₹49',
       period:   'auto-renews monthly',

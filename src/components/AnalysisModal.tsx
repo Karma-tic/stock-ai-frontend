@@ -127,14 +127,16 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
 </div>
 
         <div className="p-4">
-          {/* Loading */}
-          {loading && (
-            <div className="text-center py-12">
-              <div className="text-4xl mb-4 animate-pulse">🤖</div>
-              <p className="text-slate-400">AI is analyzing {stock.display_ticker}...</p>
-              <p className="text-slate-500 text-sm mt-2">Scraping news + running analysis</p>
-            </div>
-          )}
+          {/* Replace loading state */}
+{loading && (
+  <div className="text-center py-12">
+    <div className="flex justify-center mb-4">
+      <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+    <p className="text-slate-400 font-medium">Analyzing {stock.display_ticker}...</p>
+    <p className="text-slate-500 text-sm mt-1">Reading news and market data</p>
+  </div>
+)}
 
           {/* Error */}
           {error && (

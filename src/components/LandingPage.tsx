@@ -227,34 +227,94 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="bg-slate-900 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-white text-3xl font-bold mb-4">Simple Pricing</h2>
-          <p className="text-slate-400 mb-10">Start free, upgrade when you're ready</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-left">
-              <p className="text-white font-bold text-xl mb-1">Free</p>
-              <p className="text-3xl font-black text-white mb-4">₹0<span className="text-sm text-slate-400">/month</span></p>
-              {["2 AI analyses per day", "View top 10 market stocks", "3 stocks in watchlist", "Basic price data"].map(f => (
-                <p key={f} className="text-slate-300 text-sm mb-2">✅ {f}</p>
-              ))}
+ {/* Pricing — replace existing section */}
+<section className="bg-slate-900 py-16">
+  <div className="max-w-4xl mx-auto px-6 text-center">
+    <h2 className="text-white text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
+    <p className="text-slate-400 mb-10">No hidden charges. Cancel anytime.</p>
+
+    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      {/* Free */}
+      <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-left">
+        <p className="text-slate-400 text-xs font-semibold uppercase mb-2">Free</p>
+        <p className="text-3xl font-black text-white mb-1">₹0</p>
+        <p className="text-slate-500 text-xs mb-4">forever</p>
+        <div className="space-y-2">
+          {["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"].map(f => (
+            <div key={f} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+              <p className="text-slate-400 text-xs">{f}</p>
             </div>
-            <div className="bg-blue-600/10 border border-blue-500 rounded-xl p-6 text-left relative">
-              <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-bold">POPULAR</span>
-              <p className="text-white font-bold text-xl mb-1">Pro</p>
-              <p className="text-3xl font-black text-blue-400 mb-4">₹49<span className="text-sm text-slate-400">/month</span></p>
-              {["Unlimited AI analysis", "All 500+ stocks", "Unlimited watchlist", "Portfolio P&L tracker", "Daily 8:30 AM email digest", "Hourly signal refresh"].map(f => (
-                <p key={f} className="text-slate-300 text-sm mb-2">✅ {f}</p>
-              ))}
-              <button onClick={onGetStarted}
-                className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-bold transition">
-                Start Pro →
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
+        <button onClick={onGetStarted}
+          className="mt-4 w-full border border-slate-600 text-slate-300 py-2 rounded-lg text-sm font-semibold hover:border-slate-400 transition">
+          Get Started
+        </button>
+      </div>
+
+      {/* 1 Day Trial */}
+      <div className="bg-yellow-500/5 border border-yellow-500/40 rounded-xl p-5 text-left relative">
+        <span className="absolute -top-3 left-4 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded-full font-bold">TRY IT</span>
+        <p className="text-yellow-400 text-xs font-semibold uppercase mb-2">Trial</p>
+        <p className="text-3xl font-black text-white mb-1">₹1</p>
+        <p className="text-slate-500 text-xs mb-4">1 day access</p>
+        <div className="space-y-2">
+          {["Full Pro access", "All features unlocked", "No commitment"].map(f => (
+            <div key={f} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+              <p className="text-slate-300 text-xs">{f}</p>
+            </div>
+          ))}
+        </div>
+        <button onClick={onGetStarted}
+          className="mt-4 w-full bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg text-sm font-bold transition">
+          Try for ₹1
+        </button>
+      </div>
+
+      {/* 1 Month */}
+      <div className="bg-blue-600/10 border-2 border-blue-500 rounded-xl p-5 text-left relative">
+        <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">POPULAR</span>
+        <p className="text-blue-400 text-xs font-semibold uppercase mb-2">1 Month</p>
+        <p className="text-3xl font-black text-white mb-1">₹49</p>
+        <p className="text-slate-500 text-xs mb-4">no auto-renewal</p>
+        <div className="space-y-2">
+          {["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"].map(f => (
+            <div key={f} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+              <p className="text-slate-300 text-xs">{f}</p>
+            </div>
+          ))}
+        </div>
+        <button onClick={onGetStarted}
+          className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-sm font-bold transition">
+          Get 30 Days
+        </button>
+      </div>
+
+      {/* Subscription */}
+      <div className="bg-green-500/5 border border-green-500/40 rounded-xl p-5 text-left relative">
+        <span className="absolute -top-3 left-4 bg-green-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">BEST VALUE</span>
+        <p className="text-green-400 text-xs font-semibold uppercase mb-2">Monthly</p>
+        <p className="text-3xl font-black text-white mb-1">₹49</p>
+        <p className="text-slate-500 text-xs mb-4">auto-renews monthly</p>
+        <div className="space-y-2">
+          {["Everything in Pro", "Never lose access", "Cancel anytime"].map(f => (
+            <div key={f} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+              <p className="text-slate-300 text-xs">{f}</p>
+            </div>
+          ))}
+        </div>
+        <button onClick={onGetStarted}
+          className="mt-4 w-full bg-green-600 hover:bg-green-500 text-white py-2 rounded-lg text-sm font-bold transition">
+          Subscribe
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">

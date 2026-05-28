@@ -9,6 +9,9 @@ import AdBanner from './AdBanner';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
 import PennyStocks from './PennyStocks';
+import { BarChart2, Star, Briefcase, DollarSign, Flame } from 'lucide-react';
+import TrendingStocks from './TrendingStocks';
+
 
 export default function Dashboard() {
   const { isPro } = usePlan();
@@ -20,7 +23,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
- const [tab, setTab] = useState<'market' | 'watchlist' | 'portfolio' | 'penny'>('market');
+  const [tab, setTab] = useState<'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny'>('market');
  const [watchlistStocks, setWatchlistStocks] = useState<any[]>([]);
 
   useEffect(() => {
@@ -112,19 +115,22 @@ const handleAnalyze = (stock: any) => {
 
       {/* Tabs */}
 <div className="flex border-b border-slate-800 bg-slate-900 overflow-x-auto">
-  {[
-    { id: 'market',    label: ' Market' },
-    { id: 'watchlist', label: ` Watchlist (${watchlist.length})` },
-    { id: 'portfolio', label: ' Portfolio' },
-    { id: 'penny',     label: ' Penny Stocks' },
-  ].map(t => (
-    <button key={t.id} onClick={() => setTab(t.id as any)}
-      className={`flex-shrink-0 flex-1 py-3 text-sm font-semibold transition px-3 ${
-        tab === t.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'
-      }`}>
-      {t.label}
-    </button>
-  ))}
+  // Tabs
+{[
+  { id: 'market',    label: 'Market',       icon: <BarChart2 className="w-4 h-4" /> },
+  { id: 'watchlist', label: `Watchlist (${watchlist.length})`, icon: <Star className="w-4 h-4" /> },
+  { id: 'portfolio', label: 'Portfolio',    icon: <Briefcase className="w-4 h-4" /> },
+  { id: 'trending',  label: 'Trending',     icon: <Flame className="w-4 h-4" /> },
+  { id: 'penny',     label: 'Penny Stocks', icon: <DollarSign className="w-4 h-4" /> },
+].map(t => (
+  <button key={t.id} onClick={() => setTab(t.id as any)}
+    className={`flex-shrink-0 flex-1 py-3 text-xs font-semibold transition flex flex-col items-center gap-1 ${
+      tab === t.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'
+    }`}>
+    {t.icon}
+    {t.label}
+  </button>
+))}
 </div>
 
 
@@ -133,7 +139,9 @@ const handleAnalyze = (stock: any) => {
 <LatestSignals />
 {/* Stocks grid or Portfolio */}
 <div className="p-4 max-w-4xl mx-auto">
-  {tab === 'penny' ? (
+  {tab === 'trending' ? (
+  <TrendingStocks />
+) : tab === 'penny' ? (
     <PennyStocks />
   ) : tab === 'portfolio' ? (
     <Portfolio />

@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { addToWatchlist, removeFromWatchlist } from '../lib/api';
 import ReactGA from 'react-ga4';
+import { Brain } from 'lucide-react';
+
 
 interface Props {
   stock: any;
@@ -133,12 +135,12 @@ ReactGA.event({
 
       {/* Analyze button */}
       <button
-        type="button"
-        onClick={() => onAnalyze(stock)}
-        className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-white text-sm py-2 rounded-lg font-semibold transition"
-      >
-         AI Analysis
-      </button>
+  onClick={() => onAnalyze(stock)}
+  className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-white text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+>
+  <Brain className="w-4 h-4" />
+  AI Analysis
+</button>
       
     </div>
   );
