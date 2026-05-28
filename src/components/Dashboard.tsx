@@ -113,10 +113,10 @@ const handleAnalyze = (stock: any) => {
       {/* Tabs */}
 <div className="flex border-b border-slate-800 bg-slate-900 overflow-x-auto">
   {[
-    { id: 'market',    label: '📊 Market' },
-    { id: 'watchlist', label: `⭐ Watchlist (${watchlist.length})` },
-    { id: 'portfolio', label: '💼 Portfolio' },
-    { id: 'penny',     label: '💸 Penny Stocks' },
+    { id: 'market',    label: ' Market' },
+    { id: 'watchlist', label: ` Watchlist (${watchlist.length})` },
+    { id: 'portfolio', label: ' Portfolio' },
+    { id: 'penny',     label: ' Penny Stocks' },
   ].map(t => (
     <button key={t.id} onClick={() => setTab(t.id as any)}
       className={`flex-shrink-0 flex-1 py-3 text-sm font-semibold transition px-3 ${

@@ -137,7 +137,7 @@ ReactGA.event({
         onClick={() => onAnalyze(stock)}
         className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-white text-sm py-2 rounded-lg font-semibold transition"
       >
-        🤖 AI Analysis
+         AI Analysis
       </button>
       
     </div>
