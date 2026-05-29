@@ -168,14 +168,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
         </div>
 
         {/* Features */}
-       const features = [
-  'Unlimited AI analysis',
-  'Search 500+ stocks',
-  'Unlimited watchlist',
-  'Portfolio tracker',
-  'Morning email digest',
-  'Hourly signals',
-];
+
 
        {features.map(f => (
   <div key={f} className="flex items-center gap-2">
