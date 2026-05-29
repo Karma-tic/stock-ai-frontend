@@ -67,19 +67,22 @@ export default function TrendingStocks() {
 
       {/* Info banner */}
       <div className={`rounded-xl p-3 mb-4 border ${
-        activeTab === 'bought'
-          ? 'bg-green-500/10 border-green-500/30'
-          : 'bg-red-500/10 border-red-500/30'
-      }`}>
-        <p className={`text-sm font-medium ${
-          activeTab === 'bought' ? 'text-green-400' : 'text-red-400'
-        }`}>
-          {activeTab === 'bought'
-            ? 'Stocks with highest buying activity and price appreciation today'
-            : 'Stocks with highest selling pressure and price decline today'
-          }
-        </p>
-      </div>
+  activeTab === 'bought'
+    ? 'bg-green-500/10 border-green-500/30'
+    : 'bg-red-500/10 border-red-500/30'
+}`}>
+  <p className={`text-sm font-medium ${
+    activeTab === 'bought' ? 'text-green-400' : 'text-red-400'
+  }`}>
+    {activeTab === 'bought'
+      ? 'Top gaining stocks on NSE today'
+      : 'Top losing stocks on NSE today'
+    }
+  </p>
+  <p className="text-slate-500 text-xs mt-1">
+    Source: NSE India Live • Updated every hour
+  </p>
+</div>
 
       {/* Loading */}
       {loading && (

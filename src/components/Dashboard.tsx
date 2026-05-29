@@ -112,24 +112,29 @@ const handleAnalyze = (stock: any) => {
           )}
         </div>
       </div>
-
-      {/* Tabs */}
-<div className="flex border-b border-slate-800 bg-slate-900 overflow-x-auto">
-{[
-  { id: 'market',    label: 'Market',       icon: <BarChart2 className="w-4 h-4" /> },
-  { id: 'watchlist', label: `Watchlist (${watchlist.length})`, icon: <Star className="w-4 h-4" /> },
-  { id: 'portfolio', label: 'Portfolio',    icon: <Briefcase className="w-4 h-4" /> },
-  { id: 'trending',  label: 'Trending',     icon: <Flame className="w-4 h-4" /> },
-  { id: 'penny',     label: 'Penny Stocks', icon: <DollarSign className="w-4 h-4" /> },
-].map(t => (
-  <button key={t.id} onClick={() => setTab(t.id as any)}
-    className={`flex-shrink-0 flex-1 py-3 text-xs font-semibold transition flex flex-col items-center gap-1 ${
-      tab === t.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-slate-500'
-    }`}>
-    {t.icon}
-    {t.label}
-  </button>
-))}
+{/* Sliding Tab Navigation */}
+<div className="bg-slate-900 border-b border-slate-800 px-4 py-3">
+  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+    {[
+      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-white' },
+      { id: 'watchlist', label: `Watchlist (${watchlist.length})`, color: 'bg-yellow-500', activeText: 'text-black' },
+      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-white' },
+      { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-white' },
+      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-white' },
+    ].map(t => (
+      <button
+        key={t.id}
+        onClick={() => setTab(t.id as any)}
+        className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+          tab === t.id
+            ? `${t.color} ${t.activeText} shadow-lg scale-105`
+            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+        }`}
+      >
+        {t.label}
+      </button>
+    ))}
+  </div>
 </div>
 
 
