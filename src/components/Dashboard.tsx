@@ -9,7 +9,7 @@ import AdBanner from './AdBanner';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
 import PennyStocks from './PennyStocks';
-import { BarChart2, Star, Briefcase, DollarSign, Flame } from 'lucide-react';
+
 import TrendingStocks from './TrendingStocks';
 
 
