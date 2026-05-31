@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
 
 import UpgradeModal from './UpgradeModal';
-
+import ShareableSignal from './ShareableSignal';
 // ── Watchlist Button ──────────────────────────────────────────────────────
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -267,7 +267,18 @@ const color = ratingMap[item.value] || 'text-white';
                   </div>
                 </div>
               )}
+{/* Share Signal Card */}
+<div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+  <h3 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">
+    Share This Signal
+  </h3>
+  <ShareableSignal signal={result.signal} stock={result.stock} />
+</div>
 
+{/* Disclaimer */}
+<div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
+  <p className="text-yellow-400 text-xs">{result.signal?.disclaimer}</p>
+</div>
               {/* Disclaimer */}
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
                 <p className="text-yellow-400 text-xs">⚠️ {result.signal?.disclaimer}</p>
