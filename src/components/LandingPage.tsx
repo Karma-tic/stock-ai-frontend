@@ -373,6 +373,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Footer */}
       <footer className="bg-slate-900 border-t border-slate-800 py-8">
+        
         <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-between items-center gap-4">
           <p className="text-slate-500 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
           <div className="flex gap-4 flex-wrap">
@@ -386,7 +387,34 @@ export default function LandingPage({ onGetStarted }: Props) {
           <p className="text-slate-600 text-xs w-full text-center">
             ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
           </p>
+          {/* Data Sources */}
+<div className="border-t border-slate-800 pt-6 mt-6 w-full">
+  <p className="text-slate-600 text-xs text-center mb-3">
+    Data Sources
+  </p>
+
+  <div className="flex flex-wrap justify-center gap-4">
+    {[
+      { label: "NSE India", url: "https://www.nseindia.com" },
+      { label: "BSE India", url: "https://www.bseindia.com" },
+      { label: "Economic Times Markets", url: "https://economictimes.indiatimes.com/markets" },
+      { label: "SEBI", url: "https://www.sebi.gov.in" },
+      { label: "Moneycontrol", url: "https://www.moneycontrol.com" },
+    ].map((link) => (
+      <a
+        key={link.label}
+        href={link.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-slate-600 hover:text-slate-400 text-xs transition underline"
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+</div>
         </div>
+        
       </footer>
     </div>
   );
