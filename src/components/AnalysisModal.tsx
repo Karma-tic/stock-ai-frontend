@@ -275,10 +275,6 @@ const color = ratingMap[item.value] || 'text-white';
   <ShareableSignal signal={result.signal} stock={result.stock} />
 </div>
 
-{/* Disclaimer */}
-<div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
-  <p className="text-yellow-400 text-xs">{result.signal?.disclaimer}</p>
-</div>
               {/* Disclaimer */}
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
                 <p className="text-yellow-400 text-xs">⚠️ {result.signal?.disclaimer}</p>
