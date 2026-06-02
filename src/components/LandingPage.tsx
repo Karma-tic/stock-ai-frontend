@@ -293,25 +293,7 @@ export default function LandingPage({ onGetStarted }: Props) {
         </button>
       </div>
 
-      {/* Subscription */}
-      <div className="bg-green-500/5 border border-green-500/40 rounded-xl p-5 text-left relative">
-        <span className="absolute -top-3 left-4 bg-green-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">BEST VALUE</span>
-        <p className="text-green-400 text-xs font-semibold uppercase mb-2">Monthly</p>
-        <p className="text-3xl font-black text-white mb-1">₹49</p>
-        <p className="text-slate-500 text-xs mb-4">auto-renews monthly</p>
-        <div className="space-y-2">
-          {["Everything in Pro", "Never lose access", "Cancel anytime"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <p className="text-slate-300 text-xs">{f}</p>
-            </div>
-          ))}
-        </div>
-        <button onClick={onGetStarted}
-          className="mt-4 w-full bg-green-600 hover:bg-green-500 text-white py-2 rounded-lg text-sm font-bold transition">
-          Subscribe
-        </button>
-      </div>
+      
     </div>
   </div>
 </section>
