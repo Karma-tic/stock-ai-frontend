@@ -27,48 +27,35 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     'Morning email digest',
     'Hourly signals',
   ];
-  const plans = [
-    {
-      id:       'trial' as PlanType,
-    
-      title:    '1 Day Trial',
-      price:    '₹1',
-      period:   'one time',
-      desc:     'Try everything for 1 day',
-      amount:   100,  // paise
-      days:     1,
-      badge:    'TRY IT',
-      badgeColor: 'bg-yellow-500',
-      border:   'border-yellow-500',
-      popular:  false,
-    },
-    {
-      id:       'onetime' as PlanType,
-      title:    '1 Month Access',
-      price:    '₹49',
-      period:   'no auto-renewal',
-      desc:     'Pay once, access for 30 days',
-      amount:   4900,
-      days:     30,
-      badge:    'POPULAR',
-      badgeColor: 'bg-blue-500',
-      border:   'border-blue-500',
-      popular:  true,
-    },
-    {
-      id:       'subscription' as PlanType,
-      title:    'Monthly Plan',
-      price:    '₹49',
-      period:   'auto-renews monthly',
-      desc:     'Never lose access, cancel anytime',
-      amount:   4900,
-      days:     30,
-      badge:    'BEST VALUE',
-      badgeColor: 'bg-green-500',
-      border:   'border-green-500',
-      popular:  false,
-    },
-  ];
+const plans = [
+  {
+    id:       'trial' as PlanType,
+    emoji:    '🎯',
+    title:    '1 Day Trial',
+    price:    '₹1',
+    period:   'one time',
+    desc:     'Try everything for 1 day',
+    amount:   100,
+    days:     1,
+    badge:    'TRY IT',
+    badgeColor: 'bg-yellow-500',
+    border:   'border-yellow-500',
+  },
+  {
+    id:       'onetime' as PlanType,
+    emoji:    '🔓',
+    title:    '1 Month Access',
+    price:    '₹49',
+    period:   'no auto-renewal',
+    desc:     'Pay once, access for 30 days',
+    amount:   4900,
+    days:     30,
+    badge:    'POPULAR',
+    badgeColor: 'bg-blue-500',
+    border:   'border-blue-500',
+  },
+  // REMOVED subscription plan — UPI AutoPay not supported yet
+];
   const planIcons: Record<PlanType, JSX.Element | null> = {
   trial: <Target className="w-5 h-5 text-yellow-400" />,
   onetime: <Unlock className="w-5 h-5 text-blue-400" />,
@@ -76,85 +63,94 @@ export default function UpgradeModal({ onClose, onSuccess }: {
 };
 
   const handlePayment = async (plan: typeof plans[0]) => {
-    setLoading(true);
-    try {
-      const { data: session } = await supabase.auth.getSession();
-      const token = session.session?.access_token;
-      if (!token) { alert('Please login again'); setLoading(false); return; }
-
-      let orderData: any;
-
-      if (plan.id === 'subscription') {
-        // Razorpay subscription (auto-renew)
-        const res = await axios.post(
-          `${BASE}/api/payment/create-subscription`, {},
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        orderData = { type: 'subscription', ...res.data };
-      } else {
-        // One-time order (trial or monthly)
-        const res = await axios.post(
-          `${BASE}/api/payment/create-order`,
-          { amount: plan.amount },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        orderData = { type: 'order', ...res.data };
-      }
-
-      const options: any = {
-        key:         orderData.key,
-        name:        'Stock AI',
-        description: plan.title,
-        theme:       { color: '#3b82f6' },
-        modal: {
-          ondismiss: () => setLoading(false)
-        },
-      };
-
-      if (orderData.type === 'subscription') {
-        options.subscription_id = orderData.subscription_id;
-        options.handler = async (response: any) => {
-          await axios.post(`${BASE}/api/payment/verify`, {
-            razorpay_payment_id:      response.razorpay_payment_id,
-            razorpay_subscription_id: response.razorpay_subscription_id,
-            razorpay_signature:       response.razorpay_signature,
-          }, { headers: { Authorization: `Bearer ${token}` } });
-          alert('🎉 You are now Pro!');
-          onSuccess(); onClose();
-        };
-      } else {
-        options.order_id = orderData.order_id;
-        options.amount   = orderData.amount;
-        options.currency = 'INR';
-        options.handler  = async (response: any) => {
-          await axios.post(`${BASE}/api/payment/verify-order`, {
-            razorpay_order_id:   response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature:  response.razorpay_signature,
-            days:                plan.days,
-          }, { headers: { Authorization: `Bearer ${token}` } });
-          const msg = plan.id === 'trial'
-            ? '🎉 Trial activated! Enjoy 1 day of Pro access.'
-            : '🎉 You are now Pro for 30 days!';
-          alert(msg);
-          onSuccess(); onClose();
-        };
-      }
-
-      options.prefill = { email: session.session?.user?.email || '' };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', (r: any) => {
-        alert(`Payment failed: ${r.error.description}`);
-        setLoading(false);
-      });
-      rzp.open();
-
-    } catch (e: any) {
-      alert(`Error: ${e?.response?.data?.detail || e.message}`);
+  setLoading(true);
+  try {
+    const { data: session } = await supabase.auth.getSession();
+    const token = session.session?.access_token;
+    if (!token) {
+      alert('Please login again');
       setLoading(false);
+      return;
     }
-  };
+
+    // Always use one-time order — no subscriptions
+    const res = await axios.post(
+      `${BASE}/api/payment/create-order`,
+      { amount: plan.amount },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    const orderData = res.data;
+    console.log('Order created:', orderData);
+
+    const options: any = {
+      key:         orderData.key,
+      order_id:    orderData.order_id,
+      amount:      orderData.amount,
+      currency:    'INR',
+      name:        'Stock AI',
+      description: plan.title,
+      theme:       { color: '#3b82f6' },
+      modal: {
+        ondismiss: () => {
+          console.log('Payment dismissed');
+          setLoading(false);
+        }
+      },
+      handler: async (response: any) => {
+        console.log('Payment success:', response);
+        try {
+          const verifyRes = await axios.post(
+            `${BASE}/api/payment/verify-order`,
+            {
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+              days:                plan.days,
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          console.log('Verify success:', verifyRes.data);
+          alert(
+            plan.days === 1
+              ? '✅ Trial activated! Enjoy 1 day Pro access.'
+              : '✅ You are now Pro for 30 days!'
+          );
+          onSuccess();
+          onClose();
+        } catch (e: any) {
+          console.error('Verify failed:', e?.response?.data || e.message);
+          alert(
+            `Payment received but activation failed.\n` +
+            `Payment ID: ${response.razorpay_payment_id}\n` +
+            `Email contact@karmatix.in with this ID for manual activation.`
+          );
+        }
+      },
+      prefill: { email: session.session?.user?.email || '' },
+    };
+
+    if (!window.Razorpay) {
+      alert('Payment gateway failed to load. Please refresh the page.');
+      setLoading(false);
+      return;
+    }
+
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', (r: any) => {
+      console.error('Payment failed:', r.error);
+      alert(`Payment failed: ${r.error.description}\nTry a different payment method.`);
+      setLoading(false);
+    });
+    rzp.open();
+
+  } catch (e: any) {
+    console.error('Payment error:', e?.response?.data || e.message);
+    alert(`Error: ${e?.response?.data?.detail || e.message}`);
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
