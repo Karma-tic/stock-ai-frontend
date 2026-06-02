@@ -233,7 +233,7 @@ export default function LandingPage({ onGetStarted }: Props) {
     <h2 className="text-white text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
     <p className="text-slate-400 mb-10">No hidden charges. Cancel anytime.</p>
 
-    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
       {/* Free */}
       <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-left">
         <p className="text-slate-400 text-xs font-semibold uppercase mb-2">Free</p>
