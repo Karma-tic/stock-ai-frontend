@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { BarChart2, Star, Briefcase, DollarSign, Flame, Search, X } from 'lucide-react';
+import {  Search, X } from 'lucide-react';
 
 import { getTopStocks, getWatchlist, searchStocks, getStock } from '../lib/api';
 import { usePlan } from '../lib/usePlan';
