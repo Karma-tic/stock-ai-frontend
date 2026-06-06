@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getPortfolio, addToPortfolio, removeFromPortfolio } from '../lib/api';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
+import { Coins, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
 
 export default function Portfolio() {
     const { isPro } = usePlan();
@@ -71,7 +72,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
   if (loading) return (
     <div className="text-center py-20">
-      <div className="text-4xl mb-4 animate-pulse">💼</div>
+      <Coins className="w-10 h-10 mx-auto mb-4 animate-spin text-blue-400" />
       <p className="text-slate-400">Loading portfolio...</p>
     </div>
   );
@@ -98,7 +99,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Add Stock Button */}
 <div className="flex justify-between items-center mb-4">
-  <h2 className="text-white font-bold text-lg">💼 My Portfolio</h2>
+  <h2 className="text-white font-bold text-lg flex items-center gap-2">
+  <Coins className="w-5 h-5" />
+  My Portfolio
+</h2>
   <div className="flex items-center gap-2">
     {!isPro && (
       <span className="text-slate-500 text-xs">
@@ -115,7 +119,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
       }}
       className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg font-semibold transition"
     >
-      {showAdd ? '✕ Cancel' : '+ Add Stock'}
+      {showAdd ? 'Cancel' : 'Add Stock'}
     </button>
   </div>
 </div>
@@ -156,13 +160,18 @@ const [showUpgrade, setShowUpgrade] = useState(false);
               />
             </div>
           </div>
-          {error && <p className="text-red-400 text-sm mb-3">❌ {error}</p>}
+          {error && (
+  <p className="text-red-400 text-sm mb-3 flex items-center gap-1">
+    <AlertTriangle className="w-4 h-4" />
+    {error}
+  </p>
+)}
           <button
             onClick={handleAdd}
             disabled={adding}
             className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white px-6 py-2 rounded-lg font-semibold text-sm transition"
           >
-            {adding ? 'Adding...' : '✅ Add to Portfolio'}
+            {adding ? 'Adding...' : 'Add to Portfolio'}
           </button>
         </div>
       )}
@@ -170,7 +179,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
       {/* Empty State */}
       {portfolio.length === 0 && !showAdd && (
         <div className="text-center py-16 bg-slate-800 border border-slate-700 rounded-xl">
-          <div className="text-5xl mb-4">💼</div>
+          <Coins className="w-12 h-12 mx-auto mb-4 text-blue-400" />
           <p className="text-white font-semibold text-lg mb-2">No stocks yet</p>
           <p className="text-slate-400 text-sm mb-4">Add your stocks to track live P&L</p>
           <button
@@ -199,7 +208,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                           ? 'bg-green-500/20 text-green-400'
                           : 'bg-red-500/20 text-red-400'
                       }`}>
-                        {(item.price_change_pct||0) >= 0 ? '▲' : '▼'} {Math.abs(item.price_change_pct||0)}%
+                       <div className="flex items-center gap-1">
+  <TrendingUp className={`w-3 h-3 ${(item.price_change_pct||0) >= 0 ? '' : 'rotate-180'}`} />
+  {Math.abs(item.price_change_pct||0)}%
+</div>
                       </span>
                     </div>
                     <p className="text-slate-400 text-xs">{item.company_name}</p>
@@ -252,7 +264,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                   onClick={() => handleRemove(item.ticker)}
                   className="mt-3 text-slate-500 hover:text-red-400 text-xs transition"
                 >
-                  🗑 Remove from portfolio
+                  <span className="flex items-center gap-1">
+  <AlertTriangle className="w-3 h-3" />
+  Remove from portfolio
+</span>
                 </button>
               </div>
             );
@@ -261,7 +276,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
       )}
 
       <p className="text-slate-600 text-xs text-center mt-6">
-        ⚠️ P&L is indicative only. Not SEBI-registered advice.
+        <span className="flex items-center justify-center gap-1">
+  <AlertTriangle className="w-3 h-3" />
+  P&L is indicative only. Not SEBI-registered advice.
+</span>
       </p>
       {showUpgrade && (
   <UpgradeModal
