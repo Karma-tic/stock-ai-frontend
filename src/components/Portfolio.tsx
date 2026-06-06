@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { getPortfolio, addToPortfolio, removeFromPortfolio } from '../lib/api';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
-import { Coins, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
+import { Coins, AlertTriangle, TrendingUp } from 'lucide-react';
 
 export default function Portfolio() {
     const { isPro } = usePlan();
