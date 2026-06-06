@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StockCard from './StockCard';
 import AnalysisModal from './AnalysisModal';
-
+import { Coins, AlertTriangle, TrendingUp } from 'lucide-react';
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export default function PennyStocks() {
@@ -28,14 +28,20 @@ export default function PennyStocks() {
       {/* Header */}
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
         <h2 className="text-yellow-400 font-bold text-lg mb-1">
-          💸 Penny Stocks — Under ₹100
+          <span className="inline-flex items-center gap-2">
+  <Coins className="w-5 h-5" />
+  Penny Stocks — Under ₹100
+</span>
         </h2>
         <p className="text-slate-400 text-sm">
           High risk, high reward. These stocks trade below ₹100 on NSE.
           Always do your research before investing in penny stocks.
         </p>
         <p className="text-red-400 text-xs mt-2">
-          ⚠️ Penny stocks are highly volatile and risky. Not suitable for all investors.
+         <span className="inline-flex items-center gap-1">
+  <AlertTriangle className="w-4 h-4" />
+  Penny stocks are highly volatile and risky.
+</span>
         </p>
       </div>
 
@@ -55,7 +61,10 @@ export default function PennyStocks() {
           <div className="bg-slate-800 border border-slate-700 rounded-xl p-3 text-center">
             <p className="text-slate-500 text-xs">Most stocks up</p>
             <p className="text-blue-400 font-bold text-xl">
-              {stocks.filter(s => (s.price_change || 0) > 0).length} ▲
+             <span className="inline-flex items-center gap-1 justify-center">
+  {stocks.filter(s => (s.price_change || 0) > 0).length}
+  <TrendingUp className="w-4 h-4" />
+</span>
             </p>
           </div>
         </div>
@@ -64,7 +73,7 @@ export default function PennyStocks() {
       {/* Loading */}
       {loading && (
         <div className="text-center py-20">
-          <div className="text-4xl mb-4 animate-pulse">💸</div>
+          <Coins className="w-10 h-10 mx-auto mb-4 animate-pulse text-yellow-400" />
           <p className="text-slate-400">Loading penny stocks...</p>
           <p className="text-slate-500 text-sm mt-2">
             Fetching live prices for all stocks under ₹100
@@ -91,7 +100,7 @@ export default function PennyStocks() {
       {/* Empty state */}
       {!loading && stocks.length === 0 && (
         <div className="text-center py-20">
-          <div className="text-4xl mb-4">💸</div>
+         <Coins className="w-10 h-10 mx-auto mb-4 text-yellow-400" />
           <p className="text-white font-semibold">No penny stocks found right now</p>
           <p className="text-slate-400 text-sm mt-2">
             Check back during market hours
