@@ -202,29 +202,46 @@ export default function Dashboard() {
       {/* ============================================== */}
 
       {/* Tabs */}
-      <div className="bg-slate-900 border-b border-slate-800 px-4 py-3">
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-          {[
-            { id: 'market', label: 'Market' },
-            { id: 'watchlist', label: `Watchlist (${watchlist.length})` },
-            { id: 'trending', label: 'Trending' },
-            { id: 'portfolio', label: 'Portfolio' },
-            { id: 'penny', label: 'Penny Stocks' },
-          ].map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id as any)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                tab === t.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-800 text-slate-400'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
+     {/* Sliding Tab Navigation */}
+<div className="bg-slate-900 border-b border-slate-800 px-4 py-3">
+  <div
+    className="
+      flex gap-2 pb-1
+      overflow-x-auto scrollbar-hide
+      md:overflow-visible
+      md:justify-between
+    "
+  >
+    {[
+      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-white' },
+      { id: 'watchlist', label: `Watchlist (${watchlist.length})`, color: 'bg-yellow-500', activeText: 'text-black' },
+      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-white' },
+      { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-white' },
+      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-white' },
+    ].map(t => (
+      <button
+        key={t.id}
+        onClick={() => setTab(t.id as any)}
+        className={`
+          flex-shrink-0
+          md:flex-1
+          px-4 py-2
+          rounded-full
+          text-sm font-semibold
+          transition-all
+          text-center
+          ${
+            tab === t.id
+              ? `${t.color} ${t.activeText} shadow-lg scale-105`
+              : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+          }
+        `}
+      >
+        {t.label}
+      </button>
+    ))}
+  </div>
+</div>
 
       <LatestSignals />
 
