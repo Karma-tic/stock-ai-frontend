@@ -19,7 +19,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-slate-400 hover:text-white transition text-sm"
         >
-          🏠 Home
+          Home
         </button>
       </div>
       {children}
