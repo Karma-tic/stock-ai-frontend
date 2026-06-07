@@ -12,6 +12,7 @@ import Contact from './components/Contact';
 import About from './components/About';
 import LandingPage from './components/LandingPage';
 import Blog from './components/Blog';
+import Learn from './components/Learn';
 
 function Footer() {
   return (
@@ -70,7 +71,6 @@ function MainApp({ user }: { user: any }) {
 export default function App() {
 const [user, setUser] = useState<any>(null);
 const [loading, setLoading] = useState(true);
-const [showLogin, setShowLogin] = useState(false);
 
 useEffect(() => {
   // Handle magic link redirect — URL contains access_token in hash
@@ -87,7 +87,6 @@ useEffect(() => {
     if (session) {
       localStorage.setItem('sb_token', session.access_token);
       setUser(session.user);
-      setShowLogin(false); // ← make sure this is here
     } else {
       setUser(null);
       localStorage.removeItem('sb_token');
@@ -124,25 +123,32 @@ useEffect(() => {
         <Route path="/about"      element={publicLayout(About)} />
         <Route path="/blog"       element={publicLayout(Blog)} />
         <Route path="/blog/*"     element={publicLayout(Blog)} />
+        <Route path="/learn"      element={publicLayout(Learn)} />
+        
+        <Route path="/login" element={
+          <LoginPage
+            onLogin={(token, u) => {
+              localStorage.setItem('sb_token', token);
+              setUser(u);
+              // After login, they can just navigate to / or dashboard
+              window.location.href = '/'; 
+            }}
+            onBack={() => {
+               window.history.back();
+            }}
+          />
+        } />
+        
         <Route
-  path="*"
-  element={
-    user ? (
-      <MainApp user={user} />
-) : showLogin ? (
-  <LoginPage
-    onLogin={(token, u) => {
-      localStorage.setItem('sb_token', token);
-      setUser(u);
-      setShowLogin(false);
-    }}
-    onBack={() => setShowLogin(false)}  // ← add this
-  />
-) : (
-      <LandingPage onGetStarted={() => setShowLogin(true)} />
-    )
-  }
-/>
+          path="*"
+          element={
+            user ? (
+              <MainApp user={user} />
+            ) : (
+              <LandingPage onGetStarted={() => { window.location.href = '/login'; }} />
+            )
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

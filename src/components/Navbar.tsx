@@ -119,6 +119,11 @@ export default function Navbar({ user }: { user: any }) {
           </button>
         </div>
 
+        {/* MOBILE MENU OVERLAY */}
+        {open && (
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+        )}
+        
         {/* MOBILE MENU */}
         {open && (
           <div className="md:hidden absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4 shadow-xl z-50">
@@ -146,12 +151,13 @@ export default function Navbar({ user }: { user: any }) {
               Contact
             </Link>
 
-            <button
-              onClick={goToEducation}
-              className="block text-left text-slate-300 hover:text-white transition w-full"
+            <Link
+              to="/learn"
+              onClick={() => setOpen(false)}
+              className="block text-slate-300 hover:text-white transition"
             >
               Learn
-            </button>
+            </Link>
 
             {/* Mobile Actions */}
             {user ? (
