@@ -1,4 +1,5 @@
 import PageLayout from './PageLayout';
+import { Mail, CreditCard, Shield, Wrench } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -8,22 +9,27 @@ export default function Contact() {
         <p className="text-slate-400 text-sm mb-8">BytePlay Technologies — Stock AI</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        {[
-          { icon: '📧', title: 'General Enquiries', value: 'contact@karmatix.in' },
-          { icon: '💳', title: 'Payment & Billing', value: 'contact@karmatix.in' },
-          { icon: '🔒', title: 'Privacy Concerns', value: 'contact@karmatix.in' },
-          { icon: '🛠️', title: 'Technical Support', value: 'contact@karmatix.in' },
-        ].map(item => (
-          <div key={item.title} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
-            <div className="text-2xl mb-2">{item.icon}</div>
-            <p className="text-white font-semibold">{item.title}</p>
-            <a href={`mailto:${item.value}`}
-              className="text-blue-400 hover:text-blue-300 text-sm transition">
-              {item.value}
-            </a>
-          </div>
-        ))}
-      </div>
+  {[
+    { icon: Mail, title: "General Enquiries", value: "contact@karmatix.in" },
+    { icon: CreditCard, title: "Payment & Billing", value: "contact@karmatix.in" },
+    { icon: Shield, title: "Privacy Concerns", value: "hr@karmatix.in" },
+    { icon: Wrench, title: "Technical Support", value: "sujeetsingh@karmatix.in" },
+  ].map(({ icon: Icon, title, value }) => (
+    <div
+      key={title}
+      className="bg-slate-800 border border-slate-700 rounded-xl p-4"
+    >
+      <Icon className="w-6 h-6 text-blue-400 mb-2" />
+      <p className="text-white font-semibold">{title}</p>
+      <a
+        href={`mailto:${value}`}
+        className="text-blue-400 hover:text-blue-300 text-sm transition"
+      >
+        {value}
+      </a>
+    </div>
+  ))}
+</div>
 
       <div className="bg-slate-800 border border-slate-700 rounded-xl p-6">
         <h2 className="text-white font-bold text-lg mb-4">Response Times</h2>
