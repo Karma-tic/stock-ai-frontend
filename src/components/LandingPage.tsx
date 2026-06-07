@@ -97,7 +97,6 @@ export default function LandingPage({ onGetStarted }: Props) {
                 Learn
               </Link>
             </div>
-            </div>
           )}
 
         </div>
