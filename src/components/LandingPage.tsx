@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   TrendingUp,
@@ -17,11 +18,12 @@ interface Props {
 
 export default function LandingPage({ onGetStarted }: Props) {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-slate-950 overflow-x-hidden">
 
       {/* Navigation */}
-      <nav className="bg-slate-900 border-b border-slate-800">
+      <nav className="bg-slate-900 border-b border-slate-800 relative z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           
           {/* Logo */}
@@ -70,12 +72,49 @@ export default function LandingPage({ onGetStarted }: Props) {
           </div>
 
           {/* Mobile CTA */}
-          <button
-            onClick={onGetStarted}
-            className="sm:hidden bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap"
-          >
-            Get Started
-          </button>
+          <div className="sm:hidden flex items-center gap-3">
+            <button
+              onClick={onGetStarted}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap"
+            >
+              Get Started
+            </button>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white text-2xl px-2"
+            >
+              ☰
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {menuOpen && (
+            <div className="absolute top-[100%] left-0 w-full sm:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-4 shadow-xl z-50">
+              <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
+                About
+              </Link>
+              <Link to="/blog" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
+                Blog
+              </Link>
+              <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
+                Contact
+              </Link>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/#education");
+                  setTimeout(() => {
+                    document.getElementById("education")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }, 100);
+                }}
+                className="block text-left text-slate-300 hover:text-white text-sm transition w-full"
+              >
+                Learn
+              </button>
+            </div>
+          )}
 
         </div>
       </nav>

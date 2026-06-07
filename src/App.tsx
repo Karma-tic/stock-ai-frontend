@@ -11,6 +11,7 @@ import Disclaimer from './components/Disclaimer';
 import Contact from './components/Contact';
 import About from './components/About';
 import LandingPage from './components/LandingPage';
+import Blog from './components/Blog';
 
 function Footer() {
   return (
@@ -121,6 +122,8 @@ useEffect(() => {
         <Route path="/disclaimer" element={publicLayout(Disclaimer)} />
         <Route path="/contact"    element={publicLayout(Contact)} />
         <Route path="/about"      element={publicLayout(About)} />
+        <Route path="/blog"       element={publicLayout(Blog)} />
+        <Route path="/blog/*"     element={publicLayout(Blog)} />
         <Route
   path="*"
   element={

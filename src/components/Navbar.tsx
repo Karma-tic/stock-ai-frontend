@@ -107,43 +107,43 @@ export default function Navbar({ user }: { user: any }) {
             Logout
           </button>
         </div>
+
+        {/* MOBILE MENU */}
+        {open && (
+          <div className="md:hidden absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4 shadow-xl z-50">
+            <Link
+              to="/about"
+              onClick={() => setOpen(false)}
+              className="block text-white"
+            >
+              About
+            </Link>
+
+            <Link
+              to="/blog"
+              onClick={() => setOpen(false)}
+              className="block text-white"
+            >
+              Blog
+            </Link>
+
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="block text-white"
+            >
+              Contact
+            </Link>
+
+            <button
+              onClick={goToEducation}
+              className="block text-left text-white w-full"
+            >
+              Learn
+            </button>
+          </div>
+        )}
       </nav>
-
-      {/* MOBILE MENU */}
-      {open && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4">
-          <Link
-            to="/about"
-            onClick={() => setOpen(false)}
-            className="block text-white"
-          >
-            About
-          </Link>
-
-          <Link
-            to="/blog"
-            onClick={() => setOpen(false)}
-            className="block text-white"
-          >
-            Blog
-          </Link>
-
-          <Link
-            to="/contact"
-            onClick={() => setOpen(false)}
-            className="block text-white"
-          >
-            Contact
-          </Link>
-
-          <button
-            onClick={goToEducation}
-            className="block text-left text-white w-full"
-          >
-            Learn
-          </button>
-        </div>
-      )}
 
       {/* UPGRADE MODAL */}
       {showUpgrade && (
