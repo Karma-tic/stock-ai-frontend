@@ -14,8 +14,9 @@ import {
 interface Props {
   onGetStarted: () => void;
 }
-const navigate = useNavigate();
+
 export default function LandingPage({ onGetStarted }: Props) {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-slate-950 overflow-x-hidden">
 
