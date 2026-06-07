@@ -1,7 +1,6 @@
-
-import { Link } from 'react-router-dom';
-import { TrendingUp } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  TrendingUp,
   Target,
   IndianRupee,
   Smartphone,
@@ -15,7 +14,7 @@ import {
 interface Props {
   onGetStarted: () => void;
 }
-
+const navigate = useNavigate();
 export default function LandingPage({ onGetStarted }: Props) {
   return (
     <div className="min-h-screen bg-slate-950 overflow-x-hidden">
@@ -46,6 +45,21 @@ export default function LandingPage({ onGetStarted }: Props) {
             <Link to="/contact" className="text-slate-400 hover:text-white text-sm transition">
               Contact
             </Link>
+           <button
+  onClick={() => {
+    navigate("/#education");
+
+    // Delay ensures page renders before scroll
+    setTimeout(() => {
+      document.getElementById("education")?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }, 100);
+  }}
+  className="text-slate-300 hover:text-white text-sm transition"
+>
+  Learn
+</button>
             <button
               onClick={onGetStarted}
               className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap"
@@ -351,6 +365,7 @@ export default function LandingPage({ onGetStarted }: Props) {
   </div>
 </section>
     {/* ── EDUCATION HUB ─────────────────────────────────────── */}
+    <section id="education" className="bg-slate-900 py-16">
 <section className="max-w-5xl mx-auto px-6 py-16">
 
   {/* Section header */}
@@ -812,7 +827,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       ))}
     </div>
   </div>
-
+</section>
 </section>
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">
