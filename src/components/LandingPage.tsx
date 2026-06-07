@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   TrendingUp,
   Target,
@@ -17,7 +17,6 @@ interface Props {
 }
 
 export default function LandingPage({ onGetStarted }: Props) {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-slate-950 overflow-x-hidden">
