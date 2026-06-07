@@ -49,10 +49,10 @@ export default function Navbar({ user }: { user: any }) {
       {/* NAVBAR */}
       <nav className="bg-slate-900 border-b border-slate-700 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
         {/* LEFT */}
-        <div className="flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-blue-400" />
-          <span className="font-bold text-lg text-white">Stock AI</span>
-          <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-400 shrink-0" /></span>
+          <span className="font-bold text-lg text-white whitespace-nowrap">Stock AI</span>
+          <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
             LIVE
           </span>
         </div>
@@ -78,33 +78,44 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* RIGHT */}
         <div className="flex items-center gap-2">
+          {user ? (
+            <div className="hidden sm:flex items-center gap-2">
+              {isPro ? (
+                <span className="flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-semibold">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  PRO
+                </span>
+              ) : (
+                <button
+                  onClick={() => setShowUpgrade(true)}
+                  className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg font-semibold transition"
+                >
+                  Upgrade ₹49
+                </button>
+              )}
+
+              <button
+                onClick={logout}
+                className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-white transition"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/"
+              className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition"
+            >
+              Get Started
+            </Link>
+          )}
+
           {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden text-white text-2xl px-2"
           >
             ☰
-          </button>
-
-          {isPro ? (
-            <span className="flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-semibold">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              PRO
-            </span>
-          ) : (
-            <button
-              onClick={() => setShowUpgrade(true)}
-              className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg font-semibold transition"
-            >
-              Upgrade ₹49
-            </button>
-          )}
-
-          <button
-            onClick={logout}
-            className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-white transition"
-          >
-            Logout
           </button>
         </div>
 
@@ -114,7 +125,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/about"
               onClick={() => setOpen(false)}
-              className="block text-white"
+              className="block text-slate-300 hover:text-white transition"
             >
               About
             </Link>
@@ -122,7 +133,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/blog"
               onClick={() => setOpen(false)}
-              className="block text-white"
+              className="block text-slate-300 hover:text-white transition"
             >
               Blog
             </Link>
@@ -130,17 +141,51 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="block text-white"
+              className="block text-slate-300 hover:text-white transition"
             >
               Contact
             </Link>
 
             <button
               onClick={goToEducation}
-              className="block text-left text-white w-full"
+              className="block text-left text-slate-300 hover:text-white transition w-full"
             >
               Learn
             </button>
+
+            {/* Mobile Actions */}
+            {user ? (
+              <div className="pt-4 border-t border-slate-800 space-y-3">
+                {isPro ? (
+                  <span className="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full font-semibold">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    PRO
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => setShowUpgrade(true)}
+                    className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
+                  >
+                    Upgrade ₹49
+                  </button>
+                )}
+                <button
+                  onClick={logout}
+                  className="block w-full text-center text-sm bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-white transition"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="pt-4 border-t border-slate-800">
+                <Link
+                  to="/"
+                  className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </nav>
