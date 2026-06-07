@@ -104,9 +104,13 @@ useEffect(() => {
     );
   }
 
-  const publicLayout = (Component: React.ComponentType) => (
-    <><Component /><Footer /></>
-  );
+ const publicLayout = (Component: React.ComponentType) => (
+  <>
+    <Navbar user={user} />
+    <Component />
+    <Footer />
+  </>
+);
 
   return (
     <BrowserRouter>
