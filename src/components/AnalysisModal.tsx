@@ -155,33 +155,78 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                 <p className="text-slate-300 text-sm mt-2">{result.signal?.analysis?.short_summary}</p>
               </div>
 
-              {/* Price targets */}
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="font-semibold text-white mb-3">📊 Price Targets</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-blue-400' },
-                    { label: 'Target 1', value: `₹${result.signal?.entry_strategy?.target_price_1}`, color: 'text-green-400' },
-                    { label: 'Target 2', value: `₹${result.signal?.entry_strategy?.target_price_2}`, color: 'text-green-300' },
-                    { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-400' },
-                  ].map(item => (
-                    <div key={item.label} className="bg-slate-900 rounded-lg p-3">
-                      <p className="text-slate-500 text-xs">{item.label}</p>
-                      <p className={`font-bold ${item.color}`}>{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  <div className="bg-slate-900 rounded-lg p-3">
-                    <p className="text-slate-500 text-xs">Upside</p>
-                    <p className="font-bold text-green-400">+{result.signal?.entry_strategy?.upside_pct}%</p>
-                  </div>
-                  <div className="bg-slate-900 rounded-lg p-3">
-                    <p className="text-slate-500 text-xs">Downside Risk</p>
-                    <p className="font-bold text-red-400">-{result.signal?.entry_strategy?.downside_risk_pct}%</p>
-                  </div>
-                </div>
-              </div>
+              {/* Price Targets */}
+{(() => {
+  const entry = result?.signal?.entry_strategy || {};
+  const fmt   = (val: any) => {
+    if (val === null || val === undefined || val === 'null') return '—';
+    const num = parseFloat(val);
+    if (isNaN(num) || num === 0) return '—';
+    return `₹${num.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+  };
+  const fmtPct = (val: any) => {
+    if (val === null || val === undefined || val === 'null') return '—';
+    const num = parseFloat(val);
+    if (isNaN(num)) return '—';
+    return `${num > 0 ? '+' : ''}${num.toFixed(1)}%`;
+  };
+
+  return (
+    <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+      <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+        Price Targets
+      </h3>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Buy At</p>
+          <p className="text-blue-400 font-bold text-lg">
+            {fmt(entry.suggested_buy_price)}
+          </p>
+        </div>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Target 1</p>
+          <p className="text-green-400 font-bold text-lg">
+            {fmt(entry.target_price_1)}
+          </p>
+        </div>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Target 2</p>
+          <p className="text-green-300 font-bold text-lg">
+            {fmt(entry.target_price_2)}
+          </p>
+        </div>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Stop Loss</p>
+          <p className="text-red-400 font-bold text-lg">
+            {fmt(entry.stop_loss)}
+          </p>
+        </div>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Upside</p>
+          <p className="text-green-400 font-bold">
+            {fmtPct(entry.upside_pct)}
+          </p>
+        </div>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <p className="text-slate-400 text-xs mb-1">Downside Risk</p>
+          <p className="text-red-400 font-bold">
+            {fmtPct(entry.downside_risk_pct)}
+          </p>
+        </div>
+      </div>
+
+      {/* Show message if targets missing */}
+      {(!entry.suggested_buy_price || entry.suggested_buy_price === null) && (
+        <div className="mt-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+          <p className="text-yellow-400 text-xs">
+            Price targets not available for this signal.
+            Click AI Analysis again to get fresh analysis with targets.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+})()}
 
               {/* Quantity guide */}
               <div className="bg-slate-800 rounded-xl p-4">
