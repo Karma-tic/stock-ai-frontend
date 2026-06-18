@@ -33,9 +33,9 @@ export default function TrendingStocks() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-white font-bold text-xl mb-1">Market Pulse</h2>
+        <h2 className="text-white font-bold text-xl mb-1">Today's Biggest Movers</h2>
         <p className="text-slate-400 text-sm">
-          Most active NSE stocks by volume — updated daily
+          Real-time gainers and losers across 150+ NSE stocks — refreshed every 30 min
         </p>
       </div>
 
@@ -75,12 +75,12 @@ export default function TrendingStocks() {
     activeTab === 'bought' ? 'text-green-400' : 'text-red-400'
   }`}>
     {activeTab === 'bought'
-      ? 'Top gaining stocks on NSE today'
-      : 'Top losing stocks on NSE today'
+      ? 'Stocks gaining the most right now — not a prediction, this is happening live'
+      : 'Stocks losing the most right now — not a prediction, this is happening live'
     }
   </p>
   <p className="text-slate-500 text-xs mt-1">
-    Source: NSE India Live • Updated every hour
+    Scanned across our full stock universe • Refreshed every 30 min
   </p>
 </div>
 
