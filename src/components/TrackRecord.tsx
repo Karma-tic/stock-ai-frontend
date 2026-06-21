@@ -1,7 +1,7 @@
 // src/components/TrackRecord.tsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CheckCircle2, XCircle, TrendingUp } from 'lucide-react';
+import { CheckCircle2, XCircle } from 'lucide-react';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
