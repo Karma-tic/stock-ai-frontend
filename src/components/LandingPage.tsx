@@ -97,6 +97,9 @@ export default function LandingPage({ onGetStarted }: Props) {
               <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
                 Contact
               </Link>
+              <Link to="/track-record" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
+                Track Record
+              </Link>
               <Link to="/learn" onClick={() => setMenuOpen(false)} className="block text-slate-300 hover:text-white text-sm transition">
                 Learn
               </Link>
