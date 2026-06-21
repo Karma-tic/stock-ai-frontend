@@ -47,12 +47,17 @@ export default function LandingPage({ onGetStarted }: Props) {
             <Link to="/contact" className="text-slate-400 hover:text-white text-sm transition">
               Contact
             </Link>
+            <Link to="/track-record" className="text-slate-400 hover:text-white text-sm transition">
+              Track Record
+            </Link>
             <Link
               to="/learn"
               className="text-slate-300 hover:text-white text-sm transition"
             >
               Learn
             </Link>
+            
+
             <button
               onClick={onGetStarted}
               className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap"

@@ -13,6 +13,7 @@ import About from './components/About';
 import LandingPage from './components/LandingPage';
 import Blog from './components/Blog';
 import Learn from './components/Learn';
+import TrackRecord from './components/TrackRecord';
 
 function Footer() {
   return (
@@ -124,7 +125,8 @@ useEffect(() => {
         <Route path="/blog"       element={publicLayout(Blog)} />
         <Route path="/blog/*"     element={publicLayout(Blog)} />
         <Route path="/learn"      element={publicLayout(Learn)} />
-        
+        <Route path="/track-record" element={publicLayout(TrackRecord)} />
+
         <Route path="/login" element={
           <LoginPage
             onLogin={(token, u) => {
