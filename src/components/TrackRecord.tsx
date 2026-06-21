@@ -120,8 +120,8 @@ export default function TrackRecord() {
       </div>
 
       {/* Table */}
-      <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-x-auto">
+        <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="bg-slate-900 text-slate-400 text-left">
               <th className="p-3">Stock</th>

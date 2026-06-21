@@ -120,7 +120,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           Indian Stocks For You.
         </h1>
         <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-8">
-          Stock AI reads NSE filings, Google News, Economic Times and Moneycontrol
+          Stock AI reads NSE filings, Reuters, Business Standard, Mint and Moneycontrol
           — then gives you a structured BUY/HOLD/SELL signal with exact price targets
           in under 10 seconds. Free to start.
         </p>
