@@ -36,7 +36,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Navigation */}
       <nav className="bg-slate-900 border-b border-slate-800 relative z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+        <div className="w-full px-6 py-4 flex justify-between items-center">
           
           {/* Logo */}
           <div className="flex items-center gap-2 min-w-0">
