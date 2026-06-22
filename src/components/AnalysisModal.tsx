@@ -4,6 +4,25 @@ import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from 
 
 import UpgradeModal from './UpgradeModal';
 import ShareableSignal from './ShareableSignal';
+function splitIntoPoints(text?: string): string[] {
+  if (!text) return [];
+
+  // First try splitting on periods followed by a capital letter (proper sentences)
+  let points = text.split(/\.\s+(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
+
+  // If that didn't split anything (one giant blob), try splitting on
+  // a lowercase letter immediately followed by an uppercase letter —
+  // this catches concatenated phrases with no punctuation at all,
+  // e.g. "...value zoneStrong dividend..."
+  if (points.length <= 1) {
+    points = text.split(/(?<=[a-z%])(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
+  }
+
+  // Clean trailing periods and ensure each point ends cleanly
+  return points.map(p => p.replace(/\.$/, '').trim());
+}
+
+
 // ── Watchlist Button ──────────────────────────────────────────────────────
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -283,11 +302,19 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
               <div className="grid grid-cols-1 gap-3">
                 <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
                   <p className="text-green-400 font-semibold text-sm mb-1">🟢 Bull Case</p>
-                  <p className="text-slate-300 text-sm">{result.signal?.analysis?.bull_case}</p>
+                 <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                    {splitIntoPoints(result.signal?.analysis?.bull_case).map((point, i) => (
+                      <li key={i}>{point}</li>
+                    ))}
+                  </ul>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
                   <p className="text-red-400 font-semibold text-sm mb-1">🔴 Bear Case</p>
-                  <p className="text-slate-300 text-sm">{result.signal?.analysis?.bear_case}</p>
+                  <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                    {splitIntoPoints(result.signal?.analysis?.bear_case).map((point, i) => (
+                      <li key={i}>{point}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
