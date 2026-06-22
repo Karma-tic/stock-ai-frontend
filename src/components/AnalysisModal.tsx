@@ -4,8 +4,18 @@ import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from 
 
 import UpgradeModal from './UpgradeModal';
 import ShareableSignal from './ShareableSignal';
-function splitIntoPoints(text?: string): string[] {
+function splitIntoPoints(text?: unknown): string[] {
+  // Handle non-string inputs gracefully — cached signals may have
+  // bull_case/bear_case as arrays, objects, or other unexpected types
   if (!text) return [];
+
+  if (Array.isArray(text)) {
+    return text.map(t => String(t).trim()).filter(Boolean);
+  }
+
+  if (typeof text !== 'string') {
+    return [String(text)];
+  }
 
   // First try splitting on periods followed by a capital letter (proper sentences)
   let points = text.split(/\.\s+(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
