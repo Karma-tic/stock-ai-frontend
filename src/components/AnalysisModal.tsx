@@ -205,17 +205,70 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                 </div>
               </div>
 
-              {/* Ratings */}
+              {/* Conviction Meter */}
               <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="font-semibold text-white mb-3">⭐ Ratings</h3>
+                <h3 className="font-semibold text-white mb-1">🎯 Conviction Meter</h3>
+                <p className="text-slate-500 text-xs mb-4">
+                  Not all signals are equal — here's what's actually driving this confidence score
+                </p>
+
+                {/* Bar scores */}
+                <div className="space-y-3 mb-4">
+                  {[
+                    { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-blue-500' },
+                    { label: 'Valuation',       value: result.signal?.ratings?.value_score,     color: 'bg-yellow-500' },
+                    { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-purple-500' },
+                  ].map(item => {
+                    const score = Number(item.value) || 0;
+                    const pct   = Math.max(0, Math.min(100, score * 10));
+                    return (
+                      <div key={item.label}>
+                        <div className="flex justify-between items-center mb-1">
+                          <p className="text-slate-300 text-xs font-medium">{item.label}</p>
+                          <p className="text-slate-400 text-xs font-bold">{score}/10</p>
+                        </div>
+                        <div className="w-full bg-slate-900 rounded-full h-2">
+                          <div
+                            className={`${item.color} h-2 rounded-full transition-all`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* News sentiment badge */}
+                <div className="flex items-center justify-between bg-slate-900 rounded-lg p-3 mb-3">
+                  <p className="text-slate-400 text-xs">News Sentiment</p>
+                  {(() => {
+                    const sentiment = result.signal?.ratings?.news_sentiment || 'NEUTRAL';
+                    const sentimentColors: Record<string, string> = {
+                      POSITIVE: 'bg-green-500/20 text-green-400',
+                      NEGATIVE: 'bg-red-500/20 text-red-400',
+                      NEUTRAL:  'bg-slate-600/30 text-slate-300',
+                    };
+                    return (
+                      <span className={`px-2 py-1 rounded-md text-xs font-bold ${sentimentColors[sentiment] || sentimentColors.NEUTRAL}`}>
+                        {sentiment}
+                      </span>
+                    );
+                  })()}
+                </div>
+
+                {/* Dividend / Growth / Risk badges */}
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { label: 'Dividend', value: result.signal?.ratings?.dividend_potential },
-                    { label: 'Growth', value: result.signal?.ratings?.growth_potential },
-                    { label: 'Risk', value: result.signal?.ratings?.risk_level },
+                    { label: 'Growth',   value: result.signal?.ratings?.growth_potential },
+                    { label: 'Risk',     value: result.signal?.ratings?.risk_level },
                   ].map(item => {
-                    const ratingMap: Record<string, string> = { HIGH: item.label === 'Risk' ? 'text-red-400' : 'text-green-400', MEDIUM: 'text-yellow-400', LOW: item.label === 'Risk' ? 'text-green-400' : 'text-red-400' };
-const color = ratingMap[item.value] || 'text-white';
+                    const ratingMap: Record<string, string> = {
+                      HIGH:   item.label === 'Risk' ? 'text-red-400'   : 'text-green-400',
+                      MEDIUM: 'text-yellow-400',
+                      LOW:    item.label === 'Risk' ? 'text-green-400' : 'text-red-400',
+                    };
+                    const color = ratingMap[item.value] || 'text-white';
                     return (
                       <div key={item.label} className="bg-slate-900 rounded-lg p-3 text-center">
                         <p className="text-slate-500 text-xs">{item.label}</p>
@@ -223,20 +276,6 @@ const color = ratingMap[item.value] || 'text-white';
                       </div>
                     );
                   })}
-                </div>
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  <div className="bg-slate-900 rounded-lg p-2 text-center">
-                    <p className="text-slate-500 text-xs">Sentiment</p>
-                    <p className="text-sm font-bold text-white">{result.signal?.ratings?.news_sentiment}</p>
-                  </div>
-                  <div className="bg-slate-900 rounded-lg p-2 text-center">
-                    <p className="text-slate-500 text-xs">Value</p>
-                    <p className="text-sm font-bold text-yellow-400">{result.signal?.ratings?.value_score}/10</p>
-                  </div>
-                  <div className="bg-slate-900 rounded-lg p-2 text-center">
-                    <p className="text-slate-500 text-xs">Momentum</p>
-                    <p className="text-sm font-bold text-blue-400">{result.signal?.ratings?.momentum_score}/10</p>
-                  </div>
                 </div>
               </div>
 
