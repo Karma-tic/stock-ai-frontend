@@ -23,9 +23,9 @@ export default function About() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
           {[
-            { number: "500+",   label: "NSE/BSE Stocks Covered" },
+            { number: "2300+",   label: "NSE/BSE Stocks Covered" },
             { number: "8 sec",  label: "Average Analysis Time" },
-            { number: "4+",     label: "News Sources Per Stock" },
+            { number: "6+",     label: "News Sources Per Stock" },
             { number: "Free",   label: "To Start" },
           ].map(stat => (
             <div key={stat.label}
