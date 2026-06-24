@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import {
-  TrendingUp,
   Target,
   IndianRupee,
   Smartphone,
@@ -13,6 +12,7 @@ import {
   Newspaper,
   RefreshCcw,
 } from "lucide-react";
+
 interface Props {
   onGetStarted: () => void;
 }
@@ -30,10 +30,9 @@ export default function LandingPage({ onGetStarted }: Props) {
       })
       .catch(() => {});
   }, []);
+
   return (
     <div className="min-h-screen bg-slate-950 overflow-x-hidden">
-
-  
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
@@ -146,75 +145,76 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
 
       {/* Features */}
-<section className="bg-slate-900 py-16">
-  <div className="max-w-5xl mx-auto px-6">
-    <h2 className="text-white text-3xl font-bold text-center mb-10">
-      Everything You Need to Invest Smarter
-    </h2>
+      <section className="bg-slate-900 py-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-white text-3xl font-bold text-center mb-10">
+            Everything You Need to Invest Smarter
+          </h2>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[
-        {
-          icon: Target,
-          title: "BUY/HOLD/SELL Signals",
-          desc: "Clear signals with confidence percentage so you know how strong the recommendation is",
-        },
-        {
-          icon: IndianRupee,
-          title: "Price Targets",
-          desc: "Exact entry price, two target levels and stop loss for every analysis",
-        },
-        {
-          icon: Smartphone,
-          title: "Works on Phone",
-          desc: "Fully responsive — check your stocks anywhere from your mobile device",
-        },
-        {
-          icon: Star,
-          title: "Watchlist",
-          desc: "Save your favourite stocks and monitor them with one tap",
-        },
-        {
-          icon: Briefcase,
-          title: "Portfolio Tracker",
-          desc: "Track your holdings with live P&L — see your profit or loss in real time",
-        },
-        {
-          icon: Mail,
-          title: "Morning Digest",
-          desc: "Pro users get daily email at 8:30 AM with top BUY signals before market opens",
-        },
-        {
-          icon: Coins,
-          title: "Penny Stocks",
-          desc: "Dedicated section for NSE stocks under ₹100 — high risk, high reward opportunities",
-        },
-        {
-          icon: Newspaper,
-          title: "Multi-source News",
-          desc: "Reads NSE India, Google News, Economic Times and Moneycontrol for every stock",
-        },
-        {
-          icon: RefreshCcw,
-          title: "Hourly Refresh",
-          desc: "Signals automatically updated every hour during market hours (9 AM - 4 PM IST)",
-        },
-      ].map((f) => {
-        const Icon = f.icon;
-        return (
-          <div
-            key={f.title}
-            className="bg-slate-800 border border-slate-700 rounded-xl p-5"
-          >
-            <Icon className="w-7 h-7 text-blue-400 mb-3" strokeWidth={2.2} />
-            <p className="text-white font-semibold mb-2">{f.title}</p>
-            <p className="text-slate-400 text-sm">{f.desc}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Target,
+                title: "BUY/HOLD/SELL Signals",
+                desc: "Clear signals with confidence percentage so you know how strong the recommendation is",
+              },
+              {
+                icon: IndianRupee,
+                title: "Price Targets",
+                desc: "Exact entry price, two target levels and stop loss for every analysis",
+              },
+              {
+                icon: Smartphone,
+                title: "Works on Phone",
+                desc: "Fully responsive — check your stocks anywhere from your mobile device",
+              },
+              {
+                icon: Star,
+                title: "Watchlist",
+                desc: "Save your favourite stocks and monitor them with one tap",
+              },
+              {
+                icon: Briefcase,
+                title: "Portfolio Tracker",
+                desc: "Track your holdings with live P&L — see your profit or loss in real time",
+              },
+              {
+                icon: Mail,
+                title: "Morning Digest",
+                desc: "Pro users get daily email at 8:30 AM with top BUY signals before market opens",
+              },
+              {
+                icon: Coins,
+                title: "Penny Stocks",
+                desc: "Dedicated section for NSE stocks under ₹100 — high risk, high reward opportunities",
+              },
+              {
+                icon: Newspaper,
+                title: "Multi-source News",
+                desc: "Reads NSE India, Google News, Economic Times and Moneycontrol for every stock",
+              },
+              {
+                icon: RefreshCcw,
+                title: "Hourly Refresh",
+                desc: "Signals automatically updated every hour during market hours (9 AM - 4 PM IST)",
+              },
+            ].map((f) => {
+              const Icon = f.icon;
+              return (
+                <div
+                  key={f.title}
+                  className="bg-slate-800 border border-slate-700 rounded-xl p-5"
+                >
+                  <Icon className="w-7 h-7 text-blue-400 mb-3" strokeWidth={2.2} />
+                  <p className="text-white font-semibold mb-2">{f.title}</p>
+                  <p className="text-slate-400 text-sm">{f.desc}</p>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
+
       {/* Educational Content — critical for AdSense */}
       <section className="max-w-5xl mx-auto px-6 py-16">
         <h2 className="text-white text-3xl font-bold text-center mb-4">
@@ -257,76 +257,75 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
- {/* Pricing — replace existing section */}
-<section className="bg-slate-900 py-16">
-  <div className="max-w-4xl mx-auto px-6 text-center">
-    <h2 className="text-white text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
-    <p className="text-slate-400 mb-10">No hidden charges. Cancel anytime.</p>
+      {/* Pricing — replace existing section */}
+      <section className="bg-slate-900 py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-white text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
+          <p className="text-slate-400 mb-10">No hidden charges. Cancel anytime.</p>
 
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
-      {/* Free */}
-      <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-left">
-        <p className="text-slate-400 text-xs font-semibold uppercase mb-2">Free</p>
-        <p className="text-3xl font-black text-white mb-1">₹0</p>
-        <p className="text-slate-500 text-xs mb-4">forever</p>
-        <div className="space-y-2">
-          {["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-              <p className="text-slate-400 text-xs">{f}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
+            {/* Free */}
+            <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-left">
+              <p className="text-slate-400 text-xs font-semibold uppercase mb-2">Free</p>
+              <p className="text-3xl font-black text-white mb-1">₹0</p>
+              <p className="text-slate-500 text-xs mb-4">forever</p>
+              <div className="space-y-2">
+                {["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"].map(f => (
+                  <div key={f} className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                    <p className="text-slate-400 text-xs">{f}</p>
+                  </div>
+                ))}
+              </div>
+              <button onClick={onGetStarted}
+                className="mt-4 w-full border border-slate-600 text-slate-300 py-2 rounded-lg text-sm font-semibold hover:border-slate-400 transition">
+                Get Started
+              </button>
             </div>
-          ))}
-        </div>
-        <button onClick={onGetStarted}
-          className="mt-4 w-full border border-slate-600 text-slate-300 py-2 rounded-lg text-sm font-semibold hover:border-slate-400 transition">
-          Get Started
-        </button>
-      </div>
 
-      {/* 1 Day Trial */}
-      <div className="bg-yellow-500/5 border border-yellow-500/40 rounded-xl p-5 text-left relative">
-        <span className="absolute -top-3 left-4 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded-full font-bold">TRY IT</span>
-        <p className="text-yellow-400 text-xs font-semibold uppercase mb-2">Trial</p>
-        <p className="text-3xl font-black text-white mb-1">₹1</p>
-        <p className="text-slate-500 text-xs mb-4">1 day access</p>
-        <div className="space-y-2">
-          {["Full Pro access", "All features unlocked", "No commitment"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
-              <p className="text-slate-300 text-xs">{f}</p>
+            {/* 1 Day Trial */}
+            <div className="bg-yellow-500/5 border border-yellow-500/40 rounded-xl p-5 text-left relative">
+              <span className="absolute -top-3 left-4 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded-full font-bold">TRY IT</span>
+              <p className="text-yellow-400 text-xs font-semibold uppercase mb-2">Trial</p>
+              <p className="text-3xl font-black text-white mb-1">₹1</p>
+              <p className="text-slate-500 text-xs mb-4">1 day access</p>
+              <div className="space-y-2">
+                {["Full Pro access", "All features unlocked", "No commitment"].map(f => (
+                  <div key={f} className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                    <p className="text-slate-300 text-xs">{f}</p>
+                  </div>
+                ))}
+              </div>
+              <button onClick={onGetStarted}
+                className="mt-4 w-full bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg text-sm font-bold transition">
+                Try for ₹1
+              </button>
             </div>
-          ))}
-        </div>
-        <button onClick={onGetStarted}
-          className="mt-4 w-full bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg text-sm font-bold transition">
-          Try for ₹1
-        </button>
-      </div>
 
-      {/* 1 Month */}
-      <div className="bg-blue-600/10 border-2 border-blue-500 rounded-xl p-5 text-left relative">
-        <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">POPULAR</span>
-        <p className="text-blue-400 text-xs font-semibold uppercase mb-2">1 Month</p>
-        <p className="text-3xl font-black text-white mb-1">₹49</p>
-        <p className="text-slate-500 text-xs mb-4">no auto-renewal</p>
-        <div className="space-y-2">
-          {["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              <p className="text-slate-300 text-xs">{f}</p>
+            {/* 1 Month */}
+            <div className="bg-blue-600/10 border-2 border-blue-500 rounded-xl p-5 text-left relative">
+              <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">POPULAR</span>
+              <p className="text-blue-400 text-xs font-semibold uppercase mb-2">1 Month</p>
+              <p className="text-3xl font-black text-white mb-1">₹49</p>
+              <p className="text-slate-500 text-xs mb-4">no auto-renewal</p>
+              <div className="space-y-2">
+                {["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"].map(f => (
+                  <div key={f} className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                    <p className="text-slate-300 text-xs">{f}</p>
+                  </div>
+                ))}
+              </div>
+              <button onClick={onGetStarted}
+                className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-sm font-bold transition">
+                Get 30 Days
+              </button>
             </div>
-          ))}
-        </div>
-        <button onClick={onGetStarted}
-          className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-sm font-bold transition">
-          Get 30 Days
-        </button>
-      </div>
 
-      
-    </div>
-  </div>
-</section>
+          </div>
+        </div>
+      </section>
 
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">
@@ -383,51 +382,6 @@ export default function LandingPage({ onGetStarted }: Props) {
         </button>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-8">
-        
-        <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/about" className="text-slate-500 hover:text-white text-sm">About</Link>
-            <Link to="/privacy" className="text-slate-500 hover:text-white text-sm">Privacy</Link>
-            <Link to="/terms" className="text-slate-500 hover:text-white text-sm">Terms</Link>
-            <Link to="/refund" className="text-slate-500 hover:text-white text-sm">Refund</Link>
-            <Link to="/disclaimer" className="text-slate-500 hover:text-white text-sm">Disclaimer</Link>
-            <Link to="/contact" className="text-slate-500 hover:text-white text-sm">Contact</Link>
-          </div>
-          <p className="text-slate-600 text-xs w-full text-center">
-            ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
-          </p>
-          {/* Data Sources */}
-<div className="border-t border-slate-800 pt-6 mt-6 w-full">
-  <p className="text-slate-600 text-xs text-center mb-3">
-    Data Sources
-  </p>
-
-  <div className="flex flex-wrap justify-center gap-4">
-    {[
-      { label: "NSE India", url: "https://www.nseindia.com" },
-      { label: "BSE India", url: "https://www.bseindia.com" },
-      { label: "Economic Times Markets", url: "https://economictimes.indiatimes.com/markets" },
-      { label: "SEBI", url: "https://www.sebi.gov.in" },
-      { label: "Moneycontrol", url: "https://www.moneycontrol.com" },
-    ].map((link) => (
-      <a
-        key={link.label}
-        href={link.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-slate-600 hover:text-slate-400 text-xs transition underline"
-      >
-        {link.label}
-      </a>
-    ))}
-  </div>
-</div>
-        </div>
-        
-      </footer>
     </div>
   );
 }
