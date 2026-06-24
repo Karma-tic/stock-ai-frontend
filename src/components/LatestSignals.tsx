@@ -47,21 +47,45 @@ export default function LatestSignals() {
             HOLD: 'text-yellow-400',
             SELL: 'text-red-400'
           };
-          return (
-            <div key={i} className={`flex-shrink-0 border rounded-lg px-3 py-2 min-w-[130px] ${colors[s.signal] || 'border-slate-600'}`}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-white font-bold text-sm">{s.ticker}</span>
-                <span className={`text-xs font-bold ${textColors[s.signal] || 'text-white'}`}>
-                  {s.signal}
-                </span>
+         return (
+    <div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
+      {/* 1. Add this layout wrapper to limit the width and center it on wide PC screens */}
+      <div className="max-w-5xl mx-auto w-full">
+        
+        <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
+          AI Signals
+        </p>
+        
+        {/* 2. Added md:justify-start or keeping it flexible while centering elements inside */}
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {signals.map((s, i) => {
+            const colors: Record<string, string> = {
+              BUY:  'border-green-500 bg-green-500/10',
+              HOLD: 'border-yellow-500 bg-yellow-500/10',
+              SELL: 'border-red-500 bg-red-500/10'
+            };
+            const textColors: Record<string, string> = {
+              BUY:  'text-green-400',
+              HOLD: 'text-yellow-400',
+              SELL: 'text-red-400'
+            };
+            return (
+              <div key={i} className={`flex-shrink-0 border rounded-lg px-3 py-2 min-w-[130px] ${colors[s.signal] || 'border-slate-600'}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-white font-bold text-sm">{s.ticker}</span>
+                  <span className={`text-xs font-bold ${textColors[s.signal] || 'text-white'}`}>
+                    {s.signal}
+                  </span>
+                </div>
+                <div className="flex justify-between mt-1">
+                  <p className="text-slate-400 text-xs">₹{s.current_price}</p>
+                  <p className="text-slate-500 text-xs">{s.confidence}% conf</p>
+                </div>
               </div>
-              <div className="flex justify-between mt-1">
-                <p className="text-slate-400 text-xs">₹{s.current_price}</p>
-                <p className="text-slate-500 text-xs">{s.confidence}% conf</p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
       </div>
     </div>
   );
