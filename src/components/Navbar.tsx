@@ -93,10 +93,10 @@ export default function Navbar({ user }: { user: any }) {
             </div>
           ) : (
             <Link
-              to="/"
+              to="/login"
               className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition whitespace-nowrap"
             >
-              Get Started Free
+              Get Started
             </Link>
           )}
 
@@ -183,7 +183,7 @@ export default function Navbar({ user }: { user: any }) {
             ) : (
               <div className="pt-4 border-t border-slate-800">
                 <Link
-                  to="/"
+                  to="/login"
                   className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
                 >
                   Get Started
