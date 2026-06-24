@@ -36,18 +36,18 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Navigation */}
       <nav className="bg-slate-900 border-b border-slate-800 relative z-50">
-        <div className="w-full px-6 py-4 flex justify-between items-center">
+        <div className="w-full px-4 sm:px-6 py-4 flex justify-between items-center">
           
-          {/* Logo */}
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-400 shrink-0" /></span>
-            <span className="font-bold text-xl text-white whitespace-nowrap">
+          {/* Logo (Now Clickable & Mobile Optimized) */}
+          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <span className="text-xl sm:text-2xl shrink-0"><TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400 shrink-0" /></span>
+            <span className="font-bold text-lg sm:text-xl text-white whitespace-nowrap">
               Stock AI
             </span>
-            <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
+            <span className="text-[10px] sm:text-xs bg-green-500 text-black px-1.5 sm:px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
               LIVE
             </span>
-          </div>
+          </Link>
 
           {/* Right Nav (hidden on mobile) */}
           <div className="hidden sm:flex items-center gap-4">

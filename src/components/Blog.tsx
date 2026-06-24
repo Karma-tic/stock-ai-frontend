@@ -28,6 +28,12 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-slate-950 py-20">
       <div className="max-w-5xl mx-auto px-6">
+        
+        {/* New Back Button */}
+        <Link to="/" className="inline-flex items-center text-slate-400 hover:text-white text-sm font-semibold mb-8 transition">
+          ← Back to Home
+        </Link>
+
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-6">
             Stock Market <span className="text-blue-400">Insights</span>
