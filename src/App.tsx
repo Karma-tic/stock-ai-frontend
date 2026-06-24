@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import LoginPage from './components/LoginPage';
 import Dashboard from './components/Dashboard';
@@ -59,105 +59,105 @@ function Footer() {
   );
 }
 
-function MainApp({ user }: { user: any }) {
+// NEW: Global Layout Component
+function AppLayout({ user }: { user: any }) {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+
   return (
-    <>
-      <Navbar user={user} />
-      <Dashboard />
-      <Footer />
-    </>
-  );
-}
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar stays pinned to the top (Hidden on Login Page) */}
+      {!isLoginPage && <Navbar user={user} />}
+      
+      {/* The main content area expands to push the footer down */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/privacy"    element={<PrivacyPolicy />} />
+          <Route path="/terms"      element={<TermsOfService />} />
+          <Route path="/refund"     element={<RefundPolicy />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
+          <Route path="/contact"    element={<Contact />} />
+          <Route path="/about"      element={<About />} />
+          <Route path="/blog/*"     element={<Blog />} />
+          <Route path="/learn"      element={<Learn />} />
+          <Route path="/track-record" element={<TrackRecord />} />
 
-export default function App() {
-const [user, setUser] = useState<any>(null);
-const [loading, setLoading] = useState(true);
+          <Route path="/login" element={
+            <LoginPage
+              onLogin={(token, u) => {
+                localStorage.setItem('sb_token', token);
+                window.location.href = '/'; 
+              }}
+              onBack={() => {
+                window.history.back();
+              }}
+            />
+          } />
+          
+          <Route
+            path="*"
+            element={
+              user ? (
+                <Dashboard />
+              ) : (
+                <LandingPage onGetStarted={() => { window.location.href = '/login'; }} />
+              )
+            }
+          />
+        </Routes>
+      </main>
 
-useEffect(() => {
-  // Handle magic link redirect — URL contains access_token in hash
-  supabase.auth.getSession().then(({ data }) => {
-    if (data.session) {
-      localStorage.setItem('sb_token', data.session.access_token);
-      setUser(data.session.user);
-    }
-    setLoading(false);
-  });
-
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-    console.log('Auth event:', event, session?.user?.email);
-    if (session) {
-      localStorage.setItem('sb_token', session.access_token);
-      setUser(session.user);
-    } else {
-      setUser(null);
-      localStorage.removeItem('sb_token');
-    }
-  });
-
-  return () => subscription.unsubscribe();
-}, []);
-
-  if (loading) {
-  return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
-      <div className="relative flex h-12 w-12 items-center justify-center">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
-        <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
-      </div>
-      <p className="text-slate-400 text-xs tracking-widest uppercase animate-pulse">
-        Fetching Real-time Intelligence
-      </p>
+      {/* Footer stays pinned to the bottom (Hidden on Login Page) */}
+      {!isLoginPage && <Footer />}
     </div>
   );
 }
 
- const publicLayout = (Component: React.ComponentType) => (
-  <>
-    <Navbar user={user} />
-    <Component />
-    <Footer />
-  </>
-);
+export default function App() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        localStorage.setItem('sb_token', data.session.access_token);
+        setUser(data.session.user);
+      }
+      setLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth event:', event, session?.user?.email);
+      if (session) {
+        localStorage.setItem('sb_token', session.access_token);
+        setUser(session.user);
+      } else {
+        setUser(null);
+        localStorage.removeItem('sb_token');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+        <div className="relative flex h-12 w-12 items-center justify-center">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
+          <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
+        </div>
+        <p className="text-slate-400 text-xs tracking-widest uppercase animate-pulse">
+          Fetching Real-time Intelligence
+        </p>
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/privacy"    element={publicLayout(PrivacyPolicy)} />
-        <Route path="/terms"      element={publicLayout(TermsOfService)} />
-        <Route path="/refund"     element={publicLayout(RefundPolicy)} />
-        <Route path="/disclaimer" element={publicLayout(Disclaimer)} />
-        <Route path="/contact"    element={publicLayout(Contact)} />
-        <Route path="/about"      element={publicLayout(About)} />
-        <Route path="/blog"       element={publicLayout(Blog)} />
-        <Route path="/blog/*"     element={publicLayout(Blog)} />
-        <Route path="/learn"      element={publicLayout(Learn)} />
-        <Route path="/track-record" element={publicLayout(TrackRecord)} />
-
-        <Route path="/login" element={
-          <LoginPage
-            onLogin={(token, u) => {
-              localStorage.setItem('sb_token', token);
-              setUser(u);
-              // After login, they can just navigate to / or dashboard
-              window.location.href = '/'; 
-            }}
-            onBack={() => {
-               window.history.back();
-            }}
-          />
-        } />
-        
-        <Route
-          path="*"
-          element={
-            user ? (
-              <MainApp user={user} />
-            ) : (
-              <LandingPage onGetStarted={() => { window.location.href = '/login'; }} />
-            )
-          }
-        />
-      </Routes>
+      {/* AppLayout contains everything and manages the global Navbar/Footer */}
+      <AppLayout user={user} />
     </BrowserRouter>
   );
 }
