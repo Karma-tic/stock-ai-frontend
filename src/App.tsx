@@ -15,7 +15,6 @@ import Blog from './components/Blog';
 import Learn from './components/Learn';
 import TrackRecord from './components/TrackRecord';
 
-import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
