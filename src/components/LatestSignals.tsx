@@ -34,7 +34,8 @@ export default function LatestSignals() {
         <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
           AI Signals
         </p>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+       {/* Added md:justify-center so it centers on PC, but stays scrollable on mobile */}
+<div className="flex md:justify-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {signals.map((s, i) => {
           const colors: Record<string, string> = {
             BUY:  'border-green-500 bg-green-500/10',
