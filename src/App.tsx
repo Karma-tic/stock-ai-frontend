@@ -98,12 +98,19 @@ useEffect(() => {
 }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-4xl animate-pulse">📈</div>
+  return (
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+      <div className="flex items-end gap-1.5 h-10">
+        <div className="w-2 bg-emerald-500 rounded-sm animate-[bounce_1s_infinite_100ms] h-full"></div>
+        <div className="w-2 bg-emerald-400 rounded-sm animate-[bounce_1s_infinite_300ms] h-2/3"></div>
+        <div className="w-2 bg-emerald-600 rounded-sm animate-[bounce_1s_infinite_200ms] h-4/5"></div>
       </div>
-    );
-  }
+      <p className="text-slate-400 text-sm font-medium tracking-wide animate-pulse">
+        Analyzing Market Signals...
+      </p>
+    </div>
+  );
+}
 
  const publicLayout = (Component: React.ComponentType) => (
   <>
