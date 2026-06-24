@@ -328,6 +328,33 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                 </div>
               </div>
 
+              {/* What Would Prove This Wrong */}
+              {Array.isArray(result.signal?.analysis?.invalidation_triggers) &&
+                result.signal.analysis.invalidation_triggers.length > 0 && (
+                <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4">
+                  <p className="text-orange-400 font-semibold text-sm mb-1">
+                    ⚠️ What Would Prove This Wrong
+                  </p>
+                  <p className="text-slate-500 text-xs mb-3">
+                    No signal is certain — here's what would invalidate this call
+                  </p>
+                  <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                    {result.signal.analysis.invalidation_triggers.map((trigger: string, i: number) => (
+                      <li key={i}>{trigger}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {result.signal?.analysis?.what_to_watch && (
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+                  <p className="text-slate-400 text-xs mb-1">👁️ What to watch</p>
+                  <p className="text-slate-200 text-sm font-medium">
+                    {result.signal.analysis.what_to_watch}
+                  </p>
+                </div>
+              )}
+
               {/* News */}
               {result.news?.news?.length > 0 && (
                 <div className="bg-slate-800 rounded-xl p-4">
