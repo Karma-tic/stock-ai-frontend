@@ -47,7 +47,7 @@ export default function Navbar({ user }: { user: any }) {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="bg-slate-900 border-b border-slate-700 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
+      <nav className="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         {/* LEFT */}
         <Link to="/" className="flex items-center gap-2 min-w-0">
           <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-400 shrink-0" /></span>
@@ -104,9 +104,9 @@ export default function Navbar({ user }: { user: any }) {
           ) : (
             <Link
               to="/"
-              className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition"
+              className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition whitespace-nowrap"
             >
-              Get Started
+              Get Started Free
             </Link>
           )}
 
