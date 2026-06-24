@@ -86,7 +86,7 @@ export default function LatestSignals() {
           })}
         </div>
 
-      </div>
+    
     </div>
   );
 }
