@@ -28,13 +28,14 @@ export default function LatestSignals() {
 
   if (!signals.length) return null;
 
-  return (
-    <div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
-     <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
-  AI Signals
-</p>
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {signals.map((s, i) => {
+<div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
+      {/* This new div acts as a wrapper to center the whole block */}
+      <div className="max-w-5xl mx-auto">
+        <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
+          AI Signals
+        </p>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {signals.map((s, i) => {
           const colors: Record<string, string> = {
             BUY:  'border-green-500 bg-green-500/10',
             HOLD: 'border-yellow-500 bg-yellow-500/10',
