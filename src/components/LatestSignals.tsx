@@ -28,35 +28,13 @@ export default function LatestSignals() {
 
   if (!signals.length) return null;
 
-<div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
-      {/* This new div acts as a wrapper to center the whole block */}
-      <div className="max-w-5xl mx-auto">
-        <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
-          AI Signals
-        </p>
-       {/* Added md:justify-center so it centers on PC, but stays scrollable on mobile */}
-<div className="flex md:justify-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          {signals.map((s, i) => {
-          const colors: Record<string, string> = {
-            BUY:  'border-green-500 bg-green-500/10',
-            HOLD: 'border-yellow-500 bg-yellow-500/10',
-            SELL: 'border-red-500 bg-red-500/10'
-          };
-          const textColors: Record<string, string> = {
-            BUY:  'text-green-400',
-            HOLD: 'text-yellow-400',
-            SELL: 'text-red-400'
-          };
-         return (
+  return (
     <div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
-      {/* 1. Add this layout wrapper to limit the width and center it on wide PC screens */}
-      <div className="max-w-5xl mx-auto w-full">
-        
+      {/* Container wrapper to perfectly align with your main dashboard tabs */}
+      <div className="max-w-7xl mx-auto w-full">
         <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
           AI Signals
         </p>
-        
-        {/* 2. Added md:justify-start or keeping it flexible while centering elements inside */}
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {signals.map((s, i) => {
             const colors: Record<string, string> = {
@@ -85,8 +63,7 @@ export default function LatestSignals() {
             );
           })}
         </div>
-
-    
+      </div>
     </div>
   );
 }
