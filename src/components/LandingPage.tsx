@@ -166,7 +166,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           to="/track-record"
           className="text-blue-400 hover:text-blue-300 text-sm font-medium underline"
         >
-          See our full public track record — every signal, every outcome →
+          See our full public track record — every signal, every outcome
         </Link>
       </section>
 

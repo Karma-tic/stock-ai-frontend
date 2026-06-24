@@ -49,13 +49,13 @@ export default function Navbar({ user }: { user: any }) {
       {/* NAVBAR */}
       <nav className="bg-slate-900 border-b border-slate-700 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
         {/* LEFT */}
-        <div className="flex items-center gap-2 min-w-0">
+        <Link to="/" className="flex items-center gap-2 min-w-0">
           <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-400 shrink-0" /></span>
           <span className="font-bold text-lg text-white whitespace-nowrap">Stock AI</span>
           <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
             LIVE
           </span>
-        </div>
+        </Link>
 
         {/* CENTER (DESKTOP ONLY) */}
         <div className="hidden md:flex items-center gap-5 text-sm">
@@ -68,12 +68,12 @@ export default function Navbar({ user }: { user: any }) {
           <Link to="/contact" className="text-slate-400 hover:text-white transition">
             Contact
           </Link>
-          <button
-            onClick={goToEducation}
-            className="text-slate-400 hover:text-white transition"
-          >
+          <Link to="/track-record" className="text-slate-400 hover:text-white transition">
+            Track Record
+          </Link>
+          <Link to="/learn" className="text-slate-400 hover:text-white transition">
             Learn
-          </button>
+          </Link>
         </div>
 
         {/* RIGHT */}
@@ -149,6 +149,14 @@ export default function Navbar({ user }: { user: any }) {
               className="block text-slate-300 hover:text-white transition"
             >
               Contact
+            </Link>
+
+            <Link
+              to="/track-record"
+              onClick={() => setOpen(false)}
+              className="block text-slate-300 hover:text-white transition"
+            >
+              Track Record
             </Link>
 
             <Link
