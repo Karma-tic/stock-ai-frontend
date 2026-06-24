@@ -15,50 +15,52 @@ import Blog from './components/Blog';
 import Learn from './components/Learn';
 import TrackRecord from './components/TrackRecord';
 
+import { Link } from 'react-router-dom';
+
 function Footer() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 py-8 mt-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div>
-            <p className="text-white font-semibold mb-2">Stock AI</p>
-            <p className="text-slate-500 text-xs">AI-powered Indian stock market intelligence platform.</p>
-          </div>
-          <div>
-            <p className="text-slate-400 font-semibold text-sm mb-2">Company</p>
-            <div className="space-y-1">
-              <Link to="/about" className="block text-slate-500 hover:text-white text-xs transition">About</Link>
-              <Link to="/contact" className="block text-slate-500 hover:text-white text-xs transition">Contact</Link>
-            </div>
-          </div>
-          <div>
-            <p className="text-slate-400 font-semibold text-sm mb-2">Legal</p>
-            <div className="space-y-1">
-              <Link to="/privacy" className="block text-slate-500 hover:text-white text-xs transition">Privacy Policy</Link>
-              <Link to="/terms" className="block text-slate-500 hover:text-white text-xs transition">Terms & Conditions</Link>
-              <Link to="/refund" className="block text-slate-500 hover:text-white text-xs transition">Refund Policy</Link>
-            </div>
-          </div>
-          <div>
-            <p className="text-slate-400 font-semibold text-sm mb-2">Support</p>
-            <div className="space-y-1">
-              <Link to="/disclaimer" className="block text-slate-500 hover:text-white text-xs transition">Disclaimer</Link>
-              <a href="mailto:contact@karmatix.in" className="block text-slate-500 hover:text-white text-xs transition">contact@karmatix.in</a>
-            </div>
-          </div>
+    <footer className="bg-slate-900 border-t border-slate-800 py-8">
+      <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-between items-center gap-4">
+        <p className="text-slate-500 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
+        <div className="flex gap-4 flex-wrap">
+          <Link to="/about" className="text-slate-500 hover:text-white text-sm">About</Link>
+          <Link to="/privacy" className="text-slate-500 hover:text-white text-sm">Privacy</Link>
+          <Link to="/terms" className="text-slate-500 hover:text-white text-sm">Terms</Link>
+          <Link to="/refund" className="text-slate-500 hover:text-white text-sm">Refund</Link>
+          <Link to="/disclaimer" className="text-slate-500 hover:text-white text-sm">Disclaimer</Link>
+          <Link to="/contact" className="text-slate-500 hover:text-white text-sm">Contact</Link>
         </div>
-
-        <div className="border-t border-slate-800 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-slate-600 text-xs">© 2026 BytePlay Technologies. All rights reserved.</p>
-          <p className="text-slate-600 text-xs text-center">
-            ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
-          </p>
+        <p className="text-slate-600 text-xs w-full text-center">
+          ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
+        </p>
+        
+        {/* Data Sources */}
+        <div className="border-t border-slate-800 pt-6 mt-6 w-full">
+          <p className="text-slate-600 text-xs text-center mb-3">Data Sources</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              { label: "NSE India", url: "https://www.nseindia.com" },
+              { label: "BSE India", url: "https://www.bseindia.com" },
+              { label: "Economic Times Markets", url: "https://economictimes.indiatimes.com/markets" },
+              { label: "SEBI", url: "https://www.sebi.gov.in" },
+              { label: "Moneycontrol", url: "https://www.moneycontrol.com" },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-600 hover:text-slate-400 text-xs transition underline"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
   );
 }
-
 // NEW: Global Layout Component
 function AppLayout({ user }: { user: any }) {
   const location = useLocation();
