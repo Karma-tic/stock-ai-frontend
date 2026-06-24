@@ -1,9 +1,6 @@
-import PageLayout from './PageLayout';
-
 export default function About() {
   return (
-    <PageLayout>
-      <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="max-w-4xl mx-auto px-6 py-12">
 
         {/* Hero */}
         <div className="text-center mb-16">
@@ -298,6 +295,6 @@ export default function About() {
         </div>
 
       </div>
-    </PageLayout>
+    
   );
 }

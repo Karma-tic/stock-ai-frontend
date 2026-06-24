@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import UpgradeModal from './UpgradeModal';
 import { TrendingUp, Star } from 'lucide-react';
@@ -7,8 +7,6 @@ import { TrendingUp, Star } from 'lucide-react';
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export default function Navbar({ user }: { user: any }) {
-  const navigate = useNavigate();
-
   const [open, setOpen] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPro, setIsPro] = useState(false);
@@ -34,15 +32,7 @@ export default function Navbar({ user }: { user: any }) {
     window.location.reload();
   };
 
-  const goToEducation = () => {
-    setOpen(false);
-    navigate('/');
-    setTimeout(() => {
-      document
-        .getElementById('education')
-        ?.scrollIntoView({ behavior: 'smooth' });
-    }, 150);
-  };
+
 
   return (
     <>
