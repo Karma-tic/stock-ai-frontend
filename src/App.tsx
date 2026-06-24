@@ -100,13 +100,12 @@ useEffect(() => {
   if (loading) {
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
-      <div className="flex items-end gap-1.5 h-10">
-        <div className="w-2 bg-emerald-500 rounded-sm animate-[bounce_1s_infinite_100ms] h-full"></div>
-        <div className="w-2 bg-emerald-400 rounded-sm animate-[bounce_1s_infinite_300ms] h-2/3"></div>
-        <div className="w-2 bg-emerald-600 rounded-sm animate-[bounce_1s_infinite_200ms] h-4/5"></div>
+      <div className="relative flex h-12 w-12 items-center justify-center">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
+        <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
       </div>
-      <p className="text-slate-400 text-sm font-medium tracking-wide animate-pulse">
-        Analyzing Market Signals...
+      <p className="text-slate-400 text-xs tracking-widest uppercase animate-pulse">
+        Fetching Real-time Intelligence
       </p>
     </div>
   );
