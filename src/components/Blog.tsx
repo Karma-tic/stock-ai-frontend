@@ -29,10 +29,7 @@ export default function Blog() {
     <div className="min-h-screen bg-slate-950 py-20">
       <div className="max-w-5xl mx-auto px-6">
         
-        {/* New Back Button */}
-        <Link to="/" className="inline-flex items-center text-slate-400 hover:text-white text-sm font-semibold mb-8 transition">
-          ← Back to Home
-        </Link>
+        
 
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-6">
@@ -49,7 +46,7 @@ export default function Blog() {
               <h3 className="text-white font-bold text-xl mb-4">{a.title}</h3>
               <p className="text-slate-400 leading-relaxed mb-6">{a.desc}</p>
               <Link to={a.link} className="text-blue-400 hover:text-blue-300 font-semibold transition flex items-center gap-2">
-                Read full article →
+                Read full article
               </Link>
             </div>
           ))}
