@@ -19,7 +19,7 @@ export default function LatestSignals() {
         // Only show signals with real confidence
         const real = (res.data.signals || [])
           .filter((s: any) => s.confidence > 0)
-          .slice(0, 12);
+          .slice(0, 6);
         setSignals(real);
       }).catch(() => {});
     };
@@ -49,6 +49,15 @@ export default function LatestSignals() {
         .animate-ticker:hover {
           animation-play-state: paused;
         }
+        
+        /* Only animate on mobile/tablet. On large screens, we will center them if there aren't many. */
+        @media (min-width: 1024px) {
+          .desktop-no-animate {
+            animation: none !important;
+            transform: none !important;
+            justify-content: center;
+          }
+        }
       `}</style>
 
       {/* Container wrapper to perfectly align with your main dashboard tabs */}
@@ -64,9 +73,11 @@ export default function LatestSignals() {
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-900 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-900 to-transparent z-10 pointer-events-none"></div>
 
-          {/* The actual scrolling container */}
-          <div className="flex gap-2 w-max animate-ticker pb-1">
-            {tickerItems.map((s, i) => {
+          {/* The actual scrolling container. 
+              We conditionally apply desktop-no-animate if there are 8 or fewer unique signals */}
+          <div className={`flex gap-2 w-max animate-ticker pb-1 ${signals.length <= 8 ? 'lg:desktop-no-animate lg:w-full' : ''}`}>
+            {/* If we aren't animating on desktop, we only want to map the ORIGINAL signals array, not the duplicated one */}
+            {(signals.length <= 8 ? signals : tickerItems).map((s, i) => {
               const colors: Record<string, string> = {
                 BUY:  'border-green-500 bg-green-500/10',
                 HOLD: 'border-yellow-500 bg-yellow-500/10',
