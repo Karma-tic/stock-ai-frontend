@@ -28,40 +28,76 @@ export default function LatestSignals() {
 
   if (!signals.length) return null;
 
+  // We duplicate the signals array multiple times to ensure the ticker 
+  // is wide enough to cover the screen and loop seamlessly.
+  const tickerItems = [...signals, ...signals, ...signals, ...signals];
+
   return (
-    <div className="px-4 py-3 bg-slate-900 border-b border-slate-800">
+    <div className="px-4 py-3 bg-slate-900 border-b border-slate-800 overflow-hidden">
+      
+      {/* Inline styles for the seamless ticker animation */}
+      <style>{`
+        @keyframes ticker-scroll {
+          0% { transform: translateX(0); }
+          /* Translating by -50% perfectly loops because we duplicated the array evenly */
+          100% { transform: translateX(-50%); } 
+        }
+        .animate-ticker {
+          animation: ticker-scroll 30s linear infinite;
+        }
+        /* Pause the animation when the user hovers over it to read */
+        .animate-ticker:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Container wrapper to perfectly align with your main dashboard tabs */}
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="max-w-7xl mx-auto w-full relative">
         <p className="text-slate-500 text-xs mb-2 uppercase tracking-wider font-semibold">
           AI Signals
         </p>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          {signals.map((s, i) => {
-            const colors: Record<string, string> = {
-              BUY:  'border-green-500 bg-green-500/10',
-              HOLD: 'border-yellow-500 bg-yellow-500/10',
-              SELL: 'border-red-500 bg-red-500/10'
-            };
-            const textColors: Record<string, string> = {
-              BUY:  'text-green-400',
-              HOLD: 'text-yellow-400',
-              SELL: 'text-red-400'
-            };
-            return (
-              <div key={i} className={`flex-shrink-0 border rounded-lg px-3 py-2 min-w-[130px] ${colors[s.signal] || 'border-slate-600'}`}>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-white font-bold text-sm">{s.ticker}</span>
-                  <span className={`text-xs font-bold ${textColors[s.signal] || 'text-white'}`}>
-                    {s.signal}
-                  </span>
+        
+        {/* Ticker Window - Relative positioning for the gradient fade effects */}
+        <div className="relative overflow-hidden w-full">
+          
+          {/* Left and Right gradient overlays to make it look like they fade in/out of the edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-900 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-900 to-transparent z-10 pointer-events-none"></div>
+
+          {/* The actual scrolling container */}
+          <div className="flex gap-2 w-max animate-ticker pb-1">
+            {tickerItems.map((s, i) => {
+              const colors: Record<string, string> = {
+                BUY:  'border-green-500 bg-green-500/10',
+                HOLD: 'border-yellow-500 bg-yellow-500/10',
+                SELL: 'border-red-500 bg-red-500/10'
+              };
+              const textColors: Record<string, string> = {
+                BUY:  'text-green-400',
+                HOLD: 'text-yellow-400',
+                SELL: 'text-red-400'
+              };
+              
+              return (
+                <div 
+                  // Use index in key because we are duplicating the exact same items
+                  key={`${s.ticker}-${i}`} 
+                  className={`flex-shrink-0 border rounded-lg px-3 py-2 w-[130px] cursor-default transition-colors hover:bg-slate-800 ${colors[s.signal] || 'border-slate-600'}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-white font-bold text-sm truncate">{s.ticker}</span>
+                    <span className={`text-xs font-bold ${textColors[s.signal] || 'text-white'}`}>
+                      {s.signal}
+                    </span>
+                  </div>
+                  <div className="flex justify-between mt-1 items-center">
+                    <p className="text-slate-400 text-xs truncate">₹{s.current_price}</p>
+                    <p className="text-slate-500 text-[10px] font-medium">{s.confidence}% conf</p>
+                  </div>
                 </div>
-                <div className="flex justify-between mt-1">
-                  <p className="text-slate-400 text-xs">₹{s.current_price}</p>
-                  <p className="text-slate-500 text-xs">{s.confidence}% conf</p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
