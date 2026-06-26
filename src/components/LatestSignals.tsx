@@ -76,8 +76,11 @@ export default function LatestSignals() {
           {/* The actual scrolling container. 
               We conditionally apply desktop-no-animate if there are 8 or fewer unique signals */}
           <div className={`flex gap-2 w-max animate-ticker pb-1 ${signals.length <= 8 ? 'lg:desktop-no-animate lg:w-full' : ''}`}>
-            {/* If we aren't animating on desktop, we only want to map the ORIGINAL signals array, not the duplicated one */}
-            {(signals.length <= 8 ? signals : tickerItems).map((s, i) => {
+            {/* We map ALL items, but hide the duplicates on desktop if we have <= 8 signals */}
+            {tickerItems.map((s, i) => {
+              const isDuplicate = i >= signals.length;
+              const hideOnDesktop = signals.length <= 8 && isDuplicate;
+              
               const colors: Record<string, string> = {
                 BUY:  'border-green-500 bg-green-500/10',
                 HOLD: 'border-yellow-500 bg-yellow-500/10',
@@ -93,7 +96,7 @@ export default function LatestSignals() {
                 <div 
                   // Use index in key because we are duplicating the exact same items
                   key={`${s.ticker}-${i}`} 
-                  className={`flex-shrink-0 border rounded-lg px-3 py-2 w-[130px] cursor-default transition-colors hover:bg-slate-800 ${colors[s.signal] || 'border-slate-600'}`}
+                  className={`flex-shrink-0 border rounded-lg px-3 py-2 w-[130px] cursor-default transition-colors hover:bg-slate-800 ${colors[s.signal] || 'border-slate-600'} ${hideOnDesktop ? 'lg:hidden' : ''}`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-white font-bold text-sm truncate">{s.ticker}</span>
