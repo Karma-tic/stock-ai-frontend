@@ -22,7 +22,74 @@ interface Props {
 
 export default function LandingPage({ onGetStarted }: Props) {
   const [trackAccuracy, setTrackAccuracy] = useState<number | null>(null);
+ const [activePricing, setActivePricing] = useState(1); // Default to middle card
+  const [touchStart, setTouchStart] = useState(0);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && activePricing < 2) {
+      setActivePricing(prev => prev + 1);
+    }
+    if (isRightSwipe && activePricing > 0) {
+      setActivePricing(prev => prev - 1);
+    }
+  };
+
+  const pricingPlans = [
+    {
+      title: "Free",
+      price: "₹0",
+      period: "forever",
+      features: ["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"],
+      badge: null,
+      badgeClass: "",
+      bgClass: "bg-slate-800",
+      borderClass: "border border-slate-700",
+      titleClass: "text-slate-400",
+      dotClass: "bg-slate-500",
+      featureClass: "text-slate-400",
+      btnClass: "border border-slate-600 text-slate-300 hover:border-slate-400",
+      btnText: "Get Started"
+    },
+    {
+      title: "Trial",
+      price: "₹1",
+      period: "1 day access",
+      features: ["Full Pro access", "All features unlocked", "No commitment"],
+      badge: "TRY IT",
+      badgeClass: "bg-yellow-500 text-black",
+      bgClass: "bg-yellow-500/5",
+      borderClass: "border border-yellow-500/40",
+      titleClass: "text-yellow-400",
+      dotClass: "bg-yellow-400",
+      featureClass: "text-slate-300",
+      btnClass: "bg-yellow-500 hover:bg-yellow-400 text-black",
+      btnText: "Try for ₹1"
+    },
+    {
+      title: "1 Month",
+      price: "₹49",
+      period: "no auto-renewal",
+      features: ["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"],
+      badge: "POPULAR",
+      badgeClass: "bg-blue-600 text-white",
+      bgClass: "bg-blue-600/10",
+      borderClass: "border-2 border-blue-500",
+      titleClass: "text-blue-400",
+      dotClass: "bg-blue-400",
+      featureClass: "text-slate-300",
+      btnClass: "bg-blue-600 hover:bg-blue-500 text-white",
+      btnText: "Get 30 Days"
+    }
+  ];
   useEffect(() => {
     const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     axios.get(`${BASE}/api/track-record`)
@@ -296,75 +363,111 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
+     
       {/* Pricing — replace existing section */}
-      <section className="bg-slate-900 py-16">
+      <section className="bg-slate-900 py-16 overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-white text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
           <p className="text-slate-400 mb-10">No hidden charges. Cancel anytime.</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
-            {/* Free */}
-            <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-left">
-              <p className="text-slate-400 text-xs font-semibold uppercase mb-2">Free</p>
-              <p className="text-3xl font-black text-white mb-1">₹0</p>
-              <p className="text-slate-500 text-xs mb-4">forever</p>
-              <div className="space-y-2">
-                {["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"].map(f => (
-                  <div key={f} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                    <p className="text-slate-400 text-xs">{f}</p>
-                  </div>
-                ))}
-              </div>
-              <button onClick={onGetStarted}
-                className="mt-4 w-full border border-slate-600 text-slate-300 py-2 rounded-lg text-sm font-semibold hover:border-slate-400 transition">
-                Get Started
-              </button>
-            </div>
+          {/* MOBILE: 3D Horizontal Slider */}
+          <div 
+            className="sm:hidden relative h-[380px] w-full flex items-center justify-center"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {pricingPlans.map((plan, i) => {
+              const offset = i - activePricing;
+              
+              // Determine 3D scaling and fading based on position
+              let transform = 'scale-75 opacity-0 z-0 pointer-events-none hidden';
+              if (offset === 0) transform = 'translate-x-0 scale-100 z-20 opacity-100 shadow-2xl';
+              else if (offset === -1) transform = '-translate-x-[85%] scale-90 z-10 opacity-40 cursor-pointer';
+              else if (offset === 1) transform = 'translate-x-[85%] scale-90 z-10 opacity-40 cursor-pointer';
 
-            {/* 1 Day Trial */}
-            <div className="bg-yellow-500/5 border border-yellow-500/40 rounded-xl p-5 text-left relative">
-              <span className="absolute -top-3 left-4 bg-yellow-500 text-black text-xs px-2 py-0.5 rounded-full font-bold">TRY IT</span>
-              <p className="text-yellow-400 text-xs font-semibold uppercase mb-2">Trial</p>
-              <p className="text-3xl font-black text-white mb-1">₹1</p>
-              <p className="text-slate-500 text-xs mb-4">1 day access</p>
-              <div className="space-y-2">
-                {["Full Pro access", "All features unlocked", "No commitment"].map(f => (
-                  <div key={f} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
-                    <p className="text-slate-300 text-xs">{f}</p>
+              return (
+                <div 
+                  key={plan.title}
+                  onClick={() => setActivePricing(i)}
+                  className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
+                >
+                  {plan.badge && (
+                    <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
+                      {plan.badge}
+                    </span>
+                  )}
+                  <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
+                  <p className="text-3xl font-black text-white mb-1">{plan.price}</p>
+                  <p className="text-slate-500 text-xs mb-4">{plan.period}</p>
+                  <div className="space-y-2">
+                    {plan.features.map(f => (
+                      <div key={f} className="flex items-center gap-2">
+                        <div className={`w-1.5 h-1.5 rounded-full ${plan.dotClass}`} />
+                        <p className={`${plan.featureClass} text-xs`}>{f}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <button onClick={onGetStarted}
-                className="mt-4 w-full bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg text-sm font-bold transition">
-                Try for ₹1
-              </button>
-            </div>
-
-            {/* 1 Month */}
-            <div className="bg-blue-600/10 border-2 border-blue-500 rounded-xl p-5 text-left relative">
-              <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">POPULAR</span>
-              <p className="text-blue-400 text-xs font-semibold uppercase mb-2">1 Month</p>
-              <p className="text-3xl font-black text-white mb-1">₹49</p>
-              <p className="text-slate-500 text-xs mb-4">no auto-renewal</p>
-              <div className="space-y-2">
-                {["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"].map(f => (
-                  <div key={f} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                    <p className="text-slate-300 text-xs">{f}</p>
-                  </div>
-                ))}
-              </div>
-              <button onClick={onGetStarted}
-                className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-sm font-bold transition">
-                Get 30 Days
-              </button>
-            </div>
-
+                  <button 
+                    onClick={(e) => {
+                      if (offset !== 0) {
+                        // If they click the button on a faded side card, just zoom it in instead of triggering payment
+                        e.stopPropagation(); 
+                        setActivePricing(i);
+                      } else {
+                        onGetStarted();
+                      }
+                    }}
+                    className={`mt-4 w-full py-2 rounded-lg text-sm font-bold transition ${plan.btnClass}`}
+                  >
+                    {plan.btnText}
+                  </button>
+                </div>
+              );
+            })}
           </div>
+
+          {/* DESKTOP: Standard Centered Grid */}
+          <div className="hidden sm:grid grid-cols-3 gap-6 justify-items-center">
+            {pricingPlans.map((plan) => (
+              <div key={plan.title} className={`w-full text-left relative rounded-xl p-5 ${plan.bgClass} ${plan.borderClass}`}>
+                {plan.badge && (
+                  <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
+                    {plan.badge}
+                  </span>
+                )}
+                <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
+                <p className="text-3xl font-black text-white mb-1">{plan.price}</p>
+                <p className="text-slate-500 text-xs mb-4">{plan.period}</p>
+                <div className="space-y-2">
+                  {plan.features.map(f => (
+                    <div key={f} className="flex items-center gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full ${plan.dotClass}`} />
+                      <p className={`${plan.featureClass} text-xs`}>{f}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={onGetStarted}
+                  className={`mt-4 w-full py-2 rounded-lg text-sm font-bold transition ${plan.btnClass}`}>
+                  {plan.btnText}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Pagination Indicator Dots */}
+          <div className="sm:hidden flex justify-center gap-2 mt-6">
+            {pricingPlans.map((_, i) => (
+              <div 
+                key={i} 
+                onClick={() => setActivePricing(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-slate-700'}`}
+              />
+            ))}
+          </div>
+
         </div>
       </section>
+
 
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">
