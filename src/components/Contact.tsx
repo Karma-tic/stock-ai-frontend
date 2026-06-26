@@ -1,9 +1,9 @@
-import PageLayout from './PageLayout';
+
 import { Mail, CreditCard, Shield, Wrench } from "lucide-react";
 
 export default function Contact() {
   return (
-    <PageLayout>
+    
       <div className="min-h-screen bg-slate-950 p-8 max-w-3xl mx-auto">
         <h1 className="text-white text-3xl font-bold mb-2">Contact Us</h1>
         <p className="text-slate-400 text-sm mb-8">BytePlay Technologies — Stock AI</p>
@@ -55,6 +55,6 @@ export default function Contact() {
         </p>
       </div>
     </div>
-    </PageLayout>
+   
   );
 }
