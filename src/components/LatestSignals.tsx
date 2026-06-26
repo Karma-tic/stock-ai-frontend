@@ -19,7 +19,7 @@ export default function LatestSignals() {
         // Only show signals with real confidence
         const real = (res.data.signals || [])
           .filter((s: any) => s.confidence > 0)
-          .slice(0, 6);
+          .slice(0, 12);
         setSignals(real);
       }).catch(() => {});
     };
