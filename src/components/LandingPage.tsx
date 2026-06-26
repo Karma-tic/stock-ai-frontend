@@ -11,6 +11,9 @@ import {
   Coins,
   Newspaper,
   RefreshCcw,
+  Activity,
+  Globe,
+  Cpu,
 } from "lucide-react";
 
 interface Props {
@@ -115,7 +118,7 @@ export default function LandingPage({ onGetStarted }: Props) {
             ))}
           </div>
           <p className="text-slate-600 text-xs text-center mt-4">
-            ⚠️ AI signals for educational purposes only. Not SEBI-registered advice.
+            AI signals for educational purposes only. Not SEBI-registered advice.
           </p>
         </div>
       </section>
@@ -129,21 +132,25 @@ export default function LandingPage({ onGetStarted }: Props) {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
           {[
-            { step: "1", icon: "📊", title: "Fetch Live Data", desc: "Real-time price, PE ratio, 52-week range, volume and dividend data from NSE/BSE" },
-            { step: "2", icon: "📰", title: "Scrape News", desc: "Reads NSE India announcements, Google News, Economic Times and Moneycontrol simultaneously" },
-            { step: "3", icon: "🤖", title: "AI Analysis", desc: "Llama 3.3 AI processes all data and generates structured BUY/HOLD/SELL signal" },
-            { step: "4", icon: "🎯", title: "Get Signal", desc: "Receive exact entry price, target prices, stop loss and quantity recommendations" },
-          ].map(s => (
-            <div key={s.step} className="text-center">
-              <div className="text-4xl mb-3">{s.icon}</div>
-              <div className="text-blue-400 text-xs font-bold mb-1">STEP {s.step}</div>
-              <p className="text-white font-semibold mb-2">{s.title}</p>
-              <p className="text-slate-400 text-sm">{s.desc}</p>
-            </div>
-          ))}
+            { step: "1", icon: Activity, anim: "animate-[bounce_3s_infinite]", color: "text-blue-400", bg: "bg-blue-500/10", title: "Fetch Live Data", desc: "Real-time price, PE ratio, 52-week range, volume and dividend data from NSE/BSE" },
+            { step: "2", icon: Globe, anim: "animate-[spin_8s_linear_infinite]", color: "text-indigo-400", bg: "bg-indigo-500/10", title: "Scrape News", desc: "Reads NSE India announcements, Google News, Economic Times and Moneycontrol simultaneously" },
+            { step: "3", icon: Cpu, anim: "animate-pulse", color: "text-purple-400", bg: "bg-purple-500/10", title: "AI Analysis", desc: "Llama 3.3 AI processes all data and generates structured BUY/HOLD/SELL signal" },
+            { step: "4", icon: Target, anim: "animate-[pulse_2s_infinite]", color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Get Signal", desc: "Receive exact entry price, target prices, stop loss and quantity recommendations" },
+          ].map(s => {
+            const Icon = s.icon;
+            return (
+              <div key={s.step} className="text-center group">
+                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 border border-slate-700/50 ${s.bg}`}>
+                  <Icon className={`w-8 h-8 ${s.color} ${s.anim}`} strokeWidth={1.5} />
+                </div>
+                <div className="text-blue-400 text-xs font-bold mb-1">STEP {s.step}</div>
+                <p className="text-white font-semibold mb-2">{s.title}</p>
+                <p className="text-slate-400 text-sm">{s.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
-
       {/* Features */}
       <section className="bg-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-6">
