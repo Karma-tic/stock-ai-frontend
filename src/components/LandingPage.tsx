@@ -152,11 +152,28 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
       {/* Features */}
+      {/* Features */}
       <section className="bg-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-white text-3xl font-bold text-center mb-10">
             Everything You Need to Invest Smarter
           </h2>
+
+          {/* Add the custom keyframes for the feature icons */}
+          <style>{`
+            @keyframes feature-float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-4px); }
+            }
+            @keyframes feature-spin {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+            @keyframes feature-pulse {
+              0%, 100% { transform: scale(1); opacity: 1; }
+              50% { transform: scale(0.9); opacity: 0.7; }
+            }
+          `}</style>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -164,55 +181,70 @@ export default function LandingPage({ onGetStarted }: Props) {
                 icon: Target,
                 title: "BUY/HOLD/SELL Signals",
                 desc: "Clear signals with confidence percentage so you know how strong the recommendation is",
+                anim: "feature-pulse 2.5s ease-in-out infinite"
               },
               {
                 icon: IndianRupee,
                 title: "Price Targets",
                 desc: "Exact entry price, two target levels and stop loss for every analysis",
+                anim: "feature-float 3s ease-in-out infinite"
               },
               {
                 icon: Smartphone,
                 title: "Works on Phone",
                 desc: "Fully responsive — check your stocks anywhere from your mobile device",
+                anim: "feature-float 4s ease-in-out infinite"
               },
               {
                 icon: Star,
                 title: "Watchlist",
                 desc: "Save your favourite stocks and monitor them with one tap",
+                anim: "feature-pulse 3s ease-in-out infinite"
               },
               {
                 icon: Briefcase,
                 title: "Portfolio Tracker",
                 desc: "Track your holdings with live P&L — see your profit or loss in real time",
+                anim: "feature-float 3.5s ease-in-out infinite"
               },
               {
                 icon: Mail,
                 title: "Morning Digest",
                 desc: "Pro users get daily email at 8:30 AM with top BUY signals before market opens",
+                anim: "feature-float 2.5s ease-in-out infinite"
               },
               {
                 icon: Coins,
                 title: "Penny Stocks",
                 desc: "Dedicated section for NSE stocks under ₹100 — high risk, high reward opportunities",
+                anim: "feature-float 3s ease-in-out infinite"
               },
               {
                 icon: Newspaper,
                 title: "Multi-source News",
                 desc: "Reads NSE India, Google News, Economic Times and Moneycontrol for every stock",
+                anim: "feature-float 4s ease-in-out infinite"
               },
               {
                 icon: RefreshCcw,
                 title: "Hourly Refresh",
                 desc: "Signals automatically updated every hour during market hours (9 AM - 4 PM IST)",
+                anim: "feature-spin 6s linear infinite"
               },
             ].map((f) => {
               const Icon = f.icon;
               return (
                 <div
                   key={f.title}
-                  className="bg-slate-800 border border-slate-700 rounded-xl p-5"
+                  className="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-slate-600 transition group"
                 >
-                  <Icon className="w-7 h-7 text-blue-400 mb-3" strokeWidth={2.2} />
+                  <div className="w-12 h-12 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <Icon 
+                      className="w-6 h-6 text-blue-400" 
+                      strokeWidth={2} 
+                      style={{ animation: f.anim }}
+                    />
+                  </div>
                   <p className="text-white font-semibold mb-2">{f.title}</p>
                   <p className="text-slate-400 text-sm">{f.desc}</p>
                 </div>
