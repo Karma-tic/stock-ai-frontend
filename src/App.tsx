@@ -11,7 +11,6 @@ import Disclaimer from './components/Disclaimer';
 import Contact from './components/Contact';
 import About from './components/About';
 import LandingPage from './components/LandingPage';
-import Blog from './components/Blog';
 import Learn from './components/Learn';
 import TrackRecord from './components/TrackRecord';
 import ToolsHub from './components/ToolsHub';
@@ -95,7 +94,6 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/contact"    element={<Contact />} />
           <Route path="/about"      element={<About />} />
-          <Route path="/blog/*"     element={<Blog />} />
           <Route path="/learn"      element={<Learn />} />
           <Route path="/track-record" element={<TrackRecord />} />
           <Route path="/market-wrap" element={<MarketWrap />} />
