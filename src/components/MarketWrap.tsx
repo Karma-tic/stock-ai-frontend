@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface MarketWrap {
+interface MarketWrapItem {
   id: string;
   date: string;
   title: string;
@@ -9,7 +9,7 @@ interface MarketWrap {
 }
 
 const MarketWrap: React.FC = () => {
-  const [wraps, setWraps] = useState<MarketWrap[]>([]);
+  const [wraps, setWraps] = useState<MarketWrapItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
