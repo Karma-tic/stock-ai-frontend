@@ -20,6 +20,15 @@ import LumpsumCalculator from './components/LumpsumCalculator';
 import BrokerageCalculator from './components/BrokerageCalculator';
 import StockDirectory from './components/StockDirectory';
 import StockPage from './components/StockPage';
+import Chapter1 from './components/learn/Chapter1';
+import Chapter2 from './components/learn/Chapter2';
+import Chapter3 from './components/learn/Chapter3';
+import Chapter4 from './components/learn/Chapter4';
+import Chapter5 from './components/learn/Chapter5';
+import Chapter6 from './components/learn/Chapter6';
+import Chapter7 from './components/learn/Chapter7';
+import Chapter8 from './components/learn/Chapter8';
+import Chapter9 from './components/learn/Chapter9';
 
 
 function Footer() {
@@ -95,6 +104,17 @@ function AppLayout({ user }: { user: any }) {
           
           <Route path="/stocks" element={<StockDirectory />} />
           <Route path="/stock/:symbol" element={<StockPage />} />
+
+          {/* Learn Wiki Routes */}
+          <Route path="/learn/what-is-stock-market" element={<Chapter1 />} />
+          <Route path="/learn/types-of-trading" element={<Chapter2 />} />
+          <Route path="/learn/essential-terms" element={<Chapter3 />} />
+          <Route path="/learn/fundamental-vs-technical" element={<Chapter4 />} />
+          <Route path="/learn/market-risks" element={<Chapter5 />} />
+          <Route path="/learn/ai-in-markets" element={<Chapter6 />} />
+          <Route path="/learn/how-to-start" element={<Chapter7 />} />
+          <Route path="/learn/dividend-investing" element={<Chapter8 />} />
+          <Route path="/learn/common-mistakes" element={<Chapter9 />} />
 
           <Route path="/login" element={
             <LoginPage
