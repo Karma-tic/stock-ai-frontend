@@ -29,6 +29,7 @@ import Chapter6 from './components/learn/Chapter6';
 import Chapter7 from './components/learn/Chapter7';
 import Chapter8 from './components/learn/Chapter8';
 import Chapter9 from './components/learn/Chapter9';
+import MarketWrap from './components/MarketWrap';
 
 
 function Footer() {
@@ -97,6 +98,7 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/blog/*"     element={<Blog />} />
           <Route path="/learn"      element={<Learn />} />
           <Route path="/track-record" element={<TrackRecord />} />
+          <Route path="/market-wrap" element={<MarketWrap />} />
           <Route path="/tools"      element={<ToolsHub />} />
           <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
           <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />

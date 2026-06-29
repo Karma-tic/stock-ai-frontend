@@ -49,17 +49,14 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* CENTER (DESKTOP ONLY) */}
         <div className="hidden md:flex items-center gap-5 text-sm">
-          <Link to="/about" className="text-slate-400 hover:text-white transition">
-            About
-          </Link>
           <Link to="/blog" className="text-slate-400 hover:text-white transition">
             Blog
           </Link>
-          <Link to="/contact" className="text-slate-400 hover:text-white transition">
-            Contact
-          </Link>
           <Link to="/tools" className="text-slate-400 hover:text-white transition">
             Tools
+          </Link>
+          <Link to="/market-wrap" className="text-slate-400 hover:text-white transition">
+            Market Wrap
           </Link>
           <Link to="/stocks" className="text-slate-400 hover:text-white transition">
             Stocks
@@ -124,14 +121,6 @@ export default function Navbar({ user }: { user: any }) {
         {open && (
           <div className="md:hidden absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4 shadow-xl z-50">
             <Link
-              to="/about"
-              onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
-            >
-              About
-            </Link>
-
-            <Link
               to="/blog"
               onClick={() => setOpen(false)}
               className="block text-slate-300 hover:text-white transition"
@@ -140,19 +129,19 @@ export default function Navbar({ user }: { user: any }) {
             </Link>
 
             <Link
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
-            >
-              Contact
-            </Link>
-
-            <Link
               to="/tools"
               onClick={() => setOpen(false)}
               className="block text-slate-300 hover:text-white transition"
             >
               Tools
+            </Link>
+
+            <Link
+              to="/market-wrap"
+              onClick={() => setOpen(false)}
+              className="block text-slate-300 hover:text-white transition"
+            >
+              Market Wrap
             </Link>
 
             <Link

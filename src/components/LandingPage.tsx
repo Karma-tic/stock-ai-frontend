@@ -321,45 +321,18 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
-      {/* Educational Content — critical for AdSense */}
+      {/* Market Wrap Feature */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-white text-3xl font-bold text-center mb-4">
-          Learn Stock Market Investing
-        </h2>
-        <p className="text-slate-400 text-center mb-10">
-          Educational resources for Indian retail investors
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {[
-            {
-              title: "What is PE Ratio and Why It Matters",
-              desc: "Price to Earnings ratio compares a company's stock price to its earnings per share. A lower PE suggests the stock may be undervalued. For Indian markets, average PE is around 20-25 for large caps.",
-              link: "/blog/what-is-pe-ratio"
-            },
-            {
-              title: "How to Read NSE Stock Announcements",
-              desc: "NSE publishes corporate announcements including quarterly results, board meetings, dividends and major business updates. These directly impact stock prices and are crucial for investors.",
-              link: "/blog/how-to-read-nse-announcements"
-            },
-            {
-              title: "Understanding Dividend Yield in Indian Stocks",
-              desc: "Dividend yield shows annual dividend as percentage of stock price. ITC, Coal India and PSU stocks typically offer high dividend yields, making them attractive for income investors.",
-              link: "/blog/dividend-yield-india"
-            },
-            {
-              title: "What are Penny Stocks in NSE/BSE?",
-              desc: "Penny stocks are shares trading below ₹100. While they offer high return potential, they also carry significant risks including low liquidity and high volatility. Always invest cautiously.",
-              link: "/blog/penny-stocks-india"
-            },
-          ].map(a => (
-            <div key={a.title} className="bg-slate-800 border border-slate-700 rounded-xl p-6">
-              <h3 className="text-white font-bold text-lg mb-3">{a.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-4">{a.desc}</p>
-              <Link to={a.link} className="text-blue-400 hover:text-blue-300 text-sm transition">
-                Read more →
-              </Link>
-            </div>
-          ))}
+        <div className="bg-gradient-to-r from-blue-900/40 to-slate-800/40 border border-blue-500/20 rounded-2xl p-8 sm:p-12 text-center">
+          <h2 className="text-white text-3xl font-bold mb-4">
+            Daily Market Wrap-Up
+          </h2>
+          <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+            Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST so you never miss a beat.
+          </p>
+          <Link to="/market-wrap" className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition">
+            Read the Latest Wrap →
+          </Link>
         </div>
       </section>
 
