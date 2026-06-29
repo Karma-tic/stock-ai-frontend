@@ -14,6 +14,8 @@ import LandingPage from './components/LandingPage';
 import Blog from './components/Blog';
 import Learn from './components/Learn';
 import TrackRecord from './components/TrackRecord';
+import ToolsHub from './components/ToolsHub';
+import SIPCalculator from './components/SIPCalculator';
 
 
 function Footer() {
@@ -82,6 +84,8 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/blog/*"     element={<Blog />} />
           <Route path="/learn"      element={<Learn />} />
           <Route path="/track-record" element={<TrackRecord />} />
+          <Route path="/tools"      element={<ToolsHub />} />
+          <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
 
           <Route path="/login" element={
             <LoginPage
