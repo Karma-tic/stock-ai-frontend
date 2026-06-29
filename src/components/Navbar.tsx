@@ -49,8 +49,8 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* CENTER (DESKTOP ONLY) */}
         <div className="hidden md:flex items-center gap-5 text-sm">
-          <Link to="/learn" className="text-slate-400 hover:text-white transition">
-            Learn
+          <Link to="/blog" className="text-slate-400 hover:text-white transition">
+            Blog
           </Link>
           <Link to="/tools" className="text-slate-400 hover:text-white transition">
             Tools
@@ -121,11 +121,11 @@ export default function Navbar({ user }: { user: any }) {
         {open && (
           <div className="md:hidden absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4 shadow-xl z-50">
             <Link
-              to="/learn"
+              to="/blog"
               onClick={() => setOpen(false)}
               className="block text-slate-300 hover:text-white transition"
             >
-              Learn
+              Blog
             </Link>
 
             <Link
