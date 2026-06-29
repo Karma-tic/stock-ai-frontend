@@ -61,6 +61,9 @@ export default function Navbar({ user }: { user: any }) {
           <Link to="/tools" className="text-slate-400 hover:text-white transition">
             Tools
           </Link>
+          <Link to="/stocks" className="text-slate-400 hover:text-white transition">
+            Stocks
+          </Link>
           <Link to="/track-record" className="text-slate-400 hover:text-white transition">
             Track Record
           </Link>
@@ -150,6 +153,14 @@ export default function Navbar({ user }: { user: any }) {
               className="block text-slate-300 hover:text-white transition"
             >
               Tools
+            </Link>
+
+            <Link
+              to="/stocks"
+              onClick={() => setOpen(false)}
+              className="block text-slate-300 hover:text-white transition"
+            >
+              Stocks
             </Link>
 
             <Link

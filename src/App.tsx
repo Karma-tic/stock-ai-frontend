@@ -18,6 +18,8 @@ import ToolsHub from './components/ToolsHub';
 import SIPCalculator from './components/SIPCalculator';
 import LumpsumCalculator from './components/LumpsumCalculator';
 import BrokerageCalculator from './components/BrokerageCalculator';
+import StockDirectory from './components/StockDirectory';
+import StockPage from './components/StockPage';
 
 
 function Footer() {
@@ -90,6 +92,9 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
           <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />
           <Route path="/tools/brokerage-calculator" element={<BrokerageCalculator />} />
+          
+          <Route path="/stocks" element={<StockDirectory />} />
+          <Route path="/stock/:symbol" element={<StockPage />} />
 
           <Route path="/login" element={
             <LoginPage
