@@ -15,18 +15,18 @@ export default function ToolsHub() {
     {
       title: "Lumpsum Calculator",
       description: "Estimate returns on your one-time investments over a long period.",
-      path: "#",
+      path: "/tools/lumpsum-calculator",
       icon: <TrendingUp className="w-8 h-8 text-emerald-400" />,
       color: "border-emerald-500/30 bg-emerald-500/10",
-      isNew: false
+      isNew: true
     },
     {
       title: "Brokerage Calculator",
       description: "Calculate exactly how much you'll pay in taxes, STT, and brokerage per trade.",
-      path: "#",
+      path: "/tools/brokerage-calculator",
       icon: <PieChart className="w-8 h-8 text-purple-400" />,
       color: "border-purple-500/30 bg-purple-500/10",
-      isNew: false
+      isNew: true
     }
   ];
 

@@ -16,6 +16,8 @@ import Learn from './components/Learn';
 import TrackRecord from './components/TrackRecord';
 import ToolsHub from './components/ToolsHub';
 import SIPCalculator from './components/SIPCalculator';
+import LumpsumCalculator from './components/LumpsumCalculator';
+import BrokerageCalculator from './components/BrokerageCalculator';
 
 
 function Footer() {
@@ -86,6 +88,8 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/track-record" element={<TrackRecord />} />
           <Route path="/tools"      element={<ToolsHub />} />
           <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
+          <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />
+          <Route path="/tools/brokerage-calculator" element={<BrokerageCalculator />} />
 
           <Route path="/login" element={
             <LoginPage
