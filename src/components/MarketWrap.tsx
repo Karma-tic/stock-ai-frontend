@@ -8,6 +8,8 @@ interface MarketWrapItem {
   created_at: string;
 }
 
+const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const MarketWrap: React.FC = () => {
   const [wraps, setWraps] = useState<MarketWrapItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ const MarketWrap: React.FC = () => {
   useEffect(() => {
     const fetchWraps = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/market-wraps'); // Use localhost for testing, will need env var for prod
+        const response = await fetch(`${BASE}/api/market-wraps`);
         const data = await response.json();
         setWraps(data.wraps || []);
       } catch (error) {
