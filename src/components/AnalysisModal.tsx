@@ -354,7 +354,36 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                   </p>
                 </div>
               )}
-
+               {/* Red Flag Radar */}
+              {result.news?.red_flags?.length > 0 && (
+                <div className="bg-red-950/40 border-2 border-red-600 rounded-xl p-4">
+                  <h3 className="font-bold text-red-400 mb-1 flex items-center gap-2">
+                    🚨 Red Flag Radar
+                  </h3>
+                  <p className="text-slate-400 text-xs mb-3">
+                    Verified official NSE disclosures detected — not AI opinion, these are real regulatory filings
+                  </p>
+                  <div className="space-y-2">
+                    {result.news.red_flags.map((flag: any, i: number) => (
+                      <a
+                        key={i}
+                        href={flag.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block bg-red-900/30 border border-red-700 rounded-lg p-3 hover:bg-red-900/50 transition"
+                      >
+                        <span className="inline-block bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded mb-1">
+                          {flag.category}
+                        </span>
+                        <p className="text-slate-200 text-sm">{flag.title}</p>
+                        <p className="text-slate-500 text-xs mt-1">
+                          {flag.source} · {flag.date}
+                        </p>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
               {/* News */}
               {result.news?.news?.length > 0 && (
                 <div className="bg-slate-800 rounded-xl p-4">
