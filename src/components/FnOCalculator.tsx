@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ArrowLeft, Calculator, Info, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Calculator, Info, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 
 export default function FnOCalculator() {
   const [tradeType, setTradeType] = useState<'options' | 'futures'>('options');
