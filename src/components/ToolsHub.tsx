@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calculator, TrendingUp, PieChart } from 'lucide-react';
+import { Calculator, TrendingUp, PieChart, Activity } from 'lucide-react';
 
 export default function ToolsHub() {
   const tools = [
@@ -17,7 +17,14 @@ export default function ToolsHub() {
       description: "Estimate returns on your one-time investments over a long period.",
       path: "/tools/lumpsum-calculator",
       icon: <TrendingUp className="w-8 h-8 text-emerald-400" />,
-      color: "border-emerald-500/30 bg-emerald-500/10",
+      isNew: true
+    },
+    {
+      title: "F&O Calculator",
+      description: "Calculate your exact P&L, Margin, Brokerage, and STT for Futures and Options.",
+      path: "/tools/fno-calculator",
+      icon: <Activity className="w-8 h-8 text-indigo-400" />,
+      color: "border-indigo-500/30 bg-indigo-500/10",
       isNew: true
     },
     {

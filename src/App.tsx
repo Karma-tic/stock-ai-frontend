@@ -19,6 +19,7 @@ import ToolsHub from './components/ToolsHub';
 import SIPCalculator from './components/SIPCalculator';
 import LumpsumCalculator from './components/LumpsumCalculator';
 import BrokerageCalculator from './components/BrokerageCalculator';
+import FnOCalculator from './components/FnOCalculator';
 import StockDirectory from './components/StockDirectory';
 import StockPage from './components/StockPage';
 import Chapter1 from './components/learn/Chapter1';
@@ -105,6 +106,7 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
           <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />
           <Route path="/tools/brokerage-calculator" element={<BrokerageCalculator />} />
+          <Route path="/tools/fno-calculator" element={<FnOCalculator />} />
           
           <Route path="/stocks" element={<StockDirectory />} />
           <Route path="/stock/:symbol" element={<StockPage />} />
