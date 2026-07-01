@@ -78,11 +78,6 @@ export default function FnOCalculator() {
   return (
     <div className="min-h-screen bg-slate-950 pt-24 pb-16 px-6">
       <div className="max-w-4xl mx-auto">
-        <Link to="/tools" className="inline-flex items-center text-slate-400 hover:text-white transition mb-8">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Tools
-        </Link>
-        
         <div className="flex items-center gap-4 mb-8">
           <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
             <Calculator className="w-8 h-8 text-indigo-400" />
@@ -171,13 +166,13 @@ export default function FnOCalculator() {
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 h-full flex flex-col">
                 <h3 className="text-lg font-semibold text-white mb-6">Trade Summary</h3>
                 
-                <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                   <div className={`p-5 rounded-2xl border ${results.netPnL >= 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-slate-400 text-sm">Net P&L (After Taxes)</p>
+                      <p className="text-slate-400 text-sm sm:text-base">Net P&L</p>
                       {results.netPnL >= 0 ? <TrendingUp className="w-5 h-5 text-emerald-400" /> : <TrendingDown className="w-5 h-5 text-red-400" />}
                     </div>
-                    <p className={`text-3xl font-bold ${results.netPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <p className={`text-2xl sm:text-3xl font-bold truncate ${results.netPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {formatCurrency(results.netPnL)}
                     </p>
                     <p className={`text-sm mt-1 ${results.netPnL >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -186,8 +181,8 @@ export default function FnOCalculator() {
                   </div>
                   
                   <div className="bg-slate-950 border border-slate-800 rounded-2xl p-5">
-                    <p className="text-slate-400 text-sm mb-2">Gross P&L</p>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-slate-400 text-sm sm:text-base mb-2">Gross P&L</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-white truncate">
                       {formatCurrency(results.grossPnL)}
                     </p>
                     <p className="text-slate-500 text-sm mt-1">
