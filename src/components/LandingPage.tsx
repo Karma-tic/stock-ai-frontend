@@ -88,7 +88,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       dotClass: "bg-blue-400",
       featureClass: "text-slate-300",
       btnClass: "bg-blue-600 hover:bg-blue-500 text-white",
-      btnText: "Get 30 Days"
+      btnText: "Get 30 Days for ₹99"
     }
   ];
   useEffect(() => {
@@ -371,7 +371,15 @@ export default function LandingPage({ onGetStarted }: Props) {
                     </span>
                   )}
                   <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
-                  <p className="text-3xl font-black text-white mb-1">{plan.price}</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    {plan.originalPrice && (
+                      <p className="text-slate-500 text-lg line-through">{plan.originalPrice}</p>
+                    )}
+                    <p className="text-3xl font-black text-white">{plan.price}</p>
+                    {plan.originalPrice && (
+                      <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
+                    )}
+                  </div>
                   <p className="text-slate-500 text-xs mb-4">{plan.period}</p>
                   <div className="space-y-2">
                     {plan.features.map(f => (
@@ -410,7 +418,15 @@ export default function LandingPage({ onGetStarted }: Props) {
                   </span>
                 )}
                 <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
-                <p className="text-3xl font-black text-white mb-1">{plan.price}</p>
+                <div className="flex items-center gap-2 mb-1">
+                  {plan.originalPrice && (
+                    <p className="text-slate-500 text-lg line-through">{plan.originalPrice}</p>
+                  )}
+                  <p className="text-3xl font-black text-white">{plan.price}</p>
+                  {plan.originalPrice && (
+                    <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
+                  )}
+                </div>
                 <p className="text-slate-500 text-xs mb-4">{plan.period}</p>
                 <div className="space-y-2">
                   {plan.features.map(f => (
