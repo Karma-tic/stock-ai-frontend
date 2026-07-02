@@ -83,7 +83,7 @@ export default function Navbar({ user }: { user: any }) {
                   onClick={() => setShowUpgrade(true)}
                   className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg font-semibold transition"
                 >
-                  Upgrade ₹49
+                  Upgrade ₹99
                 </button>
               )}
 
@@ -181,7 +181,7 @@ export default function Navbar({ user }: { user: any }) {
                     onClick={() => setShowUpgrade(true)}
                     className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
                   >
-                    Upgrade ₹49
+                    Upgrade ₹99
                   </button>
                 )}
                 <button

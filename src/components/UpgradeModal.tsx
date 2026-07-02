@@ -45,10 +45,11 @@ const plans = [
     id:       'onetime' as PlanType,
     emoji:    '🔓',
     title:    '1 Month Access',
-    price:    '₹49',
+    price:    '₹99',
+    originalPrice: '₹499',
     period:   'no auto-renewal',
     desc:     'Pay once, access for 30 days',
-    amount:   4900,
+    amount:   9900,
     days:     30,
     badge:    'POPULAR',
     badgeColor: 'bg-blue-500',
@@ -210,7 +211,15 @@ const plans = [
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-white font-black text-xl">{plan.price}</p>
+                  <div className="flex items-center gap-2">
+                    {'originalPrice' in plan && (
+                      <p className="text-slate-500 text-sm line-through">{(plan as any).originalPrice}</p>
+                    )}
+                    <p className="text-white font-black text-xl">{plan.price}</p>
+                    {'originalPrice' in plan && (
+                      <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -228,7 +237,7 @@ const plans = [
             disabled={loading || !selected}
             className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition text-lg"
           >
-            {loading ? '⏳ Processing...' : selected ? `Pay ${plans.find(p => p.id === selected)?.price}` : 'Select a Plan'}
+           {loading ? '⏳ Processing...' : selected ? `Pay ${plans.find(p => p.id === selected)?.price} →` : 'Select a Plan'}
           </button>
           <button onClick={onClose} className="w-full text-slate-500 text-sm mt-3 py-2">
             Maybe later
