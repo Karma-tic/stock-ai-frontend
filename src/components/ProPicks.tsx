@@ -4,6 +4,8 @@ import { Target, TrendingUp, Lock, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import UpgradeModal from './UpgradeModal';
 
+const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 export default function ProPicks() {
   const [picks, setPicks] = useState<any[]>([]);
   const [isPro, setIsPro] = useState(false);
@@ -20,12 +22,12 @@ export default function ProPicks() {
         setIsLoggedIn(!!session);
 
         // Fetch Accuracy
-        const accRes = await fetch("http://localhost:8000/api/pro-accuracy");
+        const accRes = await fetch(`${BASE}/api/pro-accuracy`);
         const accData = await accRes.json();
         setAccuracy(accData);
 
         // Fetch Picks
-        const picksRes = await fetch("http://localhost:8000/api/pro-picks", {
+        const picksRes = await fetch(`${BASE}/api/pro-picks`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
