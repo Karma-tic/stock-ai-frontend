@@ -70,7 +70,16 @@ export default function Navbar({ user }: { user: any }) {
         </div>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* PRO PICKS BUTTON - ALWAYS VISIBLE */}
+          <Link 
+            to="/pro-picks" 
+            className={`flex items-center gap-1.5 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 hover:from-yellow-500/20 hover:to-yellow-600/20 border border-yellow-500/30 text-yellow-500 text-xs sm:text-sm font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition-all ${user ? 'animate-pulse shadow-[0_0_10px_rgba(234,179,8,0.2)]' : ''}`}
+          >
+            <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-yellow-500" />
+            <span className="whitespace-nowrap">Pro Picks</span>
+          </Link>
+
           {user ? (
             <div className="hidden sm:flex items-center gap-2">
               {isPro ? (
@@ -144,7 +153,7 @@ export default function Navbar({ user }: { user: any }) {
               Market Wrap
             </Link>
 
-            <Link
+          <Link
               to="/stocks"
               onClick={() => setOpen(false)}
               className="block text-slate-300 hover:text-white transition"

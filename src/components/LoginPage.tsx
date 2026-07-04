@@ -19,7 +19,7 @@ export default function LoginPage({ onLogin, onBack }: Props) {
     setLoading(true);
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: 'https://byteplay.org' }
+      options: { redirectTo: window.location.origin }
     });
   };
 
