@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Target, TrendingUp, Lock, CheckCircle2, ShieldAlert } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Target, TrendingUp, Lock, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import UpgradeModal from './UpgradeModal';
 
 export default function ProPicks() {
