@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface MarketWrapItem {
   id: string;
@@ -13,13 +14,42 @@ const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const MarketWrap: React.FC = () => {
   const [wraps, setWraps] = useState<MarketWrapItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentIndex < wraps.length - 1) {
+      setCurrentIndex(prev => prev + 1); // Swipe left = go to older wraps
+    }
+    if (isRightSwipe && currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1); // Swipe right = go to newer wraps
+    }
+  };
+
+  const goToPrev = () => {
+    if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
+  };
+
+  const goToNext = () => {
+    if (currentIndex < wraps.length - 1) setCurrentIndex(prev => prev + 1);
+  };
 
   useEffect(() => {
     const fetchWraps = async () => {
       try {
         const response = await fetch(`${BASE}/api/market-wraps`);
         const data = await response.json();
-        setWraps(data.wraps || []);
+        // Limit to current day + previous 3 days (max 4 wraps)
+        setWraps(data.wraps ? data.wraps.slice(0, 4) : []);
       } catch (error) {
         console.error("Error fetching market wraps:", error);
       } finally {
@@ -55,26 +85,66 @@ const MarketWrap: React.FC = () => {
             No market wrap-ups available yet. Check back after market close!
           </div>
         ) : (
-          <div className="space-y-12">
-            {wraps.map((wrap) => (
-              <div key={wrap.id} className="bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-700">
-                <div className="flex items-center justify-between mb-6 border-b border-slate-700 pb-4">
-                  <h2 className="text-2xl font-bold text-white">{wrap.title}</h2>
-                  <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                    {new Date(wrap.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </span>
-                </div>
-                
-                <div 
-                  className="prose prose-invert prose-blue max-w-none 
-                             prose-h3:text-blue-400 prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
-                             prose-p:text-slate-300 prose-p:leading-relaxed
-                             prose-ul:text-slate-300 prose-li:my-1
-                             prose-strong:text-white whitespace-pre-wrap"
-                  dangerouslySetInnerHTML={{ __html: wrap.content_html }} 
-                />
+          <div 
+            className="relative"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Desktop Navigation Arrows */}
+            {currentIndex > 0 && (
+              <button 
+                onClick={goToPrev}
+                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-slate-800 border border-slate-700 rounded-full items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition shadow-xl z-10"
+                aria-label="Newer wrap"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+            
+            {currentIndex < wraps.length - 1 && (
+              <button 
+                onClick={goToNext}
+                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-slate-800 border border-slate-700 rounded-full items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition shadow-xl z-10"
+                aria-label="Older wrap"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+
+            <div className="bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-700">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-slate-700 pb-4 gap-4">
+                <h2 className="text-2xl font-bold text-white">{wraps[currentIndex].title}</h2>
+                <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium self-start sm:self-auto shrink-0">
+                  {new Date(wraps[currentIndex].date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </span>
               </div>
-            ))}
+              
+              <div 
+                className="prose prose-invert prose-blue max-w-none 
+                           prose-h3:text-blue-400 prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                           prose-p:text-slate-300 prose-p:leading-relaxed
+                           prose-ul:text-slate-300 prose-li:my-1
+                           prose-strong:text-white whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: wraps[currentIndex].content_html }} 
+              />
+            </div>
+
+            {/* Pagination Dots (Mobile & Desktop) */}
+            <div className="flex justify-center gap-2 mt-8">
+              {wraps.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    currentIndex === idx ? 'w-8 bg-blue-500' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                  }`}
+                  aria-label={`Go to wrap ${idx + 1}`}
+                />
+              ))}
+            </div>
+            <div className="text-center mt-2 text-slate-500 text-xs">
+              Swipe left for older wraps
+            </div>
           </div>
         )}
       </div>
