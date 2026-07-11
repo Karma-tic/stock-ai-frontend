@@ -73,6 +73,37 @@ export default function Chapter4() {
             </p>
           </div>
 
+    
+        {/* SEO Text Content for AdSense */}
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
+          <h2 className="text-2xl font-bold mb-4 text-white">Fundamental vs. Technical Analysis: Finding Your Edge</h2>
+          <p className="mb-4 leading-relaxed">
+            When deciding which stocks to buy, investors generally rely on two distinct schools of thought: Fundamental Analysis and Technical Analysis. While purists argue for one over the other, the most successful investors often use a combination of both.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Fundamental Analysis: Uncovering Intrinsic Value</h3>
+          <p className="mb-4 leading-relaxed">
+            Fundamental analysis is the process of evaluating a company's core business to determine its intrinsic value. The goal is to answer a simple question: Is the current stock price lower or higher than what the company is actually worth?
+          </p>
+          <p className="mb-4 leading-relaxed">
+            Fundamental analysts pore over financial statements—the balance sheet, income statement, and cash flow statement. They look at crucial ratios:
+          </p>
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-300">
+            <li><strong>Price-to-Earnings (P/E) Ratio:</strong> How much you are paying for ₹1 of the company's earnings. A lower P/E relative to peers might indicate an undervalued stock.</li>
+            <li><strong>Return on Equity (ROE):</strong> A measure of financial performance calculated by dividing net income by shareholders' equity. It shows how efficiently management is using investors' money to generate growth.</li>
+            <li><strong>Debt-to-Equity Ratio:</strong> Indicates how much debt a company is using to finance its assets relative to the value of shareholders' equity. High debt can be a red flag in rising interest rate environments.</li>
+          </ul>
+          <h3 className="text-xl font-bold mb-3 text-white">Technical Analysis: The Study of Price Action</h3>
+          <p className="mb-4 leading-relaxed">
+            Technical analysis completely ignores a company's financials. Instead, it assumes that all fundamental information is already "priced in" to the stock. Technical analysts study historical market data, primarily price and volume, to forecast future price movements.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            This approach involves reading candlestick charts, identifying support and resistance levels, and using mathematical indicators like Moving Averages, Relative Strength Index (RSI), and MACD. Technical analysts look for repeating patterns (like Head and Shoulders, Double Bottoms, or Flags) to time their entries and exits.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Combining Both Worlds: Techno-Funda Approach</h3>
+          <p className="mb-4 leading-relaxed">
+            A growing number of modern traders employ a "Techno-Funda" strategy. They use fundamental analysis to answer the question of <em>what</em> to buy (identifying fundamentally strong companies with good earnings growth) and use technical analysis to answer the question of <em>when</em> to buy (finding the optimal entry price based on chart support levels). This dual approach can significantly improve risk-adjusted returns.
+          </p>
+        </article>
     </LearnLayout>
   );
 }

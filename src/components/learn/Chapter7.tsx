@@ -56,6 +56,42 @@ export default function Chapter7() {
             ))}
           </div>
 
+    
+        {/* SEO Text Content for AdSense */}
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
+          <h2 className="text-2xl font-bold mb-4 text-white">Your First Steps: Demat, KYC, and Choosing a Broker</h2>
+          <p className="mb-4 leading-relaxed">
+            Starting your investment journey in the Indian stock market is easier now than ever before. The digitization of the financial sector has streamlined the process, allowing anyone with a smartphone and a bank account to start investing within a few hours.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">The Demat and Trading Account</h3>
+          <p className="mb-4 leading-relaxed">
+            Before you can buy your first share, you need to open two linked accounts:
+          </p>
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-300">
+            <li><strong>Trading Account:</strong> Provided by a stockbroker, this account acts as your interface with the stock exchange (NSE/BSE). You use it to place buy and sell orders.</li>
+            <li><strong>Demat Account:</strong> Short for Dematerialized account, this acts as a digital locker. When you buy shares via your trading account, they are electronically credited to and stored safely in your Demat account, which is maintained by depositories like NSDL or CDSL.</li>
+          </ul>
+          <h3 className="text-xl font-bold mb-3 text-white">The KYC Process</h3>
+          <p className="mb-4 leading-relaxed">
+            Know Your Customer (KYC) is a mandatory verification process mandated by SEBI. It prevents fraud, money laundering, and illegal activities. To complete your KYC online, you will need:
+          </p>
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-300">
+            <li>Your PAN Card (mandatory for investing in India).</li>
+            <li>An Aadhaar Card linked to your mobile number (for eSign).</li>
+            <li>A canceled cheque or bank statement to link your bank account.</li>
+            <li>A live photo or a short video verification via your webcam or phone.</li>
+          </ul>
+          <h3 className="text-xl font-bold mb-3 text-white">Discount Brokers vs. Full-Service Brokers</h3>
+          <p className="mb-4 leading-relaxed">
+            Choosing the right broker is critical for your profitability, as high brokerage fees can severely eat into your returns.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            <strong>Full-Service Brokers</strong> (like ICICI Direct, HDFC Securities) offer a wide range of services including research reports, advisory services, and relationship managers. However, they charge a higher brokerage fee, often a percentage of the trade value.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            <strong>Discount Brokers</strong> (like Zerodha, Upstox, Groww) revolutionized the industry by offering a flat-fee model (e.g., ₹20 per trade) or even zero brokerage on equity delivery. They do not provide personalized advice but offer robust, fast trading platforms. For modern, tech-savvy retail investors, discount brokers are almost always the preferred choice due to their cost efficiency and ease of use.
+          </p>
+        </article>
     </LearnLayout>
   );
 }

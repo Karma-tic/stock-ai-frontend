@@ -73,6 +73,35 @@ export default function Chapter5() {
             ))}
           </div>
 
+    
+        {/* SEO Text Content for AdSense */}
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
+          <h2 className="text-2xl font-bold mb-4 text-white">Navigating Market Risks: Systemic vs. Unsystemic</h2>
+          <p className="mb-4 leading-relaxed">
+            Risk is an inherent part of investing. The potential for high returns in the stock market is directly correlated with the amount of risk an investor is willing to take. However, risk is not a monolith; it can be categorized into two primary types: Systemic Risk and Unsystemic Risk.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Systemic Risk (Market Risk)</h3>
+          <p className="mb-4 leading-relaxed">
+            Systemic risk refers to the risk inherent to the entire market or market segment. It is the risk that an entire financial system or market will collapse, affecting all companies within it regardless of their individual fundamentals. Because it affects the broad market, systemic risk is generally unpredictable and impossible to completely avoid through diversification.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            Examples of systemic risk include macroeconomic events like interest rate hikes by the RBI or Federal Reserve, geopolitical tensions, global pandemics (like COVID-19 in 2020), and severe recessions. When a "Black Swan" event occurs, virtually all stocks fall, regardless of how strong their individual balance sheets might be.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Unsystemic Risk (Specific Risk)</h3>
+          <p className="mb-4 leading-relaxed">
+            Unsystemic risk, on the other hand, is specific to a particular company or industry. It is the risk that a specific stock will decline due to factors unique to its operations or its immediate competitive environment.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            Examples of unsystemic risk include a change in company management, a product recall, a sudden regulatory change affecting a specific sector (like pharmaceuticals or telecommunications), or a competitor launching a highly disruptive product.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Managing Risk Through Diversification</h3>
+          <p className="mb-4 leading-relaxed">
+            While you cannot eliminate systemic risk, you can effectively mitigate unsystemic risk through <strong>diversification</strong>. By spreading your capital across different sectors (e.g., holding stocks in IT, Banking, FMCG, and Auto) and across different asset classes (e.g., Equities, Debt, Gold), you ensure that a catastrophic event in one specific company or industry does not wipe out your entire portfolio.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            A well-diversified portfolio acts as a shock absorber. For instance, if regulatory changes hurt your banking stocks, your IT or Pharma holdings might remain unaffected or even gain, balancing the overall impact on your wealth.
+          </p>
+        </article>
     </LearnLayout>
   );
 }

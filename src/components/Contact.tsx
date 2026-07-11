@@ -49,8 +49,13 @@ export default function Contact() {
       </div>
 
       <div className="mt-6 bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+        <p className="text-blue-400 text-sm mb-2">
+          <strong>Corporate Headquarters:</strong><br />
+          Bhopal, Madhya Pradesh, India<br />
+          (Operating fully remote across India)
+        </p>
         <p className="text-blue-400 text-sm">
-          <strong>Business Hours:</strong> Monday to Friday, 10:00 AM – 6:00 PM IST.
+          <strong>Business Hours:</strong> Monday to Friday, 9:00 AM – 6:00 PM IST.
           We are closed on Indian public holidays.
         </p>
       </div>

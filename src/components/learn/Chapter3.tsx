@@ -39,6 +39,35 @@ export default function Chapter3() {
             ))}
           </div>
 
+    
+        {/* SEO Text Content for AdSense */}
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
+          <h2 className="text-2xl font-bold mb-4 text-white">Mastering the Language of the Market</h2>
+          <p className="mb-4 leading-relaxed">
+            To successfully navigate the financial markets, you must first speak its language. Financial jargon can seem intimidating, but understanding these essential terms is the first step toward becoming a confident investor.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Bulls, Bears, and Market Sentiment</h3>
+          <p className="mb-4 leading-relaxed">
+            The terms "Bull" and "Bear" are ubiquitous in finance. A <strong>Bull Market</strong> occurs when stock prices are rising consistently, fueled by economic growth and investor optimism. Conversely, a <strong>Bear Market</strong> is characterized by falling prices and widespread pessimism, typically defined as a drop of 20% or more from recent highs. These terms are said to originate from how the animals attack: a bull thrusts its horns up, while a bear swipes its paws down.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Volatility and the VIX</h3>
+          <p className="mb-4 leading-relaxed">
+            <strong>Volatility</strong> measures the rate at which the price of a stock or market index increases or decreases. A highly volatile stock experiences massive price swings in short periods, making it riskier but potentially more profitable for short-term traders. The India VIX (Volatility Index) is a measure of the market's expectation of volatility over the near term. A rising VIX often indicates fear and uncertainty, usually correlating with a falling Nifty 50.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Liquidity: The Lifeblood of Trading</h3>
+          <p className="mb-4 leading-relaxed">
+            <strong>Liquidity</strong> refers to how easily you can buy or sell a stock without significantly affecting its price. High liquidity means there are always plenty of buyers and sellers available. Large-cap stocks like Reliance or Infosys are highly liquid. Penny stocks, however, often suffer from low liquidity, meaning you might not be able to sell your shares when you want to, or you may have to sell them at a steep discount (the bid-ask spread is wide).
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Corporate Actions: Dividends, Bonuses, and Splits</h3>
+          <p className="mb-4 leading-relaxed">
+            Companies regularly announce corporate actions that affect shareholders:
+          </p>
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-300">
+            <li><strong>Dividends:</strong> A portion of the company's profits distributed to shareholders as a reward for their investment.</li>
+            <li><strong>Bonus Issue:</strong> Free additional shares given to existing shareholders based upon the number of shares they already own (e.g., a 1:1 bonus means you get one free share for every share you hold).</li>
+            <li><strong>Stock Split:</strong> A decision to increase the number of outstanding shares by splitting existing shares (e.g., a ₹10 face value share split into 10 shares of ₹1 face value). This increases liquidity and makes the stock more affordable for retail investors without changing the company's total market capitalization.</li>
+          </ul>
+        </article>
     </LearnLayout>
   );
 }

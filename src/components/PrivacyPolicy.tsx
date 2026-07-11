@@ -14,19 +14,19 @@ export default function PrivacyPolicy() {
         },
         {
           title: "2. How We Use Your Information",
-          content: "Your data is used exclusively to provide stock market analysis, watchlist tracking, and portfolio P&L features. We do not sell, rent, or share your personal information with any third parties for marketing purposes."
+          content: "Your data is used exclusively to provide stock market analysis, watchlist tracking, and portfolio P&L features. We do not sell, rent, or share your personal information with any third parties for marketing purposes, except as required for targeted advertising networks like Google AdSense (see section 4)."
         },
         {
           title: "3. Data Storage & Security",
           content: "All data is securely stored using Supabase (PostgreSQL) with Row Level Security enabled. Data transmission is encrypted via HTTPS/TLS. We follow industry-standard security practices."
         },
         {
-          title: "4. Cookies & Analytics",
-          content: "We use cookies and local storage to maintain your login session. We use Google Analytics to understand how users interact with our platform. No personally identifiable information is shared with Google Analytics."
+          title: "4. Cookies, Google AdSense & Analytics",
+          content: "We use cookies and local storage to maintain your login session. We also use third-party vendors, including Google, which use cookies to serve ads based on a user's prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet. Users may opt out of personalized advertising by visiting Google Ads Settings (https://www.google.com/settings/ads). We also use Google Analytics to understand how users interact with our platform."
         },
         {
           title: "5. Third Party Services",
-          content: "We use Groq AI for stock analysis generation, Razorpay for payment processing, and Supabase for authentication and data storage. Each service operates under its own privacy policy."
+          content: "We use Groq AI for stock analysis generation, Razorpay for payment processing, Supabase for authentication and data storage, and Google AdSense for monetization. Each service operates under its own privacy policy."
         },
         {
           title: "6. Data Retention",

@@ -240,38 +240,41 @@ export default function About() {
                 <h3 className="text-slate-400 text-xs uppercase tracking-widest mb-3">
                   Organisation
                 </h3>
-                <p className="text-white font-semibold">BytePlay Technologies</p>
+                <p className="text-white font-semibold">Karmatix</p>
                 <p className="text-slate-400 text-sm mt-1">
-                  Independent software and technology company building
+                  Parent company of BytePlay. Independent software and technology company building
                   financial tools for Indian retail investors.
                 </p>
               </div>
               <div>
                 <h3 className="text-slate-400 text-xs uppercase tracking-widest mb-3">
-                  Product
+                  Location & Address
                 </h3>
-                <p className="text-white font-semibold">Stock AI</p>
+                <p className="text-white font-semibold">Headquarters</p>
                 <p className="text-slate-400 text-sm mt-1">
-                  AI-powered NSE/BSE stock analysis platform.
-                  Available at byteplay.org
+                  Bhopal, Madhya Pradesh, India<br />
+                  (Operating fully remote across India)
                 </p>
               </div>
               <div>
                 <h3 className="text-slate-400 text-xs uppercase tracking-widest mb-3">
-                  Contact
+                  Contact & Support
                 </h3>
                 <a href="mailto:contact@karmatix.in"
                   className="text-blue-400 hover:text-blue-300 transition">
                   contact@karmatix.in
                 </a>
+                <p className="text-slate-400 text-sm mt-2">
+                  Business Hours: Monday to Friday, 9:00 AM - 6:00 PM IST
+                </p>
               </div>
               <div>
                 <h3 className="text-slate-400 text-xs uppercase tracking-widest mb-3">
-                  Coverage
+                  Leadership
                 </h3>
-                <p className="text-white font-semibold">India — NSE & BSE</p>
+                <p className="text-white font-semibold">Founded by Indian Retail Traders</p>
                 <p className="text-slate-400 text-sm mt-1">
-                  500+ listed Indian companies across all major sectors
+                  Built by a dedicated team of quantitative developers and financial researchers who understand the challenges faced by everyday investors in the NSE/BSE markets.
                 </p>
               </div>
             </div>

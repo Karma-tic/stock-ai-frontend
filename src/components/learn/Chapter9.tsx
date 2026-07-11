@@ -42,6 +42,30 @@ export default function Chapter9() {
             ))}
           </div>
 
+    
+        {/* SEO Text Content for AdSense */}
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
+          <h2 className="text-2xl font-bold mb-4 text-white">The Psychology of Trading: Common Pitfalls to Avoid</h2>
+          <p className="mb-4 leading-relaxed">
+            The mathematical mechanics of the stock market are relatively simple to grasp; it is the psychological aspect that causes the vast majority of traders to lose money. Success in the financial markets requires mastering your own emotions—specifically, fear and greed. Avoiding these common behavioral mistakes is critical for long-term survival.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">FOMO (Fear Of Missing Out)</h3>
+          <p className="mb-4 leading-relaxed">
+            FOMO occurs when a trader sees a stock skyrocketing (often a penny stock or a trending tech stock) and impulsively buys in near the top, terrified of missing the rally. This usually happens after the smart money has already taken their positions. By the time retail investors buy in due to FOMO, the trend is exhausted, and the stock inevitably crashes, leaving the latecomers holding heavy losses. Always trade based on a defined strategy, not on the fear of missing a sudden spike.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Averaging Down on Losers</h3>
+          <p className="mb-4 leading-relaxed">
+            "Averaging down" involves buying more shares of a stock as its price falls, hoping to lower the average entry price. While this can work for fundamentally strong long-term investments, doing this in short-term trading is disastrous. A famous market adage warns: "Never catch a falling knife." Throwing good money after bad into a declining stock without a clear reversal signal is a surefire way to blow up a trading account.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Revenge Trading</h3>
+          <p className="mb-4 leading-relaxed">
+            After suffering a painful loss, human nature compels us to try and win it back immediately. This is known as revenge trading. The trader abandons their risk management rules, increases their position size, and takes suboptimal trades in a desperate attempt to recoup the loss. Revenge trading is driven purely by emotion and almost always results in deeper drawdowns. The best action after a severe loss is to step away from the screen and recalibrate.
+          </p>
+          <h3 className="text-xl font-bold mb-3 text-white">Ignoring the Stop-Loss</h3>
+          <p className="mb-4 leading-relaxed">
+            A stop-loss is an order placed with a broker to sell a security when it reaches a certain price, designed to limit an investor's loss on a position. Perhaps the most fatal mistake a trader can make is entering a trade without a predefined stop-loss, or worse, manually moving the stop-loss lower as the trade goes against them, hoping for a bounce. Accepting a small, calculated loss is the cost of doing business in trading; refusing to accept it can lead to catastrophic financial ruin.
+          </p>
+        </article>
     </LearnLayout>
   );
 }
