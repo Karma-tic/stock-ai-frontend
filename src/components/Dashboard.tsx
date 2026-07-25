@@ -10,7 +10,6 @@ import AnalysisModal from './AnalysisModal';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
-import ProBadge from './ProBadge';
 import UpcomingIpos from './UpcomingIpos';
 import UpgradeModal from './UpgradeModal';
 import PennyStocks from './PennyStocks';
