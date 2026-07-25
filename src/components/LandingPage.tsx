@@ -15,6 +15,7 @@ import {
   Globe,
   Cpu,
 } from "lucide-react";
+import UpcomingIpos from "./UpcomingIpos";
 
 interface Props {
   onGetStarted: () => void;
@@ -458,6 +459,20 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
+
+
+      {/* Upcoming IPOs Section */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-white text-3xl font-bold mb-4">
+            IPO AI Predictions <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2 py-1 rounded-full ml-2 align-middle border border-emerald-500/20">NEW</span>
+          </h2>
+          <p className="text-slate-400">
+            Live grey market premium (GMP) tracking and AI analysis of upcoming IPOs.
+          </p>
+        </div>
+        <UpcomingIpos />
+      </section>
 
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">

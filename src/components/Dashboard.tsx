@@ -10,6 +10,8 @@ import AnalysisModal from './AnalysisModal';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
+import ProBadge from './ProBadge';
+import UpcomingIpos from './UpcomingIpos';
 import UpgradeModal from './UpgradeModal';
 import PennyStocks from './PennyStocks';
 import TrendingStocks from './TrendingStocks';
@@ -217,6 +219,7 @@ export default function Dashboard() {
       { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-white' },
       { id: 'watchlist', label: `Watchlist (${watchlist.length})`, color: 'bg-yellow-500', activeText: 'text-black' },
       { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-white' },
+      { id: 'ipos',      label: 'Upcoming IPOs',color: 'bg-emerald-500',activeText: 'text-white' },
       { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-white' },
       { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-white' },
     ].map(t => (
@@ -270,6 +273,8 @@ export default function Dashboard() {
           <TrendingStocks />
         ) : tab === 'penny' ? (
           <PennyStocks />
+        ) : tab === 'ipos' ? (
+          <UpcomingIpos />
         ) : tab === 'portfolio' ? (
           <Portfolio />
         ) : loading ? (
