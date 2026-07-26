@@ -33,6 +33,7 @@ import Chapter8 from './components/learn/Chapter8';
 import Chapter9 from './components/learn/Chapter9';
 import MarketWrap from './components/MarketWrap';
 import ProPicks from './components/ProPicks';
+import IPOsPage from './components/IPOsPage';
 
 
 function Footer() {
@@ -113,6 +114,7 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/stock/:symbol" element={<StockPage />} />
 
           <Route path="/pro-picks" element={<ProPicks />} />
+          <Route path="/ipos" element={<IPOsPage />} />
           
           {/* Learn Wiki Routes */}
           <Route path="/learn/what-is-stock-market" element={<Chapter1 />} />
