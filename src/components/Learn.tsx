@@ -5,7 +5,7 @@ import { ChevronRight } from 'lucide-react';
 export default function Learn() {
   const chapters = [
     { num: 1, title: "What is the Stock Market?", slug: "what-is-stock-market", desc: "The basics of NSE, BSE, Nifty, and SEBI.", iconBg: "bg-blue-600" },
-    { num: 2, title: "Types of Trading in Indian Stock Market", slug: "types-of-trading", desc: "Intraday, Swing, Positional, and Long-term.", iconBg: "bg-purple-600" },
+    { num: 2, title: "Types of Trading in Indian Stock Market", slug: "types-of-trading", desc: "Intraday, Swing, Positional, and Long-term.", iconBg: "bg-indigo-600" },
     { num: 3, title: "Essential Stock Market Terms", slug: "essential-terms", desc: "Bull market, PE Ratio, Stop Loss, DIIs and FIIs.", iconBg: "bg-green-600" },
     { num: 4, title: "Fundamental vs Technical Analysis", slug: "fundamental-vs-technical", desc: "How to actually pick stocks to buy.", iconBg: "bg-orange-600" },
     { num: 5, title: "Stock Market Risks", slug: "market-risks", desc: "Understand what causes you to lose money.", iconBg: "bg-red-600" },

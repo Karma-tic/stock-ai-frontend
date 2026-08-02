@@ -94,13 +94,13 @@ export default function BrokerageCalculator() {
             <div className="flex p-1 bg-gray-50 rounded-xl mb-6">
               <button 
                 onClick={() => setTradeType('delivery')}
-                className={`flex-1 py-2 text-sm font-bold rounded-lg transition ${tradeType === 'delivery' ? 'bg-purple-600 text-gray-900 shadow-md' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition ${tradeType === 'delivery' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-900'}`}
               >
                 Delivery (CNC)
               </button>
               <button 
                 onClick={() => setTradeType('intraday')}
-                className={`flex-1 py-2 text-sm font-bold rounded-lg transition ${tradeType === 'intraday' ? 'bg-purple-600 text-gray-900 shadow-md' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition ${tradeType === 'intraday' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-900'}`}
               >
                 Intraday (MIS)
               </button>

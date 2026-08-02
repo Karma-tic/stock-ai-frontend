@@ -10,7 +10,7 @@ export default function Chapter2() {
       nextChapter={{ path: '/learn/essential-terms', title: 'Essential Stock Market Terms' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center text-gray-900 font-black text-xl shadow-lg flex-shrink-0">
+        <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg flex-shrink-0">
           2
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-gray-900">Types of Trading in Indian Stock Market</h2>

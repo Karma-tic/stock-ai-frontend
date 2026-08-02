@@ -215,12 +215,12 @@ export default function Dashboard() {
     "
   >
     {[
-      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-gray-900' },
+      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-white' },
       { id: 'watchlist', label: `Watchlist (${watchlist.length})`, color: 'bg-yellow-500', activeText: 'text-black' },
-      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-gray-900' },
-      { id: 'ipos',      label: 'Upcoming IPOs',color: 'bg-emerald-500',activeText: 'text-gray-900' },
-      { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-gray-900' },
-      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-gray-900' },
+      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-white' },
+      { id: 'ipos',      label: 'Upcoming IPOs',color: 'bg-emerald-500',activeText: 'text-white' },
+      { id: 'portfolio', label: 'Portfolio',    color: 'bg-indigo-500', activeText: 'text-white' },
+      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-white' },
     ].map(t => (
       <button
         key={t.id}
