@@ -121,9 +121,11 @@ const plans = [
           onSuccess();
           onClose();
         } catch (e: any) {
-          console.error('Verify failed:', e?.response?.data || e.message);
+          const detail = e?.response?.data?.detail || e.message;
+          console.error('Verify failed:', detail);
           alert(
             `Payment received but activation failed.\n` +
+            `Error: ${detail}\n` +
             `Payment ID: ${response.razorpay_payment_id}\n` +
             `Email contact@karmatix.in with this ID for manual activation.`
           );
