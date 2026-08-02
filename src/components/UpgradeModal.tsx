@@ -1,5 +1,5 @@
 // src/components/UpgradeModal.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { supabase } from '../lib/supabase';
 import { Target, Unlock, RefreshCw, Check } from 'lucide-react';
@@ -19,6 +19,15 @@ export default function UpgradeModal({ onClose, onSuccess }: {
 }) {
   const [loading, setLoading]     = useState(false);
   const [selected, setSelected]   = useState<PlanType>(null);
+  const [hasUsedTrial, setHasUsedTrial] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user?.user_metadata?.has_used_trial) {
+        setHasUsedTrial(true);
+      }
+    });
+  }, []);
     const features = [
     'Unlimited AI analysis',
     'Search 500+ stocks',
@@ -178,7 +187,7 @@ const plans = [
 
         {/* Plan Cards */}
         <div className="p-4 space-y-3">
-          {plans.map(plan => (
+          {plans.filter(p => !(p.id === 'trial' && hasUsedTrial)).map(plan => (
             <div
               key={plan.id}
               onClick={() => setSelected(plan.id)}
