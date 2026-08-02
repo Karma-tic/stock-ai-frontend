@@ -53,13 +53,13 @@ export default function UpcomingIpos() {
   };
 
   const getGmpColor = (gmp?: string) => {
-    if (!gmp || gmp === '₹0' || gmp === '₹-') return 'text-slate-400';
+    if (!gmp || gmp === '₹0' || gmp === '₹-') return 'text-gray-500';
     if (gmp.includes('-')) return 'text-rose-400';
     return 'text-emerald-400 font-bold';
   };
 
   const getEstListingColor = (est?: string) => {
-    if (!est || est.includes('(0.00%)') || est === '₹-') return 'text-slate-400';
+    if (!est || est.includes('(0.00%)') || est === '₹-') return 'text-gray-500';
     if (est.includes('-')) return 'text-rose-400';
     return 'text-emerald-400';
   };
@@ -71,14 +71,14 @@ export default function UpcomingIpos() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
           <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
         </div>
-        <p className="text-slate-400 text-sm animate-pulse tracking-widest uppercase">Fetching Live IPO GMPs...</p>
+        <p className="text-gray-500 text-sm animate-pulse tracking-widest uppercase">Fetching Live IPO GMPs...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="py-12 text-center text-slate-400 text-sm">
+      <div className="py-12 text-center text-gray-500 text-sm">
         {error}
       </div>
     );
@@ -88,77 +88,77 @@ export default function UpcomingIpos() {
     <div className="space-y-6">
       
       {/* FILTER TABS */}
-      <div className="flex items-center justify-between flex-wrap gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+      <div className="flex items-center justify-between flex-wrap gap-4 bg-white/50 p-4 rounded-2xl border border-gray-200">
         <div className="flex gap-2">
           {['All', 'Mainboard', 'SME'].map(f => (
             <button
               key={f}
               onClick={() => setFilter(f as any)}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${filter === f ? 'bg-emerald-500 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'}`}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${filter === f ? 'bg-emerald-500 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-gray-50 text-gray-500 hover:bg-gray-200 hover:text-gray-900'}`}
             >
               {f}
             </button>
           ))}
         </div>
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             type="text" 
             placeholder="Search IPOs..." 
-            className="bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-64"
+            className="bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-sm text-gray-900 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-64"
           />
         </div>
       </div>
 
       {/* DATA TABLE (Desktop) */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
+      <div className="bg-white/80 border border-gray-200 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-950/50 border-b border-slate-800">
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider rounded-tl-2xl">IPO Name</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Price Band</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Dates</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">GMP</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Est. Listing</th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right rounded-tr-2xl">Status</th>
+              <tr className="bg-white/50 border-b border-gray-200">
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider rounded-tl-2xl">IPO Name</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Price Band</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Dates</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">GMP</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Est. Listing</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right rounded-tr-2xl">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
               {filteredIpos.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500 text-sm">
+                  <td colSpan={7} className="px-6 py-12 text-center text-gray-400 text-sm">
                     No IPOs found for this category.
                   </td>
                 </tr>
               ) : (
                 filteredIpos.map(ipo => (
-                  <tr key={ipo.id} className="hover:bg-slate-800/30 transition-colors group">
+                  <tr key={ipo.id} className="hover:bg-gray-50/30 transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0 group-hover:scale-110 transition-transform">
                           {ipo.company_name.charAt(0)}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-200 group-hover:text-emerald-400 transition-colors whitespace-normal max-w-[200px] leading-tight">
+                          <p className="text-sm font-bold text-gray-800 group-hover:text-emerald-400 transition-colors whitespace-normal max-w-[200px] leading-tight">
                             {ipo.company_name}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-400">
-                      <span className="bg-slate-800 text-slate-300 px-2 py-1 rounded-md text-[10px] font-medium tracking-wide">
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      <span className="bg-gray-50 text-gray-600 px-2 py-1 rounded-md text-[10px] font-medium tracking-wide">
                         {ipo.lot_size || 'MAINBOARD'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-medium text-slate-300">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
                       {ipo.price_band}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-xs text-slate-300 flex flex-col gap-1">
+                      <div className="text-xs text-gray-600 flex flex-col gap-1">
                         <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{ipo.open_date}</span>
-                        <span className="flex items-center gap-1.5 text-slate-500"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>{ipo.close_date}</span>
+                        <span className="flex items-center gap-1.5 text-gray-400"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>{ipo.close_date}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -181,9 +181,9 @@ export default function UpcomingIpos() {
             </tbody>
           </table>
         </div>
-        <div className="bg-slate-900 px-6 py-4 border-t border-slate-800 text-xs text-slate-500 flex items-center gap-2 justify-between">
+        <div className="bg-white px-6 py-4 border-t border-gray-200 text-xs text-gray-400 flex items-center gap-2 justify-between">
           <div className="flex items-center gap-2">
-            <Info className="w-4 h-4 text-slate-400" />
+            <Info className="w-4 h-4 text-gray-500" />
             GMP (Grey Market Premium) is highly volatile and indicative only. Est. Listing is based on upper price band + GMP.
           </div>
           <div>Live Data Feed</div>

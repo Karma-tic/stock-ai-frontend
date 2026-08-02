@@ -11,26 +11,26 @@ export default function StockPage() {
   const profile = STOCK_PROFILES[upperSymbol] || getGenericProfile(upperSymbol);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300">
+    <div className="min-h-screen bg-white text-gray-600">
       
       {/* Hero Section */}
-      <div className="bg-slate-900 border-b border-slate-800 pt-16 pb-12 px-6">
+      <div className="bg-white border-b border-gray-200 pt-16 pb-12 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl md:text-5xl font-black text-white">{profile.symbol}</h1>
-                <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-sm font-bold">
+                <h1 className="text-4xl md:text-5xl font-black text-gray-900">{profile.symbol}</h1>
+                <span className="bg-blue-500/10 text-blue-600 border border-blue-500/20 px-3 py-1 rounded-full text-sm font-bold">
                   {profile.sector}
                 </span>
               </div>
-              <p className="text-xl text-slate-400">{profile.name}</p>
+              <p className="text-xl text-gray-500">{profile.name}</p>
             </div>
             
             <div className="flex-shrink-0">
               <Link 
                 to="/login" 
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-blue-500/20"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-gray-900 font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-blue-500/20"
               >
                 <TrendingUp className="w-5 h-5" />
                 Get Live AI Analysis
@@ -42,12 +42,12 @@ export default function StockPage() {
 
       {/* Main Content - SEO Goldmine */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <article className="prose prose-invert max-w-none prose-headings:text-white prose-p:leading-relaxed prose-p:text-slate-300">
+        <article className="prose prose-invert max-w-none prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-600">
           
           <section className="mb-12">
             <div className="flex items-center gap-2 mb-4">
-              <Info className="w-6 h-6 text-blue-400" />
-              <h2 className="text-2xl font-bold m-0 text-white">Company Overview</h2>
+              <Info className="w-6 h-6 text-blue-600" />
+              <h2 className="text-2xl font-bold m-0 text-gray-900">Company Overview</h2>
             </div>
             <p>{profile.overview}</p>
           </section>
@@ -55,31 +55,31 @@ export default function StockPage() {
           <section className="mb-12">
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="w-6 h-6 text-emerald-400" />
-              <h2 className="text-2xl font-bold m-0 text-white">Business Segments & Revenue Model</h2>
+              <h2 className="text-2xl font-bold m-0 text-gray-900">Business Segments & Revenue Model</h2>
             </div>
             <p>{profile.businessSegments}</p>
           </section>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-purple-400" />
-                <h3 className="text-xl font-bold m-0 text-white">Fundamental Analysis Guide</h3>
+                <h3 className="text-xl font-bold m-0 text-gray-900">Fundamental Analysis Guide</h3>
               </div>
               <p className="text-sm">{profile.fundamentalAnalysis}</p>
             </section>
 
-            <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-5 h-5 text-red-400" />
-                <h3 className="text-xl font-bold m-0 text-white">Risks & Opportunities</h3>
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+                <h3 className="text-xl font-bold m-0 text-gray-900">Risks & Opportunities</h3>
               </div>
               <p className="text-sm">{profile.risksAndOpportunities}</p>
             </section>
           </div>
 
-          <section className="border-t border-slate-800 pt-12">
-            <h2 className="text-2xl font-bold mb-4 text-white">How to Trade {profile.symbol} using AI</h2>
+          <section className="border-t border-gray-200 pt-12">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">How to Trade {profile.symbol} using AI</h2>
             <p>
               While understanding the fundamental profile of {profile.name} is crucial for long-term investing, short-to-medium term price action is often dictated by market sentiment, quarterly earnings reports, and breaking news. 
             </p>
@@ -97,11 +97,11 @@ export default function StockPage() {
         </article>
 
         {/* Footer CTA */}
-        <div className="mt-16 bg-gradient-to-r from-blue-900/40 to-slate-900 border border-blue-500/30 rounded-2xl p-8 text-center">
-          <h3 className="text-white text-2xl font-bold mb-3">
+        <div className="mt-16 bg-gradient-to-r from-blue-900/40 to-gray-50 border border-blue-500/30 rounded-2xl p-8 text-center">
+          <h3 className="text-gray-900 text-2xl font-bold mb-3">
             Don't Guess. Let AI Analyze {profile.symbol}.
           </h3>
-          <p className="text-slate-400 mb-6 max-w-xl mx-auto">
+          <p className="text-gray-500 mb-6 max-w-xl mx-auto">
             Join thousands of smart investors using AI to find the best entry and exit points in the Indian stock market.
           </p>
           <Link to="/login" className="inline-block bg-white text-blue-900 font-bold py-3 px-8 rounded-xl transition hover:bg-slate-200">

@@ -61,11 +61,11 @@ const verifyEmailOtp = async () => {
 };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       {onBack && (
         <div className="p-4">
           <button onClick={onBack}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition text-sm">
+            className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition text-sm">
             ← Back to Home
           </button>
         </div>
@@ -76,17 +76,17 @@ const verifyEmailOtp = async () => {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">📈</div>
-            <h1 className="text-3xl font-black text-white">Stock AI</h1>
-            <p className="text-slate-400 mt-2">AI-powered NSE/BSE analysis</p>
+            <h1 className="text-3xl font-black text-gray-900">Stock AI</h1>
+            <p className="text-gray-500 mt-2">AI-powered NSE/BSE analysis</p>
           </div>
 
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6">
+          <div className="bg-white border border-gray-300 rounded-2xl p-6">
             {/* Mode tabs */}
-            <div className="flex bg-slate-800 rounded-xl p-1 mb-6">
+            <div className="flex bg-gray-50 rounded-xl p-1 mb-6">
               {(['google', 'email'] as const).map(m => (
                 <button key={m} onClick={() => { setMode(m); setStep('input'); setError(''); }}
                   className={`flex-1 py-2 rounded-lg text-sm font-semibold transition ${
-                    mode === m ? 'bg-blue-600 text-white' : 'text-slate-400'
+                    mode === m ? 'bg-blue-600 text-gray-900' : 'text-gray-500'
                   }`}>
                   {m === 'google' ? '🔵 Google' : '📧 Email OTP'}
                 </button>
@@ -107,7 +107,7 @@ const verifyEmailOtp = async () => {
                 {step === 'input' ? (
                   <>
                     <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3">
-                      <p className="text-blue-400 text-xs">
+                      <p className="text-blue-600 text-xs">
                         📧 We'll send a 6-digit OTP to your email. No password needed.
                       </p>
                     </div>
@@ -117,18 +117,18 @@ const verifyEmailOtp = async () => {
                       onChange={e => setEmail(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && sendEmailOtp()}
                       placeholder="your@email.com"
-                      className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-gray-50 border border-gray-400 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500"
                     />
                     <button onClick={sendEmailOtp}
                       disabled={loading || !email.includes('@')}
-                      className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition">
+                      className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition">
                       {loading ? 'Sending...' : 'Send OTP to Email'}
                     </button>
                   </>
                 ) : (
                   <>
                     <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-3">
-                      <p className="text-green-400 text-xs">
+                      <p className="text-green-600 text-xs">
                         ✅ OTP sent to <strong>{email}</strong>
                         <br />Check your inbox (and spam folder)
                       </p>
@@ -140,15 +140,15 @@ const verifyEmailOtp = async () => {
                       onKeyDown={e => e.key === 'Enter' && verifyEmailOtp()}
                       placeholder="Enter 6-digit OTP"
                       maxLength={6}
-                      className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white text-center text-xl tracking-widest focus:outline-none focus:border-blue-500"
+                      className="w-full bg-gray-50 border border-gray-400 rounded-xl px-4 py-3 text-gray-900 text-center text-xl tracking-widest focus:outline-none focus:border-blue-500"
                     />
                     <button onClick={verifyEmailOtp}
                       disabled={loading || otp.length < 6}
-                      className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition">
+                      className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition">
                       {loading ? 'Verifying...' : '✅ Verify & Login'}
                     </button>
                     <button onClick={() => { setStep('input'); setOtp(''); setError(''); }}
-                      className="w-full text-slate-500 text-sm">
+                      className="w-full text-gray-400 text-sm">
                       ← Change email
                     </button>
                   </>
@@ -157,11 +157,11 @@ const verifyEmailOtp = async () => {
             )}
 
             {error && (
-              <p className="text-red-400 text-sm text-center mt-3">❌ {error}</p>
+              <p className="text-red-600 text-sm text-center mt-3">❌ {error}</p>
             )}
           </div>
 
-          <p className="text-slate-600 text-xs text-center mt-6">
+          <p className="text-gray-300 text-xs text-center mt-6">
             AI signals are for educational purposes only. Not SEBI-registered advice.
           </p>
         </div>

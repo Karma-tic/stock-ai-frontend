@@ -10,10 +10,10 @@ export default function Chapter2() {
       nextChapter={{ path: '/learn/essential-terms', title: 'Essential Stock Market Terms' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg flex-shrink-0">
+        <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center text-gray-900 font-black text-xl shadow-lg flex-shrink-0">
           2
         </div>
-        <h2 className="text-3xl md:text-4xl font-black text-white">Types of Trading in Indian Stock Market</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-gray-900">Types of Trading in Indian Stock Market</h2>
       </div>
       
       
@@ -23,7 +23,7 @@ export default function Chapter2() {
                 title:  "Intraday Trading",
                 color:  "border-red-500/40 bg-red-500/5",
                 badge:  "High Risk",
-                badgeC: "bg-red-500/20 text-red-400",
+                badgeC: "bg-red-500/20 text-red-600",
                 desc:   "Buying and selling stocks within the same trading day. Positions must be closed before 3:30 PM. Requires significant time, discipline and risk management. Not recommended for beginners.",
                 pros:   ["No overnight risk", "Can profit in falling markets"],
                 cons:   ["Very high risk", "Requires constant monitoring", "Most beginners lose money"],
@@ -41,7 +41,7 @@ export default function Chapter2() {
                 title:  "Positional Trading",
                 color:  "border-blue-500/40 bg-blue-500/5",
                 badge:  "Medium Risk",
-                badgeC: "bg-blue-500/20 text-blue-400",
+                badgeC: "bg-blue-500/20 text-blue-600",
                 desc:   "Holding stocks for weeks to months based on a medium-term view. Focuses on fundamental analysis and sector trends. Good balance between active and passive investing.",
                 pros:   ["Less stress than intraday", "Captures large moves"],
                 cons:   ["Requires patience", "Capital locked for months"],
@@ -50,7 +50,7 @@ export default function Chapter2() {
                 title:  "Long-term Investing",
                 color:  "border-green-500/40 bg-green-500/5",
                 badge:  "Lower Risk",
-                badgeC: "bg-green-500/20 text-green-400",
+                badgeC: "bg-green-500/20 text-green-600",
                 desc:   "Buying quality stocks and holding for years or decades. Warren Buffett's preferred approach. Power of compounding works best here. Ideal for wealth building over time.",
                 pros:   ["Benefits from compounding", "Lower tax on LTCG", "Less time required"],
                 cons:   ["Returns take years", "Patience required"],
@@ -58,56 +58,56 @@ export default function Chapter2() {
             ].map(item => (
               <div key={item.title} className={`border rounded-xl p-5 ${item.color}`}>
                 <div className="flex justify-between items-start mb-3">
-                  <h4 className="text-white font-bold">{item.title}</h4>
+                  <h4 className="text-gray-900 font-bold">{item.title}</h4>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${item.badgeC}`}>
                     {item.badge}
                   </span>
                 </div>
-                <p className="text-slate-400 text-sm leading-relaxed mb-4">{item.desc}</p>
+                <p className="text-gray-500 text-sm leading-relaxed mb-4">{item.desc}</p>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <p className="text-green-400 text-xs font-semibold mb-1">Pros</p>
-                    {item.pros.map(p => <p key={p} className="text-slate-400 text-xs">+ {p}</p>)}
+                    <p className="text-green-600 text-xs font-semibold mb-1">Pros</p>
+                    {item.pros.map(p => <p key={p} className="text-gray-500 text-xs">+ {p}</p>)}
                   </div>
                   <div>
-                    <p className="text-red-400 text-xs font-semibold mb-1">Cons</p>
-                    {item.cons.map(c => <p key={c} className="text-slate-400 text-xs">- {c}</p>)}
+                    <p className="text-red-600 text-xs font-semibold mb-1">Cons</p>
+                    {item.cons.map(c => <p key={c} className="text-gray-500 text-xs">- {c}</p>)}
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
-            <p className="text-blue-400 text-sm font-semibold mb-2">Stock AI Recommendation</p>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-blue-600 text-sm font-semibold mb-2">Stock AI Recommendation</p>
+            <p className="text-gray-600 leading-relaxed">
               For most retail investors, a combination of positional trading and long-term investing works best. Stock AI at <strong>byteplay.org</strong> generates BUY/HOLD/SELL signals with 1-3 month and 6-12 month targets — perfectly suited for both positional and long-term approaches.
             </p>
           </div>
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-slate-800 prose-headings:text-white prose-a:text-blue-400">
-          <h2 className="text-2xl font-bold mb-4 text-white">Deep Dive into Trading Styles: From Intraday to Delivery</h2>
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-gray-200 prose-headings:text-gray-900 prose-a:text-blue-600">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Deep Dive into Trading Styles: From Intraday to Delivery</h2>
           <p className="mb-4 leading-relaxed">
             Navigating the stock market requires choosing a trading style that aligns with your capital, risk tolerance, and time commitment. The Indian stock market offers various avenues, each with its distinct characteristics and taxation rules.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-white">Intraday Trading (Day Trading)</h3>
+          <h3 className="text-xl font-bold mb-3 text-gray-900">Intraday Trading (Day Trading)</h3>
           <p className="mb-4 leading-relaxed">
             Intraday trading involves buying and selling stocks within the same trading day (between 9:15 AM and 3:30 PM IST). The goal is to profit from short-term price fluctuations. If a position is not closed by the trader, the broker will automatically square it off before the market closes. Intraday traders rely heavily on technical analysis, charts, and momentum indicators. Because positions are not held overnight, intraday traders are immune to "gap down" openings the next day, but they must possess immense discipline and quick decision-making skills.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-white">Swing Trading</h3>
+          <h3 className="text-xl font-bold mb-3 text-gray-900">Swing Trading</h3>
           <p className="mb-4 leading-relaxed">
             Swing trading sits between day trading and long-term investing. Traders hold positions for a period ranging from a few days to several weeks. The objective is to capture a "swing" or a specific price movement in a stock. Swing traders use a combination of fundamental and technical analysis to identify trends and potential breakouts. This style requires less screen time than intraday trading but requires a solid understanding of market cycles and stop-loss management.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-white">Delivery Trading (Long-Term Investing)</h3>
+          <h3 className="text-xl font-bold mb-3 text-gray-900">Delivery Trading (Long-Term Investing)</h3>
           <p className="mb-4 leading-relaxed">
             Delivery trading is synonymous with traditional investing. When you buy shares and hold them in your Demat account for more than a day, it is considered a delivery trade. This approach is rooted in fundamental analysis—evaluating a company's financial health, management, and growth prospects. Long-term investors benefit not just from capital appreciation but also from corporate actions like dividends, bonuses, and stock splits.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-white">Tax Implications in India</h3>
+          <h3 className="text-xl font-bold mb-3 text-gray-900">Tax Implications in India</h3>
           <p className="mb-4 leading-relaxed">
             Understanding the tax structure is crucial for calculating your net returns. In India, the taxation varies significantly based on your trading style:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-300">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
             <li><strong>Short-Term Capital Gains (STCG):</strong> Applies to equity shares sold within 12 months of purchase. It is typically taxed at a flat rate of 15% (subject to changes in the Union Budget).</li>
             <li><strong>Long-Term Capital Gains (LTCG):</strong> Applies to equity shares held for more than 12 months. LTCG exceeding ₹1 lakh in a financial year is taxed at 10% without indexation benefits.</li>
             <li><strong>Intraday and F&O Trading:</strong> Profits from intraday equity trading and Futures & Options are treated as speculative and non-speculative business income, respectively, and are taxed according to your applicable income tax slab.</li>

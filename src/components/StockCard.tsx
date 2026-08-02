@@ -73,7 +73,7 @@ ReactGA.event({
   };
 
   return (
-    <div className="bg-slate-800 border border-slate-700 hover:border-blue-500 rounded-xl p-4 transition-all">
+    <div className="bg-gray-50 border border-gray-300 hover:border-blue-500 rounded-xl p-4 transition-all">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div
@@ -81,12 +81,12 @@ ReactGA.event({
           onClick={() => onAnalyze(stock)}
         >
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white text-lg">{stock.display_ticker}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+            <span className="font-bold text-gray-900 text-lg">{stock.display_ticker}</span>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'}`}>
               {isUp ? '▲' : '▼'} {Math.abs(stock.price_change_pct || 0)}%
             </span>
           </div>
-          <p className="text-slate-400 text-xs mt-0.5 truncate max-w-[150px]">{stock.company_name}</p>
+          <p className="text-gray-500 text-xs mt-0.5 truncate max-w-[150px]">{stock.company_name}</p>
         </div>
 
         {/* Star button — completely isolated from card click */}
@@ -98,9 +98,9 @@ ReactGA.event({
             e.stopPropagation();
             handleWatchlist();
           }}
-          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-700 transition"
+          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition"
         >
-          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-slate-500 hover:text-yellow-400'}`}>
+          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-400'}`}>
             {loading ? '⏳' : localWatchlist ? '★' : '☆'}
           </span>
         </button>
@@ -108,27 +108,27 @@ ReactGA.event({
 
       {/* Price — clickable */}
       <div className="mb-3 cursor-pointer" onClick={() => onAnalyze(stock)}>
-        <span className="text-2xl font-bold text-white">
+        <span className="text-2xl font-bold text-gray-900">
           ₹{(stock.current_price || 0).toLocaleString('en-IN')}
         </span>
-        <span className={`ml-2 text-sm ${isUp ? 'text-green-400' : 'text-red-400'}`}>
+        <span className={`ml-2 text-sm ${isUp ? 'text-green-600' : 'text-red-600'}`}>
           {isUp ? '+' : ''}{stock.price_change || 0}
         </span>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 text-center" onClick={() => onAnalyze(stock)}>
-        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
-          <p className="text-slate-500 text-xs">PE</p>
-          <p className="text-white text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
+        <div className="bg-white rounded-lg p-2 cursor-pointer">
+          <p className="text-gray-400 text-xs">PE</p>
+          <p className="text-gray-900 text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
         </div>
-        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
-          <p className="text-slate-500 text-xs">Div%</p>
-          <p className="text-green-400 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
+        <div className="bg-white rounded-lg p-2 cursor-pointer">
+          <p className="text-gray-400 text-xs">Div%</p>
+          <p className="text-green-600 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
         </div>
-        <div className="bg-slate-900 rounded-lg p-2 cursor-pointer">
-          <p className="text-slate-500 text-xs">52W%</p>
-          <p className="text-blue-400 text-sm font-semibold">{stock.position_in_52w || 0}%</p>
+        <div className="bg-white rounded-lg p-2 cursor-pointer">
+          <p className="text-gray-400 text-xs">52W%</p>
+          <p className="text-blue-600 text-sm font-semibold">{stock.position_in_52w || 0}%</p>
         </div>
         
       </div>
@@ -136,7 +136,7 @@ ReactGA.event({
       {/* Analyze button */}
       <button
   onClick={() => onAnalyze(stock)}
-  className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-white text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+  className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-gray-900 text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2"
 >
   <Brain className="w-4 h-4" />
   AI Analysis

@@ -77,7 +77,7 @@ const [error, setError] = useState('');
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition ${
         inWatchlist
           ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50'
-          : 'bg-slate-700 text-slate-400 border border-slate-600 hover:border-yellow-500 hover:text-yellow-400'
+          : 'bg-gray-100 text-gray-500 border border-gray-400 hover:border-yellow-500 hover:text-yellow-400'
       }`}>
       {loading ? '⏳' : inWatchlist ? '★ Watching' : '☆ Watchlist'}
     </button>
@@ -111,37 +111,37 @@ export default function AnalysisModal({ stock, onClose }: { stock: any; onClose:
   }, [stock]);
 
   const signal = result?.signal?.signal;
-const colorMap: Record<string, string> = { BUY: 'text-green-400', HOLD: 'text-yellow-400', SELL: 'text-red-400' };
+const colorMap: Record<string, string> = { BUY: 'text-green-600', HOLD: 'text-yellow-400', SELL: 'text-red-600' };
 const bgMap: Record<string, string> = { BUY: 'bg-green-500/20 border-green-500', HOLD: 'bg-yellow-500/20 border-yellow-500', SELL: 'bg-red-500/20 border-red-500' };
-const signalColor = colorMap[signal] || 'text-white';
-const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
+const signalColor = colorMap[signal] || 'text-gray-900';
+const signalBg = bgMap[signal] || 'bg-gray-100 border-gray-400';
   return (
-    <div className="fixed inset-0 bg-black/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-white/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
       <div
-        className="bg-slate-900 border border-slate-700 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white border border-gray-300 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
 {/* Header */}
-<div className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 bg-slate-900">
+<div className="flex justify-between items-center p-4 border-b border-gray-300 sticky top-0 bg-white">
   <div>
-    <h2 className="font-bold text-xl text-white">{stock.display_ticker}</h2>
-    <p className="text-slate-400 text-sm">{stock.company_name}</p>
+    <h2 className="font-bold text-xl text-gray-900">{stock.display_ticker}</h2>
+    <p className="text-gray-500 text-sm">{stock.company_name}</p>
   </div>
-  <button onClick={onClose} className="text-slate-400 hover:text-white text-2xl">✕</button>
+  <button onClick={onClose} className="text-gray-500 hover:text-gray-900 text-2xl">✕</button>
 </div>
 
 {/* Live Price Bar */}
-<div className="px-4 py-3 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
+<div className="px-4 py-3 bg-gray-50 border-b border-gray-300 flex items-center justify-between">
 
   <div className="flex items-center gap-3">
-    <span className="text-2xl font-black text-white">
+    <span className="text-2xl font-black text-gray-900">
       ₹{stock.current_price?.toLocaleString('en-IN')}
     </span>
 
     <span className={`text-sm font-semibold px-2 py-0.5 rounded-full ${
       stock.price_change >= 0
-        ? 'bg-green-500/20 text-green-400'
-        : 'bg-red-500/20 text-red-400'
+        ? 'bg-green-500/20 text-green-600'
+        : 'bg-red-500/20 text-red-600'
     }`}>
       {stock.price_change >= 0 ? '▲' : '▼'} {Math.abs(stock.price_change_pct)}%
     </span>
@@ -162,14 +162,14 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
     <div className="flex justify-center mb-4">
       <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
     </div>
-    <p className="text-slate-400 font-medium">Analyzing {stock.display_ticker}...</p>
-    <p className="text-slate-500 text-sm mt-1">Reading news and market data</p>
+    <p className="text-gray-500 font-medium">Analyzing {stock.display_ticker}...</p>
+    <p className="text-gray-400 text-sm mt-1">Reading news and market data</p>
   </div>
 )}
 
           {/* Error */}
           {error && (
-            <div className="bg-red-500/20 border border-red-500 rounded-xl p-4 text-red-400">
+            <div className="bg-red-500/20 border border-red-500 rounded-xl p-4 text-red-600">
               ❌ {error}
             </div>
           )}
@@ -180,64 +180,64 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
               {/* Signal */}
               <div className={`border rounded-xl p-4 text-center ${signalBg}`}>
                 <p className={`text-4xl font-black ${signalColor}`}>{signal}</p>
-                <p className="text-slate-400 text-sm mt-1">Confidence: {result.signal?.confidence}%</p>
-                <p className="text-slate-300 text-sm mt-2">{result.signal?.analysis?.short_summary}</p>
+                <p className="text-gray-500 text-sm mt-1">Confidence: {result.signal?.confidence}%</p>
+                <p className="text-gray-600 text-sm mt-2">{result.signal?.analysis?.short_summary}</p>
               </div>
 
               {/* Price targets */}
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="font-semibold text-white mb-3">📊 Price Targets</h3>
+              <div className="bg-gray-50 rounded-xl p-4">
+                <h3 className="font-semibold text-gray-900 mb-3">📊 Price Targets</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-blue-400' },
-                    { label: 'Target 1', value: `₹${result.signal?.entry_strategy?.target_price_1}`, color: 'text-green-400' },
+                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-blue-600' },
+                    { label: 'Target 1', value: `₹${result.signal?.entry_strategy?.target_price_1}`, color: 'text-green-600' },
                     { label: 'Target 2', value: `₹${result.signal?.entry_strategy?.target_price_2}`, color: 'text-green-300' },
-                    { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-400' },
+                    { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-600' },
                   ].map(item => (
-                    <div key={item.label} className="bg-slate-900 rounded-lg p-3">
-                      <p className="text-slate-500 text-xs">{item.label}</p>
+                    <div key={item.label} className="bg-white rounded-lg p-3">
+                      <p className="text-gray-400 text-xs">{item.label}</p>
                       <p className={`font-bold ${item.color}`}>{item.value}</p>
                     </div>
                   ))}
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-3">
-                  <div className="bg-slate-900 rounded-lg p-3">
-                    <p className="text-slate-500 text-xs">Upside</p>
-                    <p className="font-bold text-green-400">+{result.signal?.entry_strategy?.upside_pct}%</p>
+                  <div className="bg-white rounded-lg p-3">
+                    <p className="text-gray-400 text-xs">Upside</p>
+                    <p className="font-bold text-green-600">+{result.signal?.entry_strategy?.upside_pct}%</p>
                   </div>
-                  <div className="bg-slate-900 rounded-lg p-3">
-                    <p className="text-slate-500 text-xs">Downside Risk</p>
-                    <p className="font-bold text-red-400">-{result.signal?.entry_strategy?.downside_risk_pct}%</p>
+                  <div className="bg-white rounded-lg p-3">
+                    <p className="text-gray-400 text-xs">Downside Risk</p>
+                    <p className="font-bold text-red-600">-{result.signal?.entry_strategy?.downside_risk_pct}%</p>
                   </div>
                 </div>
               </div>
 
               {/* Quantity guide */}
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="font-semibold text-white mb-3">🛒 How Many Shares to Buy</h3>
+              <div className="bg-gray-50 rounded-xl p-4">
+                <h3 className="font-semibold text-gray-900 mb-3">🛒 How Many Shares to Buy</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { label: '₹10,000', value: result.signal?.quantity_guide?.for_10000_inr },
                     { label: '₹25,000', value: result.signal?.quantity_guide?.for_25000_inr },
                     { label: '₹50,000', value: result.signal?.quantity_guide?.for_50000_inr },
                   ].map(item => (
-                    <div key={item.label} className="bg-slate-900 rounded-lg p-3 text-center">
-                      <p className="text-slate-500 text-xs">{item.label}</p>
-                      <p className="font-bold text-white text-lg">{item.value}</p>
-                      <p className="text-slate-500 text-xs">shares</p>
+                    <div key={item.label} className="bg-white rounded-lg p-3 text-center">
+                      <p className="text-gray-400 text-xs">{item.label}</p>
+                      <p className="font-bold text-gray-900 text-lg">{item.value}</p>
+                      <p className="text-gray-400 text-xs">shares</p>
                     </div>
                   ))}
                 </div>
                 <div className="mt-3 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-                  <p className="text-blue-400 text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
-                  <p className="text-slate-400 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
+                  <p className="text-blue-600 text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
+                  <p className="text-gray-500 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
                 </div>
               </div>
 
               {/* Conviction Meter */}
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="font-semibold text-white mb-1">🎯 Conviction Meter</h3>
-                <p className="text-slate-500 text-xs mb-4">
+              <div className="bg-gray-50 rounded-xl p-4">
+                <h3 className="font-semibold text-gray-900 mb-1">🎯 Conviction Meter</h3>
+                <p className="text-gray-400 text-xs mb-4">
                   Not all signals are equal — here's what's actually driving this confidence score
                 </p>
 
@@ -253,10 +253,10 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                     return (
                       <div key={item.label}>
                         <div className="flex justify-between items-center mb-1">
-                          <p className="text-slate-300 text-xs font-medium">{item.label}</p>
-                          <p className="text-slate-400 text-xs font-bold">{score}/10</p>
+                          <p className="text-gray-600 text-xs font-medium">{item.label}</p>
+                          <p className="text-gray-500 text-xs font-bold">{score}/10</p>
                         </div>
-                        <div className="w-full bg-slate-900 rounded-full h-2">
+                        <div className="w-full bg-white rounded-full h-2">
                           <div
                             className={`${item.color} h-2 rounded-full transition-all`}
                             style={{ width: `${pct}%` }}
@@ -268,14 +268,14 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                 </div>
 
                 {/* News sentiment badge */}
-                <div className="flex items-center justify-between bg-slate-900 rounded-lg p-3 mb-3">
-                  <p className="text-slate-400 text-xs">News Sentiment</p>
+                <div className="flex items-center justify-between bg-white rounded-lg p-3 mb-3">
+                  <p className="text-gray-500 text-xs">News Sentiment</p>
                   {(() => {
                     const sentiment = result.signal?.ratings?.news_sentiment || 'NEUTRAL';
                     const sentimentColors: Record<string, string> = {
-                      POSITIVE: 'bg-green-500/20 text-green-400',
-                      NEGATIVE: 'bg-red-500/20 text-red-400',
-                      NEUTRAL:  'bg-slate-600/30 text-slate-300',
+                      POSITIVE: 'bg-green-500/20 text-green-600',
+                      NEGATIVE: 'bg-red-500/20 text-red-600',
+                      NEUTRAL:  'bg-gray-200/30 text-gray-600',
                     };
                     return (
                       <span className={`px-2 py-1 rounded-md text-xs font-bold ${sentimentColors[sentiment] || sentimentColors.NEUTRAL}`}>
@@ -293,14 +293,14 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                     { label: 'Risk',     value: result.signal?.ratings?.risk_level },
                   ].map(item => {
                     const ratingMap: Record<string, string> = {
-                      HIGH:   item.label === 'Risk' ? 'text-red-400'   : 'text-green-400',
+                      HIGH:   item.label === 'Risk' ? 'text-red-600'   : 'text-green-600',
                       MEDIUM: 'text-yellow-400',
-                      LOW:    item.label === 'Risk' ? 'text-green-400' : 'text-red-400',
+                      LOW:    item.label === 'Risk' ? 'text-green-600' : 'text-red-600',
                     };
-                    const color = ratingMap[item.value] || 'text-white';
+                    const color = ratingMap[item.value] || 'text-gray-900';
                     return (
-                      <div key={item.label} className="bg-slate-900 rounded-lg p-3 text-center">
-                        <p className="text-slate-500 text-xs">{item.label}</p>
+                      <div key={item.label} className="bg-white rounded-lg p-3 text-center">
+                        <p className="text-gray-400 text-xs">{item.label}</p>
                         <p className={`font-bold text-sm ${color}`}>{item.value}</p>
                       </div>
                     );
@@ -311,16 +311,16 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
               {/* Bull/Bear */}
               <div className="grid grid-cols-1 gap-3">
                 <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
-                  <p className="text-green-400 font-semibold text-sm mb-1">🟢 Bull Case</p>
-                 <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                  <p className="text-green-600 font-semibold text-sm mb-1">🟢 Bull Case</p>
+                 <ul className="text-gray-600 text-sm space-y-1.5 list-disc list-inside">
                     {splitIntoPoints(result.signal?.analysis?.bull_case).map((point, i) => (
                       <li key={i}>{point}</li>
                     ))}
                   </ul>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-                  <p className="text-red-400 font-semibold text-sm mb-1">🔴 Bear Case</p>
-                  <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                  <p className="text-red-600 font-semibold text-sm mb-1">🔴 Bear Case</p>
+                  <ul className="text-gray-600 text-sm space-y-1.5 list-disc list-inside">
                     {splitIntoPoints(result.signal?.analysis?.bear_case).map((point, i) => (
                       <li key={i}>{point}</li>
                     ))}
@@ -335,10 +335,10 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                   <p className="text-orange-400 font-semibold text-sm mb-1">
                     ⚠️ What Would Prove This Wrong
                   </p>
-                  <p className="text-slate-500 text-xs mb-3">
+                  <p className="text-gray-400 text-xs mb-3">
                     No signal is certain — here's what would invalidate this call
                   </p>
-                  <ul className="text-slate-300 text-sm space-y-1.5 list-disc list-inside">
+                  <ul className="text-gray-600 text-sm space-y-1.5 list-disc list-inside">
                     {result.signal.analysis.invalidation_triggers.map((trigger: string, i: number) => (
                       <li key={i}>{trigger}</li>
                     ))}
@@ -347,9 +347,9 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
               )}
 
               {result.signal?.analysis?.what_to_watch && (
-                <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
-                  <p className="text-slate-400 text-xs mb-1">👁️ What to watch</p>
-                  <p className="text-slate-200 text-sm font-medium">
+                <div className="bg-gray-50 border border-gray-300 rounded-xl p-4">
+                  <p className="text-gray-500 text-xs mb-1">👁️ What to watch</p>
+                  <p className="text-gray-800 text-sm font-medium">
                     {result.signal.analysis.what_to_watch}
                   </p>
                 </div>
@@ -357,10 +357,10 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                {/* Red Flag Radar */}
               {result.news?.red_flags?.length > 0 && (
                 <div className="bg-red-950/40 border-2 border-red-600 rounded-xl p-4">
-                  <h3 className="font-bold text-red-400 mb-1 flex items-center gap-2">
+                  <h3 className="font-bold text-red-600 mb-1 flex items-center gap-2">
                     🚨 Red Flag Radar
                   </h3>
-                  <p className="text-slate-400 text-xs mb-3">
+                  <p className="text-gray-500 text-xs mb-3">
                     Verified official NSE disclosures detected — not AI opinion, these are real regulatory filings
                   </p>
                   <div className="space-y-2">
@@ -372,11 +372,11 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
                         rel="noreferrer"
                         className="block bg-red-900/30 border border-red-700 rounded-lg p-3 hover:bg-red-900/50 transition"
                       >
-                        <span className="inline-block bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded mb-1">
+                        <span className="inline-block bg-red-600 text-gray-900 text-xs font-bold px-2 py-0.5 rounded mb-1">
                           {flag.category}
                         </span>
-                        <p className="text-slate-200 text-sm">{flag.title}</p>
-                        <p className="text-slate-500 text-xs mt-1">
+                        <p className="text-gray-800 text-sm">{flag.title}</p>
+                        <p className="text-gray-400 text-xs mt-1">
                           {flag.source} · {flag.date}
                         </p>
                       </a>
@@ -386,22 +386,22 @@ const signalBg = bgMap[signal] || 'bg-slate-700 border-slate-600';
               )}
               {/* News */}
               {result.news?.news?.length > 0 && (
-                <div className="bg-slate-800 rounded-xl p-4">
-                  <h3 className="font-semibold text-white mb-3">📰 Latest News</h3>
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <h3 className="font-semibold text-gray-900 mb-3">📰 Latest News</h3>
                   <div className="space-y-2">
                     {result.news.news.slice(0, 5).map((item: any, i: number) => (
                       <a key={i} href={item.link} target="_blank" rel="noreferrer"
-                        className="block bg-slate-900 rounded-lg p-3 hover:bg-slate-700 transition">
-                        <p className="text-slate-300 text-xs">{item.title}</p>
-                        <p className="text-slate-500 text-xs mt-1">{item.source}</p>
+                        className="block bg-white rounded-lg p-3 hover:bg-gray-200 transition">
+                        <p className="text-gray-600 text-xs">{item.title}</p>
+                        <p className="text-gray-400 text-xs mt-1">{item.source}</p>
                       </a>
                     ))}
                   </div>
                 </div>
               )}
 {/* Share Signal Card */}
-<div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
-  <h3 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">
+<div className="bg-gray-50 border border-gray-300 rounded-xl p-4">
+  <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wider">
     Share This Signal
   </h3>
   <ShareableSignal signal={result.signal} stock={result.stock} />

@@ -7,17 +7,17 @@ export default function StockDirectory() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300">
+    <div className="min-h-screen bg-white text-gray-600">
       <div className="max-w-5xl mx-auto px-6 py-16">
         
         <div className="text-center mb-12">
-          <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
             Stock Directory
           </p>
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Indian Stock Market Profiles
           </h1>
-          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
             Browse our comprehensive database of Indian stocks. Read detailed company profiles, understand their business models, and learn how to analyze their fundamentals.
           </p>
         </div>
@@ -27,24 +27,24 @@ export default function StockDirectory() {
             <Link 
               key={stock.symbol} 
               to={`/stock/${stock.symbol}`}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-blue-500/50 hover:bg-slate-800 transition duration-300 group block"
+              className="bg-white border border-gray-200 rounded-2xl p-6 hover:border-blue-500/50 hover:bg-gray-50 transition duration-300 group block"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-white text-xl font-bold">{stock.symbol}</h3>
-                  <p className="text-slate-500 text-sm truncate max-w-[200px]">{stock.name}</p>
+                  <h3 className="text-gray-900 text-xl font-bold">{stock.symbol}</h3>
+                  <p className="text-gray-400 text-sm truncate max-w-[200px]">{stock.name}</p>
                 </div>
-                <span className="text-xs font-semibold bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full">
+                <span className="text-xs font-semibold bg-blue-500/10 text-blue-600 px-2 py-1 rounded-full">
                   {stock.marketCapRank}
                 </span>
               </div>
               
               <div className="mb-4">
-                <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Sector</span>
-                <p className="text-sm text-slate-300 mt-1">{stock.sector}</p>
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Sector</span>
+                <p className="text-sm text-gray-600 mt-1">{stock.sector}</p>
               </div>
 
-              <div className="text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+              <div className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                 Read Profile <span>→</span>
               </div>
             </Link>
@@ -52,12 +52,12 @@ export default function StockDirectory() {
         </div>
 
         {/* Dynamic Fallback Notice */}
-        <div className="mt-16 bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
-          <h3 className="text-white text-xl font-bold mb-3">Looking for another stock?</h3>
-          <p className="text-slate-400 mb-6 max-w-xl mx-auto">
+        <div className="mt-16 bg-white border border-gray-200 rounded-2xl p-8 text-center">
+          <h3 className="text-gray-900 text-xl font-bold mb-3">Looking for another stock?</h3>
+          <p className="text-gray-500 mb-6 max-w-xl mx-auto">
             Our AI can analyze over 2,000+ NSE and BSE listed stocks in real-time. Simply log in and use the search bar on your dashboard to instantly generate a BUY/HOLD/SELL signal for any stock.
           </p>
-          <Link to="/login" className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition">
+          <Link to="/login" className="inline-block bg-blue-600 hover:bg-blue-500 text-gray-900 font-bold py-3 px-8 rounded-xl transition">
             Get Free AI Analysis
           </Link>
         </div>

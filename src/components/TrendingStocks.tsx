@@ -33,20 +33,20 @@ export default function TrendingStocks() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-white font-bold text-xl mb-1">Today's Biggest Movers</h2>
-        <p className="text-slate-400 text-sm">
+        <h2 className="text-gray-900 font-bold text-xl mb-1">Today's Biggest Movers</h2>
+        <p className="text-gray-500 text-sm">
           Real-time gainers and losers across 150+ NSE stocks — refreshed every 30 min
         </p>
       </div>
 
       {/* Toggle tabs */}
-      <div className="flex bg-slate-800 rounded-xl p-1 mb-6 max-w-xs">
+      <div className="flex bg-gray-50 rounded-xl p-1 mb-6 max-w-xs">
         <button
           onClick={() => setActiveTab('bought')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition ${
             activeTab === 'bought'
-              ? 'bg-green-600 text-white'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-green-600 text-gray-900'
+              : 'text-gray-500 hover:text-gray-900'
           }`}
         >
           <TrendingUp className="w-4 h-4" />
@@ -56,8 +56,8 @@ export default function TrendingStocks() {
           onClick={() => setActiveTab('sold')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition ${
             activeTab === 'sold'
-              ? 'bg-red-600 text-white'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-red-600 text-gray-900'
+              : 'text-gray-500 hover:text-gray-900'
           }`}
         >
           <TrendingDown className="w-4 h-4" />
@@ -72,14 +72,14 @@ export default function TrendingStocks() {
     : 'bg-red-500/10 border-red-500/30'
 }`}>
   <p className={`text-sm font-medium ${
-    activeTab === 'bought' ? 'text-green-400' : 'text-red-400'
+    activeTab === 'bought' ? 'text-green-600' : 'text-red-600'
   }`}>
     {activeTab === 'bought'
       ? 'Stocks gaining the most right now — not a prediction, this is happening live'
       : 'Stocks losing the most right now — not a prediction, this is happening live'
     }
   </p>
-  <p className="text-slate-500 text-xs mt-1">
+  <p className="text-gray-400 text-xs mt-1">
     Scanned across our full stock universe • Refreshed every 30 min
   </p>
 </div>
@@ -88,13 +88,13 @@ export default function TrendingStocks() {
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-slate-800 border border-slate-700 rounded-xl p-4 animate-pulse">
-              <div className="h-5 w-24 bg-slate-700 rounded mb-2" />
-              <div className="h-3 w-32 bg-slate-700 rounded mb-3" />
-              <div className="h-8 w-28 bg-slate-700 rounded mb-3" />
+            <div key={i} className="bg-gray-50 border border-gray-300 rounded-xl p-4 animate-pulse">
+              <div className="h-5 w-24 bg-gray-100 rounded mb-2" />
+              <div className="h-3 w-32 bg-gray-100 rounded mb-3" />
+              <div className="h-8 w-28 bg-gray-100 rounded mb-3" />
               <div className="grid grid-cols-3 gap-2">
                 {[...Array(3)].map((_, j) => (
-                  <div key={j} className="h-12 bg-slate-700 rounded-lg" />
+                  <div key={j} className="h-12 bg-gray-100 rounded-lg" />
                 ))}
               </div>
             </div>
@@ -108,7 +108,7 @@ export default function TrendingStocks() {
           {stocks.map((stock: any, index: number) => (
             <div key={stock.display_ticker} className="relative">
               {/* Rank badge */}
-              <div className={`absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white ${
+              <div className={`absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-gray-900 ${
                 activeTab === 'bought' ? 'bg-green-600' : 'bg-red-600'
               }`}>
                 #{index + 1}
@@ -127,12 +127,12 @@ export default function TrendingStocks() {
 
       {!loading && stocks.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-white font-semibold">No data available</p>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-gray-900 font-semibold">No data available</p>
+          <p className="text-gray-500 text-sm mt-2">
             Check back during market hours
           </p>
           <button onClick={loadTrending}
-            className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-semibold">
+            className="mt-4 bg-blue-600 text-gray-900 px-6 py-2 rounded-lg text-sm font-semibold">
             Retry
           </button>
         </div>

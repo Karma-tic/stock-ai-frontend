@@ -16,18 +16,18 @@ export default function Learn() {
   ];
 
   return (
-    <div className="bg-slate-950 min-h-screen">
+    <div className="bg-white min-h-screen">
       <section className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
             Free Learning Hub
           </p>
-          <h1 className="text-white text-4xl md:text-5xl font-black mb-6">
+          <h1 className="text-gray-900 text-4xl md:text-5xl font-black mb-6">
             Complete Guide to Stock Market Investing in India
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             Everything you need to know about trading on NSE and BSE —
             from basics to AI-powered analysis. Choose a chapter below to start reading.
           </p>
@@ -39,18 +39,18 @@ export default function Learn() {
             <Link 
               key={ch.num} 
               to={`/learn/${ch.slug}`}
-              className="flex items-center gap-6 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/30 p-6 rounded-2xl transition group"
+              className="flex items-center gap-6 bg-white hover:bg-gray-50 border border-gray-200 hover:border-blue-500/30 p-6 rounded-2xl transition group"
             >
-              <div className={`w-14 h-14 ${ch.iconBg} rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
+              <div className={`w-14 h-14 ${ch.iconBg} rounded-2xl flex items-center justify-center text-gray-900 font-black text-xl flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
                 {ch.num}
               </div>
               <div className="flex-1">
-                <h3 className="text-white text-xl font-bold mb-1 group-hover:text-blue-400 transition-colors">
+                <h3 className="text-gray-900 text-xl font-bold mb-1 group-hover:text-blue-600 transition-colors">
                   {ch.title}
                 </h3>
-                <p className="text-slate-400 text-sm">{ch.desc}</p>
+                <p className="text-gray-500 text-sm">{ch.desc}</p>
               </div>
-              <div className="hidden sm:flex flex-shrink-0 text-slate-500 group-hover:text-white transition-colors">
+              <div className="hidden sm:flex flex-shrink-0 text-gray-400 group-hover:text-gray-900 transition-colors">
                 <ChevronRight className="w-6 h-6" />
               </div>
             </Link>

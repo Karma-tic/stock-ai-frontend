@@ -37,11 +37,11 @@ export default function Navbar({ user }: { user: any }) {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+      <nav className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         {/* LEFT */}
         <Link to="/" className="flex items-center gap-2 min-w-0">
-          <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-400 shrink-0" /></span>
-          <span className="font-bold text-lg text-white whitespace-nowrap">Stock AI</span>
+          <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-blue-600 shrink-0" /></span>
+          <span className="font-bold text-lg text-gray-900 whitespace-nowrap">Stock AI</span>
           <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
             LIVE
           </span>
@@ -49,25 +49,25 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* CENTER (DESKTOP ONLY) */}
         <div className="hidden md:flex items-center gap-5 text-sm">
-          <Link to="/blog" className="text-slate-400 hover:text-white transition">
+          <Link to="/blog" className="text-gray-500 hover:text-gray-900 transition">
             Blog
           </Link>
-          <Link to="/tools" className="text-slate-400 hover:text-white transition">
+          <Link to="/tools" className="text-gray-500 hover:text-gray-900 transition">
             Tools
           </Link>
-          <Link to="/market-wrap" className="text-slate-400 hover:text-white transition">
+          <Link to="/market-wrap" className="text-gray-500 hover:text-gray-900 transition">
             Market Wrap
           </Link>
-          <Link to="/stocks" className="text-slate-400 hover:text-white transition">
+          <Link to="/stocks" className="text-gray-500 hover:text-gray-900 transition">
             Stocks
           </Link>
-          <Link to="/ipos" className="text-slate-400 hover:text-white transition">
+          <Link to="/ipos" className="text-gray-500 hover:text-gray-900 transition">
             IPOs
           </Link>
-          <Link to="/track-record" className="text-slate-400 hover:text-white transition">
+          <Link to="/track-record" className="text-gray-500 hover:text-gray-900 transition">
             Track Record
           </Link>
-          <Link to="/learn" className="text-slate-400 hover:text-white transition">
+          <Link to="/learn" className="text-gray-500 hover:text-gray-900 transition">
             Learn
           </Link>
         </div>
@@ -86,14 +86,14 @@ export default function Navbar({ user }: { user: any }) {
           {user ? (
             <div className="hidden sm:flex items-center gap-2">
               {isPro ? (
-                <span className="flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-semibold">
+                <span className="flex items-center gap-1 text-xs bg-blue-500 text-gray-900 px-2 py-0.5 rounded-full font-semibold">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   PRO
                 </span>
               ) : (
                 <button
                   onClick={() => setShowUpgrade(true)}
-                  className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg font-semibold transition"
+                  className="text-xs bg-blue-600 hover:bg-blue-500 text-gray-900 px-3 py-1.5 rounded-lg font-semibold transition"
                 >
                   Upgrade ₹99
                 </button>
@@ -101,7 +101,7 @@ export default function Navbar({ user }: { user: any }) {
 
               <button
                 onClick={logout}
-                className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-white transition"
+                className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-gray-900 transition"
               >
                 Logout
               </button>
@@ -109,7 +109,7 @@ export default function Navbar({ user }: { user: any }) {
           ) : (
             <Link
               to="/login"
-              className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition whitespace-nowrap"
+              className="hidden sm:block text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-gray-900 font-semibold transition whitespace-nowrap"
             >
               Get Started
             </Link>
@@ -118,7 +118,7 @@ export default function Navbar({ user }: { user: any }) {
           {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden text-white text-2xl px-2"
+            className="md:hidden text-gray-900 text-2xl px-2"
           >
             ☰
           </button>
@@ -131,11 +131,11 @@ export default function Navbar({ user }: { user: any }) {
         
         {/* MOBILE MENU */}
         {open && (
-          <div className="md:hidden absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-700 px-4 py-4 space-y-4 shadow-xl z-50">
+          <div className="md:hidden absolute top-[100%] left-0 w-full bg-white border-b border-gray-300 px-4 py-4 space-y-4 shadow-xl z-50">
             <Link
               to="/blog"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Blog
             </Link>
@@ -143,7 +143,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/tools"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Tools
             </Link>
@@ -151,7 +151,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/market-wrap"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Market Wrap
             </Link>
@@ -159,7 +159,7 @@ export default function Navbar({ user }: { user: any }) {
           <Link
               to="/stocks"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Stocks
             </Link>
@@ -167,7 +167,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/ipos"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               IPOs
             </Link>
@@ -175,7 +175,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/track-record"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Track Record
             </Link>
@@ -183,39 +183,39 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               to="/learn"
               onClick={() => setOpen(false)}
-              className="block text-slate-300 hover:text-white transition"
+              className="block text-gray-600 hover:text-gray-900 transition"
             >
               Learn
             </Link>
 
             {/* Mobile Actions */}
             {user ? (
-              <div className="pt-4 border-t border-slate-800 space-y-3">
+              <div className="pt-4 border-t border-gray-200 space-y-3">
                 {isPro ? (
-                  <span className="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full font-semibold">
+                  <span className="inline-flex items-center gap-1 text-xs bg-blue-500 text-gray-900 px-2 py-1 rounded-full font-semibold">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     PRO
                   </span>
                 ) : (
                   <button
                     onClick={() => setShowUpgrade(true)}
-                    className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
+                    className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-gray-900 px-3 py-2 rounded-lg font-semibold transition"
                   >
                     Upgrade ₹99
                   </button>
                 )}
                 <button
                   onClick={logout}
-                  className="block w-full text-center text-sm bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-white transition"
+                  className="block w-full text-center text-sm bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg text-gray-900 transition"
                 >
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="pt-4 border-t border-slate-800">
+              <div className="pt-4 border-t border-gray-200">
                 <Link
                   to="/login"
-                  className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-semibold transition"
+                  className="block w-full text-center text-sm bg-blue-600 hover:bg-blue-500 text-gray-900 px-3 py-2 rounded-lg font-semibold transition"
                 >
                   Get Started
                 </Link>

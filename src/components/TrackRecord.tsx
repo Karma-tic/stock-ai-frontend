@@ -34,8 +34,8 @@ export default function TrackRecord() {
     return (
       <div className="max-w-5xl mx-auto px-4 py-16">
         <div className="animate-pulse space-y-4">
-          <div className="h-10 w-64 bg-slate-800 rounded" />
-          <div className="h-32 bg-slate-800 rounded-xl" />
+          <div className="h-10 w-64 bg-gray-50 rounded" />
+          <div className="h-32 bg-gray-50 rounded-xl" />
         </div>
       </div>
     );
@@ -44,8 +44,8 @@ export default function TrackRecord() {
   if (!data || data.total_signals === 0) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold text-white mb-2">Track Record</h1>
-        <p className="text-slate-400">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Track Record</h1>
+        <p className="text-gray-500">
           We're still building our public track record. Check back soon.
         </p>
       </div>
@@ -62,10 +62,10 @@ export default function TrackRecord() {
 
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-black text-white mb-3">
+        <h1 className="text-3xl font-black text-gray-900 mb-3">
           Our Public Track Record
         </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto">
+        <p className="text-gray-500 max-w-2xl mx-auto">
           Every AI signal we generate is automatically checked 7 days later.
           Nothing is hidden, nothing is removed. This is the real, unfiltered result.
         </p>
@@ -73,30 +73,30 @@ export default function TrackRecord() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
-          <p className="text-slate-400 text-sm mb-1">Overall Accuracy</p>
-          <p className="text-4xl font-black text-blue-400">
+        <div className="bg-gray-50 border border-gray-300 rounded-xl p-6 text-center">
+          <p className="text-gray-500 text-sm mb-1">Overall Accuracy</p>
+          <p className="text-4xl font-black text-blue-600">
             {data.overall_accuracy}%
           </p>
-          <p className="text-slate-500 text-xs mt-1">
+          <p className="text-gray-400 text-xs mt-1">
             {data.total_signals} signals tracked
           </p>
         </div>
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
-          <p className="text-slate-400 text-sm mb-1">Avg Return on BUY</p>
-          <p className={`text-4xl font-black ${data.avg_buy_return >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+        <div className="bg-gray-50 border border-gray-300 rounded-xl p-6 text-center">
+          <p className="text-gray-500 text-sm mb-1">Avg Return on BUY</p>
+          <p className={`text-4xl font-black ${data.avg_buy_return >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {data.avg_buy_return >= 0 ? '+' : ''}{data.avg_buy_return}%
           </p>
-          <p className="text-slate-500 text-xs mt-1">
+          <p className="text-gray-400 text-xs mt-1">
             Per signal, 7 days later
           </p>
         </div>
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
-          <p className="text-slate-400 text-sm mb-1">BUY Accuracy</p>
-          <p className="text-4xl font-black text-green-400">
+        <div className="bg-gray-50 border border-gray-300 rounded-xl p-6 text-center">
+          <p className="text-gray-500 text-sm mb-1">BUY Accuracy</p>
+          <p className="text-4xl font-black text-green-600">
             {data.breakdown?.BUY?.accuracy ?? 0}%
           </p>
-          <p className="text-slate-500 text-xs mt-1">
+          <p className="text-gray-400 text-xs mt-1">
             {data.breakdown?.BUY?.correct ?? 0}/{data.breakdown?.BUY?.total ?? 0} correct
           </p>
         </div>
@@ -110,8 +110,8 @@ export default function TrackRecord() {
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
               filter === f
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-blue-600 text-gray-900'
+                : 'bg-gray-50 text-gray-500 hover:text-gray-900'
             }`}
           >
             {f}
@@ -120,10 +120,10 @@ export default function TrackRecord() {
       </div>
 
       {/* Table */}
-      <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-x-auto">
+      <div className="bg-gray-50 border border-gray-300 rounded-xl overflow-x-auto">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
-            <tr className="bg-slate-900 text-slate-400 text-left">
+            <tr className="bg-white text-gray-500 text-left">
               <th className="p-3">Stock</th>
               <th className="p-3">Signal</th>
               <th className="p-3">Conf</th>
@@ -136,34 +136,34 @@ export default function TrackRecord() {
           </thead>
           <tbody>
             {filtered.map(s => (
-              <tr key={s.id} className="border-t border-slate-700">
-                <td className="p-3 font-bold text-white">{s.ticker}</td>
+              <tr key={s.id} className="border-t border-gray-300">
+                <td className="p-3 font-bold text-gray-900">{s.ticker}</td>
                 <td className="p-3">
                   <span className={`font-semibold ${
-                    s.signal === 'BUY' ? 'text-green-400' :
-                    s.signal === 'SELL' ? 'text-red-400' : 'text-yellow-400'
+                    s.signal === 'BUY' ? 'text-green-600' :
+                    s.signal === 'SELL' ? 'text-red-600' : 'text-yellow-400'
                   }`}>
                     {s.signal}
                   </span>
                 </td>
-                <td className="p-3 text-slate-300">{s.confidence}%</td>
-                <td className="p-3 text-slate-300">₹{s.entry_price}</td>
-                <td className="p-3 text-slate-300">₹{s.price_at_check}</td>
-                <td className={`p-3 font-semibold ${s.pct_change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <td className="p-3 text-gray-600">{s.confidence}%</td>
+                <td className="p-3 text-gray-600">₹{s.entry_price}</td>
+                <td className="p-3 text-gray-600">₹{s.price_at_check}</td>
+                <td className={`p-3 font-semibold ${s.pct_change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {s.pct_change >= 0 ? '+' : ''}{s.pct_change}%
                 </td>
                 <td className="p-3">
                   {s.was_correct ? (
-                    <span className="flex items-center gap-1 text-green-400">
+                    <span className="flex items-center gap-1 text-green-600">
                       <CheckCircle2 className="w-4 h-4" /> Correct
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-red-400">
+                    <span className="flex items-center gap-1 text-red-600">
                       <XCircle className="w-4 h-4" /> Wrong
                     </span>
                   )}
                 </td>
-                <td className="p-3 text-slate-500">{s.signal_date}</td>
+                <td className="p-3 text-gray-400">{s.signal_date}</td>
               </tr>
             ))}
           </tbody>
@@ -171,13 +171,13 @@ export default function TrackRecord() {
       </div>
 
       {filtered.length === 0 && (
-        <p className="text-center text-slate-500 py-10">
+        <p className="text-center text-gray-400 py-10">
           No {filter} signals tracked yet.
         </p>
       )}
 
       {/* Disclaimer */}
-      <p className="text-slate-500 text-xs mt-8 text-center max-w-2xl mx-auto">
+      <p className="text-gray-400 text-xs mt-8 text-center max-w-2xl mx-auto">
         {data.disclaimer}
       </p>
     </div>

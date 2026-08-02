@@ -26,26 +26,26 @@ export default function Blog() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 py-20">
+    <div className="min-h-screen bg-white py-20">
       <div className="max-w-5xl mx-auto px-6">
         
         
 
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-6">
-            Stock Market <span className="text-blue-400">Insights</span>
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+            Stock Market <span className="text-blue-600">Insights</span>
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             Learn about investing in the Indian stock market with our comprehensive guides and articles.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map(a => (
-            <div key={a.title} className="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition">
-              <h3 className="text-white font-bold text-xl mb-4">{a.title}</h3>
-              <p className="text-slate-400 leading-relaxed mb-6">{a.desc}</p>
-              <Link to={a.link} className="text-blue-400 hover:text-blue-300 font-semibold transition flex items-center gap-2">
+            <div key={a.title} className="bg-white border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition">
+              <h3 className="text-gray-900 font-bold text-xl mb-4">{a.title}</h3>
+              <p className="text-gray-500 leading-relaxed mb-6">{a.desc}</p>
+              <Link to={a.link} className="text-blue-600 hover:text-blue-300 font-semibold transition flex items-center gap-2">
                 Read full article
               </Link>
             </div>

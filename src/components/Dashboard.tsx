@@ -35,7 +35,7 @@ export default function Dashboard() {
   /* ================================================ */
 
   const [tab, setTab] = useState<
-    'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny'
+    'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny' | 'ipos'
   >('market');
 
   /* ================= PRELOAD ================= */
@@ -144,23 +144,23 @@ export default function Dashboard() {
   const displayStocks = tab === 'market' ? stocks : watchlistStocks;
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-20">
+    <div className="min-h-screen bg-white pb-20">
       {/* ================= SEARCH BAR ================= */}
-      <div className="px-4 py-3 bg-slate-900 border-b border-slate-800 sticky top-[57px] z-40">
+      <div className="px-4 py-3 bg-white border-b border-gray-200 sticky top-[57px] z-40">
         <div ref={searchRef} className="relative max-w-lg mx-auto">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
               value={search}
               onChange={e => handleSearch(e.target.value)}
               placeholder="Search stocks... (RELIANCE, TCS, ZOMATO)"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-9 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
+              className="w-full bg-gray-50 border border-gray-300 rounded-xl pl-9 pr-9 py-2.5 text-gray-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
             />
             {search && (
               <button
                 onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -168,9 +168,9 @@ export default function Dashboard() {
           </div>
 
           {(searchResults.length > 0 || searchLoading) && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-50">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-gray-50 border border-gray-300 rounded-xl shadow-xl z-50">
               {searchLoading && (
-                <div className="px-4 py-3 text-slate-400 text-sm flex gap-2 items-center">
+                <div className="px-4 py-3 text-gray-500 text-sm flex gap-2 items-center">
                   <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                   Searching...
                 </div>
@@ -181,10 +181,10 @@ export default function Dashboard() {
                   <button
                     key={r.symbol}
                     onClick={() => handleSearchSelect(r.symbol)}
-                    className="w-full px-4 py-3 text-left hover:bg-slate-700 text-white text-sm border-b border-slate-700 last:border-0"
+                    className="w-full px-4 py-3 text-left hover:bg-gray-200 text-gray-900 text-sm border-b border-gray-300 last:border-0"
                   >
                     <span className="font-bold">{r.symbol}</span>
-                    <span className="text-slate-400 ml-2 text-xs">
+                    <span className="text-gray-500 ml-2 text-xs">
                       {r.yf_ticker}
                     </span>
                   </button>
@@ -193,7 +193,7 @@ export default function Dashboard() {
               {!searchLoading &&
                 search.length >= 2 &&
                 searchResults.length === 0 && (
-                  <div className="px-4 py-3 text-slate-500 text-sm">
+                  <div className="px-4 py-3 text-gray-400 text-sm">
                     No stocks found for "{search}"
                   </div>
                 )}
@@ -205,7 +205,7 @@ export default function Dashboard() {
 
       {/* Tabs */}
      {/* Sliding Tab Navigation */}
-<div className="bg-slate-900 border-b border-slate-800 px-4 py-3">
+<div className="bg-white border-b border-gray-200 px-4 py-3">
   <div
     className="
       flex gap-2 pb-1
@@ -215,12 +215,12 @@ export default function Dashboard() {
     "
   >
     {[
-      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-white' },
+      { id: 'market',    label: 'Market',       color: 'bg-blue-600',   activeText: 'text-gray-900' },
       { id: 'watchlist', label: `Watchlist (${watchlist.length})`, color: 'bg-yellow-500', activeText: 'text-black' },
-      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-white' },
-      { id: 'ipos',      label: 'Upcoming IPOs',color: 'bg-emerald-500',activeText: 'text-white' },
-      { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-white' },
-      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-white' },
+      { id: 'trending',  label: 'Trending',     color: 'bg-orange-500', activeText: 'text-gray-900' },
+      { id: 'ipos',      label: 'Upcoming IPOs',color: 'bg-emerald-500',activeText: 'text-gray-900' },
+      { id: 'portfolio', label: 'Portfolio',    color: 'bg-purple-600', activeText: 'text-gray-900' },
+      { id: 'penny',     label: 'Penny Stocks', color: 'bg-green-600',  activeText: 'text-gray-900' },
     ].map(t => (
       <button
         key={t.id}
@@ -236,7 +236,7 @@ export default function Dashboard() {
           ${
             tab === t.id
               ? `${t.color} ${t.activeText} shadow-lg scale-105`
-              : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+              : 'bg-gray-50 text-gray-500 hover:bg-gray-200 hover:text-gray-900'
           }
         `}
       >
@@ -250,17 +250,17 @@ export default function Dashboard() {
 
       {/* Daily Market Wrap Preview */}
       <div className="p-4 max-w-4xl mx-auto -mt-2">
-        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-blue-900/40 to-slate-800/40 border border-blue-500/20 rounded-2xl p-6 hover:border-blue-500/50 transition group">
+        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-blue-900/40 to-white/40 border border-blue-500/20 rounded-2xl p-6 hover:border-blue-500/50 transition group">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-white text-xl font-bold mb-1 group-hover:text-blue-400 transition">
+              <h3 className="text-gray-900 text-xl font-bold mb-1 group-hover:text-blue-600 transition">
                 🗞️ Daily Market Wrap-Up
               </h3>
-              <p className="text-slate-400 text-sm">
+              <p className="text-gray-500 text-sm">
                 Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST.
               </p>
             </div>
-            <span className="shrink-0 bg-blue-600 group-hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-xl transition text-sm">
+            <span className="shrink-0 bg-blue-600 group-hover:bg-blue-500 text-gray-900 font-semibold px-4 py-2 rounded-xl transition text-sm">
               Read Latest →
             </span>
           </div>
@@ -277,7 +277,7 @@ export default function Dashboard() {
         ) : tab === 'portfolio' ? (
           <Portfolio />
         ) : loading ? (
-          <div className="text-center text-slate-400 py-20">Loading...</div>
+          <div className="text-center text-gray-500 py-20">Loading...</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayStocks.map((stock: any, index: number) => (
