@@ -37,7 +37,7 @@ export default function Navbar({ user }: { user: any }) {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="bg-lavender-surface border-b border-white/50 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+      <nav className="bg-lavender-surface/90 backdrop-blur-md border-b border-lavender-text/10 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         {/* LEFT */}
         <Link to="/" className="flex items-center gap-2 min-w-0">
           <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-lavender-primary shrink-0" /></span>
@@ -131,7 +131,7 @@ export default function Navbar({ user }: { user: any }) {
         
         {/* MOBILE MENU */}
         {open && (
-          <div className="md:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-white/50 px-4 py-4 space-y-4 shadow-lavender z-50">
+          <div className="md:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
             <Link
               to="/blog"
               onClick={() => setOpen(false)}

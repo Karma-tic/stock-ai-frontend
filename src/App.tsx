@@ -40,22 +40,22 @@ function Footer() {
   return (
     <footer className="bg-lavender-surface border-t border-white/50 py-8">
       <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-between items-center gap-4">
-        <p className="text-lavender-text/60 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
+        <p className="text-lavender-text/80 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
         <div className="flex gap-4 flex-wrap">
-          <Link to="/about" className="text-lavender-text/60 hover:text-lavender-text text-sm">About</Link>
-          <Link to="/privacy" className="text-lavender-text/60 hover:text-lavender-text text-sm">Privacy</Link>
-          <Link to="/terms" className="text-lavender-text/60 hover:text-lavender-text text-sm">Terms</Link>
-          <Link to="/refund" className="text-lavender-text/60 hover:text-lavender-text text-sm">Refund</Link>
-          <Link to="/disclaimer" className="text-lavender-text/60 hover:text-lavender-text text-sm">Disclaimer</Link>
-          <Link to="/contact" className="text-lavender-text/60 hover:text-lavender-text text-sm">Contact</Link>
+          <Link to="/about" className="text-lavender-text/80 hover:text-lavender-text text-sm">About</Link>
+          <Link to="/privacy" className="text-lavender-text/80 hover:text-lavender-text text-sm">Privacy</Link>
+          <Link to="/terms" className="text-lavender-text/80 hover:text-lavender-text text-sm">Terms</Link>
+          <Link to="/refund" className="text-lavender-text/80 hover:text-lavender-text text-sm">Refund</Link>
+          <Link to="/disclaimer" className="text-lavender-text/80 hover:text-lavender-text text-sm">Disclaimer</Link>
+          <Link to="/contact" className="text-lavender-text/80 hover:text-lavender-text text-sm">Contact</Link>
         </div>
-        <p className="text-gray-300 text-xs w-full text-center">
+        <p className="text-lavender-text/70 text-xs w-full text-center">
           ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
         </p>
         
         {/* Data Sources */}
         <div className="border-t border-white/50 pt-6 mt-6 w-full">
-          <p className="text-gray-300 text-xs text-center mb-3">Data Sources</p>
+          <p className="text-lavender-text/70 text-xs text-center mb-3">Data Sources</p>
           <div className="flex flex-wrap justify-center gap-4">
             {[
               { label: "NSE India", url: "https://www.nseindia.com" },
@@ -69,7 +69,7 @@ function Footer() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-lavender-text/70 text-xs transition underline"
+                className="text-lavender-text/70 hover:text-lavender-text text-xs transition underline"
               >
                 {link.label}
               </a>

@@ -146,7 +146,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-lavender-surface pb-20">
       {/* ================= SEARCH BAR ================= */}
-      <div className="px-4 py-3 bg-lavender-surface border-b border-white/50 sticky top-[57px] z-40">
+      <div className="px-4 py-3 bg-lavender-surface border-b border-lavender-text/10 sticky top-[57px] z-40 backdrop-blur-md bg-opacity-90">
         <div ref={searchRef} className="relative max-w-lg mx-auto">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lavender-text/60 pointer-events-none" />
@@ -155,12 +155,12 @@ export default function Dashboard() {
               value={search}
               onChange={e => handleSearch(e.target.value)}
               placeholder="Search stocks... (RELIANCE, TCS, ZOMATO)"
-              className="w-full bg-lavender-surface border border-white/50 rounded-2xl pl-9 pr-9 py-2.5 text-lavender-text placeholder-slate-500 focus:outline-none focus:border-white/50 text-sm"
+              className="w-full bg-white border border-lavender-text/20 rounded-2xl pl-9 pr-9 py-2.5 text-lavender-text placeholder-lavender-text/40 focus:outline-none focus:border-lavender-primary/50 focus:ring-1 focus:ring-lavender-primary/50 text-sm shadow-sm transition-all"
             />
             {search && (
               <button
                 onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-lavender-text/60 hover:text-lavender-text"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-lavender-text/60 hover:text-lavender-text transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -168,7 +168,7 @@ export default function Dashboard() {
           </div>
 
           {(searchResults.length > 0 || searchLoading) && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-lavender-surface border border-white/50 rounded-2xl shadow-lavender z-50">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-lavender-text/10 rounded-2xl shadow-lavender z-50 overflow-hidden">
               {searchLoading && (
                 <div className="px-4 py-3 text-lavender-text/70 text-sm flex gap-2 items-center">
                   <div className="w-4 h-4 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
@@ -181,7 +181,7 @@ export default function Dashboard() {
                   <button
                     key={r.symbol}
                     onClick={() => handleSearchSelect(r.symbol)}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-200 text-lavender-text text-sm border-b border-white/50 last:border-0"
+                    className="w-full px-4 py-3 text-left hover:bg-lavender-secondary/10 text-lavender-text text-sm border-b border-lavender-text/5 last:border-0 transition-colors"
                   >
                     <span className="font-bold">{r.symbol}</span>
                     <span className="text-lavender-text/70 ml-2 text-xs">
@@ -205,7 +205,7 @@ export default function Dashboard() {
 
       {/* Tabs */}
      {/* Sliding Tab Navigation */}
-<div className="bg-lavender-surface border-b border-white/50 px-4 py-3">
+<div className="bg-lavender-surface border-b border-lavender-text/10 px-4 py-3">
   <div
     className="
       flex gap-2 pb-1
@@ -236,7 +236,7 @@ export default function Dashboard() {
           ${
             tab === t.id
               ? `${t.color} ${t.activeText} shadow-lavender scale-105`
-              : 'bg-lavender-surface text-lavender-text/70 hover:bg-gray-200 hover:text-lavender-text'
+              : 'bg-white border border-lavender-text/10 text-lavender-text/70 hover:bg-lavender-secondary/10 hover:border-lavender-text/20 hover:text-lavender-text'
           }
         `}
       >
