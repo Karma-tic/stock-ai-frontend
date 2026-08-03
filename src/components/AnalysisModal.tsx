@@ -245,7 +245,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                 <div className="space-y-3 mb-4">
                   {[
                     { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-lavender-primary' },
-                    { label: 'Valuation',       value: result.signal?.ratings?.valuation_score, color: 'bg-green-500' },
+                    { label: 'Valuation',       value: result.signal?.ratings?.value_score, color: 'bg-green-500' },
                     { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-lavender-secondary' },
                   ].map(item => {
                     const score = Number(item.value) || 0;
