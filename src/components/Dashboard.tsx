@@ -250,17 +250,17 @@ export default function Dashboard() {
 
       {/* Daily Market Wrap Preview */}
       <div className="p-4 max-w-4xl mx-auto -mt-2">
-        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-blue-900/40 to-white/40 border border-blue-500/20 rounded-2xl p-6 hover:border-blue-500/50 transition group">
+        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-amber-50 to-white border border-amber-200/60 rounded-2xl p-6 hover:border-amber-400/50 transition group shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-gray-900 text-xl font-bold mb-1 group-hover:text-blue-600 transition">
+              <h3 className="text-amber-900 text-xl font-bold mb-1 group-hover:text-amber-700 transition">
                 🗞️ Daily Market Wrap-Up
               </h3>
-              <p className="text-gray-500 text-sm">
+              <p className="text-stone-600 text-sm">
                 Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST.
               </p>
             </div>
-            <span className="shrink-0 bg-blue-600 group-hover:bg-blue-500 text-gray-900 font-semibold px-4 py-2 rounded-xl transition text-sm">
+            <span className="shrink-0 bg-stone-800 group-hover:bg-stone-700 text-white font-semibold px-4 py-2 rounded-xl transition text-sm shadow-sm">
               Read Latest →
             </span>
           </div>

@@ -62,7 +62,7 @@ export default function ProPicks() {
       </div>
 
       {/* ACCURACY TRACKER */}
-      <div className="bg-gray-800/40 border border-gray-700/50 rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lg">
+      <div className="bg-amber-100/50 border border-amber-200/60 rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-sm">
         <div className="flex items-center gap-4 mb-4 md:mb-0">
           <div className="p-3 bg-green-500/10 rounded-full border border-green-500/20">
             <Target className="w-8 h-8 text-green-600" />
@@ -112,7 +112,7 @@ export default function ProPicks() {
           </div>
         ) : (
           picks.map((pick, index) => (
-            <div key={index} className={`relative overflow-hidden bg-gray-900 border rounded-2xl p-6 transition-all ${isPro ? 'border-gray-700 hover:border-yellow-500/50 hover:-translate-y-1' : 'border-gray-800'}`}>
+            <div key={index} className={`relative overflow-hidden bg-white border rounded-2xl p-6 transition-all shadow-sm ${isPro ? 'border-amber-200 hover:border-amber-400 hover:-translate-y-1' : 'border-gray-200'}`}>
               
               {/* Blur Overlay for Free Users */}
               {!isPro && (
@@ -148,15 +148,15 @@ export default function ProPicks() {
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-gray-950 p-3 rounded-xl border border-gray-800">
+                <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-100">
                   <div className="text-xs text-gray-500 mb-1">Target 1</div>
                   <div className={`font-bold ${isPro ? 'text-green-600' : 'text-gray-600'}`}>₹{pick.target1}</div>
                 </div>
-                <div className="bg-gray-950 p-3 rounded-xl border border-gray-800">
+                <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-100">
                   <div className="text-xs text-gray-500 mb-1">Target 2</div>
                   <div className={`font-bold ${isPro ? 'text-green-600' : 'text-gray-600'}`}>₹{pick.target2}</div>
                 </div>
-                <div className="bg-gray-950 p-3 rounded-xl border border-red-900/20">
+                <div className="bg-red-50/50 p-3 rounded-xl border border-red-200/50">
                   <div className="text-xs text-red-500/70 mb-1">Stop Loss</div>
                   <div className={`font-bold ${isPro ? 'text-red-600' : 'text-gray-600'}`}>₹{pick.stopLoss}</div>
                 </div>

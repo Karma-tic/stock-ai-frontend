@@ -70,7 +70,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
     setSharing(true);
     try {
       const canvas  = await html2canvas(cardRef.current, {
-        backgroundColor: '#0f172a',
+        backgroundColor: '#ffffff',
         scale:           2,
         useCORS:         true,
         logging:         false,
@@ -91,7 +91,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
       <div
         ref={cardRef}
         style={{
-          background:   '#0f172a',
+          background:   '#ffffff',
           padding:      '24px',
           borderRadius: '16px',
           border:       `2px solid ${colors.border}`,
@@ -104,24 +104,24 @@ export default function ShareableSignal({ signal, stock }: Props) {
         <div style={{ display: 'flex', justifyContent: 'space-between',
                       alignItems: 'flex-start', marginBottom: '16px' }}>
           <div>
-            <p style={{ color: '#94a3b8', fontSize: '11px',
+            <p style={{ color: '#78716c', fontSize: '11px',
                         textTransform: 'uppercase', letterSpacing: '2px',
                         margin: 0 }}>
               AI Analysis
             </p>
-            <p style={{ color: '#fff', fontSize: '24px', fontWeight: 900,
+            <p style={{ color: '#1c1917', fontSize: '24px', fontWeight: 900,
                         margin: '4px 0 0 0' }}>
               {ticker}
             </p>
-            <p style={{ color: '#64748b', fontSize: '12px', margin: 0 }}>
+            <p style={{ color: '#57534e', fontSize: '12px', margin: 0 }}>
               {companyName?.substring(0, 30)}
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ color: '#94a3b8', fontSize: '11px', margin: 0 }}>
+            <p style={{ color: '#78716c', fontSize: '11px', margin: 0 }}>
               {today}
             </p>
-            <p style={{ color: '#fff', fontSize: '20px',
+            <p style={{ color: '#1c1917', fontSize: '20px',
                         fontWeight: 700, margin: '4px 0 0 0' }}>
               ₹{price?.toLocaleString('en-IN')}
             </p>
@@ -142,7 +142,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
                       letterSpacing: '4px' }}>
             {signalData}
           </p>
-          <p style={{ color: '#94a3b8', fontSize: '13px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#78716c', fontSize: '13px', margin: '4px 0 0 0' }}>
             Confidence: {confidence}%
           </p>
         </div>
@@ -151,16 +151,16 @@ export default function ShareableSignal({ signal, stock }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr',
                       gap: '8px', marginBottom: '16px' }}>
           {[
-            { label: 'Entry',     value: `₹${entry.suggested_buy_price}`,  color: '#3b82f6' },
-            { label: 'Target 1',  value: `₹${entry.target_price_1}`,       color: '#22c55e' },
-            { label: 'Target 2',  value: `₹${entry.target_price_2}`,       color: '#86efac' },
-            { label: 'Stop Loss', value: `₹${entry.stop_loss}`,            color: '#ef4444' },
+            { label: 'Entry',     value: `₹${entry.suggested_buy_price}`,  color: '#d97706' },
+            { label: 'Target 1',  value: `₹${entry.target_price_1}`,       color: '#16a34a' },
+            { label: 'Target 2',  value: `₹${entry.target_price_2}`,       color: '#22c55e' },
+            { label: 'Stop Loss', value: `₹${entry.stop_loss}`,            color: '#dc2626' },
           ].map(item => (
             <div key={item.label} style={{
-              background: '#1e293b', borderRadius: '8px',
+              background: '#fef3c7', borderRadius: '8px',
               padding: '10px', textAlign: 'center'
             }}>
-              <p style={{ color: '#64748b', fontSize: '10px',
+              <p style={{ color: '#78716c', fontSize: '10px',
                           margin: 0, textTransform: 'uppercase' }}>
                 {item.label}
               </p>
@@ -174,19 +174,21 @@ export default function ShareableSignal({ signal, stock }: Props) {
 
         {/* Watermark */}
         <div style={{
-          borderTop:  '1px solid #1e293b',
+          borderTop:  '1px solid #fde68a',
           paddingTop: '12px',
           display:    'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'center'
         }}>
-          <p style={{ color: '#3b82f6', fontSize: '13px',
-                      fontWeight: 700, margin: 0 }}>
-            byteplay.org
-          </p>
-          <p style={{ color: '#334155', fontSize: '10px', margin: 0 }}>
-            AI analysis • Not SEBI advice
-          </p>
+          <div>
+            <p style={{ color: '#1c1917', fontSize: '12px',
+                        fontWeight: 700, margin: 0 }}>
+              byteplay.org
+            </p>
+            <p style={{ color: '#78716c', fontSize: '10px', margin: 0 }}>
+              AI analysis • Not SEBI advice
+            </p>
+          </div>
         </div>
       </div>
 
@@ -195,7 +197,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
         <button
           onClick={captureAndShare}
           disabled={sharing}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-gray-900 px-5 py-2.5 rounded-xl text-sm font-semibold transition"
+          className="flex items-center gap-2 bg-stone-800 hover:bg-stone-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm"
         >
           <Share2 className="w-4 h-4" />
           {sharing ? 'Preparing...' : 'Share Signal'}

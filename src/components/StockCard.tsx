@@ -136,7 +136,7 @@ ReactGA.event({
       {/* Analyze button */}
       <button
   onClick={() => onAnalyze(stock)}
-  className="mt-3 w-full bg-blue-600 hover:bg-blue-500 text-gray-900 text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+  className="mt-3 w-full bg-stone-800 hover:bg-stone-700 text-white text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2 shadow-sm"
 >
   <Brain className="w-4 h-4" />
   AI Analysis

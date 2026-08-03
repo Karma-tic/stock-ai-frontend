@@ -232,8 +232,8 @@ export default function BrokerageCalculator() {
             The break-even point is how much a stock price must move in your favor just to cover the taxes and charges. For example, if you buy ₹10 Lakhs worth of shares in delivery, your total charges could exceed ₹1,500. This means the stock needs to go up by at least ₹1,500 just for you to exit at a "no profit, no loss" scenario. Active traders must use a brokerage calculator to ensure their profit targets are far larger than their transaction costs.
           </p>
 
-          <div className="bg-purple-900/20 border border-purple-500/30 rounded-xl p-6 mt-8">
-            <h3 className="text-purple-400 font-bold mb-2">Disclaimer</h3>
+          <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-6 mt-8 shadow-sm">
+            <h3 className="text-amber-900 font-bold mb-2">Important Notes</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               The calculations provided are approximate and based on standard discount broker rates (e.g., Zerodha) as of 2024. Actual charges may vary depending on your specific broker, DP charges (for selling delivery shares), and regulatory updates. Always verify final contract notes provided by your broker.
             </p>

@@ -325,14 +325,14 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Market Wrap Feature */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-blue-900/40 to-white/40 border border-blue-500/20 rounded-2xl p-8 sm:p-12 text-center">
-          <h2 className="text-gray-900 text-3xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-amber-100/50 to-white border border-amber-200 rounded-2xl p-8 sm:p-12 text-center shadow-sm">
+          <h2 className="text-amber-900 text-3xl font-bold mb-4">
             Daily Market Wrap-Up
           </h2>
-          <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-stone-600 text-lg mb-8 max-w-2xl mx-auto">
             Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST so you never miss a beat.
           </p>
-          <Link to="/market-wrap" className="inline-block bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold px-6 py-3 rounded-xl transition">
+          <Link to="/market-wrap" className="inline-block bg-stone-800 hover:bg-stone-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm">
             Read the Latest Wrap →
           </Link>
         </div>

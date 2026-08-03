@@ -30,7 +30,7 @@ export default function StockPage() {
             <div className="flex-shrink-0">
               <Link 
                 to="/login" 
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-gray-900 font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-blue-500/20"
+                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-amber-500/20"
               >
                 <TrendingUp className="w-5 h-5" />
                 Get Live AI Analysis

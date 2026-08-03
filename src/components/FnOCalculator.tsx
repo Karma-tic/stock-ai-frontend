@@ -153,8 +153,8 @@ export default function FnOCalculator() {
               </div>
             </div>
             
-            <div className="bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 flex gap-3 text-sm text-blue-200">
-              <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
+            <div className="bg-amber-50 border border-amber-200/50 rounded-2xl p-4 flex gap-3 text-sm text-stone-600 shadow-sm">
+              <Info className="w-5 h-5 text-amber-600 flex-shrink-0" />
               <p>This calculator estimates taxes based on standard Indian equity F&O rates. Actual brokerage may vary slightly based on your broker's specific GST policies.</p>
             </div>
           </div>

@@ -189,7 +189,7 @@ const signalBg = bgMap[signal] || 'bg-gray-100 border-gray-400';
                 <h3 className="font-semibold text-gray-900 mb-3">📊 Price Targets</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-blue-600' },
+                    { label: 'Buy At', value: `₹${result.signal?.entry_strategy?.suggested_buy_price}`, color: 'text-stone-900' },
                     { label: 'Target 1', value: `₹${result.signal?.entry_strategy?.target_price_1}`, color: 'text-green-600' },
                     { label: 'Target 2', value: `₹${result.signal?.entry_strategy?.target_price_2}`, color: 'text-green-300' },
                     { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-600' },
@@ -228,9 +228,9 @@ const signalBg = bgMap[signal] || 'bg-gray-100 border-gray-400';
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-                  <p className="text-blue-600 text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
-                  <p className="text-gray-500 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
+                <div className="mt-3 bg-amber-50/50 border border-amber-200/60 rounded-lg p-3">
+                  <p className="text-amber-900 text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
+                  <p className="text-stone-500 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
                 </div>
               </div>
 
@@ -244,9 +244,9 @@ const signalBg = bgMap[signal] || 'bg-gray-100 border-gray-400';
                 {/* Bar scores */}
                 <div className="space-y-3 mb-4">
                   {[
-                    { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-blue-500' },
-                    { label: 'Valuation',       value: result.signal?.ratings?.value_score,     color: 'bg-yellow-500' },
-                    { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-purple-500' },
+                    { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-stone-500' },
+                    { label: 'Valuation',       value: result.signal?.ratings?.valuation_score, color: 'bg-green-500' },
+                    { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-amber-500' },
                   ].map(item => {
                     const score = Number(item.value) || 0;
                     const pct   = Math.max(0, Math.min(100, score * 10));
