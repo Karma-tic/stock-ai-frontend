@@ -116,13 +116,13 @@ const bgMap: Record<string, string> = { BUY: 'bg-green-500/20 border-green-500',
 const signalColor = colorMap[signal] || 'text-lavender-text';
 const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
   return (
-    <div className="fixed inset-0 bg-lavender-surface/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-lavender-text/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
       <div
-        className="bg-lavender-surface border border-white/50 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-lavender-base border border-white/50 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto shadow-lavender"
         onClick={e => e.stopPropagation()}
       >
 {/* Header */}
-<div className="flex justify-between items-center p-4 border-b border-white/50 sticky top-0 bg-lavender-surface">
+<div className="flex justify-between items-center p-4 border-b border-lavender-surface sticky top-0 bg-lavender-base/95 backdrop-blur z-10">
   <div>
     <h2 className="font-bold text-xl text-lavender-text">{stock.display_ticker}</h2>
     <p className="text-lavender-text/70 text-sm">{stock.company_name}</p>
@@ -131,7 +131,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
 </div>
 
 {/* Live Price Bar */}
-<div className="px-4 py-3 bg-lavender-surface border-b border-white/50 flex items-center justify-between">
+<div className="px-4 py-3 bg-lavender-base border-b border-lavender-surface flex items-center justify-between">
 
   <div className="flex items-center gap-3">
     <span className="text-2xl font-black text-lavender-text">
@@ -194,18 +194,18 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                     { label: 'Target 2', value: `₹${result.signal?.entry_strategy?.target_price_2}`, color: 'text-green-300' },
                     { label: 'Stop Loss', value: `₹${result.signal?.entry_strategy?.stop_loss}`, color: 'text-red-600' },
                   ].map(item => (
-                    <div key={item.label} className="bg-lavender-surface rounded-2xl p-3">
+                    <div key={item.label} className="bg-white rounded-2xl p-3 shadow-sm border border-lavender-surface">
                       <p className="text-lavender-text/60 text-xs">{item.label}</p>
                       <p className={`font-bold ${item.color}`}>{item.value}</p>
                     </div>
                   ))}
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-3">
-                  <div className="bg-lavender-surface rounded-2xl p-3">
+                  <div className="bg-white rounded-2xl p-3 shadow-sm border border-lavender-surface">
                     <p className="text-lavender-text/60 text-xs">Upside</p>
                     <p className="font-bold text-green-600">+{result.signal?.entry_strategy?.upside_pct}%</p>
                   </div>
-                  <div className="bg-lavender-surface rounded-2xl p-3">
+                  <div className="bg-white rounded-2xl p-3 shadow-sm border border-lavender-surface">
                     <p className="text-lavender-text/60 text-xs">Downside Risk</p>
                     <p className="font-bold text-red-600">-{result.signal?.entry_strategy?.downside_risk_pct}%</p>
                   </div>
@@ -221,14 +221,14 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                     { label: '₹25,000', value: result.signal?.quantity_guide?.for_25000_inr },
                     { label: '₹50,000', value: result.signal?.quantity_guide?.for_50000_inr },
                   ].map(item => (
-                    <div key={item.label} className="bg-lavender-surface rounded-2xl p-3 text-center">
+                    <div key={item.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-lavender-surface">
                       <p className="text-lavender-text/60 text-xs">{item.label}</p>
                       <p className="font-bold text-lavender-text text-lg">{item.value}</p>
                       <p className="text-lavender-text/60 text-xs">shares</p>
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 bg-lavender-surface border border-white/50 rounded-2xl p-3">
+                <div className="mt-3 bg-white border border-lavender-surface shadow-sm rounded-2xl p-3">
                   <p className="text-lavender-text text-xs">⏰ Best time: {result.signal?.quantity_guide?.best_time_to_buy?.replace(/_/g, ' ')}</p>
                   <p className="text-lavender-text/70 text-xs mt-1">{result.signal?.quantity_guide?.best_time_reason}</p>
                 </div>
@@ -244,9 +244,9 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                 {/* Bar scores */}
                 <div className="space-y-3 mb-4">
                   {[
-                    { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-stone-500' },
+                    { label: 'Technical Setup', value: result.signal?.ratings?.technical_score, color: 'bg-lavender-primary' },
                     { label: 'Valuation',       value: result.signal?.ratings?.valuation_score, color: 'bg-green-500' },
-                    { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-lavender-surface0' },
+                    { label: 'Momentum',        value: result.signal?.ratings?.momentum_score,  color: 'bg-lavender-secondary' },
                   ].map(item => {
                     const score = Number(item.value) || 0;
                     const pct   = Math.max(0, Math.min(100, score * 10));
@@ -256,7 +256,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                           <p className="text-lavender-text/80 text-xs font-medium">{item.label}</p>
                           <p className="text-lavender-text/70 text-xs font-bold">{score}/10</p>
                         </div>
-                        <div className="w-full bg-lavender-surface rounded-full h-2">
+                        <div className="w-full bg-white border border-lavender-surface rounded-full h-2">
                           <div
                             className={`${item.color} h-2 rounded-full transition-all`}
                             style={{ width: `${pct}%` }}
@@ -268,7 +268,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                 </div>
 
                 {/* News sentiment badge */}
-                <div className="flex items-center justify-between bg-lavender-surface rounded-2xl p-3 mb-3">
+                <div className="flex items-center justify-between bg-white border border-lavender-surface shadow-sm rounded-2xl p-3 mb-3">
                   <p className="text-lavender-text/70 text-xs">News Sentiment</p>
                   {(() => {
                     const sentiment = result.signal?.ratings?.news_sentiment || 'NEUTRAL';
@@ -299,7 +299,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                     };
                     const color = ratingMap[item.value] || 'text-lavender-text';
                     return (
-                      <div key={item.label} className="bg-lavender-surface rounded-2xl p-3 text-center">
+                      <div key={item.label} className="bg-white border border-lavender-surface shadow-sm rounded-2xl p-3 text-center">
                         <p className="text-lavender-text/60 text-xs">{item.label}</p>
                         <p className={`font-bold text-sm ${color}`}>{item.value}</p>
                       </div>
@@ -349,7 +349,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
               {result.signal?.analysis?.what_to_watch && (
                 <div className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
                   <p className="text-lavender-text/70 text-xs mb-1">👁️ What to watch</p>
-                  <p className="text-gray-800 text-sm font-medium">
+                  <p className="text-lavender-text text-sm font-medium">
                     {result.signal.analysis.what_to_watch}
                   </p>
                 </div>
@@ -375,7 +375,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                         <span className="inline-block bg-red-600 text-lavender-text text-xs font-bold px-2 py-0.5 rounded mb-1">
                           {flag.category}
                         </span>
-                        <p className="text-gray-800 text-sm">{flag.title}</p>
+                        <p className="text-lavender-text text-sm">{flag.title}</p>
                         <p className="text-lavender-text/60 text-xs mt-1">
                           {flag.source} · {flag.date}
                         </p>
@@ -391,7 +391,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                   <div className="space-y-2">
                     {result.news.news.slice(0, 5).map((item: any, i: number) => (
                       <a key={i} href={item.link} target="_blank" rel="noreferrer"
-                        className="block bg-lavender-surface rounded-2xl p-3 hover:bg-gray-200 transition">
+                        className="block bg-white border border-lavender-surface shadow-sm rounded-2xl p-3 hover:bg-lavender-base transition">
                         <p className="text-lavender-text/80 text-xs">{item.title}</p>
                         <p className="text-lavender-text/60 text-xs mt-1">{item.source}</p>
                       </a>
