@@ -10,10 +10,10 @@ export default function Chapter7() {
       nextChapter={{ path: '/learn/dividend-investing', title: 'Dividend Investing' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-yellow-600 rounded-2xl flex items-center justify-center text-gray-900 font-black text-xl shadow-lg flex-shrink-0">
+        <div className="w-12 h-12 bg-yellow-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           7
         </div>
-        <h2 className="text-3xl md:text-4xl font-black text-gray-900">How to Start Investing Step by Step</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-lavender-text">How to Start Investing Step by Step</h2>
       </div>
       
       
@@ -44,13 +44,13 @@ export default function Chapter7() {
                 desc:  "Use Stock AI's portfolio tracker at byteplay.org to monitor your live P&L. Enter your holdings, buy prices and quantities — the app shows your current profit or loss updated in real time. Review your portfolio at least once a week and rebalance based on changed fundamentals.",
               },
             ].map((item, index) => (
-              <div key={item.step} className="flex flex-col sm:flex-row gap-6 bg-gray-50 border border-gray-300 rounded-2xl p-6 sm:p-8 hover:border-yellow-500/30 transition">
-                <div className="flex-shrink-0 w-12 h-12 bg-yellow-500/20 border border-yellow-500/30 rounded-xl flex items-center justify-center text-yellow-400 font-black text-xl">
+              <div key={item.step} className="flex flex-col sm:flex-row gap-6 bg-lavender-surface border border-white/50 rounded-2xl p-6 sm:p-8 hover:border-yellow-500/30 transition">
+                <div className="flex-shrink-0 w-12 h-12 bg-yellow-500/20 border border-yellow-500/30 rounded-2xl flex items-center justify-center text-yellow-400 font-black text-xl">
                   {index + 1}
                 </div>
                 <div>
-                  <h4 className="text-gray-900 text-xl font-bold mb-3">{item.step}</h4>
-                  <p className="text-gray-500 text-lg leading-relaxed">{item.desc}</p>
+                  <h4 className="text-lavender-text text-xl font-bold mb-3">{item.step}</h4>
+                  <p className="text-lavender-text/70 text-lg leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -58,30 +58,30 @@ export default function Chapter7() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-gray-200 prose-headings:text-gray-900 prose-a:text-blue-600">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Your First Steps: Demat, KYC, and Choosing a Broker</h2>
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Your First Steps: Demat, KYC, and Choosing a Broker</h2>
           <p className="mb-4 leading-relaxed">
             Starting your investment journey in the Indian stock market is easier now than ever before. The digitization of the financial sector has streamlined the process, allowing anyone with a smartphone and a bank account to start investing within a few hours.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">The Demat and Trading Account</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">The Demat and Trading Account</h3>
           <p className="mb-4 leading-relaxed">
             Before you can buy your first share, you need to open two linked accounts:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li><strong>Trading Account:</strong> Provided by a stockbroker, this account acts as your interface with the stock exchange (NSE/BSE). You use it to place buy and sell orders.</li>
             <li><strong>Demat Account:</strong> Short for Dematerialized account, this acts as a digital locker. When you buy shares via your trading account, they are electronically credited to and stored safely in your Demat account, which is maintained by depositories like NSDL or CDSL.</li>
           </ul>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">The KYC Process</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">The KYC Process</h3>
           <p className="mb-4 leading-relaxed">
             Know Your Customer (KYC) is a mandatory verification process mandated by SEBI. It prevents fraud, money laundering, and illegal activities. To complete your KYC online, you will need:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li>Your PAN Card (mandatory for investing in India).</li>
             <li>An Aadhaar Card linked to your mobile number (for eSign).</li>
             <li>A canceled cheque or bank statement to link your bank account.</li>
             <li>A live photo or a short video verification via your webcam or phone.</li>
           </ul>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">Discount Brokers vs. Full-Service Brokers</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">Discount Brokers vs. Full-Service Brokers</h3>
           <p className="mb-4 leading-relaxed">
             Choosing the right broker is critical for your profitability, as high brokerage fees can severely eat into your returns.
           </p>

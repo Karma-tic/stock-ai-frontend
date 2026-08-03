@@ -26,26 +26,26 @@ export default function Blog() {
   ];
 
   return (
-    <div className="min-h-screen bg-white py-20">
+    <div className="min-h-screen bg-lavender-surface py-20">
       <div className="max-w-5xl mx-auto px-6">
         
         
 
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
-            Stock Market <span className="text-blue-600">Insights</span>
+          <h1 className="text-4xl md:text-5xl font-black text-lavender-text mb-6">
+            Stock Market <span className="text-lavender-primary">Insights</span>
           </h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+          <p className="text-lavender-text/70 text-lg max-w-2xl mx-auto">
             Learn about investing in the Indian stock market with our comprehensive guides and articles.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map(a => (
-            <div key={a.title} className="bg-white border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition">
-              <h3 className="text-gray-900 font-bold text-xl mb-4">{a.title}</h3>
-              <p className="text-gray-500 leading-relaxed mb-6">{a.desc}</p>
-              <Link to={a.link} className="text-blue-600 hover:text-blue-300 font-semibold transition flex items-center gap-2">
+            <div key={a.title} className="bg-lavender-surface border border-white/50 rounded-2xl p-8 hover:border-white/50 transition">
+              <h3 className="text-lavender-text font-bold text-xl mb-4">{a.title}</h3>
+              <p className="text-lavender-text/70 leading-relaxed mb-6">{a.desc}</p>
+              <Link to={a.link} className="text-lavender-primary hover:text-blue-300 font-semibold transition flex items-center gap-2">
                 Read full article
               </Link>
             </div>

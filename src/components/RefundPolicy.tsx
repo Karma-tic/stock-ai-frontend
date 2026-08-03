@@ -3,9 +3,9 @@ import PageLayout from './PageLayout';
 export default function RefundPolicy() {
   return (
     <PageLayout>
-    <div className="min-h-screen bg-white p-8 max-w-3xl mx-auto">
-      <h1 className="text-gray-900 text-3xl font-bold mb-2">Refund Policy</h1>
-      <p className="text-gray-500 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
+    <div className="min-h-screen bg-lavender-surface p-8 max-w-3xl mx-auto">
+      <h1 className="text-lavender-text text-3xl font-bold mb-2">Refund Policy</h1>
+      <p className="text-lavender-text/70 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
 
       {[
         {
@@ -34,8 +34,8 @@ export default function RefundPolicy() {
         },
       ].map(section => (
         <div key={section.title} className="mb-6">
-          <h2 className="text-gray-900 font-semibold text-lg mb-2">{section.title}</h2>
-          <p className="text-gray-500 leading-relaxed">{section.content}</p>
+          <h2 className="text-lavender-text font-semibold text-lg mb-2">{section.title}</h2>
+          <p className="text-lavender-text/70 leading-relaxed">{section.content}</p>
         </div>
       ))}
     </div>

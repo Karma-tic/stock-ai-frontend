@@ -197,7 +197,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
         <button
           onClick={captureAndShare}
           disabled={sharing}
-          className="flex items-center gap-2 bg-stone-800 hover:bg-stone-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm"
+          className="flex items-center gap-2 bg-gradient-lavender hover:opacity-90 disabled:opacity-50 text-white px-5 py-2.5 rounded-2xl text-sm font-semibold transition shadow-lavender"
         >
           <Share2 className="w-4 h-4" />
           {sharing ? 'Preparing...' : 'Share Signal'}
@@ -205,7 +205,7 @@ export default function ShareableSignal({ signal, stock }: Props) {
         <button
           onClick={downloadImage}
           disabled={sharing}
-          className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 px-5 py-2.5 rounded-xl text-sm font-semibold transition"
+          className="flex items-center gap-2 bg-lavender-surface hover:bg-gray-200 disabled:opacity-50 text-lavender-text px-5 py-2.5 rounded-2xl text-sm font-semibold transition"
         >
           <Download className="w-4 h-4" />
           Download

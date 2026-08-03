@@ -72,8 +72,8 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
   if (loading) return (
     <div className="text-center py-20">
-      <Coins className="w-10 h-10 mx-auto mb-4 animate-spin text-blue-600" />
-      <p className="text-gray-500">Loading portfolio...</p>
+      <Coins className="w-10 h-10 mx-auto mb-4 animate-spin text-lavender-primary" />
+      <p className="text-lavender-text/70">Loading portfolio...</p>
     </div>
   );
 
@@ -84,13 +84,13 @@ const [showUpgrade, setShowUpgrade] = useState(false);
       {portfolio.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           {[
-            { label: 'Invested', value: `₹${(summary.total_invested||0).toLocaleString('en-IN')}`, color: 'text-gray-900' },
-            { label: 'Current', value: `₹${(summary.current_value||0).toLocaleString('en-IN')}`, color: 'text-blue-600' },
+            { label: 'Invested', value: `₹${(summary.total_invested||0).toLocaleString('en-IN')}`, color: 'text-lavender-text' },
+            { label: 'Current', value: `₹${(summary.current_value||0).toLocaleString('en-IN')}`, color: 'text-lavender-primary' },
             { label: 'P&L', value: `${isProfitable ? '+' : ''}₹${(summary.total_pnl||0).toLocaleString('en-IN')}`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
             { label: 'Return', value: `${isProfitable ? '+' : ''}${(summary.total_pnl_pct||0).toFixed(2)}%`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
           ].map(item => (
-            <div key={item.label} className="bg-gray-50 border border-gray-300 rounded-xl p-3 text-center">
-              <p className="text-gray-400 text-xs mb-1">{item.label}</p>
+            <div key={item.label} className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+              <p className="text-lavender-text/60 text-xs mb-1">{item.label}</p>
               <p className={`font-bold text-lg ${item.color}`}>{item.value}</p>
             </div>
           ))}
@@ -99,13 +99,13 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Add Stock Button */}
 <div className="flex justify-between items-center mb-4">
-  <h2 className="text-gray-900 font-bold text-lg flex items-center gap-2">
+  <h2 className="text-lavender-text font-bold text-lg flex items-center gap-2">
   <Coins className="w-5 h-5" />
   My Portfolio
 </h2>
   <div className="flex items-center gap-2">
     {!isPro && (
-      <span className="text-gray-400 text-xs">
+      <span className="text-lavender-text/60 text-xs">
         {portfolio.length}/3 free
       </span>
     )}
@@ -117,7 +117,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
         }
         setShowAdd(!showAdd);
       }}
-      className="bg-blue-600 hover:bg-blue-500 text-gray-900 text-sm px-4 py-2 rounded-lg font-semibold transition"
+      className="bg-gradient-lavender hover:opacity-90 text-white text-sm px-4 py-2 rounded-2xl font-semibold transition"
     >
       {showAdd ? 'Cancel' : 'Add Stock'}
     </button>
@@ -126,37 +126,37 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Add Stock Form */}
       {showAdd && (
-        <div className="bg-gray-50 border border-gray-300 rounded-xl p-4 mb-4">
-          <h3 className="text-gray-900 font-semibold mb-3">Add Stock to Portfolio</h3>
+        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-4 mb-4">
+          <h3 className="text-lavender-text font-semibold mb-3">Add Stock to Portfolio</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             <div>
-              <label className="text-gray-500 text-xs mb-1 block">NSE Symbol</label>
+              <label className="text-lavender-text/70 text-xs mb-1 block">NSE Symbol</label>
               <input
                 type="text"
                 placeholder="e.g. RELIANCE"
                 value={form.ticker}
                 onChange={e => setForm({ ...form, ticker: e.target.value.toUpperCase() })}
-                className="w-full bg-white border border-gray-400 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
-              <label className="text-gray-500 text-xs mb-1 block">Quantity (shares)</label>
+              <label className="text-lavender-text/70 text-xs mb-1 block">Quantity (shares)</label>
               <input
                 type="number"
                 placeholder="e.g. 10"
                 value={form.quantity}
                 onChange={e => setForm({ ...form, quantity: e.target.value })}
-                className="w-full bg-white border border-gray-400 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
-              <label className="text-gray-500 text-xs mb-1 block">Avg Buy Price (₹)</label>
+              <label className="text-lavender-text/70 text-xs mb-1 block">Avg Buy Price (₹)</label>
               <input
                 type="number"
                 placeholder="e.g. 1450.50"
                 value={form.avg_buy_price}
                 onChange={e => setForm({ ...form, avg_buy_price: e.target.value })}
-                className="w-full bg-white border border-gray-400 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
           </div>
@@ -169,7 +169,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           <button
             onClick={handleAdd}
             disabled={adding}
-            className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-gray-900 px-6 py-2 rounded-lg font-semibold text-sm transition"
+            className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-lavender-text px-6 py-2 rounded-2xl font-semibold text-sm transition"
           >
             {adding ? 'Adding...' : 'Add to Portfolio'}
           </button>
@@ -178,13 +178,13 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Empty State */}
       {portfolio.length === 0 && !showAdd && (
-        <div className="text-center py-16 bg-gray-50 border border-gray-300 rounded-xl">
-          <Coins className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-900 font-semibold text-lg mb-2">No stocks yet</p>
-          <p className="text-gray-500 text-sm mb-4">Add your stocks to track live P&L</p>
+        <div className="text-center py-16 bg-lavender-surface border border-white/50 rounded-2xl">
+          <Coins className="w-12 h-12 mx-auto mb-4 text-lavender-primary" />
+          <p className="text-lavender-text font-semibold text-lg mb-2">No stocks yet</p>
+          <p className="text-lavender-text/70 text-sm mb-4">Add your stocks to track live P&L</p>
           <button
             onClick={() => setShowAdd(true)}
-            className="bg-blue-600 hover:bg-blue-500 text-gray-900 px-6 py-2 rounded-lg font-semibold transition"
+            className="bg-gradient-lavender hover:opacity-90 text-white px-6 py-2 rounded-2xl font-semibold transition"
           >
             + Add First Stock
           </button>
@@ -197,12 +197,12 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           {portfolio.map((item: any) => {
             const pnlUp = (item.pnl || 0) >= 0;
             return (
-              <div key={item.ticker} className="bg-gray-50 border border-gray-300 rounded-xl p-4">
+              <div key={item.ticker} className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
                 <div className="flex justify-between items-start">
                   {/* Left — stock info */}
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-gray-900 text-lg">{item.ticker}</span>
+                      <span className="font-bold text-lavender-text text-lg">{item.ticker}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
                         (item.price_change_pct||0) >= 0
                           ? 'bg-green-500/20 text-green-600'
@@ -214,7 +214,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 </div>
                       </span>
                     </div>
-                    <p className="text-gray-500 text-xs">{item.company_name}</p>
+                    <p className="text-lavender-text/70 text-xs">{item.company_name}</p>
                   </div>
 
                   {/* Right — P&L */}
@@ -236,20 +236,20 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                     { label: 'CMP', value: `₹${(item.current_price||0).toLocaleString('en-IN')}` },
                     { label: 'Curr Value', value: `₹${(item.current_value||0).toLocaleString('en-IN')}` },
                   ].map(stat => (
-                    <div key={stat.label} className="bg-white rounded-lg p-2 text-center">
-                      <p className="text-gray-400 text-xs">{stat.label}</p>
-                      <p className="text-gray-900 text-sm font-semibold">{stat.value}</p>
+                    <div key={stat.label} className="bg-lavender-surface rounded-2xl p-2 text-center">
+                      <p className="text-lavender-text/60 text-xs">{stat.label}</p>
+                      <p className="text-lavender-text text-sm font-semibold">{stat.value}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* Invested vs Current bar */}
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
+                  <div className="flex justify-between text-xs text-lavender-text/60 mb-1">
                     <span>Invested: ₹{(item.invested_value||0).toLocaleString('en-IN')}</span>
                     <span>Current: ₹{(item.current_value||0).toLocaleString('en-IN')}</span>
                   </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-lavender-surface rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all ${pnlUp ? 'bg-green-500' : 'bg-red-500'}`}
                       style={{
@@ -262,7 +262,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 {/* Remove button */}
                 <button
                   onClick={() => handleRemove(item.ticker)}
-                  className="mt-3 text-gray-400 hover:text-red-600 text-xs transition"
+                  className="mt-3 text-lavender-text/60 hover:text-red-600 text-xs transition"
                 >
                   <span className="flex items-center gap-1">
   <AlertTriangle className="w-3 h-3" />

@@ -73,7 +73,7 @@ ReactGA.event({
   };
 
   return (
-    <div className="bg-gray-50 border border-gray-300 hover:border-blue-500 rounded-xl p-4 transition-all">
+    <div className="bg-lavender-surface border border-white/50 hover:border-white/50 rounded-2xl p-4 transition-all">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div
@@ -81,12 +81,12 @@ ReactGA.event({
           onClick={() => onAnalyze(stock)}
         >
           <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-900 text-lg">{stock.display_ticker}</span>
+            <span className="font-bold text-lavender-text text-lg">{stock.display_ticker}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'}`}>
               {isUp ? '▲' : '▼'} {Math.abs(stock.price_change_pct || 0)}%
             </span>
           </div>
-          <p className="text-gray-500 text-xs mt-0.5 truncate max-w-[150px]">{stock.company_name}</p>
+          <p className="text-lavender-text/70 text-xs mt-0.5 truncate max-w-[150px]">{stock.company_name}</p>
         </div>
 
         {/* Star button — completely isolated from card click */}
@@ -98,9 +98,9 @@ ReactGA.event({
             e.stopPropagation();
             handleWatchlist();
           }}
-          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition"
+          className="w-9 h-9 flex items-center justify-center rounded-2xl hover:bg-gray-200 transition"
         >
-          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-400'}`}>
+          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-lavender-text/60 hover:text-yellow-400'}`}>
             {loading ? '⏳' : localWatchlist ? '★' : '☆'}
           </span>
         </button>
@@ -108,7 +108,7 @@ ReactGA.event({
 
       {/* Price — clickable */}
       <div className="mb-3 cursor-pointer" onClick={() => onAnalyze(stock)}>
-        <span className="text-2xl font-bold text-gray-900">
+        <span className="text-2xl font-bold text-lavender-text">
           ₹{(stock.current_price || 0).toLocaleString('en-IN')}
         </span>
         <span className={`ml-2 text-sm ${isUp ? 'text-green-600' : 'text-red-600'}`}>
@@ -118,17 +118,17 @@ ReactGA.event({
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 text-center" onClick={() => onAnalyze(stock)}>
-        <div className="bg-white rounded-lg p-2 cursor-pointer">
-          <p className="text-gray-400 text-xs">PE</p>
-          <p className="text-gray-900 text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
+        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+          <p className="text-lavender-text/60 text-xs">PE</p>
+          <p className="text-lavender-text text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
         </div>
-        <div className="bg-white rounded-lg p-2 cursor-pointer">
-          <p className="text-gray-400 text-xs">Div%</p>
+        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+          <p className="text-lavender-text/60 text-xs">Div%</p>
           <p className="text-green-600 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
         </div>
-        <div className="bg-white rounded-lg p-2 cursor-pointer">
-          <p className="text-gray-400 text-xs">52W%</p>
-          <p className="text-blue-600 text-sm font-semibold">{stock.position_in_52w || 0}%</p>
+        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+          <p className="text-lavender-text/60 text-xs">52W%</p>
+          <p className="text-lavender-primary text-sm font-semibold">{stock.position_in_52w || 0}%</p>
         </div>
         
       </div>
@@ -136,7 +136,7 @@ ReactGA.event({
       {/* Analyze button */}
       <button
   onClick={() => onAnalyze(stock)}
-  className="mt-3 w-full bg-stone-800 hover:bg-stone-700 text-white text-sm py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2 shadow-sm"
+  className="mt-3 w-full bg-gradient-lavender hover:opacity-90 text-white text-sm py-2 rounded-2xl font-semibold transition flex items-center justify-center gap-2 shadow-lavender"
 >
   <Brain className="w-4 h-4" />
   AI Analysis

@@ -10,10 +10,10 @@ export default function Chapter3() {
       nextChapter={{ path: '/learn/fundamental-vs-technical', title: 'Fundamental vs Technical Analysis' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-gray-900 font-black text-xl shadow-lg flex-shrink-0">
+        <div className="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           3
         </div>
-        <h2 className="text-3xl md:text-4xl font-black text-gray-900">Essential Stock Market Terms</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Essential Stock Market Terms</h2>
       </div>
       
       
@@ -32,37 +32,37 @@ export default function Chapter3() {
               { term: "Circuit Breaker", def: "Automatic trading halt when a stock moves beyond a limit (typically ±5%, ±10%, ±20%). Prevents panic buying or selling." },
               { term: "Demat Account", def: "Dematerialised account that holds your shares electronically. Required to trade on NSE/BSE. Provided by brokers like Zerodha, Groww, Upstox." },
             ].map(item => (
-              <div key={item.term} className="bg-gray-50 border border-gray-300 rounded-xl p-5 hover:border-green-500/30 transition">
+              <div key={item.term} className="bg-lavender-surface border border-white/50 rounded-2xl p-5 hover:border-green-500/30 transition">
                 <p className="text-green-600 font-bold text-lg mb-2">{item.term}</p>
-                <p className="text-gray-600 leading-relaxed">{item.def}</p>
+                <p className="text-lavender-text/80 leading-relaxed">{item.def}</p>
               </div>
             ))}
           </div>
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-gray-200 prose-headings:text-gray-900 prose-a:text-blue-600">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Mastering the Language of the Market</h2>
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Mastering the Language of the Market</h2>
           <p className="mb-4 leading-relaxed">
             To successfully navigate the financial markets, you must first speak its language. Financial jargon can seem intimidating, but understanding these essential terms is the first step toward becoming a confident investor.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">Bulls, Bears, and Market Sentiment</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">Bulls, Bears, and Market Sentiment</h3>
           <p className="mb-4 leading-relaxed">
             The terms "Bull" and "Bear" are ubiquitous in finance. A <strong>Bull Market</strong> occurs when stock prices are rising consistently, fueled by economic growth and investor optimism. Conversely, a <strong>Bear Market</strong> is characterized by falling prices and widespread pessimism, typically defined as a drop of 20% or more from recent highs. These terms are said to originate from how the animals attack: a bull thrusts its horns up, while a bear swipes its paws down.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">Volatility and the VIX</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">Volatility and the VIX</h3>
           <p className="mb-4 leading-relaxed">
             <strong>Volatility</strong> measures the rate at which the price of a stock or market index increases or decreases. A highly volatile stock experiences massive price swings in short periods, making it riskier but potentially more profitable for short-term traders. The India VIX (Volatility Index) is a measure of the market's expectation of volatility over the near term. A rising VIX often indicates fear and uncertainty, usually correlating with a falling Nifty 50.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">Liquidity: The Lifeblood of Trading</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">Liquidity: The Lifeblood of Trading</h3>
           <p className="mb-4 leading-relaxed">
             <strong>Liquidity</strong> refers to how easily you can buy or sell a stock without significantly affecting its price. High liquidity means there are always plenty of buyers and sellers available. Large-cap stocks like Reliance or Infosys are highly liquid. Penny stocks, however, often suffer from low liquidity, meaning you might not be able to sell your shares when you want to, or you may have to sell them at a steep discount (the bid-ask spread is wide).
           </p>
-          <h3 className="text-xl font-bold mb-3 text-gray-900">Corporate Actions: Dividends, Bonuses, and Splits</h3>
+          <h3 className="text-xl font-bold mb-3 text-lavender-text">Corporate Actions: Dividends, Bonuses, and Splits</h3>
           <p className="mb-4 leading-relaxed">
             Companies regularly announce corporate actions that affect shareholders:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li><strong>Dividends:</strong> A portion of the company's profits distributed to shareholders as a reward for their investment.</li>
             <li><strong>Bonus Issue:</strong> Free additional shares given to existing shareholders based upon the number of shares they already own (e.g., a 1:1 bonus means you get one free share for every share you hold).</li>
             <li><strong>Stock Split:</strong> A decision to increase the number of outstanding shares by splitting existing shares (e.g., a ₹10 face value share split into 10 shares of ₹1 face value). This increases liquidity and makes the stock more affordable for retail investors without changing the company's total market capitalization.</li>

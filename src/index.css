@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 body {
-  background-color: #f9fafb;
-  color: #111827;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #FDFBFF;
+  color: #2D244A;
+  font-family: 'Inter', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
 }
 .scrollbar-hide {
   -ms-overflow-style: none;

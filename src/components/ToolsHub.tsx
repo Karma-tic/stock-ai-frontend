@@ -7,8 +7,8 @@ export default function ToolsHub() {
       title: "SIP Calculator",
       description: "Calculate the future value of your monthly SIP investments with the power of compounding.",
       path: "/tools/sip-calculator",
-      icon: <Calculator className="w-8 h-8 text-blue-600" />,
-      color: "border-blue-500/30 bg-blue-500/10",
+      icon: <Calculator className="w-8 h-8 text-lavender-primary" />,
+      color: "border-white/50 bg-blue-500/10",
       isNew: true
     },
     // Placeholders for future tools to show the user what else is possible
@@ -32,22 +32,22 @@ export default function ToolsHub() {
       description: "Calculate exactly how much you'll pay in taxes, STT, and brokerage per trade.",
       path: "/tools/brokerage-calculator",
       icon: <PieChart className="w-8 h-8 text-purple-400" />,
-      color: "border-purple-500/30 bg-purple-500/10",
+      color: "border-white/50 bg-purple-500/10",
       isNew: true
     }
   ];
 
   return (
-    <div className="min-h-screen bg-white py-16 px-6">
+    <div className="min-h-screen bg-lavender-surface py-16 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-lavender-primary text-sm font-semibold uppercase tracking-widest mb-3">
             Financial Tools
           </p>
-          <h1 className="text-gray-900 text-4xl font-bold mb-4">
+          <h1 className="text-lavender-text text-4xl font-bold mb-4">
             Smart Calculators for Smart Investors
           </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+          <p className="text-lavender-text/70 max-w-2xl mx-auto text-lg">
             Plan your financial future with our suite of free, interactive tools designed specifically for the Indian market.
           </p>
         </div>
@@ -57,34 +57,34 @@ export default function ToolsHub() {
             tool.path !== "#" ? (
               <Link key={tool.title} to={tool.path} className={`block p-6 rounded-2xl border ${tool.color} hover:scale-105 transition duration-300 relative overflow-hidden group`}>
                 {tool.isNew && (
-                  <div className="absolute top-4 right-4 bg-blue-600 text-gray-900 text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                  <div className="absolute top-4 right-4 bg-gradient-lavender text-white text-xs font-bold px-2 py-1 rounded-full shadow-lavender">
                     NEW
                   </div>
                 )}
                 <div className="mb-4">
                   {tool.icon}
                 </div>
-                <h3 className="text-gray-900 text-xl font-bold mb-2">{tool.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <h3 className="text-lavender-text text-xl font-bold mb-2">{tool.title}</h3>
+                <p className="text-lavender-text/70 text-sm leading-relaxed mb-6">
                   {tool.description}
                 </p>
-                <div className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                <div className="text-lavender-primary text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                   Calculate Now <span>→</span>
                 </div>
               </Link>
             ) : (
               <div key={tool.title} className={`p-6 rounded-2xl border ${tool.color} opacity-60 relative overflow-hidden`}>
-                <div className="absolute top-4 right-4 bg-gray-50 text-gray-500 text-xs font-bold px-2 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-lavender-surface text-lavender-text/70 text-xs font-bold px-2 py-1 rounded-full">
                   COMING SOON
                 </div>
                 <div className="mb-4 grayscale">
                   {tool.icon}
                 </div>
-                <h3 className="text-gray-900 text-xl font-bold mb-2">{tool.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <h3 className="text-lavender-text text-xl font-bold mb-2">{tool.title}</h3>
+                <p className="text-lavender-text/70 text-sm leading-relaxed mb-6">
                   {tool.description}
                 </p>
-                <div className="text-gray-400 text-sm font-semibold flex items-center gap-1">
+                <div className="text-lavender-text/60 text-sm font-semibold flex items-center gap-1">
                   Available Soon
                 </div>
               </div>

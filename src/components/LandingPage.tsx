@@ -52,12 +52,12 @@ export default function LandingPage({ onGetStarted }: Props) {
       features: ["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"],
       badge: null,
       badgeClass: "",
-      bgClass: "bg-gray-50",
-      borderClass: "border border-gray-300",
-      titleClass: "text-gray-500",
+      bgClass: "bg-lavender-surface",
+      borderClass: "border border-white/50",
+      titleClass: "text-lavender-text/70",
       dotClass: "bg-slate-500",
-      featureClass: "text-gray-500",
-      btnClass: "border border-gray-400 text-gray-600 hover:border-slate-400",
+      featureClass: "text-lavender-text/70",
+      btnClass: "border border-white/50 text-lavender-text/80 hover:border-slate-400",
       btnText: "Get Started"
     },
     {
@@ -71,7 +71,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       borderClass: "border border-yellow-500/40",
       titleClass: "text-yellow-400",
       dotClass: "bg-yellow-400",
-      featureClass: "text-gray-600",
+      featureClass: "text-lavender-text/80",
       btnClass: "bg-yellow-500 hover:bg-yellow-400 text-black",
       btnText: "Try for ₹1"
     },
@@ -82,13 +82,13 @@ export default function LandingPage({ onGetStarted }: Props) {
       period: "no auto-renewal · limited offer",
       features: ["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"],
       badge: "POPULAR",
-      badgeClass: "bg-blue-600 text-gray-900",
-      bgClass: "bg-blue-600/10",
-      borderClass: "border-2 border-blue-500",
-      titleClass: "text-blue-600",
+      badgeClass: "bg-gradient-lavender text-white",
+      bgClass: "bg-gradient-lavender/10",
+      borderClass: "border-2 border-white/50",
+      titleClass: "text-lavender-primary",
       dotClass: "bg-blue-400",
-      featureClass: "text-gray-600",
-      btnClass: "bg-blue-600 hover:bg-blue-500 text-gray-900",
+      featureClass: "text-lavender-text/80",
+      btnClass: "bg-gradient-lavender hover:opacity-90 text-white",
       btnText: "Get 30 Days for ₹99"
     }
   ];
@@ -104,30 +104,30 @@ export default function LandingPage({ onGetStarted }: Props) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen bg-lavender-surface overflow-x-hidden">
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="inline-block bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1 text-blue-600 text-sm mb-6">
+        <div className="inline-block bg-blue-500/10 border border-white/50 rounded-full px-4 py-1 text-lavender-primary text-sm mb-6">
           AI-Powered NSE/BSE Stock Analysis
         </div>
-        <h1 className="text-4xl sm:text-6xl font-black text-gray-900 mb-6 leading-tight">
+        <h1 className="text-4xl sm:text-6xl font-black text-lavender-text mb-6 leading-tight">
           Stop Guessing.<br />
-          <span className="text-blue-600">Let AI Analyze</span><br />
+          <span className="text-lavender-primary">Let AI Analyze</span><br />
           Indian Stocks For You.
         </h1>
-        <p className="text-gray-500 text-xl max-w-2xl mx-auto mb-8">
+        <p className="text-lavender-text/70 text-xl max-w-2xl mx-auto mb-8">
           Stock AI reads NSE filings, Reuters, Business Standard, Mint and Moneycontrol
           — then gives you a structured BUY/HOLD/SELL signal with exact price targets
           in under 10 seconds. Free to start.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button onClick={onGetStarted}
-            className="bg-blue-600 hover:bg-blue-500 text-gray-900 px-8 py-4 rounded-xl text-lg font-bold transition">
+            className="bg-gradient-lavender hover:opacity-90 text-white px-8 py-4 rounded-2xl text-lg font-bold transition">
             Start Free Analysis →
           </button>
           <a href="#how-it-works"
-            className="border border-gray-400 text-gray-600 hover:text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold transition">
+            className="border border-white/50 text-lavender-text/80 hover:text-lavender-text px-8 py-4 rounded-2xl text-lg font-semibold transition">
             How It Works
           </a>
         </div>
@@ -140,27 +140,27 @@ export default function LandingPage({ onGetStarted }: Props) {
             { num: trackAccuracy ? `${trackAccuracy}%` : "—", label: "Verified Accuracy" },
           ].map(s => (
             <div key={s.label} className="text-center">
-              <p className="text-3xl font-black text-blue-600">{s.num}</p>
-              <p className="text-gray-400 text-sm">{s.label}</p>
+              <p className="text-3xl font-black text-lavender-primary">{s.num}</p>
+              <p className="text-lavender-text/60 text-sm">{s.label}</p>
             </div>
           ))}
         </div>
 
         <Link
           to="/track-record"
-          className="text-blue-600 hover:text-blue-300 text-sm font-medium underline"
+          className="text-lavender-primary hover:text-blue-300 text-sm font-medium underline"
         >
           See our full public track record — every signal, every outcome
         </Link>
       </section>
 
       {/* Sample Signal — shows real content to Google */}
-      <section className="bg-white py-16">
+      <section className="bg-lavender-surface py-16">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-gray-900 text-3xl font-bold text-center mb-4">
+          <h2 className="text-lavender-text text-3xl font-bold text-center mb-4">
             Real AI Analysis — Updated Live
           </h2>
-          <p className="text-gray-500 text-center mb-10">
+          <p className="text-lavender-text/70 text-center mb-10">
             Here's what our AI said about top NSE stocks today
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -169,20 +169,20 @@ export default function LandingPage({ onGetStarted }: Props) {
               { ticker: "TCS", company: "Tata Consultancy Services", signal: "HOLD", conf: 65, price: "₹2,283", target: "₹2,400", sector: "IT" },
               { ticker: "IRFC", company: "Indian Railway Finance Corp", signal: "BUY", conf: 80, price: "₹98", target: "₹118", sector: "Finance" },
             ].map(s => (
-              <div key={s.ticker} className="bg-gray-50 border border-gray-300 rounded-xl p-4">
+              <div key={s.ticker} className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <p className="text-gray-900 font-bold text-lg">{s.ticker}</p>
-                    <p className="text-gray-500 text-xs">{s.company}</p>
-                    <p className="text-gray-400 text-xs">{s.sector}</p>
+                    <p className="text-lavender-text font-bold text-lg">{s.ticker}</p>
+                    <p className="text-lavender-text/70 text-xs">{s.company}</p>
+                    <p className="text-lavender-text/60 text-xs">{s.sector}</p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-sm font-bold ${
                     s.signal === 'BUY' ? 'bg-green-500/20 text-green-600' : 'bg-yellow-500/20 text-yellow-400'
                   }`}>{s.signal}</span>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 mb-1">{s.price}</p>
+                <p className="text-2xl font-bold text-lavender-text mb-1">{s.price}</p>
                 <p className="text-green-600 text-sm">Target: {s.target}</p>
-                <p className="text-gray-500 text-xs mt-2">Confidence: {s.conf}%</p>
+                <p className="text-lavender-text/70 text-xs mt-2">Confidence: {s.conf}%</p>
               </div>
             ))}
           </div>
@@ -194,14 +194,14 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* How It Works */}
       <section id="how-it-works" className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-gray-900 text-3xl font-bold text-center mb-4">How Stock AI Works</h2>
-        <p className="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
+        <h2 className="text-lavender-text text-3xl font-bold text-center mb-4">How Stock AI Works</h2>
+        <p className="text-lavender-text/70 text-center mb-10 max-w-2xl mx-auto">
           Our AI reads multiple financial data sources simultaneously and generates
           structured analysis that would take a human analyst 2+ hours — in under 10 seconds.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
           {[
-            { step: "1", icon: Activity, anim: "animate-[bounce_3s_infinite]", color: "text-blue-600", bg: "bg-blue-500/10", title: "Fetch Live Data", desc: "Real-time price, PE ratio, 52-week range, volume and dividend data from NSE/BSE" },
+            { step: "1", icon: Activity, anim: "animate-[bounce_3s_infinite]", color: "text-lavender-primary", bg: "bg-blue-500/10", title: "Fetch Live Data", desc: "Real-time price, PE ratio, 52-week range, volume and dividend data from NSE/BSE" },
             { step: "2", icon: Globe, anim: "animate-[spin_8s_linear_infinite]", color: "text-indigo-400", bg: "bg-indigo-500/10", title: "Scrape News", desc: "Reads NSE India announcements, Google News, Economic Times and Moneycontrol simultaneously" },
             { step: "3", icon: Cpu, anim: "animate-pulse", color: "text-purple-400", bg: "bg-purple-500/10", title: "AI Analysis", desc: "Llama 3.3 AI processes all data and generates structured BUY/HOLD/SELL signal" },
             { step: "4", icon: Target, anim: "animate-[pulse_2s_infinite]", color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Get Signal", desc: "Receive exact entry price, target prices, stop loss and quantity recommendations" },
@@ -209,12 +209,12 @@ export default function LandingPage({ onGetStarted }: Props) {
             const Icon = s.icon;
             return (
               <div key={s.step} className="text-center group">
-                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 border border-gray-300/50 ${s.bg}`}>
+                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 border border-white/50 ${s.bg}`}>
                   <Icon className={`w-8 h-8 ${s.color} ${s.anim}`} strokeWidth={1.5} />
                 </div>
-                <div className="text-blue-600 text-xs font-bold mb-1">STEP {s.step}</div>
-                <p className="text-gray-900 font-semibold mb-2">{s.title}</p>
-                <p className="text-gray-500 text-sm">{s.desc}</p>
+                <div className="text-lavender-primary text-xs font-bold mb-1">STEP {s.step}</div>
+                <p className="text-lavender-text font-semibold mb-2">{s.title}</p>
+                <p className="text-lavender-text/70 text-sm">{s.desc}</p>
               </div>
             );
           })}
@@ -222,9 +222,9 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
       {/* Features */}
       {/* Features */}
-      <section className="bg-white py-16">
+      <section className="bg-lavender-surface py-16">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-gray-900 text-3xl font-bold text-center mb-10">
+          <h2 className="text-lavender-text text-3xl font-bold text-center mb-10">
             Everything You Need to Invest Smarter
           </h2>
 
@@ -305,17 +305,17 @@ export default function LandingPage({ onGetStarted }: Props) {
               return (
                 <div
                   key={f.title}
-                  className="bg-gray-50 border border-gray-300 rounded-xl p-5 hover:border-gray-400 transition group"
+                  className="bg-lavender-surface border border-white/50 rounded-2xl p-5 hover:border-white/50 transition group"
                 >
-                  <div className="w-12 h-12 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-blue-500/10 border border-white/50 rounded-2xl flex items-center justify-center mb-4">
                     <Icon 
-                      className="w-6 h-6 text-blue-600" 
+                      className="w-6 h-6 text-lavender-primary" 
                       strokeWidth={2} 
                       style={{ animation: f.anim }}
                     />
                   </div>
-                  <p className="text-gray-900 font-semibold mb-2">{f.title}</p>
-                  <p className="text-gray-500 text-sm">{f.desc}</p>
+                  <p className="text-lavender-text font-semibold mb-2">{f.title}</p>
+                  <p className="text-lavender-text/70 text-sm">{f.desc}</p>
                 </div>
               );
             })}
@@ -325,14 +325,14 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Market Wrap Feature */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-amber-100/50 to-white border border-amber-200 rounded-2xl p-8 sm:p-12 text-center shadow-sm">
-          <h2 className="text-amber-900 text-3xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-amber-100/50 to-white border border-white/50 rounded-2xl p-8 sm:p-12 text-center shadow-lavender">
+          <h2 className="text-lavender-text text-3xl font-bold mb-4">
             Daily Market Wrap-Up
           </h2>
-          <p className="text-stone-600 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-lavender-text/80 text-lg mb-8 max-w-2xl mx-auto">
             Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST so you never miss a beat.
           </p>
-          <Link to="/market-wrap" className="inline-block bg-stone-800 hover:bg-stone-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm">
+          <Link to="/market-wrap" className="inline-block bg-gradient-lavender hover:opacity-90 text-white font-semibold px-6 py-3 rounded-2xl transition shadow-lavender">
             Read the Latest Wrap →
           </Link>
         </div>
@@ -340,10 +340,10 @@ export default function LandingPage({ onGetStarted }: Props) {
 
      
       {/* Pricing — replace existing section */}
-      <section className="bg-white py-16 overflow-hidden">
+      <section className="bg-lavender-surface py-16 overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-gray-900 text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
-          <p className="text-gray-500 mb-10">No hidden charges. Cancel anytime.</p>
+          <h2 className="text-lavender-text text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
+          <p className="text-lavender-text/70 mb-10">No hidden charges. Cancel anytime.</p>
 
           {/* MOBILE: 3D Horizontal Slider */}
           <div 
@@ -364,7 +364,7 @@ export default function LandingPage({ onGetStarted }: Props) {
                 <div 
                   key={plan.title}
                   onClick={() => setActivePricing(i)}
-                  className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
+                  className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
                 >
                   {plan.badge && (
                     <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
@@ -374,14 +374,14 @@ export default function LandingPage({ onGetStarted }: Props) {
                   <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
                   <div className="flex items-center gap-2 mb-1">
                     {plan.originalPrice && (
-                      <p className="text-gray-400 text-lg line-through">{plan.originalPrice}</p>
+                      <p className="text-lavender-text/60 text-lg line-through">{plan.originalPrice}</p>
                     )}
-                    <p className="text-3xl font-black text-gray-900">{plan.price}</p>
+                    <p className="text-3xl font-black text-lavender-text">{plan.price}</p>
                     {plan.originalPrice && (
                       <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
                     )}
                   </div>
-                  <p className="text-gray-400 text-xs mb-4">{plan.period}</p>
+                  <p className="text-lavender-text/60 text-xs mb-4">{plan.period}</p>
                   <div className="space-y-2">
                     {plan.features.map(f => (
                       <div key={f} className="flex items-center gap-2">
@@ -400,7 +400,7 @@ export default function LandingPage({ onGetStarted }: Props) {
                         onGetStarted();
                       }
                     }}
-                    className={`mt-4 w-full py-2 rounded-lg text-sm font-bold transition ${plan.btnClass}`}
+                    className={`mt-4 w-full py-2 rounded-2xl text-sm font-bold transition ${plan.btnClass}`}
                   >
                     {plan.btnText}
                   </button>
@@ -412,7 +412,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           {/* DESKTOP: Standard Centered Grid */}
           <div className="hidden sm:grid grid-cols-3 gap-6 justify-items-center">
             {pricingPlans.map((plan) => (
-              <div key={plan.title} className={`w-full text-left relative rounded-xl p-5 ${plan.bgClass} ${plan.borderClass}`}>
+              <div key={plan.title} className={`w-full text-left relative rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass}`}>
                 {plan.badge && (
                   <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
                     {plan.badge}
@@ -421,14 +421,14 @@ export default function LandingPage({ onGetStarted }: Props) {
                 <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
                 <div className="flex items-center gap-2 mb-1">
                   {plan.originalPrice && (
-                    <p className="text-gray-400 text-lg line-through">{plan.originalPrice}</p>
+                    <p className="text-lavender-text/60 text-lg line-through">{plan.originalPrice}</p>
                   )}
-                  <p className="text-3xl font-black text-gray-900">{plan.price}</p>
+                  <p className="text-3xl font-black text-lavender-text">{plan.price}</p>
                   {plan.originalPrice && (
                     <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
                   )}
                 </div>
-                <p className="text-gray-400 text-xs mb-4">{plan.period}</p>
+                <p className="text-lavender-text/60 text-xs mb-4">{plan.period}</p>
                 <div className="space-y-2">
                   {plan.features.map(f => (
                     <div key={f} className="flex items-center gap-2">
@@ -438,7 +438,7 @@ export default function LandingPage({ onGetStarted }: Props) {
                   ))}
                 </div>
                 <button onClick={onGetStarted}
-                  className={`mt-4 w-full py-2 rounded-lg text-sm font-bold transition ${plan.btnClass}`}>
+                  className={`mt-4 w-full py-2 rounded-2xl text-sm font-bold transition ${plan.btnClass}`}>
                   {plan.btnText}
                 </button>
               </div>
@@ -451,7 +451,7 @@ export default function LandingPage({ onGetStarted }: Props) {
               <div 
                 key={i} 
                 onClick={() => setActivePricing(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-gray-100'}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-lavender-surface'}`}
               />
             ))}
           </div>
@@ -464,10 +464,10 @@ export default function LandingPage({ onGetStarted }: Props) {
       {/* Upcoming IPOs Section */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-10">
-          <h2 className="text-gray-900 text-3xl font-bold mb-4">
+          <h2 className="text-lavender-text text-3xl font-bold mb-4">
             IPO AI Predictions <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2 py-1 rounded-full ml-2 align-middle border border-emerald-500/20">NEW</span>
           </h2>
-          <p className="text-gray-500">
+          <p className="text-lavender-text/70">
             Live grey market premium (GMP) tracking and AI analysis of upcoming IPOs.
           </p>
         </div>
@@ -476,7 +476,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* FAQ — great for SEO and AdSense */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-gray-900 text-3xl font-bold text-center mb-10">
+        <h2 className="text-lavender-text text-3xl font-bold text-center mb-10">
           Frequently Asked Questions
         </h2>
         <div className="space-y-4">
@@ -506,17 +506,17 @@ export default function LandingPage({ onGetStarted }: Props) {
               a: "Yes. Enter your stocks, quantity and average buy price in the Portfolio tab. Stock AI will show you live P&L — current value versus your invested amount."
             },
           ].map((item, i) => (
-            <div key={i} className="bg-gray-50 border border-gray-300 rounded-xl p-5">
-              <p className="text-gray-900 font-semibold mb-2">Q: {item.q}</p>
-              <p className="text-gray-500 text-sm leading-relaxed">A: {item.a}</p>
+            <div key={i} className="bg-lavender-surface border border-white/50 rounded-2xl p-5">
+              <p className="text-lavender-text font-semibold mb-2">Q: {item.q}</p>
+              <p className="text-lavender-text/70 text-sm leading-relaxed">A: {item.a}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* SEO Article for AdSense - What is Stock AI */}
-      <section className="bg-white py-16 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 prose prose-invert prose-headings:text-gray-900 prose-a:text-blue-600">
+      <section className="bg-lavender-surface py-16 border-t border-white/50">
+        <div className="max-w-4xl mx-auto px-6 prose prose-invert prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-3xl font-bold mb-6 text-center">What is Stock AI and How Does it Analyze the Indian Market?</h2>
           
           <p className="mb-4 leading-relaxed">
@@ -527,18 +527,18 @@ export default function LandingPage({ onGetStarted }: Props) {
             This is where <strong>Stock AI</strong> bridges the gap. By leveraging advanced Large Language Models (LLMs) and artificial intelligence algorithms, Stock AI automates the grueling research process. In less than 10 seconds, our AI engines scrape real-time financial data, analyze historical price action, read live news feeds from top financial publications (such as The Economic Times, Moneycontrol, and LiveMint), and synthesize this massive volume of unstructured data into a clear, actionable trading signal.
           </p>
 
-          <h3 className="text-2xl font-bold mb-4 mt-8 text-gray-900">Why AI-Driven Analysis Outperforms Traditional Methods</h3>
+          <h3 className="text-2xl font-bold mb-4 mt-8 text-lavender-text">Why AI-Driven Analysis Outperforms Traditional Methods</h3>
           <p className="mb-4 leading-relaxed">
             Human analysts, no matter how skilled, are subject to cognitive biases—fear, greed, and confirmation bias. They can also only process a limited amount of information at a time. AI models, on the other hand, are completely objective. They can instantly cross-reference a company's P/E ratio, its debt-to-equity metrics, recent insider trading filings, and the overall sentiment of a breaking news article, outputting a completely data-driven probability score.
           </p>
 
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li><strong>Unemotional Decision Making:</strong> The AI doesn't panic during market corrections or succumb to FOMO (Fear Of Missing Out) during massive bull runs.</li>
             <li><strong>Speed of Execution:</strong> The AI processes quarterly earnings results the second they are uploaded to the NSE India portal, analyzing the EPS (Earnings Per Share) and revenue growth instantly.</li>
             <li><strong>Comprehensive Risk Management:</strong> Every BUY or SELL signal generated is accompanied by a strict Stop Loss and defined Price Targets, ensuring that downside risk is always mitigated.</li>
           </ul>
 
-          <h3 className="text-2xl font-bold mb-4 mt-8 text-gray-900">Empowering the Indian Retail Investor</h3>
+          <h3 className="text-2xl font-bold mb-4 mt-8 text-lavender-text">Empowering the Indian Retail Investor</h3>
           <p className="mb-4 leading-relaxed">
             Our mission at BytePlay and Karmatix is to democratize financial research. Whether you are looking for long-term delivery investments, quick swing trades, or high-risk penny stocks, Stock AI provides the institutional-grade analytics you need. We believe that with the right educational resources and AI-powered tools, every investor can navigate the complexities of Nifty 50 and BankNifty with confidence.
           </p>
@@ -546,8 +546,8 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
 
       {/* CTA */}
-      <section className="bg-blue-600 py-16 text-center">
-        <h2 className="text-gray-900 text-3xl font-bold mb-4">
+      <section className="bg-gradient-lavender py-16 text-center">
+        <h2 className="text-lavender-text text-3xl font-bold mb-4">
           Start Investing Smarter Today
         </h2>
         <p className="text-blue-100 mb-8 max-w-xl mx-auto">
@@ -555,7 +555,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           Free to start — no credit card required.
         </p>
         <button onClick={onGetStarted}
-          className="bg-white text-blue-600 px-10 py-4 rounded-xl text-lg font-black hover:bg-blue-50 transition">
+          className="bg-lavender-surface text-lavender-primary px-10 py-4 rounded-2xl text-lg font-black hover:bg-blue-50 transition">
           Get Free AI Stock Analysis →
         </button>
       </section>

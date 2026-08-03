@@ -45,7 +45,7 @@ export default function ProPicks() {
   }, []);
 
   if (loading) {
-    return <div className="p-8 text-center text-gray-400">Loading AI Engine Data...</div>;
+    return <div className="p-8 text-center text-lavender-text/60">Loading AI Engine Data...</div>;
   }
 
   return (
@@ -56,26 +56,26 @@ export default function ProPicks() {
           <TrendingUp className="w-10 h-10 text-yellow-500" />
           Pro Picks
         </h1>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+        <p className="text-lavender-text/60 text-lg max-w-2xl mx-auto">
           Every morning at 9:20 AM, our AI runs a massive quantitative funnel across all 500 Nifty stocks, filtering down to the top 2-5 absolute best setups for the day.
         </p>
       </div>
 
       {/* ACCURACY TRACKER */}
-      <div className="bg-amber-100/50 border border-amber-200/60 rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-sm">
+      <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
         <div className="flex items-center gap-4 mb-4 md:mb-0">
           <div className="p-3 bg-green-500/10 rounded-full border border-green-500/20">
             <Target className="w-8 h-8 text-green-600" />
           </div>
           <div>
             <h3 className="text-gray-300 font-medium">All-Time AI Accuracy</h3>
-            <p className="text-sm text-gray-500">Based on End-of-Day Closing Prices</p>
+            <p className="text-sm text-lavender-text/70">Based on End-of-Day Closing Prices</p>
           </div>
         </div>
         <div className="flex items-center gap-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900">{accuracy?.total_picks || 0}</div>
-            <div className="text-sm text-gray-500">Total Calls</div>
+            <div className="text-3xl font-bold text-lavender-text">{accuracy?.total_picks || 0}</div>
+            <div className="text-sm text-lavender-text/70">Total Calls</div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-extrabold text-green-600">{accuracy?.win_rate || "0%"}</div>
@@ -86,10 +86,10 @@ export default function ProPicks() {
 
       {/* SECURITY BANNER FOR FREE USERS */}
       {!isPro && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 mb-8 text-center flex flex-col items-center">
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-6 mb-8 text-center flex flex-col items-center">
           <Lock className="w-12 h-12 text-yellow-500 mb-3" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Unlock Today's Picks</h2>
-          <p className="text-gray-400 mb-6 max-w-xl">
+          <h2 className="text-2xl font-bold text-lavender-text mb-2">Unlock Today's Picks</h2>
+          <p className="text-lavender-text/60 mb-6 max-w-xl">
             You are currently viewing masked data. The exact ticker names, entry points, and targets are fully encrypted and only visible to Pro subscribers.
           </p>
           {isLoggedIn ? (
@@ -107,17 +107,17 @@ export default function ProPicks() {
       {/* PICKS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {picks.length === 0 ? (
-          <div className="col-span-full text-center p-12 text-gray-500 border border-gray-800 rounded-xl">
+          <div className="col-span-full text-center p-12 text-lavender-text/70 border border-white/50 rounded-2xl">
             No picks generated for today yet. Check back after 9:30 AM.
           </div>
         ) : (
           picks.map((pick, index) => (
-            <div key={index} className={`relative overflow-hidden bg-white border rounded-2xl p-6 transition-all shadow-sm ${isPro ? 'border-amber-200 hover:border-amber-400 hover:-translate-y-1' : 'border-gray-200'}`}>
+            <div key={index} className={`relative overflow-hidden bg-lavender-surface border rounded-2xl p-6 transition-all shadow-lavender ${isPro ? 'border-white/50 hover:border-white/50 hover:-translate-y-1' : 'border-white/50'}`}>
               
               {/* Blur Overlay for Free Users */}
               {!isPro && (
-                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-white/40 flex items-center justify-center">
-                  <div className="bg-white/80 px-6 py-2 rounded-full border border-gray-700 text-yellow-500 font-bold flex items-center gap-2 shadow-2xl">
+                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-lavender-surface/40 flex items-center justify-center">
+                  <div className="bg-lavender-surface/80 px-6 py-2 rounded-full border border-white/50 text-yellow-500 font-bold flex items-center gap-2 shadow-2xl">
                     <Lock className="w-4 h-4" /> Pro Only
                   </div>
                 </div>
@@ -125,7 +125,7 @@ export default function ProPicks() {
 
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className={`text-3xl font-black ${isPro ? 'text-gray-900' : 'text-gray-600 font-mono tracking-widest'}`}>
+                  <h3 className={`text-3xl font-black ${isPro ? 'text-lavender-text' : 'text-lavender-text/80 font-mono tracking-widest'}`}>
                     {pick.ticker}
                   </h3>
                   <div className="inline-flex items-center gap-1 bg-green-500/10 text-green-600 text-xs px-2 py-1 rounded mt-2 border border-green-500/20">
@@ -134,31 +134,31 @@ export default function ProPicks() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-gray-500 text-sm mb-1">Entry Price</div>
-                  <div className={`text-xl font-bold ${isPro ? 'text-gray-900' : 'text-gray-600 font-mono'}`}>
+                  <div className="text-lavender-text/70 text-sm mb-1">Entry Price</div>
+                  <div className={`text-xl font-bold ${isPro ? 'text-lavender-text' : 'text-lavender-text/80 font-mono'}`}>
                     ₹{pick.entry}
                   </div>
                 </div>
               </div>
 
-              <div className="mb-6 pb-6 border-b border-gray-800">
-                <p className={`text-sm leading-relaxed ${isPro ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className="mb-6 pb-6 border-b border-white/50">
+                <p className={`text-sm leading-relaxed ${isPro ? 'text-gray-300' : 'text-lavender-text/80'}`}>
                   {isPro ? pick.reasoning : "Our AI has detected a massive structural setup for this ticker. Earnings, momentum, and technicals have perfectly aligned, making this one of the highest probability trades of the day..."}
                 </p>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-100">
-                  <div className="text-xs text-gray-500 mb-1">Target 1</div>
-                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-gray-600'}`}>₹{pick.target1}</div>
+                <div className="bg-lavender-surface p-3 rounded-2xl border border-white/50">
+                  <div className="text-xs text-lavender-text/70 mb-1">Target 1</div>
+                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target1}</div>
                 </div>
-                <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-100">
-                  <div className="text-xs text-gray-500 mb-1">Target 2</div>
-                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-gray-600'}`}>₹{pick.target2}</div>
+                <div className="bg-lavender-surface p-3 rounded-2xl border border-white/50">
+                  <div className="text-xs text-lavender-text/70 mb-1">Target 2</div>
+                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target2}</div>
                 </div>
-                <div className="bg-red-50/50 p-3 rounded-xl border border-red-200/50">
+                <div className="bg-red-50/50 p-3 rounded-2xl border border-red-200/50">
                   <div className="text-xs text-red-500/70 mb-1">Stop Loss</div>
-                  <div className={`font-bold ${isPro ? 'text-red-600' : 'text-gray-600'}`}>₹{pick.stopLoss}</div>
+                  <div className={`font-bold ${isPro ? 'text-red-600' : 'text-lavender-text/80'}`}>₹{pick.stopLoss}</div>
                 </div>
               </div>
 

@@ -5,19 +5,19 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-lavender-surface">
       {/* Back bar */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+      <div className="bg-lavender-surface border-b border-white/50 px-4 py-3 flex items-center gap-3">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition text-sm"
+          className="flex items-center gap-2 text-lavender-text/70 hover:text-lavender-text transition text-sm"
         >
           ← Back
         </button>
         <span className="text-gray-300">|</span>
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition text-sm"
+          className="flex items-center gap-2 text-lavender-text/70 hover:text-lavender-text transition text-sm"
         >
           Home
         </button>

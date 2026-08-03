@@ -26,14 +26,14 @@ export default function PennyStocks() {
   return (
     <div className="p-4 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
+      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 mb-6">
         <h2 className="text-yellow-400 font-bold text-lg mb-1">
           <span className="inline-flex items-center gap-2">
   <Coins className="w-5 h-5" />
   Penny Stocks — Under ₹100
 </span>
         </h2>
-        <p className="text-gray-500 text-sm">
+        <p className="text-lavender-text/70 text-sm">
           High risk, high reward. These stocks trade below ₹100 on NSE.
           Always do your research before investing in penny stocks.
         </p>
@@ -48,19 +48,19 @@ export default function PennyStocks() {
       {/* Stats bar */}
       {!loading && stocks.length > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-gray-50 border border-gray-300 rounded-xl p-3 text-center">
-            <p className="text-gray-400 text-xs">Total Stocks</p>
-            <p className="text-gray-900 font-bold text-xl">{stocks.length}</p>
+          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+            <p className="text-lavender-text/60 text-xs">Total Stocks</p>
+            <p className="text-lavender-text font-bold text-xl">{stocks.length}</p>
           </div>
-          <div className="bg-gray-50 border border-gray-300 rounded-xl p-3 text-center">
-            <p className="text-gray-400 text-xs">Cheapest</p>
+          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+            <p className="text-lavender-text/60 text-xs">Cheapest</p>
             <p className="text-green-600 font-bold text-xl">
               ₹{Math.min(...stocks.map(s => s.current_price || 999)).toFixed(1)}
             </p>
           </div>
-          <div className="bg-gray-50 border border-gray-300 rounded-xl p-3 text-center">
-            <p className="text-gray-400 text-xs">Most stocks up</p>
-            <p className="text-blue-600 font-bold text-xl">
+          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+            <p className="text-lavender-text/60 text-xs">Most stocks up</p>
+            <p className="text-lavender-primary font-bold text-xl">
              <span className="inline-flex items-center gap-1 justify-center">
   {stocks.filter(s => (s.price_change || 0) > 0).length}
   <TrendingUp className="w-4 h-4" />
@@ -74,8 +74,8 @@ export default function PennyStocks() {
       {loading && (
         <div className="text-center py-20">
           <Coins className="w-10 h-10 mx-auto mb-4 animate-pulse text-yellow-400" />
-          <p className="text-gray-500">Loading penny stocks...</p>
-          <p className="text-gray-400 text-sm mt-2">
+          <p className="text-lavender-text/70">Loading penny stocks...</p>
+          <p className="text-lavender-text/60 text-sm mt-2">
             Fetching live prices for all stocks under ₹100
           </p>
         </div>
@@ -101,8 +101,8 @@ export default function PennyStocks() {
       {!loading && stocks.length === 0 && (
         <div className="text-center py-20">
          <Coins className="w-10 h-10 mx-auto mb-4 text-yellow-400" />
-          <p className="text-gray-900 font-semibold">No penny stocks found right now</p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className="text-lavender-text font-semibold">No penny stocks found right now</p>
+          <p className="text-lavender-text/70 text-sm mt-2">
             Check back during market hours
           </p>
         </div>

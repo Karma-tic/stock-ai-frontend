@@ -62,13 +62,13 @@ const plans = [
     days:     30,
     badge:    'POPULAR',
     badgeColor: 'bg-blue-500',
-    border:   'border-blue-500',
+    border:   'border-white/50',
   },
   // REMOVED subscription plan — UPI AutoPay not supported yet
 ];
   const planIcons: Record<PlanType, React.ReactNode> = {
   trial: <Target className="w-5 h-5 text-yellow-400" />,
-  onetime: <Unlock className="w-5 h-5 text-blue-600" />,
+  onetime: <Unlock className="w-5 h-5 text-lavender-primary" />,
   subscription: <RefreshCw className="w-5 h-5 text-green-600" />
 };
 
@@ -165,14 +165,14 @@ const plans = [
 };
 
   return (
-    <div className="fixed inset-0 bg-white/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-white border border-gray-300 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-lavender-surface/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="bg-lavender-surface border border-white/50 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
-        <div className="p-6 text-center border-b border-gray-300">
+        <div className="p-6 text-center border-b border-white/50">
           <div className="text-4xl mb-2">🚀</div>
-          <h2 className="text-gray-900 font-bold text-xl">Upgrade to Pro</h2>
-          <p className="text-gray-500 text-sm mt-1">Choose a plan that works for you</p>
+          <h2 className="text-lavender-text font-bold text-xl">Upgrade to Pro</h2>
+          <p className="text-lavender-text/70 text-sm mt-1">Choose a plan that works for you</p>
         </div>
 
         {/* Features */}
@@ -181,7 +181,7 @@ const plans = [
        {features.map(f => (
   <div key={f} className="flex items-center gap-2">
     <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-    <p className="text-gray-600 text-xs">{f}</p>
+    <p className="text-lavender-text/80 text-xs">{f}</p>
   </div>
 ))}
 
@@ -191,14 +191,14 @@ const plans = [
             <div
               key={plan.id}
               onClick={() => setSelected(plan.id)}
-              className={`relative border-2 rounded-xl p-4 cursor-pointer transition ${
+              className={`relative border-2 rounded-2xl p-4 cursor-pointer transition ${
                 selected === plan.id
-                  ? plan.border + ' bg-gray-50'
-                  : 'border-gray-300 hover:border-slate-500'
+                  ? plan.border + ' bg-lavender-surface'
+                  : 'border-white/50 hover:border-slate-500'
               }`}
             >
               {/* Badge */}
-              <span className={`absolute -top-2.5 left-4 text-xs text-gray-900 px-2 py-0.5 rounded-full font-bold ${plan.badgeColor}`}>
+              <span className={`absolute -top-2.5 left-4 text-xs text-lavender-text px-2 py-0.5 rounded-full font-bold ${plan.badgeColor}`}>
                 {plan.badge}
               </span>
 
@@ -206,27 +206,27 @@ const plans = [
                 <div className="flex items-center gap-3">
                   {/* Radio */}
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    selected === plan.id ? plan.border : 'border-gray-400'
+                    selected === plan.id ? plan.border : 'border-white/50'
                   }`}>
                     {selected === plan.id && (
                       <div className="w-2.5 h-2.5 rounded-full bg-blue-400" />
                     )}
                   </div>
                   <div>
-                    <p className="text-gray-900 font-semibold flex items-center gap-2">
+                    <p className="text-lavender-text font-semibold flex items-center gap-2">
   {planIcons[plan.id]}
   {plan.title}
 </p>
-                    <p className="text-gray-500 text-xs">{plan.desc}</p>
-                    <p className="text-gray-400 text-xs">{plan.period}</p>
+                    <p className="text-lavender-text/70 text-xs">{plan.desc}</p>
+                    <p className="text-lavender-text/60 text-xs">{plan.period}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="flex items-center gap-2">
                     {'originalPrice' in plan && (
-                      <p className="text-gray-400 text-sm line-through">{(plan as any).originalPrice}</p>
+                      <p className="text-lavender-text/60 text-sm line-through">{(plan as any).originalPrice}</p>
                     )}
-                    <p className="text-gray-900 font-black text-xl">{plan.price}</p>
+                    <p className="text-lavender-text font-black text-xl">{plan.price}</p>
                     {'originalPrice' in plan && (
                       <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
                     )}
@@ -246,11 +246,11 @@ const plans = [
               else alert('Please select a plan');
             }}
             disabled={loading || !selected}
-            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-gray-900 font-bold py-4 rounded-xl transition text-lg"
+            className="w-full bg-gradient-lavender hover:opacity-90 disabled:opacity-50 text-white font-bold py-4 rounded-2xl transition text-lg"
           >
            {loading ? '⏳ Processing...' : selected ? `Pay ${plans.find(p => p.id === selected)?.price} →` : 'Select a Plan'}
           </button>
-          <button onClick={onClose} className="w-full text-gray-400 text-sm mt-3 py-2">
+          <button onClick={onClose} className="w-full text-lavender-text/60 text-sm mt-3 py-2">
             Maybe later
           </button>
           <p className="text-gray-300 text-xs text-center mt-2">

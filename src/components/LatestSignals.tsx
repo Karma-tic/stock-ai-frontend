@@ -33,7 +33,7 @@ export default function LatestSignals() {
   const tickerItems = [...signals, ...signals, ...signals, ...signals];
 
   return (
-    <div className="px-4 py-3 bg-white border-b border-gray-200 overflow-hidden">
+    <div className="px-4 py-3 bg-lavender-surface border-b border-white/50 overflow-hidden">
       
       {/* Inline styles for the seamless ticker animation */}
       <style>{`
@@ -64,7 +64,7 @@ export default function LatestSignals() {
       `}</style>
 
       <div className="max-w-7xl mx-auto w-full">
-        <p className="text-gray-400 text-xs mb-2 uppercase tracking-wider font-semibold md:text-center">
+        <p className="text-lavender-text/60 text-xs mb-2 uppercase tracking-wider font-semibold md:text-center">
           Live AI Signals
         </p>
         
@@ -100,17 +100,17 @@ export default function LatestSignals() {
                   key={`${s.ticker}-${i}`} 
                   // If it IS a duplicate, we hide it completely on desktop (md:hidden).
                   // This leaves only the original 6 items perfectly centered!
-                  className={`flex-shrink-0 border rounded-lg px-3 py-2 w-[140px] cursor-default transition-colors hover:bg-gray-50 ${colors[s.signal] || 'border-gray-400'} ${isDuplicate ? 'md:hidden' : ''}`}
+                  className={`flex-shrink-0 border rounded-2xl px-3 py-2 w-[140px] cursor-default transition-colors hover:bg-lavender-surface ${colors[s.signal] || 'border-white/50'} ${isDuplicate ? 'md:hidden' : ''}`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-gray-900 font-bold text-sm truncate">{s.ticker}</span>
-                    <span className={`text-xs font-bold ${textColors[s.signal] || 'text-gray-900'}`}>
+                    <span className="text-lavender-text font-bold text-sm truncate">{s.ticker}</span>
+                    <span className={`text-xs font-bold ${textColors[s.signal] || 'text-lavender-text'}`}>
                       {s.signal}
                     </span>
                   </div>
                   <div className="flex justify-between mt-1 items-center">
-                    <p className="text-gray-500 text-xs truncate">₹{s.current_price}</p>
-                    <p className="text-gray-400 text-[10px] font-medium">{s.confidence}% conf</p>
+                    <p className="text-lavender-text/70 text-xs truncate">₹{s.current_price}</p>
+                    <p className="text-lavender-text/60 text-[10px] font-medium">{s.confidence}% conf</p>
                   </div>
                 </div>
               );
