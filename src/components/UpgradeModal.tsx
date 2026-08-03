@@ -166,7 +166,7 @@ const plans = [
 
   return (
     <div className="fixed inset-0 bg-lavender-surface/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-lavender-surface border border-white/50 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
         <div className="p-6 text-center border-b border-white/50">

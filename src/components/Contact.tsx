@@ -17,7 +17,7 @@ export default function Contact() {
   ].map(({ icon: Icon, title, value }) => (
     <div
       key={title}
-      className="bg-lavender-surface border border-white/50 rounded-2xl p-4"
+      className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4"
     >
       <Icon className="w-6 h-6 text-lavender-primary mb-2" />
       <p className="text-lavender-text font-semibold">{title}</p>
@@ -31,7 +31,7 @@ export default function Contact() {
   ))}
 </div>
 
-      <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
         <h2 className="text-lavender-text font-bold text-lg mb-4">Response Times</h2>
         <div className="space-y-3">
           {[

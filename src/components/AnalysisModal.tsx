@@ -347,7 +347,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
               )}
 
               {result.signal?.analysis?.what_to_watch && (
-                <div className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
+                <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
                   <p className="text-lavender-text/70 text-xs mb-1">👁️ What to watch</p>
                   <p className="text-lavender-text text-sm font-medium">
                     {result.signal.analysis.what_to_watch}
@@ -400,7 +400,7 @@ const signalBg = bgMap[signal] || 'bg-lavender-surface border-white/50';
                 </div>
               )}
 {/* Share Signal Card */}
-<div className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
+<div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
   <h3 className="font-semibold text-lavender-text mb-3 text-sm uppercase tracking-wider">
     Share This Signal
   </h3>

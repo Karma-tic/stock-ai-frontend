@@ -146,7 +146,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-lavender-surface pb-20">
       {/* ================= SEARCH BAR ================= */}
-      <div className="px-4 py-3 bg-lavender-surface border-b border-lavender-text/10 sticky top-[57px] z-40 backdrop-blur-md bg-opacity-90">
+      <div className="px-4 py-3 bg-lavender-secondary/10 border-b border-lavender-text/10 sticky top-[57px] z-40 backdrop-blur-md">
         <div ref={searchRef} className="relative max-w-lg mx-auto">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lavender-text/60 pointer-events-none" />
@@ -250,7 +250,7 @@ export default function Dashboard() {
 
       {/* Daily Market Wrap Preview */}
       <div className="p-4 max-w-4xl mx-auto -mt-2">
-        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-amber-50 to-white border border-white/50 rounded-2xl p-6 hover:border-white/50 transition group shadow-lavender">
+        <Link to="/market-wrap" className="block w-full bg-gradient-to-r from-amber-50 to-white border border-white/50 rounded-2xl p-6 hover:border-lavender-text/20 hover:shadow-lavender transition group shadow-lavender">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-lavender-text text-xl font-bold mb-1 group-hover:text-amber-700 transition">

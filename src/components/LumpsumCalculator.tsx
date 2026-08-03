@@ -50,7 +50,7 @@ export default function LumpsumCalculator() {
         </div>
 
         {/* Interactive Calculator Section */}
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
           
           {/* Controls */}
           <div className="flex-1 space-y-8">

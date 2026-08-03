@@ -89,7 +89,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
             { label: 'P&L', value: `${isProfitable ? '+' : ''}₹${(summary.total_pnl||0).toLocaleString('en-IN')}`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
             { label: 'Return', value: `${isProfitable ? '+' : ''}${(summary.total_pnl_pct||0).toFixed(2)}%`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
           ].map(item => (
-            <div key={item.label} className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+            <div key={item.label} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
               <p className="text-lavender-text/60 text-xs mb-1">{item.label}</p>
               <p className={`font-bold text-lg ${item.color}`}>{item.value}</p>
             </div>
@@ -126,7 +126,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Add Stock Form */}
       {showAdd && (
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-4 mb-4">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 mb-4">
           <h3 className="text-lavender-text font-semibold mb-3">Add Stock to Portfolio</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             <div>
@@ -136,7 +136,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. RELIANCE"
                 value={form.ticker}
                 onChange={e => setForm({ ...form, ticker: e.target.value.toUpperCase() })}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
@@ -146,7 +146,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. 10"
                 value={form.quantity}
                 onChange={e => setForm({ ...form, quantity: e.target.value })}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
@@ -156,7 +156,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. 1450.50"
                 value={form.avg_buy_price}
                 onChange={e => setForm({ ...form, avg_buy_price: e.target.value })}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
           </div>
@@ -178,7 +178,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Empty State */}
       {portfolio.length === 0 && !showAdd && (
-        <div className="text-center py-16 bg-lavender-surface border border-white/50 rounded-2xl">
+        <div className="text-center py-16 bg-white border border-lavender-text/10 shadow-sm rounded-2xl">
           <Coins className="w-12 h-12 mx-auto mb-4 text-lavender-primary" />
           <p className="text-lavender-text font-semibold text-lg mb-2">No stocks yet</p>
           <p className="text-lavender-text/70 text-sm mb-4">Add your stocks to track live P&L</p>
@@ -197,7 +197,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           {portfolio.map((item: any) => {
             const pnlUp = (item.pnl || 0) >= 0;
             return (
-              <div key={item.ticker} className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
+              <div key={item.ticker} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
                 <div className="flex justify-between items-start">
                   {/* Left — stock info */}
                   <div className="flex-1">

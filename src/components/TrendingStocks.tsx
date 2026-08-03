@@ -88,7 +88,7 @@ export default function TrendingStocks() {
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-lavender-surface border border-white/50 rounded-2xl p-4 animate-pulse">
+            <div key={i} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 animate-pulse">
               <div className="h-5 w-24 bg-lavender-surface rounded mb-2" />
               <div className="h-3 w-32 bg-lavender-surface rounded mb-3" />
               <div className="h-8 w-28 bg-lavender-surface rounded mb-3" />

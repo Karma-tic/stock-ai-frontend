@@ -94,7 +94,7 @@ const MarketWrap: React.FC = () => {
             {currentIndex > 0 && (
               <button 
                 onClick={goToPrev}
-                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-lavender-surface border border-white/50 rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
+                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
                 aria-label="Newer wrap"
               >
                 <ChevronLeft size={24} />
@@ -104,7 +104,7 @@ const MarketWrap: React.FC = () => {
             {currentIndex < wraps.length - 1 && (
               <button 
                 onClick={goToNext}
-                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-lavender-surface border border-white/50 rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
+                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
                 aria-label="Older wrap"
               >
                 <ChevronRight size={24} />

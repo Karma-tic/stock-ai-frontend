@@ -40,7 +40,7 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
           {prevChapter ? (
             <Link 
               to={prevChapter.path}
-              className="flex items-center gap-3 bg-lavender-surface hover:bg-lavender-surface border border-white/50 px-6 py-4 rounded-2xl transition w-full sm:w-auto"
+              className="flex items-center gap-3 bg-lavender-surface hover:bg-white border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
             >
               <ArrowLeft className="w-5 h-5 text-lavender-text/70" />
               <div className="text-left">

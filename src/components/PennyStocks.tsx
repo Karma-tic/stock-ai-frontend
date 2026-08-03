@@ -48,17 +48,17 @@ export default function PennyStocks() {
       {/* Stats bar */}
       {!loading && stocks.length > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
             <p className="text-lavender-text/60 text-xs">Total Stocks</p>
             <p className="text-lavender-text font-bold text-xl">{stocks.length}</p>
           </div>
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
             <p className="text-lavender-text/60 text-xs">Cheapest</p>
             <p className="text-green-600 font-bold text-xl">
               ₹{Math.min(...stocks.map(s => s.current_price || 999)).toFixed(1)}
             </p>
           </div>
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-3 text-center">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
             <p className="text-lavender-text/60 text-xs">Most stocks up</p>
             <p className="text-lavender-primary font-bold text-xl">
              <span className="inline-flex items-center gap-1 justify-center">

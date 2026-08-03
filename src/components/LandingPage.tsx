@@ -169,7 +169,7 @@ export default function LandingPage({ onGetStarted }: Props) {
               { ticker: "TCS", company: "Tata Consultancy Services", signal: "HOLD", conf: 65, price: "₹2,283", target: "₹2,400", sector: "IT" },
               { ticker: "IRFC", company: "Indian Railway Finance Corp", signal: "BUY", conf: 80, price: "₹98", target: "₹118", sector: "Finance" },
             ].map(s => (
-              <div key={s.ticker} className="bg-lavender-surface border border-white/50 rounded-2xl p-4">
+              <div key={s.ticker} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <p className="text-lavender-text font-bold text-lg">{s.ticker}</p>
@@ -305,7 +305,7 @@ export default function LandingPage({ onGetStarted }: Props) {
               return (
                 <div
                   key={f.title}
-                  className="bg-lavender-surface border border-white/50 rounded-2xl p-5 hover:border-white/50 transition group"
+                  className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-lavender-text/20 hover:shadow-lavender transition group"
                 >
                   <div className="w-12 h-12 bg-blue-500/10 border border-white/50 rounded-2xl flex items-center justify-center mb-4">
                     <Icon 
@@ -506,7 +506,7 @@ export default function LandingPage({ onGetStarted }: Props) {
               a: "Yes. Enter your stocks, quantity and average buy price in the Portfolio tab. Stock AI will show you live P&L — current value versus your invested amount."
             },
           ].map((item, i) => (
-            <div key={i} className="bg-lavender-surface border border-white/50 rounded-2xl p-5">
+            <div key={i} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
               <p className="text-lavender-text font-semibold mb-2">Q: {item.q}</p>
               <p className="text-lavender-text/70 text-sm leading-relaxed">A: {item.a}</p>
             </div>

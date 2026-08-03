@@ -85,7 +85,7 @@ export default function BrokerageCalculator() {
         </div>
 
         {/* Interactive Calculator Section */}
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
           
           {/* Controls */}
           <div className="flex-1 space-y-6">
@@ -113,7 +113,7 @@ export default function BrokerageCalculator() {
                 min="0"
                 value={buyPrice}
                 onChange={(e) => setBuyPrice(Number(e.target.value))}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
 
@@ -124,7 +124,7 @@ export default function BrokerageCalculator() {
                 min="0"
                 value={sellPrice}
                 onChange={(e) => setSellPrice(Number(e.target.value))}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
 
@@ -135,7 +135,7 @@ export default function BrokerageCalculator() {
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function BrokerageCalculator() {
             The break-even point is how much a stock price must move in your favor just to cover the taxes and charges. For example, if you buy ₹10 Lakhs worth of shares in delivery, your total charges could exceed ₹1,500. This means the stock needs to go up by at least ₹1,500 just for you to exit at a "no profit, no loss" scenario. Active traders must use a brokerage calculator to ensure their profit targets are far larger than their transaction costs.
           </p>
 
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 mt-8 shadow-lavender">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
             <h3 className="text-lavender-text font-bold mb-2">Important Notes</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               The calculations provided are approximate and based on standard discount broker rates (e.g., Zerodha) as of 2024. Actual charges may vary depending on your specific broker, DP charges (for selling delivery shares), and regulatory updates. Always verify final contract notes provided by your broker.

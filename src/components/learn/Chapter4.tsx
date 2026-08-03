@@ -18,7 +18,7 @@ export default function Chapter4() {
       
       
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <h4 className="text-lavender-text font-bold text-xl mb-4">Fundamental Analysis</h4>
               <p className="text-lavender-text/80 leading-relaxed mb-6">
                 Evaluating a company's intrinsic value by examining financial statements, business model, management quality, competitive advantages and growth prospects. Used for long-term investment decisions.
@@ -42,7 +42,7 @@ export default function Chapter4() {
               </div>
             </div>
             
-            <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <h4 className="text-lavender-text font-bold text-xl mb-4">Technical Analysis</h4>
               <p className="text-lavender-text/80 leading-relaxed mb-6">
                 Studying price charts and patterns to predict future price movements. Based on the belief that historical price action repeats. Used primarily for short-term trading decisions.

@@ -61,7 +61,7 @@ export default function StockPage() {
           </section>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <section className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+            <section className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-purple-400" />
                 <h3 className="text-xl font-bold m-0 text-lavender-text">Fundamental Analysis Guide</h3>
@@ -69,7 +69,7 @@ export default function StockPage() {
               <p className="text-sm">{profile.fundamentalAnalysis}</p>
             </section>
 
-            <section className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+            <section className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
                 <h3 className="text-xl font-bold m-0 text-lavender-text">Risks & Opportunities</h3>

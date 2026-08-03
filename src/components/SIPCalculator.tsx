@@ -51,7 +51,7 @@ export default function SIPCalculator() {
         </div>
 
         {/* Interactive Calculator Section */}
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
           
           {/* Controls */}
           <div className="flex-1 space-y-8">
@@ -199,7 +199,7 @@ export default function SIPCalculator() {
             <li><strong>Time Period:</strong> Select the number of years you plan to keep investing without withdrawing. Notice how increasing the time period drastically increases the blue "Returns" portion of the graph!</li>
           </ol>
 
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 mt-8 shadow-lavender">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
             <h3 className="text-lavender-text font-bold mb-2">Disclaimer</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               Mutual Fund investments are subject to market risks, read all scheme related documents carefully. The SIP calculator is for illustration purposes only and does not guarantee any returns. Historical returns of the Indian stock market (NSE/BSE) are not indicative of future performance. Always consult with a SEBI-registered financial advisor before making investment decisions.

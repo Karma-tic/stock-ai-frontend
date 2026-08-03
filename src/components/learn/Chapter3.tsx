@@ -32,7 +32,7 @@ export default function Chapter3() {
               { term: "Circuit Breaker", def: "Automatic trading halt when a stock moves beyond a limit (typically ±5%, ±10%, ±20%). Prevents panic buying or selling." },
               { term: "Demat Account", def: "Dematerialised account that holds your shares electronically. Required to trade on NSE/BSE. Provided by brokers like Zerodha, Groww, Upstox." },
             ].map(item => (
-              <div key={item.term} className="bg-lavender-surface border border-white/50 rounded-2xl p-5 hover:border-green-500/30 transition">
+              <div key={item.term} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-green-500/30 transition">
                 <p className="text-green-600 font-bold text-lg mb-2">{item.term}</p>
                 <p className="text-lavender-text/80 leading-relaxed">{item.def}</p>
               </div>

@@ -90,7 +90,7 @@ export default function FnOCalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Inputs Section */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               
               {/* Toggle Options / Futures */}
               <div className="flex bg-lavender-surface rounded-2xl p-1 mb-6 border border-white/50">
@@ -115,7 +115,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={buyPrice}
                     onChange={(e) => setBuyPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
                     placeholder="e.g. 150"
                   />
                 </div>
@@ -125,7 +125,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={sellPrice}
                     onChange={(e) => setSellPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
                     placeholder="e.g. 180"
                   />
                 </div>
@@ -135,7 +135,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
                     placeholder="e.g. 50"
                   />
                 </div>
@@ -147,13 +147,13 @@ export default function FnOCalculator() {
                     type="number"
                     value={brokeragePerOrder}
                     onChange={(e) => setBrokeragePerOrder(Number(e.target.value))}
-                    className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
                   />
                 </div>
               </div>
             </div>
             
-            <div className="bg-lavender-surface border border-white/50 rounded-2xl p-4 flex gap-3 text-sm text-lavender-text/80 shadow-lavender">
+            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 flex gap-3 text-sm text-lavender-text/80 shadow-lavender">
               <Info className="w-5 h-5 text-lavender-text/80 flex-shrink-0" />
               <p>This calculator estimates taxes based on standard Indian equity F&O rates. Actual brokerage may vary slightly based on your broker's specific GST policies.</p>
             </div>
@@ -162,7 +162,7 @@ export default function FnOCalculator() {
           {/* Results Section */}
           <div className="lg:col-span-7">
             {results ? (
-              <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 h-full flex flex-col">
+              <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col">
                 <h3 className="text-lg font-semibold text-lavender-text mb-6">Trade Summary</h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -179,7 +179,7 @@ export default function FnOCalculator() {
                     </p>
                   </div>
                   
-                  <div className="bg-lavender-surface border border-white/50 rounded-2xl p-5">
+                  <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
                     <p className="text-lavender-text/70 text-sm sm:text-base mb-2">Gross P&L</p>
                     <p className="text-2xl sm:text-3xl font-bold text-lavender-text truncate">
                       {formatCurrency(results.grossPnL)}
@@ -227,7 +227,7 @@ export default function FnOCalculator() {
                 </div>
               </div>
             ) : (
-              <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center">
+              <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center">
                 <Calculator className="w-16 h-16 text-slate-800 mb-4" />
                 <h3 className="text-xl font-bold text-lavender-text mb-2">Enter Trade Details</h3>
                 <p className="text-lavender-text/70 max-w-sm">

@@ -59,7 +59,7 @@ export default function Chapter5() {
                 level:  "HIGH",
               },
             ].map(item => (
-              <div key={item.risk} className="bg-lavender-surface border border-white/50 rounded-2xl p-6 hover:border-red-500/30 transition">
+              <div key={item.risk} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 hover:border-red-500/30 transition">
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-lavender-text font-bold text-lg">{item.risk}</h4>
                   <span className={`text-xs px-3 py-1 rounded-full font-bold tracking-wider ${

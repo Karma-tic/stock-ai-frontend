@@ -73,7 +73,7 @@ ReactGA.event({
   };
 
   return (
-    <div className="bg-lavender-surface border border-white/50 hover:border-white/50 rounded-2xl p-4 transition-all">
+    <div className="bg-white border border-lavender-text/10 shadow-sm hover:border-lavender-text/20 hover:shadow-lavender rounded-2xl p-4 transition-all">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div
@@ -118,15 +118,15 @@ ReactGA.event({
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 text-center" onClick={() => onAnalyze(stock)}>
-        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+        <div className="bg-lavender-surface/50 border border-lavender-text/5 rounded-2xl p-2 cursor-pointer">
           <p className="text-lavender-text/60 text-xs">PE</p>
           <p className="text-lavender-text text-sm font-semibold">{stock.pe_ratio ?? 'N/A'}</p>
         </div>
-        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+        <div className="bg-lavender-surface/50 border border-lavender-text/5 rounded-2xl p-2 cursor-pointer">
           <p className="text-lavender-text/60 text-xs">Div%</p>
           <p className="text-green-600 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
         </div>
-        <div className="bg-lavender-surface rounded-2xl p-2 cursor-pointer">
+        <div className="bg-lavender-surface/50 border border-lavender-text/5 rounded-2xl p-2 cursor-pointer">
           <p className="text-lavender-text/60 text-xs">52W%</p>
           <p className="text-lavender-primary text-sm font-semibold">{stock.position_in_52w || 0}%</p>
         </div>

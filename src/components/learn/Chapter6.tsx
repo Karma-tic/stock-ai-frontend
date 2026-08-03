@@ -17,7 +17,7 @@ export default function Chapter6() {
       </div>
       
       
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 md:p-8 mb-8">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-8 mb-8">
             <p className="text-lavender-text/80 leading-relaxed text-lg mb-4">
               Artificial Intelligence is transforming how financial markets are analyzed. Hedge funds and institutional investors have used AI for over a decade. Now, platforms like <strong className="text-lavender-text">Stock AI (byteplay.org)</strong> are making these capabilities available to retail investors in India at no cost.
             </p>

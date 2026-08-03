@@ -17,7 +17,7 @@ export default function Chapter8() {
       </div>
       
       
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-8 mb-10">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8 mb-10">
             <p className="text-lavender-text/80 text-lg leading-relaxed mb-6">
               Dividend investing is a strategy of buying stocks that regularly pay dividends — a share of company profits distributed to shareholders. In India, many PSU companies and established private companies offer attractive dividend yields. Reinvesting dividends over time through compounding can significantly grow your wealth.
             </p>

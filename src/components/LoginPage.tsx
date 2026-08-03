@@ -80,7 +80,7 @@ const verifyEmailOtp = async () => {
             <p className="text-lavender-text/70 mt-2">AI-powered NSE/BSE analysis</p>
           </div>
 
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
             {/* Mode tabs */}
             <div className="flex bg-lavender-surface rounded-2xl p-1 mb-6">
               {(['google', 'email'] as const).map(m => (
@@ -117,7 +117,7 @@ const verifyEmailOtp = async () => {
                       onChange={e => setEmail(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && sendEmailOtp()}
                       placeholder="your@email.com"
-                      className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                      className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
                     />
                     <button onClick={sendEmailOtp}
                       disabled={loading || !email.includes('@')}
@@ -140,7 +140,7 @@ const verifyEmailOtp = async () => {
                       onKeyDown={e => e.key === 'Enter' && verifyEmailOtp()}
                       placeholder="Enter 6-digit OTP"
                       maxLength={6}
-                      className="w-full bg-lavender-surface border border-white/50 rounded-2xl px-4 py-3 text-lavender-text text-center text-xl tracking-widest focus:outline-none focus:border-white/50"
+                      className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text text-center text-xl tracking-widest focus:outline-none focus:border-white/50"
                     />
                     <button onClick={verifyEmailOtp}
                       disabled={loading || otp.length < 6}

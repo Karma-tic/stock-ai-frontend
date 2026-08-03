@@ -30,7 +30,7 @@ export default function Chapter9() {
               { mistake: "FOMO buying at 52-week highs",  fix: "Check 52-week position. Avoid chasing stocks already at all-time highs without strong news." },
               { mistake: "Not reviewing your portfolio",  fix: "Review monthly. Use the Stock AI portfolio tracker for live P&L monitoring." },
             ].map((item, i) => (
-              <div key={item.mistake} className="bg-lavender-surface border border-white/50 rounded-2xl p-6 flex items-start gap-4 hover:border-rose-500/30 transition">
+              <div key={item.mistake} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 flex items-start gap-4 hover:border-rose-500/30 transition">
                 <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center flex-shrink-0 border border-rose-500/20">
                   <span className="text-rose-400 font-black text-lg">{i + 1}</span>
                 </div>

@@ -62,7 +62,7 @@ export default function ProPicks() {
       </div>
 
       {/* ACCURACY TRACKER */}
-      <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
+      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
         <div className="flex items-center gap-4 mb-4 md:mb-0">
           <div className="p-3 bg-green-500/10 rounded-full border border-green-500/20">
             <Target className="w-8 h-8 text-green-600" />
@@ -112,7 +112,7 @@ export default function ProPicks() {
           </div>
         ) : (
           picks.map((pick, index) => (
-            <div key={index} className={`relative overflow-hidden bg-lavender-surface border rounded-2xl p-6 transition-all shadow-lavender ${isPro ? 'border-white/50 hover:border-white/50 hover:-translate-y-1' : 'border-white/50'}`}>
+            <div key={index} className={`relative overflow-hidden bg-lavender-surface border rounded-2xl p-6 transition-all shadow-lavender ${isPro ? 'border-white/50 hover:border-lavender-text/20 hover:shadow-lavender hover:-translate-y-1' : 'border-white/50'}`}>
               
               {/* Blur Overlay for Free Users */}
               {!isPro && (

@@ -73,7 +73,7 @@ export default function TrackRecord() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 text-center">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">Overall Accuracy</p>
           <p className="text-4xl font-black text-lavender-primary">
             {data.overall_accuracy}%
@@ -82,7 +82,7 @@ export default function TrackRecord() {
             {data.total_signals} signals tracked
           </p>
         </div>
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 text-center">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">Avg Return on BUY</p>
           <p className={`text-4xl font-black ${data.avg_buy_return >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {data.avg_buy_return >= 0 ? '+' : ''}{data.avg_buy_return}%
@@ -91,7 +91,7 @@ export default function TrackRecord() {
             Per signal, 7 days later
           </p>
         </div>
-        <div className="bg-lavender-surface border border-white/50 rounded-2xl p-6 text-center">
+        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">BUY Accuracy</p>
           <p className="text-4xl font-black text-green-600">
             {data.breakdown?.BUY?.accuracy ?? 0}%
@@ -120,7 +120,7 @@ export default function TrackRecord() {
       </div>
 
       {/* Table */}
-      <div className="bg-lavender-surface border border-white/50 rounded-2xl overflow-x-auto">
+      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl overflow-x-auto">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="bg-lavender-surface text-lavender-text/70 text-left">

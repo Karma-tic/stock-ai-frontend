@@ -105,7 +105,7 @@ export default function UpcomingIpos() {
           <input 
             type="text" 
             placeholder="Search IPOs..." 
-            className="bg-lavender-surface border border-white/50 rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-64"
+            className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-64"
           />
         </div>
       </div>

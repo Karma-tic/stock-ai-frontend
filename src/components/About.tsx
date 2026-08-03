@@ -26,7 +26,7 @@ export default function About() {
             { number: "Free",   label: "To Start" },
           ].map(stat => (
             <div key={stat.label}
-              className="bg-lavender-surface border border-white/50 rounded-2xl p-5 text-center">
+              className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 text-center">
               <p className="text-3xl font-black text-lavender-primary mb-1">{stat.number}</p>
               <p className="text-lavender-text/70 text-sm">{stat.label}</p>
             </div>
@@ -36,7 +36,7 @@ export default function About() {
         {/* Our Story */}
         <div className="mb-16">
           <h2 className="text-lavender-text text-2xl font-bold mb-6">Our Story</h2>
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-8">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8">
             <p className="text-lavender-text/80 leading-relaxed mb-4">
               Stock AI was born out of a simple frustration. As retail investors in
               India, we found ourselves spending hours every day reading NSE filings,
@@ -94,7 +94,7 @@ export default function About() {
               },
             ].map(item => (
               <div key={item.title}
-                className="bg-lavender-surface border border-white/50 rounded-2xl p-6">
+                className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
                 <h3 className="text-lavender-text font-bold text-lg mb-3">{item.title}</h3>
                 <p className="text-lavender-text/70 leading-relaxed text-sm">{item.desc}</p>
               </div>
@@ -129,7 +129,7 @@ export default function About() {
               },
             ].map(item => (
               <div key={item.step}
-                className="flex gap-6 bg-lavender-surface border border-white/50 rounded-2xl p-6">
+                className="flex gap-6 bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
                 <div className="flex-shrink-0 w-12 h-12 bg-gradient-lavender/20 border border-white/50 rounded-2xl flex items-center justify-center">
                   <span className="text-lavender-primary font-black text-sm">{item.step}</span>
                 </div>
@@ -218,7 +218,7 @@ export default function About() {
               },
             ].map(source => (
               <div key={source.name}
-                className="bg-lavender-surface border border-white/50 rounded-2xl p-5">
+                className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
                 <a href={source.url} target="_blank" rel="noopener noreferrer"
                   className="text-lavender-primary font-bold hover:text-blue-300 transition">
                   {source.name} ↗
@@ -234,7 +234,7 @@ export default function About() {
         {/* Company info */}
         <div className="mb-16">
           <h2 className="text-lavender-text text-2xl font-bold mb-6">Company Information</h2>
-          <div className="bg-lavender-surface border border-white/50 rounded-2xl p-8">
+          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-lavender-text/70 text-xs uppercase tracking-widest mb-3">
