@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, Plus, Scale, X } from 'lucide-react';
+import { Plus, Scale, X } from 'lucide-react';
 import { getStock } from '../lib/api';
 import SEO from './SEO';
 
