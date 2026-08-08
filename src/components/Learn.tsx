@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import SEO from './SEO';
 
 export default function Learn() {
   const chapters = [
@@ -17,6 +18,11 @@ export default function Learn() {
 
   return (
     <div className="bg-lavender-surface min-h-screen">
+      <SEO
+        title="Learn Stock Market Investing in India | Free Beginner Guide | Stock AI"
+        description="Learn Indian stock market basics, trading types, PE ratio, risks, AI analysis, dividend investing, and beginner mistakes."
+        canonicalPath="/learn"
+      />
       <section className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Header */}

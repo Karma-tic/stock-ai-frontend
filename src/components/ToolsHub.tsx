@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Calculator, TrendingUp, PieChart, Activity } from 'lucide-react';
+import { Calculator, TrendingUp, PieChart, Activity, Scale } from 'lucide-react';
+import SEO from './SEO';
 
 export default function ToolsHub() {
   const tools = [
@@ -12,6 +13,14 @@ export default function ToolsHub() {
       isNew: true
     },
     // Placeholders for future tools to show the user what else is possible
+    {
+      title: "Stock Comparison",
+      description: "Compare NSE stocks side by side by price, PE, dividend yield, 52-week range, and market cap.",
+      path: "/tools/stock-comparison",
+      icon: <Scale className="w-8 h-8 text-green-600" />,
+      color: "border-green-500/30 bg-green-500/10",
+      isNew: true
+    },
     {
       title: "Lumpsum Calculator",
       description: "Estimate returns on your one-time investments over a long period.",
@@ -39,6 +48,11 @@ export default function ToolsHub() {
 
   return (
     <div className="min-h-screen bg-lavender-surface py-16 px-6">
+      <SEO
+        title="Free Financial Calculators for Indian Investors | Stock AI"
+        description="Use free SIP, lumpsum, brokerage, F&O, and stock comparison tools built for Indian stock market investors."
+        canonicalPath="/tools"
+      />
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-lavender-primary text-sm font-semibold uppercase tracking-widest mb-3">

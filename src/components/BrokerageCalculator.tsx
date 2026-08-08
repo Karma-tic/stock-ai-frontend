@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PieChart } from 'lucide-react';
+import SEO from './SEO';
 
 export default function BrokerageCalculator() {
   const [buyPrice, setBuyPrice] = useState(1000);
@@ -71,6 +72,11 @@ export default function BrokerageCalculator() {
 
   return (
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+      <SEO
+        title="Brokerage Calculator India | STT, GST and Trading Charges | Stock AI"
+        description="Calculate Indian equity delivery and intraday brokerage, STT, exchange charges, GST, stamp duty, SEBI charges, and net P&L."
+        canonicalPath="/tools/brokerage-calculator"
+      />
       <div className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Header */}

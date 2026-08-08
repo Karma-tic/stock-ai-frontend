@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { STOCK_PROFILES } from '../data/stockProfiles';
+import SEO from './SEO';
 
 export default function StockDirectory() {
   const stocks = Object.values(STOCK_PROFILES).sort((a, b) => 
@@ -8,6 +9,11 @@ export default function StockDirectory() {
 
   return (
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+      <SEO
+        title="Indian Stock Directory | NSE Stock Profiles | Stock AI"
+        description="Browse Indian stock profiles with business overviews, fundamental analysis guides, risks, and opportunities for popular NSE stocks."
+        canonicalPath="/stocks"
+      />
       <div className="max-w-5xl mx-auto px-6 py-16">
         
         <div className="text-center mb-12">
@@ -20,6 +26,18 @@ export default function StockDirectory() {
           <p className="text-lavender-text/70 max-w-2xl mx-auto text-lg">
             Browse our comprehensive database of Indian stocks. Read detailed company profiles, understand their business models, and learn how to analyze their fundamentals.
           </p>
+        </div>
+
+        <div className="mb-10 bg-green-500/10 border border-green-500/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lavender-text text-xl font-bold mb-1">Screen stocks by valuation, dividend and momentum</h2>
+            <p className="text-lavender-text/70 text-sm">
+              Use the free screener to narrow your research list before opening a detailed stock profile.
+            </p>
+          </div>
+          <Link to="/stocks/screener" className="bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-3 rounded-2xl text-sm transition text-center">
+            Open Screener
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

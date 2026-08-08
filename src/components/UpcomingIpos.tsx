@@ -21,6 +21,7 @@ export default function UpcomingIpos() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'All' | 'Mainboard' | 'SME'>('All');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     axios.get(`${BASE}/api/market/ipos`)
@@ -28,7 +29,7 @@ export default function UpcomingIpos() {
         if (res.data.status === 'success') {
           setIpos(res.data.ipos);
         } else {
-          setError('Failed to fetch IPOs');
+          setError(res.data.message || 'IPO data is temporarily unavailable.');
         }
       })
       .catch(err => {
@@ -39,10 +40,13 @@ export default function UpcomingIpos() {
   }, []);
 
   const filteredIpos = ipos.filter(ipo => {
-    if (filter === 'All') return true;
-    if (filter === 'Mainboard') return ipo.lot_size?.toLowerCase().includes('mainboard');
-    if (filter === 'SME') return ipo.lot_size?.toLowerCase().includes('sme');
-    return true;
+    const ipoText = `${ipo.company_name} ${ipo.symbol} ${ipo.status || ''}`.toLowerCase();
+    const matchesSearch = !search.trim() || ipoText.includes(search.trim().toLowerCase());
+    const matchesType =
+      filter === 'All' ||
+      (filter === 'Mainboard' && ipo.lot_size?.toLowerCase().includes('mainboard')) ||
+      (filter === 'SME' && ipo.lot_size?.toLowerCase().includes('sme'));
+    return matchesSearch && matchesType;
   });
 
   const getStatusBadge = (status?: string) => {
@@ -104,6 +108,8 @@ export default function UpcomingIpos() {
           <Search className="w-4 h-4 text-lavender-text/60 absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             type="text" 
+            value={search}
+            onChange={e => setSearch(e.target.value)}
             placeholder="Search IPOs..." 
             className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-64"
           />

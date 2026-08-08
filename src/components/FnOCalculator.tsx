@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Calculator, Info, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import SEO from './SEO';
 
 export default function FnOCalculator() {
   const [tradeType, setTradeType] = useState<'options' | 'futures'>('options');
@@ -76,6 +77,11 @@ export default function FnOCalculator() {
 
   return (
     <div className="min-h-screen bg-lavender-surface pt-24 pb-16 px-6">
+      <SEO
+        title="F&O Calculator India | Futures and Options Charges Calculator | Stock AI"
+        description="Calculate true F&O profit and loss after brokerage, STT, GST, exchange charges, stamp duty, and SEBI charges for Indian derivatives."
+        canonicalPath="/tools/fno-calculator"
+      />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl">

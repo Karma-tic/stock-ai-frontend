@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calculator } from 'lucide-react';
+import SEO from './SEO';
 
 export default function SIPCalculator() {
   const [monthlyInvestment, setMonthlyInvestment] = useState(5000);
@@ -37,6 +38,11 @@ export default function SIPCalculator() {
 
   return (
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+      <SEO
+        title="SIP Calculator India | Monthly Investment Return Calculator | Stock AI"
+        description="Calculate future value, invested amount, and estimated returns for monthly SIP investments in India with a free SIP calculator."
+        canonicalPath="/tools/sip-calculator"
+      />
       <div className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Header */}

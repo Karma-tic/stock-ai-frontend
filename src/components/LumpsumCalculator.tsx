@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp } from 'lucide-react';
+import SEO from './SEO';
 
 export default function LumpsumCalculator() {
   const [totalInvestment, setTotalInvestment] = useState(100000);
@@ -36,6 +37,11 @@ export default function LumpsumCalculator() {
 
   return (
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+      <SEO
+        title="Lumpsum Calculator India | One-Time Investment Return Calculator | Stock AI"
+        description="Estimate future value, invested amount, and returns for one-time investments using a free Indian lumpsum calculator."
+        canonicalPath="/tools/lumpsum-calculator"
+      />
       <div className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Header */}

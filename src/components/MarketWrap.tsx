@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import SEO from './SEO';
 
 interface MarketWrapItem {
   id: string;
@@ -69,6 +70,11 @@ const MarketWrap: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-lavender-surface pt-24 pb-12">
+      <SEO
+        title="Daily Market Wrap India | Nifty, Sensex and Market News | Stock AI"
+        description="Read daily Indian stock market wrap-ups covering Nifty, Sensex, major news, market sentiment, and key events after market close."
+        canonicalPath="/market-wrap"
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-lavender-text mb-4">

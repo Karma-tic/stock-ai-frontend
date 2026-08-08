@@ -10,12 +10,17 @@ interface Props {
   format?: string;
 }
 
+const ADSENSE_CLIENT = process.env.REACT_APP_ADSENSE_CLIENT || 'ca-pub-6066580021278086';
+
 export default function AdBanner({ slot, format = 'auto' }: Props) {
   useEffect(() => {
+    if (!slot || slot.includes('YOUR_')) return;
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {}
-  }, []);
+  }, [slot]);
+
+  if (!slot || slot.includes('YOUR_')) return null;
 
   return (
     <div className="my-3 text-center">
@@ -23,7 +28,7 @@ export default function AdBanner({ slot, format = 'auto' }: Props) {
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+        data-ad-client={ADSENSE_CLIENT}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive="true"

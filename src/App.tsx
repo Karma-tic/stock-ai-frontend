@@ -22,6 +22,8 @@ import BrokerageCalculator from './components/BrokerageCalculator';
 import FnOCalculator from './components/FnOCalculator';
 import StockDirectory from './components/StockDirectory';
 import StockPage from './components/StockPage';
+import StockComparison from './components/StockComparison';
+import StockScreener from './components/StockScreener';
 import Chapter1 from './components/learn/Chapter1';
 import Chapter2 from './components/learn/Chapter2';
 import Chapter3 from './components/learn/Chapter3';
@@ -109,8 +111,10 @@ function AppLayout({ user }: { user: any }) {
           <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />
           <Route path="/tools/brokerage-calculator" element={<BrokerageCalculator />} />
           <Route path="/tools/fno-calculator" element={<FnOCalculator />} />
+          <Route path="/tools/stock-comparison" element={<StockComparison />} />
           
           <Route path="/stocks" element={<StockDirectory />} />
+          <Route path="/stocks/screener" element={<StockScreener />} />
           <Route path="/stock/:symbol" element={<StockPage />} />
 
           <Route path="/pro-picks" element={<ProPicks />} />

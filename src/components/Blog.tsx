@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SEO from './SEO';
 
 export default function Blog() {
   const articles = [
@@ -27,6 +28,11 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-lavender-surface py-20">
+      <SEO
+        title="Indian Stock Market Blog | Investing Guides | Stock AI"
+        description="Read practical guides on PE ratio, NSE announcements, dividend yield, penny stocks, and Indian stock market basics."
+        canonicalPath="/blog"
+      />
       <div className="max-w-5xl mx-auto px-6">
         
         

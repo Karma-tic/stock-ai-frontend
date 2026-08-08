@@ -1,10 +1,16 @@
 import React from 'react';
 import { Rocket } from 'lucide-react';
 import UpcomingIpos from './UpcomingIpos';
+import SEO from './SEO';
 
 export default function IPOsPage() {
   return (
     <div className="min-h-screen bg-lavender-surface pt-24 pb-20 relative overflow-hidden">
+      <SEO
+        title="Upcoming IPOs India | GMP, Price Band and AI IPO View | Stock AI"
+        description="Track upcoming Indian IPOs with GMP, price band, open and close dates, estimated listing price, and educational IPO analysis."
+        canonicalPath="/ipos"
+      />
       {/* Background gradients */}
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-emerald-500/10 to-transparent pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />

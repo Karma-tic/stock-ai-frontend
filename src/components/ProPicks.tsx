@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Target, TrendingUp, Lock, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import UpgradeModal from './UpgradeModal';
+import SEO from './SEO';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -50,6 +51,11 @@ export default function ProPicks() {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto min-h-screen">
+      <SEO
+        title="Pro Picks | Daily AI-Screened NSE Setups | Stock AI"
+        description="View daily AI-screened NSE trading setups, Pro accuracy stats, entry levels, targets, and stop loss information for educational use."
+        canonicalPath="/pro-picks"
+      />
       {/* HEADER SECTION */}
       <div className="mb-12 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent mb-4 flex items-center justify-center gap-3">
@@ -57,7 +63,7 @@ export default function ProPicks() {
           Pro Picks
         </h1>
         <p className="text-lavender-text/60 text-lg max-w-2xl mx-auto">
-          Every morning at 9:20 AM, our AI runs a massive quantitative funnel across all 500 Nifty stocks, filtering down to the top 2-5 absolute best setups for the day.
+          Every morning at 9:20 AM, our AI screens a broad NSE universe and shortlists 2-5 high-interest setups for further research.
         </p>
       </div>
 
@@ -90,7 +96,7 @@ export default function ProPicks() {
           <Lock className="w-12 h-12 text-yellow-500 mb-3" />
           <h2 className="text-2xl font-bold text-lavender-text mb-2">Unlock Today's Picks</h2>
           <p className="text-lavender-text/60 mb-6 max-w-xl">
-            You are currently viewing masked data. The exact ticker names, entry points, and targets are fully encrypted and only visible to Pro subscribers.
+            You are currently viewing masked data. Exact ticker names, entry points, and targets are available only to Pro subscribers.
           </p>
           {isLoggedIn ? (
             <button onClick={() => setShowUpgrade(true)} className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
@@ -130,7 +136,7 @@ export default function ProPicks() {
                   </h3>
                   <div className="inline-flex items-center gap-1 bg-green-500/10 text-green-600 text-xs px-2 py-1 rounded mt-2 border border-green-500/20">
                     <CheckCircle2 className="w-3 h-3" />
-                    AI Confirmed
+                    AI Screened
                   </div>
                 </div>
                 <div className="text-right">
@@ -143,7 +149,7 @@ export default function ProPicks() {
 
               <div className="mb-6 pb-6 border-b border-white/50">
                 <p className={`text-sm leading-relaxed ${isPro ? 'text-gray-300' : 'text-lavender-text/80'}`}>
-                  {isPro ? pick.reasoning : "Our AI has detected a massive structural setup for this ticker. Earnings, momentum, and technicals have perfectly aligned, making this one of the highest probability trades of the day..."}
+                  {isPro ? pick.reasoning : "This masked setup passed our momentum, liquidity, and risk filters. Upgrade to review the exact ticker and reasoning before doing your own research."}
                 </p>
               </div>
 

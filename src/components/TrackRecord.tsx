@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CheckCircle2, XCircle } from 'lucide-react';
+import SEO from './SEO';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -59,6 +60,11 @@ export default function TrackRecord() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
+      <SEO
+        title="Stock AI Track Record | Public Signal Accuracy"
+        description="See the public track record for Stock AI signals, including accuracy, average BUY return, and automatically checked signal outcomes."
+        canonicalPath="/track-record"
+      />
 
       {/* Header */}
       <div className="mb-8 text-center">

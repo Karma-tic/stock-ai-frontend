@@ -16,6 +16,7 @@ import {
   Cpu,
 } from "lucide-react";
 import UpcomingIpos from "./UpcomingIpos";
+import SEO from "./SEO";
 
 interface Props {
   onGetStarted: () => void;
@@ -105,6 +106,11 @@ export default function LandingPage({ onGetStarted }: Props) {
 
   return (
     <div className="min-h-screen bg-lavender-surface overflow-x-hidden">
+      <SEO
+        title="Stock AI | AI-Powered NSE/BSE Stock Analysis for India"
+        description="Analyze Indian NSE/BSE stocks with AI-powered signals, live data, watchlists, portfolio tracking, IPOs, market wraps, and free investing tools."
+        canonicalPath="/"
+      />
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">

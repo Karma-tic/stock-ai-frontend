@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { STOCK_PROFILES, getGenericProfile } from '../data/stockProfiles';
 import { TrendingUp, Info, AlertTriangle, BookOpen } from 'lucide-react';
+import SEO from './SEO';
 
 export default function StockPage() {
   const { symbol } = useParams();
@@ -12,6 +13,11 @@ export default function StockPage() {
 
   return (
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+      <SEO
+        title={`${profile.symbol} Share Analysis | ${profile.name} Stock Profile | Stock AI`}
+        description={`Read ${profile.name} (${profile.symbol}) business overview, fundamental analysis guide, risks, opportunities, and AI stock analysis context.`}
+        canonicalPath={`/stock/${profile.symbol}`}
+      />
       
       {/* Hero Section */}
       <div className="bg-lavender-surface border-b border-white/50 pt-16 pb-12 px-6">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import SEO from './SEO';
 
 const BLOG_CONTENT: Record<string, { title: string; content: React.ReactNode }> = {
   'what-is-pe-ratio': {
@@ -84,6 +85,12 @@ export default function BlogPost() {
 
   return (
     <div className="bg-lavender-surface min-h-screen py-16">
+      <SEO
+        title={`${post.title} | Stock AI`}
+        description={`Learn: ${post.title}. A practical Indian stock market guide for retail investors.`}
+        canonicalPath={`/blog/${slug}`}
+        type="article"
+      />
       <article className="max-w-3xl mx-auto px-6">
         <Link 
           to="/blog" 

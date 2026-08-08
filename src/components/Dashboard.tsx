@@ -299,7 +299,7 @@ export default function Dashboard() {
 
                 {index === 5 && (
                   <div className="col-span-full">
-                    <AdBanner slot="YOUR_AD_SLOT_ID" />
+                    <AdBanner slot={process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || ''} />
                   </div>
                 )}
               </>
