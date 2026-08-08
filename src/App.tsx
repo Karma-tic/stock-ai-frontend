@@ -52,7 +52,7 @@ function Footer() {
           <Link to="/contact" className="text-lavender-text/80 hover:text-lavender-text text-sm">Contact</Link>
         </div>
         <p className="text-lavender-text/70 text-xs w-full text-center">
-          ⚠️ Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
+          Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
         </p>
         
         {/* Data Sources */}
@@ -133,6 +133,8 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
 
           <Route path="/login" element={
             <LoginPage
+              isDarkMode={isDarkMode}
+              onToggleTheme={onToggleTheme}
               onLogin={(token, u) => {
                 localStorage.setItem('sb_token', token);
                 window.location.href = '/'; 
