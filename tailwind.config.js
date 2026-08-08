@@ -1,14 +1,15 @@
 module.exports = {
+  darkMode: 'class',
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
         lavender: {
-          text: '#2D244A',
-          primary: '#764BA2',
-          secondary: '#A29BFE',
-          surface: '#F3F0FF',
-          base: '#FDFBFF',
+          text: 'rgb(var(--color-lavender-text) / <alpha-value>)',
+          primary: 'rgb(var(--color-lavender-primary) / <alpha-value>)',
+          secondary: 'rgb(var(--color-lavender-secondary) / <alpha-value>)',
+          surface: 'rgb(var(--color-lavender-surface) / <alpha-value>)',
+          base: 'rgb(var(--color-lavender-base) / <alpha-value>)',
         }
       },
       fontFamily: {

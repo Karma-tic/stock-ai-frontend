@@ -2,23 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    color-scheme: light;
+    --color-lavender-text: 45 36 74;
+    --color-lavender-primary: 118 75 162;
+    --color-lavender-secondary: 162 155 254;
+    --color-lavender-surface: 243 240 255;
+    --color-lavender-base: 253 251 255;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --color-lavender-text: 241 237 255;
+    --color-lavender-primary: 183 148 246;
+    --color-lavender-secondary: 122 111 207;
+    --color-lavender-surface: 18 16 30;
+    --color-lavender-base: 27 24 43;
+  }
+}
+
 @layer components {
   .app-card {
-    @apply bg-white border border-lavender-text/10 shadow-sm rounded-2xl;
+    @apply bg-white dark:bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 shadow-sm rounded-2xl;
   }
 
   .app-card-accent {
-    @apply bg-lavender-base border border-lavender-text/10 shadow-sm rounded-2xl;
+    @apply bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 shadow-sm rounded-2xl;
   }
 
   .app-tile {
-    @apply bg-lavender-base border border-lavender-text/10 rounded-2xl;
+    @apply bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 rounded-2xl;
   }
 }
 
 body {
-  background-color: #FDFBFF;
-  color: #2D244A;
+  background-color: rgb(var(--color-lavender-surface));
+  color: rgb(var(--color-lavender-text));
   font-family: 'Inter', sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -30,4 +50,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.dark .bg-white {
+  background-color: rgb(var(--color-lavender-base));
+}
+
+.dark .from-white {
+  --tw-gradient-from: rgb(var(--color-lavender-base)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--color-lavender-base) / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .to-white {
+  --tw-gradient-to: rgb(var(--color-lavender-base)) var(--tw-gradient-to-position);
+}
+
+.dark .from-gray-50 {
+  --tw-gradient-from: rgb(var(--color-lavender-base)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--color-lavender-base) / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .to-gray-50 {
+  --tw-gradient-to: rgb(var(--color-lavender-base)) var(--tw-gradient-to-position);
+}
+
+.dark .text-gray-800,
+.dark .text-slate-900,
+.dark .text-blue-900 {
+  color: rgb(var(--color-lavender-text));
+}
+
+.dark .hover\:bg-gray-200:hover,
+.dark .hover\:bg-slate-200:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-blue-50:hover {
+  background-color: rgb(var(--color-lavender-text) / 0.08);
 }

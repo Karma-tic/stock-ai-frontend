@@ -2,11 +2,19 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import UpgradeModal from './UpgradeModal';
-import { TrendingUp, Star } from 'lucide-react';
+import { Moon, Star, Sun, TrendingUp } from 'lucide-react';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-export default function Navbar({ user }: { user: any }) {
+export default function Navbar({
+  user,
+  isDarkMode,
+  onToggleTheme,
+}: {
+  user: any;
+  isDarkMode: boolean;
+  onToggleTheme: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPro, setIsPro] = useState(false);
@@ -74,6 +82,15 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* RIGHT */}
         <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            onClick={onToggleTheme}
+            className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-lavender-text/10 bg-white text-lavender-text shadow-sm transition hover:border-lavender-primary/30 hover:bg-lavender-base"
+            aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}
+            title={isDarkMode ? 'Light theme' : 'Dark theme'}
+          >
+            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+
           {/* PRO PICKS BUTTON - ALWAYS VISIBLE */}
           <Link 
             to="/pro-picks" 
@@ -187,6 +204,16 @@ export default function Navbar({ user }: { user: any }) {
             >
               Learn
             </Link>
+
+            <button
+              onClick={onToggleTheme}
+              className="flex w-full items-center justify-between rounded-2xl border border-lavender-text/10 bg-white px-3 py-2 text-lavender-text transition hover:bg-lavender-base"
+            >
+              <span className="text-sm font-semibold">
+                {isDarkMode ? 'Light theme' : 'Dark theme'}
+              </span>
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
 
             {/* Mobile Actions */}
             {user ? (

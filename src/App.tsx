@@ -83,14 +83,14 @@ function Footer() {
   );
 }
 // NEW: Global Layout Component
-function AppLayout({ user }: { user: any }) {
+function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode: boolean; onToggleTheme: () => void }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar stays pinned to the top (Hidden on Login Page) */}
-      {!isLoginPage && <Navbar user={user} />}
+      {!isLoginPage && <Navbar user={user} isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />}
       
       {/* The main content area expands to push the footer down */}
       <main className="flex-grow">
@@ -165,6 +165,17 @@ function AppLayout({ user }: { user: any }) {
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('stock_ai_theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('stock_ai_theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -206,7 +217,11 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* AppLayout contains everything and manages the global Navbar/Footer */}
-      <AppLayout user={user} />
+      <AppLayout
+        user={user}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode(prev => !prev)}
+      />
     </BrowserRouter>
   );
 }
