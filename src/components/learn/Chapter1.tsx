@@ -44,7 +44,7 @@ export default function Chapter1() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">The History and Evolution of the Indian Stock Market</h2>
           <p className="mb-4 leading-relaxed">
             The Indian stock market has a rich history that dates back to the 18th century when trading was conducted under banyan trees in Mumbai. The formalization of this unstructured trading led to the establishment of the Native Share and Stock Brokers' Association in 1875, which later became the Bombay Stock Exchange (BSE). The BSE is the oldest stock exchange in Asia.

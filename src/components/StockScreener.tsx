@@ -83,7 +83,7 @@ export default function StockScreener() {
           </p>
         </div>
 
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 mb-6">
+        <div className="app-card p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
             <div className="flex gap-2 overflow-x-auto pb-1">
               {FILTERS.map(item => (
@@ -93,7 +93,7 @@ export default function StockScreener() {
                   className={`shrink-0 px-4 py-2 rounded-2xl text-sm font-semibold transition ${
                     filter === item.id
                       ? 'bg-gradient-lavender text-white'
-                      : 'bg-lavender-surface text-lavender-text/70 hover:text-lavender-text'
+                      : 'bg-lavender-base border border-lavender-text/10 text-lavender-text/70 hover:text-lavender-text'
                   }`}
                   title={item.helper}
                 >
@@ -116,7 +116,7 @@ export default function StockScreener() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[...Array(9)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-lavender-text/10 p-5 h-44 animate-pulse" />
+              <div key={i} className="app-card p-5 h-44 animate-pulse" />
             ))}
           </div>
         ) : (
@@ -126,7 +126,7 @@ export default function StockScreener() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(stock => (
-                <div key={stock.display_ticker} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
+                <div key={stock.display_ticker} className="app-card p-5 hover:border-green-500/25 transition">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h2 className="text-xl font-black text-lavender-text">{stock.display_ticker}</h2>
@@ -139,15 +139,15 @@ export default function StockScreener() {
                   <p className="text-2xl font-bold text-lavender-text">₹{(stock.current_price || 0).toLocaleString('en-IN')}</p>
                   <p className="text-lavender-text/60 text-xs mt-1">{stock.sector || 'Sector unavailable'}</p>
                   <div className="grid grid-cols-3 gap-2 mt-4 text-center">
-                    <div className="bg-lavender-surface rounded-2xl p-2">
+                    <div className="app-tile p-2">
                       <p className="text-lavender-text/60 text-xs">PE</p>
                       <p className="font-semibold text-lavender-text">{stock.pe_ratio ?? 'N/A'}</p>
                     </div>
-                    <div className="bg-lavender-surface rounded-2xl p-2">
+                    <div className="app-tile p-2">
                       <p className="text-lavender-text/60 text-xs">Div%</p>
                       <p className="font-semibold text-green-600">{stock.dividend_yield_pct || 0}%</p>
                     </div>
-                    <div className="bg-lavender-surface rounded-2xl p-2">
+                    <div className="app-tile p-2">
                       <p className="text-lavender-text/60 text-xs">52W</p>
                       <p className="font-semibold text-lavender-primary">{stock.position_in_52w || 0}%</p>
                     </div>

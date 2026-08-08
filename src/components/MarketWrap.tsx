@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import SEO from './SEO';
 
 interface MarketWrapItem {
@@ -12,11 +12,47 @@ interface MarketWrapItem {
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+function stripHtml(value: string) {
+  return value
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8377;/g, '₹')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function trimPoint(value: string) {
+  return value.length > 135 ? `${value.slice(0, 132).trim()}...` : value;
+}
+
+function getImportantPoints(html: string) {
+  const matches = [
+    ...Array.from(html.matchAll(/<(?:strong|b)[^>]*>(.*?)<\/(?:strong|b)>/gi)),
+    ...Array.from(html.matchAll(/<li[^>]*>(.*?)<\/li>/gi)),
+    ...Array.from(html.matchAll(/<h[23][^>]*>(.*?)<\/h[23]>/gi)),
+  ].map(match => trimPoint(stripHtml(match[1]))).filter(Boolean);
+
+  const fallback = stripHtml(html)
+    .split(/(?<=[.!?])\s+/)
+    .map(trimPoint)
+    .filter(sentence => sentence.length > 35);
+
+  return [...matches, ...fallback]
+    .filter((point, index, list) => list.indexOf(point) === index)
+    .slice(0, 3);
+}
+
 const MarketWrap: React.FC = () => {
   const [wraps, setWraps] = useState<MarketWrapItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
+  const currentWrap = wraps[currentIndex];
+  const highlights = useMemo(
+    () => currentWrap ? getImportantPoints(currentWrap.content_html) : [],
+    [currentWrap]
+  );
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -77,11 +113,11 @@ const MarketWrap: React.FC = () => {
       />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-lavender-text mb-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-lavender-text mb-4">
             Daily Market Wrap-Up
           </h1>
-          <p className="text-lg text-lavender-text/70">
-            A 500-word summary of the Nifty 50 and Sensex performance, major news, and market sentiment.
+          <p className="text-base sm:text-lg text-lavender-text/70 max-w-2xl mx-auto">
+            A concise summary of Nifty 50, Sensex, major news, and market sentiment.
             Updated every weekday at 4:15 PM IST.
           </p>
         </div>
@@ -117,21 +153,37 @@ const MarketWrap: React.FC = () => {
               </button>
             )}
 
-            <div className="bg-lavender-surface rounded-2xl p-6 sm:p-8 shadow-lavender border border-white/50">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-white/50 pb-4 gap-4">
-                <h2 className="text-2xl font-bold text-lavender-text">{wraps[currentIndex].title}</h2>
-                <span className="bg-blue-500/20 text-lavender-primary px-3 py-1 rounded-full text-sm font-medium self-start sm:self-auto shrink-0">
-                  {new Date(wraps[currentIndex].date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+            <div className="app-card p-5 sm:p-7">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 border-b border-lavender-text/10 pb-4 gap-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-lavender-text">{currentWrap.title}</h2>
+                <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto shrink-0">
+                  {new Date(currentWrap.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </span>
               </div>
+
+              {highlights.length > 0 && (
+                <div className="mb-5 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-emerald-50 to-white p-4">
+                  <div className="mb-3 flex items-center gap-2 text-sm font-bold text-emerald-700">
+                    <Sparkles className="h-4 w-4" />
+                    Key points that matter
+                  </div>
+                  <div className="grid gap-2">
+                    {highlights.map(point => (
+                      <div key={point} className="flex gap-2 text-sm leading-relaxed text-lavender-text/80">
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span>{point}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <div 
-                className="prose prose-invert prose-blue max-w-none 
-                           prose-h3:text-lavender-primary prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
-                           prose-p:text-lavender-text/80 prose-p:leading-relaxed
-                           prose-ul:text-lavender-text/80 prose-li:my-1
-                           prose-strong:text-lavender-text whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{ __html: wraps[currentIndex].content_html }} 
+                className="max-w-none whitespace-pre-wrap text-sm sm:text-[15px] leading-7 text-lavender-text/80
+                           [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-lavender-text [&_h2]:mt-6 [&_h2]:mb-3
+                           [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-lavender-primary [&_h3]:mt-5 [&_h3]:mb-2
+                           [&_p]:mb-4 [&_ul]:my-4 [&_li]:my-1.5 [&_strong]:text-lavender-text"
+                dangerouslySetInnerHTML={{ __html: currentWrap.content_html }} 
               />
             </div>
 
@@ -142,7 +194,7 @@ const MarketWrap: React.FC = () => {
                   key={idx}
                   onClick={() => setCurrentIndex(idx)}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    currentIndex === idx ? 'w-8 bg-blue-500' : 'w-2 bg-lavender-surface hover:bg-slate-500'
+                    currentIndex === idx ? 'w-8 bg-blue-500' : 'w-2 bg-lavender-text/20 hover:bg-lavender-text/30'
                   }`}
                   aria-label={`Go to wrap ${idx + 1}`}
                 />

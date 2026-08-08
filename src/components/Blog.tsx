@@ -48,7 +48,7 @@ export default function Blog() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map(a => (
-            <div key={a.title} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8 hover:border-lavender-text/20 hover:shadow-lavender transition">
+            <div key={a.title} className="app-card p-8 hover:border-lavender-primary/25 hover:shadow-lavender transition">
               <h3 className="text-lavender-text font-bold text-xl mb-4">{a.title}</h3>
               <p className="text-lavender-text/70 leading-relaxed mb-6">{a.desc}</p>
               <Link to={a.link} className="text-lavender-primary hover:text-blue-300 font-semibold transition flex items-center gap-2">

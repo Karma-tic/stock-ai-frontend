@@ -58,7 +58,7 @@ export default function Chapter7() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Your First Steps: Demat, KYC, and Choosing a Broker</h2>
           <p className="mb-4 leading-relaxed">
             Starting your investment journey in the Indian stock market is easier now than ever before. The digitization of the financial sector has streamlined the process, allowing anyone with a smartphone and a bank account to start investing within a few hours.

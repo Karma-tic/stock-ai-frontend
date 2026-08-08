@@ -77,7 +77,7 @@ export default function Chapter2() {
               </div>
             ))}
           </div>
-          <div className="bg-blue-500/10 border border-white/50 rounded-2xl p-6">
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-6">
             <p className="text-lavender-primary text-sm font-semibold mb-2">Stock AI Recommendation</p>
             <p className="text-lavender-text/80 leading-relaxed">
               For most retail investors, a combination of positional trading and long-term investing works best. Stock AI at <strong>byteplay.org</strong> generates BUY/HOLD/SELL signals with 1-3 month and 6-12 month targets — perfectly suited for both positional and long-term approaches.
@@ -86,7 +86,7 @@ export default function Chapter2() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Deep Dive into Trading Styles: From Intraday to Delivery</h2>
           <p className="mb-4 leading-relaxed">
             Navigating the stock market requires choosing a trading style that aligns with your capital, risk tolerance, and time commitment. The Indian stock market offers various avenues, each with its distinct characteristics and taxation rules.

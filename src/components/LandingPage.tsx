@@ -53,12 +53,12 @@ export default function LandingPage({ onGetStarted }: Props) {
       features: ["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"],
       badge: null,
       badgeClass: "",
-      bgClass: "bg-lavender-surface",
-      borderClass: "border border-white/50",
+      bgClass: "bg-white",
+      borderClass: "border border-lavender-text/10 shadow-sm",
       titleClass: "text-lavender-text/70",
       dotClass: "bg-slate-500",
       featureClass: "text-lavender-text/70",
-      btnClass: "border border-white/50 text-lavender-text/80 hover:border-slate-400",
+      btnClass: "border border-lavender-text/10 text-lavender-text/80 hover:border-lavender-primary/30 hover:bg-lavender-base",
       btnText: "Get Started"
     },
     {
@@ -85,7 +85,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       badge: "POPULAR",
       badgeClass: "bg-gradient-lavender text-white",
       bgClass: "bg-gradient-lavender/10",
-      borderClass: "border-2 border-white/50",
+      borderClass: "border-2 border-lavender-primary/25 shadow-lavender",
       titleClass: "text-lavender-primary",
       dotClass: "bg-blue-400",
       featureClass: "text-lavender-text/80",
@@ -114,7 +114,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="inline-block bg-blue-500/10 border border-white/50 rounded-full px-4 py-1 text-lavender-primary text-sm mb-6">
+        <div className="inline-block bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1 text-lavender-primary text-sm mb-6">
           AI-Powered NSE/BSE Stock Analysis
         </div>
         <h1 className="text-4xl sm:text-6xl font-black text-lavender-text mb-6 leading-tight">
@@ -133,7 +133,7 @@ export default function LandingPage({ onGetStarted }: Props) {
             Start Free Analysis →
           </button>
           <a href="#how-it-works"
-            className="border border-white/50 text-lavender-text/80 hover:text-lavender-text px-8 py-4 rounded-2xl text-lg font-semibold transition">
+            className="border border-lavender-text/10 bg-white/70 text-lavender-text/80 hover:text-lavender-text hover:border-lavender-primary/25 px-8 py-4 rounded-2xl text-lg font-semibold transition">
             How It Works
           </a>
         </div>
@@ -161,7 +161,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
 
       {/* Sample Signal — shows real content to Google */}
-      <section className="bg-lavender-surface py-16">
+      <section className="bg-lavender-base py-16 border-y border-lavender-text/5">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-lavender-text text-3xl font-bold text-center mb-4">
             Real AI Analysis — Updated Live
@@ -228,7 +228,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
       {/* Features */}
       {/* Features */}
-      <section className="bg-lavender-surface py-16">
+      <section className="bg-lavender-base py-16 border-y border-lavender-text/5">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-lavender-text text-3xl font-bold text-center mb-10">
             Everything You Need to Invest Smarter
@@ -313,7 +313,7 @@ export default function LandingPage({ onGetStarted }: Props) {
                   key={f.title}
                   className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-lavender-text/20 hover:shadow-lavender transition group"
                 >
-                  <div className="w-12 h-12 bg-blue-500/10 border border-white/50 rounded-2xl flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center mb-4">
                     <Icon 
                       className="w-6 h-6 text-lavender-primary" 
                       strokeWidth={2} 
@@ -331,7 +331,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
       {/* Market Wrap Feature */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-amber-100/50 to-white border border-white/50 rounded-2xl p-8 sm:p-12 text-center shadow-lavender">
+        <div className="bg-gradient-to-r from-amber-50 to-white border border-amber-200 rounded-2xl p-8 sm:p-12 text-center shadow-lavender">
           <h2 className="text-lavender-text text-3xl font-bold mb-4">
             Daily Market Wrap-Up
           </h2>
@@ -346,7 +346,7 @@ export default function LandingPage({ onGetStarted }: Props) {
 
      
       {/* Pricing — replace existing section */}
-      <section className="bg-lavender-surface py-16 overflow-hidden">
+      <section className="bg-lavender-base py-16 overflow-hidden border-y border-lavender-text/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-lavender-text text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
           <p className="text-lavender-text/70 mb-10">No hidden charges. Cancel anytime.</p>
@@ -370,7 +370,7 @@ export default function LandingPage({ onGetStarted }: Props) {
                 <div 
                   key={plan.title}
                   onClick={() => setActivePricing(i)}
-                  className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
+                className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
                 >
                   {plan.badge && (
                     <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
@@ -457,7 +457,7 @@ export default function LandingPage({ onGetStarted }: Props) {
               <div 
                 key={i} 
                 onClick={() => setActivePricing(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-lavender-surface'}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-lavender-text/20'}`}
               />
             ))}
           </div>
@@ -521,8 +521,9 @@ export default function LandingPage({ onGetStarted }: Props) {
       </section>
 
       {/* SEO Article for AdSense - What is Stock AI */}
-      <section className="bg-lavender-surface py-16 border-t border-white/50">
-        <div className="max-w-4xl mx-auto px-6 prose prose-invert prose-headings:text-lavender-text prose-a:text-lavender-primary">
+      <section className="bg-lavender-base py-16 border-t border-lavender-text/10">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="app-card p-6 sm:p-8 prose prose-invert prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-3xl font-bold mb-6 text-center">What is Stock AI and How Does it Analyze the Indian Market?</h2>
           
           <p className="mb-4 leading-relaxed">
@@ -548,6 +549,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           <p className="mb-4 leading-relaxed">
             Our mission at BytePlay and Karmatix is to democratize financial research. Whether you are looking for long-term delivery investments, quick swing trades, or high-risk penny stocks, Stock AI provides the institutional-grade analytics you need. We believe that with the right educational resources and AI-powered tools, every investor can navigate the complexities of Nifty 50 and BankNifty with confidence.
           </p>
+          </div>
         </div>
       </section>
 

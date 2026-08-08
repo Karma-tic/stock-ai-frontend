@@ -44,7 +44,7 @@ export default function Chapter9() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Psychology of Trading: Common Pitfalls to Avoid</h2>
           <p className="mb-4 leading-relaxed">
             The mathematical mechanics of the stock market are relatively simple to grasp; it is the psychological aspect that causes the vast majority of traders to lose money. Success in the financial markets requires mastering your own emotions—specifically, fear and greed. Avoiding these common behavioral mistakes is critical for long-term survival.

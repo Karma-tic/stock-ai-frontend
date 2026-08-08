@@ -99,15 +99,15 @@ export default function FnOCalculator() {
             <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               
               {/* Toggle Options / Futures */}
-              <div className="flex bg-lavender-surface rounded-2xl p-1 mb-6 border border-white/50">
+              <div className="flex bg-lavender-base rounded-2xl p-1 mb-6 border border-lavender-text/10">
                 <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'options' ? 'bg-indigo-600 text-lavender-text' : 'text-lavender-text/70 hover:text-gray-800'}`}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'options' ? 'bg-indigo-600 text-white' : 'text-lavender-text/70 hover:text-gray-800'}`}
                   onClick={() => setTradeType('options')}
                 >
                   Options
                 </button>
                 <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'futures' ? 'bg-indigo-600 text-lavender-text' : 'text-lavender-text/70 hover:text-gray-800'}`}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'futures' ? 'bg-indigo-600 text-white' : 'text-lavender-text/70 hover:text-gray-800'}`}
                   onClick={() => setTradeType('futures')}
                 >
                   Futures
@@ -201,27 +201,27 @@ export default function FnOCalculator() {
                     <DollarSign className="w-4 h-4 text-indigo-400" /> Charges Breakdown
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">Brokerage</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.brokerage)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">STT/CTT</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.stt)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">Exchange Txn Charge</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.exchangeTxn)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">GST (18%)</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.gst)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">SEBI Charges</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.sebiCharges)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/50">
+                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
                       <span className="text-lavender-text/70 text-sm">Stamp Duty</span>
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.stampDuty)}</span>
                     </div>

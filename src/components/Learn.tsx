@@ -45,7 +45,7 @@ export default function Learn() {
             <Link 
               key={ch.num} 
               to={`/learn/${ch.slug}`}
-              className="flex items-center gap-6 bg-lavender-surface hover:bg-white border border-lavender-text/10 shadow-sm hover:border-lavender-text/20 hover:shadow-lavender p-6 rounded-2xl transition group"
+              className="app-card flex items-center gap-6 p-6 hover:border-lavender-primary/25 hover:shadow-lavender transition group"
             >
               <div className={`w-14 h-14 ${ch.iconBg} rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl flex-shrink-0 shadow-lavender group-hover:scale-110 transition-transform`}>
                 {ch.num}

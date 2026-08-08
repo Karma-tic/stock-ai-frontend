@@ -47,7 +47,7 @@ export default function Chapter8() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Dividend Investing: Creating Passive Income Streams</h2>
           <p className="mb-4 leading-relaxed">
             While many investors focus entirely on capital appreciation—buying a stock at ₹100 and selling it at ₹150—there is another powerful way to generate wealth in the stock market: Dividend Investing. This strategy focuses on building a portfolio of companies that regularly share a portion of their profits with their investors.

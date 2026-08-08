@@ -31,7 +31,7 @@ export default function IPOsPage() {
 
         <UpcomingIpos />
 
-        <div className="mt-20 p-8 bg-lavender-surface/50 rounded-2xl border border-white/50 text-center max-w-3xl mx-auto">
+        <div className="mt-20 app-card p-8 text-center max-w-3xl mx-auto">
           <h2 className="text-xl font-bold text-lavender-text mb-4">Why track IPOs with us?</h2>
           <p className="text-lavender-text/70 text-sm leading-relaxed">
             Our proprietary AI models process real-time subscription numbers, grey market premiums (GMP), 

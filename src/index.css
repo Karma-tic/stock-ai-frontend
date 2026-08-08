@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .app-card {
+    @apply bg-white border border-lavender-text/10 shadow-sm rounded-2xl;
+  }
+
+  .app-card-accent {
+    @apply bg-lavender-base border border-lavender-text/10 shadow-sm rounded-2xl;
+  }
+
+  .app-tile {
+    @apply bg-lavender-base border border-lavender-text/10 rounded-2xl;
+  }
+}
+
 body {
   background-color: #FDFBFF;
   color: #2D244A;

@@ -20,13 +20,13 @@ export default function StockPage() {
       />
       
       {/* Hero Section */}
-      <div className="bg-lavender-surface border-b border-white/50 pt-16 pb-12 px-6">
+      <div className="bg-lavender-base border-b border-lavender-text/10 pt-16 pb-12 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-4xl md:text-5xl font-black text-lavender-text">{profile.symbol}</h1>
-                <span className="bg-blue-500/10 text-lavender-primary border border-white/50 px-3 py-1 rounded-full text-sm font-bold">
+                <span className="bg-blue-500/10 text-lavender-primary border border-blue-500/20 px-3 py-1 rounded-full text-sm font-bold">
                   {profile.sector}
                 </span>
               </div>
@@ -67,7 +67,7 @@ export default function StockPage() {
           </section>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <section className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+            <section className="app-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-purple-400" />
                 <h3 className="text-xl font-bold m-0 text-lavender-text">Fundamental Analysis Guide</h3>
@@ -75,7 +75,7 @@ export default function StockPage() {
               <p className="text-sm">{profile.fundamentalAnalysis}</p>
             </section>
 
-            <section className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+            <section className="app-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
                 <h3 className="text-xl font-bold m-0 text-lavender-text">Risks & Opportunities</h3>
@@ -84,7 +84,7 @@ export default function StockPage() {
             </section>
           </div>
 
-          <section className="border-t border-white/50 pt-12">
+          <section className="border-t border-lavender-text/10 pt-12">
             <h2 className="text-2xl font-bold mb-4 text-lavender-text">How to Trade {profile.symbol} using AI</h2>
             <p>
               While understanding the fundamental profile of {profile.name} is crucial for long-term investing, short-to-medium term price action is often dictated by market sentiment, quarterly earnings reports, and breaking news. 
@@ -103,14 +103,14 @@ export default function StockPage() {
         </article>
 
         {/* Footer CTA */}
-        <div className="mt-16 bg-gradient-to-r from-blue-900/40 to-gray-50 border border-white/50 rounded-2xl p-8 text-center">
+        <div className="mt-16 bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-2xl p-8 text-center shadow-sm">
           <h3 className="text-lavender-text text-2xl font-bold mb-3">
             Don't Guess. Let AI Analyze {profile.symbol}.
           </h3>
           <p className="text-lavender-text/70 mb-6 max-w-xl mx-auto">
             Join thousands of smart investors using AI to find the best entry and exit points in the Indian stock market.
           </p>
-          <Link to="/login" className="inline-block bg-lavender-surface text-blue-900 font-bold py-3 px-8 rounded-2xl transition hover:bg-slate-200">
+          <Link to="/login" className="inline-block bg-blue-700 text-white font-bold py-3 px-8 rounded-2xl transition hover:bg-blue-800">
             Analyze {profile.symbol} Now
           </Link>
         </div>

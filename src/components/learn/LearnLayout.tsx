@@ -15,7 +15,7 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
       
       {/* Top Breadcrumb Nav */}
-      <div className="bg-lavender-surface border-b border-white/50 py-4 px-6 sticky top-[73px] z-30 shadow-lavender">
+      <div className="bg-white border-b border-lavender-text/10 py-4 px-6 sticky top-[73px] z-30 shadow-lavender">
         <div className="max-w-4xl mx-auto flex items-center gap-2 text-sm">
           <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-primary transition flex items-center gap-1">
             <ArrowLeft className="w-4 h-4" />
@@ -31,16 +31,16 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
       <div className="max-w-4xl mx-auto px-6 py-12">
         
         {/* Main Content Render */}
-        <div className="bg-lavender-surface/50 border border-white/50 rounded-3xl p-6 md:p-12 mb-12 shadow-lavender">
+        <div className="app-card p-6 md:p-12 mb-12">
           {children}
         </div>
 
         {/* Footer Navigation */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-white/50 pt-8">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-lavender-text/10 pt-8">
           {prevChapter ? (
             <Link 
               to={prevChapter.path}
-              className="flex items-center gap-3 bg-lavender-surface hover:bg-white border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
+              className="flex items-center gap-3 bg-white hover:bg-lavender-base border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
             >
               <ArrowLeft className="w-5 h-5 text-lavender-text/70" />
               <div className="text-left">

@@ -33,7 +33,7 @@ export default function LatestSignals() {
   const tickerItems = [...signals, ...signals, ...signals, ...signals];
 
   return (
-    <div className="px-4 py-3 bg-lavender-surface border-b border-white/50 overflow-hidden">
+    <div className="px-4 py-3 bg-white border-b border-lavender-text/10 overflow-hidden shadow-sm">
       
       {/* Inline styles for the seamless ticker animation */}
       <style>{`

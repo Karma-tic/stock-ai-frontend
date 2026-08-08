@@ -97,7 +97,7 @@ export default function BrokerageCalculator() {
           <div className="flex-1 space-y-6">
             
             {/* Trade Type Toggle */}
-            <div className="flex p-1 bg-lavender-surface rounded-2xl mb-6">
+            <div className="flex p-1 bg-lavender-base border border-lavender-text/10 rounded-2xl mb-6">
               <button 
                 onClick={() => setTradeType('delivery')}
                 className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'delivery' ? 'bg-indigo-600 text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
@@ -147,8 +147,8 @@ export default function BrokerageCalculator() {
           </div>
 
           {/* Results Summary */}
-          <div className="md:w-80 bg-lavender-surface/50 rounded-2xl p-6 border border-white/50">
-            <h3 className="text-lavender-text font-bold text-lg border-b border-white/50 pb-3 mb-4">Charges Breakdown</h3>
+          <div className="md:w-80 app-card-accent p-6">
+            <h3 className="text-lavender-text font-bold text-lg border-b border-lavender-text/10 pb-3 mb-4">Charges Breakdown</h3>
             
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
@@ -180,7 +180,7 @@ export default function BrokerageCalculator() {
                 <span className="text-lavender-text">{formatCurrency(stampDuty)}</span>
               </div>
               
-              <div className="pt-3 border-t border-white/50 flex justify-between font-bold">
+              <div className="pt-3 border-t border-lavender-text/10 flex justify-between font-bold">
                 <span className="text-red-600">Total Charges</span>
                 <span className="text-red-600">{formatCurrency(totalCharges)}</span>
               </div>

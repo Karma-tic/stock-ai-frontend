@@ -129,7 +129,7 @@ export default function SIPCalculator() {
           </div>
 
           {/* Results Summary */}
-          <div className="md:w-72 bg-lavender-surface/50 rounded-2xl p-6 border border-white/50 flex flex-col justify-center">
+          <div className="md:w-72 app-card-accent p-6 flex flex-col justify-center">
             <div className="space-y-6">
               <div>
                 <p className="text-lavender-text/70 text-sm mb-1">Invested Amount</p>
@@ -139,7 +139,7 @@ export default function SIPCalculator() {
                 <p className="text-lavender-text/70 text-sm mb-1">Est. Returns</p>
                 <p className="text-xl text-emerald-400 font-bold">{formatCurrency(estimatedReturns)}</p>
               </div>
-              <div className="pt-4 border-t border-white/50">
+              <div className="pt-4 border-t border-lavender-text/10">
                 <p className="text-lavender-text/70 text-sm mb-1">Total Value</p>
                 <p className="text-3xl text-lavender-primary font-black">{formatCurrency(totalWealth)}</p>
               </div>

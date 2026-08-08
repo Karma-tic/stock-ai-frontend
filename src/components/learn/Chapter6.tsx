@@ -86,7 +86,7 @@ export default function Chapter6() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Rise of AI and Algorithmic Trading</h2>
           <p className="mb-4 leading-relaxed">
             The landscape of the financial markets has been permanently altered by the advent of Artificial Intelligence (AI) and Algorithmic Trading (Algo Trading). The days of floor traders shouting orders are long gone; today, the majority of trading volume on exchanges like the NSE and BSE is driven by machines executing complex algorithms at lightning speeds.

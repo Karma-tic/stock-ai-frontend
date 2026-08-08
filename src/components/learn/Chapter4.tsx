@@ -31,7 +31,7 @@ export default function Chapter4() {
                   { metric: "Return on Equity", desc: "How efficiently is it using shareholder money?" },
                   { metric: "Cash Flow", desc: "Is it generating real cash, not just paper profits?" },
                 ].map(item => (
-                  <div key={item.metric} className="flex gap-3 bg-lavender-surface/50 p-3 rounded-2xl border border-white/50">
+                  <div key={item.metric} className="flex gap-3 app-tile p-3">
                     <div className="w-2 h-2 rounded-full bg-blue-400 mt-2 flex-shrink-0" />
                     <div>
                       <span className="text-lavender-text font-semibold block mb-1">{item.metric}</span>
@@ -55,7 +55,7 @@ export default function Chapter4() {
                   { metric: "Volume Analysis", desc: "Confirms price moves — high volume = conviction." },
                   { metric: "Candlestick Patterns", desc: "Doji, hammer, engulfing patterns signal reversals." },
                 ].map(item => (
-                  <div key={item.metric} className="flex gap-3 bg-lavender-surface/50 p-3 rounded-2xl border border-white/50">
+                  <div key={item.metric} className="flex gap-3 app-tile p-3">
                     <div className="w-2 h-2 rounded-full bg-purple-400 mt-2 flex-shrink-0" />
                     <div>
                       <span className="text-lavender-text font-semibold block mb-1">{item.metric}</span>
@@ -75,7 +75,7 @@ export default function Chapter4() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Fundamental vs. Technical Analysis: Finding Your Edge</h2>
           <p className="mb-4 leading-relaxed">
             When deciding which stocks to buy, investors generally rely on two distinct schools of thought: Fundamental Analysis and Technical Analysis. While purists argue for one over the other, the most successful investors often use a combination of both.

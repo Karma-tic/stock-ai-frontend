@@ -53,7 +53,7 @@ export default function UpcomingIpos() {
     const s = status?.toLowerCase() || '';
     if (s.includes('close')) return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20"><CheckCircle2 className="w-3 h-3" /> Closed</span>;
     if (s.includes('open')) return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 animate-pulse"><Clock className="w-3 h-3" /> Open</span>;
-    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-lavender-surface0/10 text-lavender-text/60 border border-white/50"><Clock className="w-3 h-3" /> Upcoming</span>;
+    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-lavender-base text-lavender-text/60 border border-lavender-text/10"><Clock className="w-3 h-3" /> Upcoming</span>;
   };
 
   const getGmpColor = (gmp?: string) => {
@@ -92,13 +92,13 @@ export default function UpcomingIpos() {
     <div className="space-y-6">
       
       {/* FILTER TABS */}
-      <div className="flex items-center justify-between flex-wrap gap-4 bg-lavender-surface/50 p-4 rounded-2xl border border-white/50">
+      <div className="app-card p-4 flex items-center justify-between flex-wrap gap-4">
         <div className="flex gap-2">
           {['All', 'Mainboard', 'SME'].map(f => (
             <button
               key={f}
               onClick={() => setFilter(f as any)}
-              className={`px-4 py-2 rounded-2xl text-sm font-semibold transition-all ${filter === f ? 'bg-emerald-500 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-lavender-surface text-lavender-text/70 hover:bg-gray-200 hover:text-lavender-text'}`}
+              className={`px-4 py-2 rounded-2xl text-sm font-semibold transition-all ${filter === f ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.25)]' : 'bg-lavender-base border border-lavender-text/10 text-lavender-text/70 hover:bg-white hover:text-lavender-text'}`}
             >
               {f}
             </button>
@@ -117,11 +117,11 @@ export default function UpcomingIpos() {
       </div>
 
       {/* DATA TABLE (Desktop) */}
-      <div className="bg-lavender-surface/80 border border-white/50 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
+      <div className="app-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left whitespace-nowrap">
             <thead>
-              <tr className="bg-lavender-surface/50 border-b border-white/50">
+              <tr className="bg-lavender-base border-b border-lavender-text/10">
                 <th className="px-6 py-4 text-xs font-semibold text-lavender-text/70 uppercase tracking-wider rounded-tl-2xl">IPO Name</th>
                 <th className="px-6 py-4 text-xs font-semibold text-lavender-text/70 uppercase tracking-wider">Type</th>
                 <th className="px-6 py-4 text-xs font-semibold text-lavender-text/70 uppercase tracking-wider">Price Band</th>
@@ -131,7 +131,7 @@ export default function UpcomingIpos() {
                 <th className="px-6 py-4 text-xs font-semibold text-lavender-text/70 uppercase tracking-wider text-right rounded-tr-2xl">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody className="divide-y divide-lavender-text/10">
               {filteredIpos.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-lavender-text/60 text-sm">
@@ -140,7 +140,7 @@ export default function UpcomingIpos() {
                 </tr>
               ) : (
                 filteredIpos.map(ipo => (
-                  <tr key={ipo.id} className="hover:bg-lavender-surface/30 transition-colors group">
+                  <tr key={ipo.id} className="hover:bg-lavender-base transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0 group-hover:scale-110 transition-transform">
@@ -154,7 +154,7 @@ export default function UpcomingIpos() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-lavender-text/70">
-                      <span className="bg-lavender-surface text-lavender-text/80 px-2 py-1 rounded-md text-[10px] font-medium tracking-wide">
+                      <span className="bg-lavender-base border border-lavender-text/10 text-lavender-text/80 px-2 py-1 rounded-md text-[10px] font-medium tracking-wide">
                         {ipo.lot_size || 'MAINBOARD'}
                       </span>
                     </td>
@@ -187,7 +187,7 @@ export default function UpcomingIpos() {
             </tbody>
           </table>
         </div>
-        <div className="bg-lavender-surface px-6 py-4 border-t border-white/50 text-xs text-lavender-text/60 flex items-center gap-2 justify-between">
+        <div className="bg-lavender-base px-6 py-4 border-t border-lavender-text/10 text-xs text-lavender-text/60 flex items-center gap-2 justify-between">
           <div className="flex items-center gap-2">
             <Info className="w-4 h-4 text-lavender-text/70" />
             GMP (Grey Market Premium) is highly volatile and indicative only. Est. Listing is based on upper price band + GMP.

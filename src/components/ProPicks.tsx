@@ -113,17 +113,17 @@ export default function ProPicks() {
       {/* PICKS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {picks.length === 0 ? (
-          <div className="col-span-full text-center p-12 text-lavender-text/70 border border-white/50 rounded-2xl">
+          <div className="col-span-full app-card text-center p-12 text-lavender-text/70">
             No picks generated for today yet. Check back after 9:30 AM.
           </div>
         ) : (
           picks.map((pick, index) => (
-            <div key={index} className={`relative overflow-hidden bg-lavender-surface border rounded-2xl p-6 transition-all shadow-lavender ${isPro ? 'border-white/50 hover:border-lavender-text/20 hover:shadow-lavender hover:-translate-y-1' : 'border-white/50'}`}>
+            <div key={index} className={`relative overflow-hidden app-card p-6 transition-all ${isPro ? 'hover:border-lavender-primary/25 hover:shadow-lavender hover:-translate-y-1' : ''}`}>
               
               {/* Blur Overlay for Free Users */}
               {!isPro && (
-                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-lavender-surface/40 flex items-center justify-center">
-                  <div className="bg-lavender-surface/80 px-6 py-2 rounded-full border border-white/50 text-yellow-500 font-bold flex items-center gap-2 shadow-2xl">
+                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-white/50 flex items-center justify-center">
+                  <div className="bg-white px-6 py-2 rounded-full border border-yellow-500/30 text-yellow-500 font-bold flex items-center gap-2 shadow-lavender">
                     <Lock className="w-4 h-4" /> Pro Only
                   </div>
                 </div>
@@ -147,18 +147,18 @@ export default function ProPicks() {
                 </div>
               </div>
 
-              <div className="mb-6 pb-6 border-b border-white/50">
-                <p className={`text-sm leading-relaxed ${isPro ? 'text-gray-300' : 'text-lavender-text/80'}`}>
+              <div className="mb-6 pb-6 border-b border-lavender-text/10">
+                <p className="text-sm leading-relaxed text-lavender-text/80">
                   {isPro ? pick.reasoning : "This masked setup passed our momentum, liquidity, and risk filters. Upgrade to review the exact ticker and reasoning before doing your own research."}
                 </p>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-lavender-surface p-3 rounded-2xl border border-white/50">
+                <div className="app-tile p-3">
                   <div className="text-xs text-lavender-text/70 mb-1">Target 1</div>
                   <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target1}</div>
                 </div>
-                <div className="bg-lavender-surface p-3 rounded-2xl border border-white/50">
+                <div className="app-tile p-3">
                   <div className="text-xs text-lavender-text/70 mb-1">Target 2</div>
                   <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target2}</div>
                 </div>

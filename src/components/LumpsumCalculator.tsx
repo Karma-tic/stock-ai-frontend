@@ -128,7 +128,7 @@ export default function LumpsumCalculator() {
           </div>
 
           {/* Results Summary */}
-          <div className="md:w-72 bg-lavender-surface/50 rounded-2xl p-6 border border-white/50 flex flex-col justify-center">
+          <div className="md:w-72 app-card-accent p-6 flex flex-col justify-center">
             <div className="space-y-6">
               <div>
                 <p className="text-lavender-text/70 text-sm mb-1">Invested Amount</p>
@@ -138,7 +138,7 @@ export default function LumpsumCalculator() {
                 <p className="text-lavender-text/70 text-sm mb-1">Est. Returns</p>
                 <p className="text-xl text-emerald-400 font-bold">{formatCurrency(estimatedReturns)}</p>
               </div>
-              <div className="pt-4 border-t border-white/50">
+              <div className="pt-4 border-t border-lavender-text/10">
                 <p className="text-lavender-text/70 text-sm mb-1">Total Value</p>
                 <p className="text-3xl text-emerald-400 font-black">{formatCurrency(totalWealth)}</p>
               </div>
@@ -204,8 +204,8 @@ export default function LumpsumCalculator() {
             <li><strong>Long-Term Capital Gains (LTCG):</strong> If you hold for more than one year, the profits are classified as long-term. Under current regulations, long-term capital gains over ₹1.25 Lakhs in a financial year are taxed at 12.5% without indexation.</li>
           </ol>
 
-          <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-2xl p-6 mt-8">
-            <h3 className="text-emerald-400 font-bold mb-2">Disclaimer</h3>
+          <div className="bg-emerald-50 border border-emerald-500/30 rounded-2xl p-6 mt-8 shadow-sm">
+            <h3 className="text-emerald-700 font-bold mb-2">Disclaimer</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               Mutual Fund and stock market investments are subject to market risks, read all scheme related documents carefully. The lumpsum return calculator is for illustration purposes only and does not guarantee any returns. Historical returns of the Indian stock market (NSE/BSE) are not indicative of future performance. Always consult with a SEBI-registered financial advisor before making investment decisions.
             </p>

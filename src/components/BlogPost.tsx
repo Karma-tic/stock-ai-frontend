@@ -104,7 +104,7 @@ export default function BlogPost() {
           {post.title}
         </h1>
         
-        <div className="prose prose-invert prose-lg max-w-none prose-p:text-lavender-text/80 prose-p:leading-relaxed prose-li:text-lavender-text/80">
+        <div className="app-card p-6 sm:p-8 prose prose-invert prose-lg max-w-none prose-p:text-lavender-text/80 prose-p:leading-relaxed prose-li:text-lavender-text/80">
           {post.content}
         </div>
       </article>

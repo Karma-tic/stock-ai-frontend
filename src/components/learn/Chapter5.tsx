@@ -75,7 +75,7 @@ export default function Chapter5() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Navigating Market Risks: Systemic vs. Unsystemic</h2>
           <p className="mb-4 leading-relaxed">
             Risk is an inherent part of investing. The potential for high returns in the stock market is directly correlated with the amount of risk an investor is willing to take. However, risk is not a monolith; it can be categorized into two primary types: Systemic Risk and Unsystemic Risk.

@@ -41,7 +41,7 @@ export default function Chapter3() {
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-white/50 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Mastering the Language of the Market</h2>
           <p className="mb-4 leading-relaxed">
             To successfully navigate the financial markets, you must first speak its language. Financial jargon can seem intimidating, but understanding these essential terms is the first step toward becoming a confident investor.

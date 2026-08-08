@@ -7,7 +7,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-lavender-surface">
       {/* Back bar */}
-      <div className="bg-lavender-surface border-b border-white/50 px-4 py-3 flex items-center gap-3">
+      <div className="bg-white border-b border-lavender-text/10 px-4 py-3 flex items-center gap-3 shadow-sm">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-lavender-text/70 hover:text-lavender-text transition text-sm"
