@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import UpgradeModal from './UpgradeModal';
@@ -18,6 +18,8 @@ export default function Navbar({
   const [open, setOpen] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPro, setIsPro] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('sb_token');
@@ -32,6 +34,29 @@ export default function Navbar({
       })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const closeOnOutsideClick = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (
+        mobileMenuRef.current?.contains(target) ||
+        mobileMenuButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+      setOpen(false);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    document.addEventListener('touchstart', closeOnOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideClick);
+      document.removeEventListener('touchstart', closeOnOutsideClick);
+    };
+  }, [open]);
 
   const logout = async () => {
     const { supabase } = await import('../lib/supabase');
@@ -134,21 +159,19 @@ export default function Navbar({
 
           {/* MOBILE MENU BUTTON */}
           <button
+            ref={mobileMenuButtonRef}
             onClick={() => setOpen(!open)}
             className="md:hidden text-lavender-text text-2xl px-2"
+            aria-expanded={open}
+            aria-label="Toggle navigation menu"
           >
             ☰
           </button>
         </div>
-
-        {/* MOBILE MENU OVERLAY */}
-        {open && (
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-        )}
         
         {/* MOBILE MENU */}
         {open && (
-          <div className="md:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
+          <div ref={mobileMenuRef} className="md:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
             <Link
               to="/blog"
               onClick={() => setOpen(false)}
