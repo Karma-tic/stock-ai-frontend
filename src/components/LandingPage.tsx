@@ -133,7 +133,7 @@ export default function LandingPage({ onGetStarted }: Props) {
             Start Free Analysis →
           </button>
           <a href="#how-it-works"
-            className="border border-lavender-text/10 bg-white/70 text-lavender-text/80 hover:text-lavender-text hover:border-lavender-primary/25 px-8 py-4 rounded-2xl text-lg font-semibold transition">
+            className="border border-lavender-primary/40 bg-lavender-primary/10 text-lavender-primary hover:border-lavender-primary/70 hover:bg-lavender-primary/20 px-8 py-4 rounded-2xl text-lg font-semibold transition-colors">
             How It Works
           </a>
         </div>
