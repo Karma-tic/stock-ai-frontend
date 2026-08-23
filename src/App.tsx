@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import LoginPage from './components/LoginPage';
 import Dashboard from './components/Dashboard';
@@ -113,9 +113,9 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/tools/fno-calculator" element={<FnOCalculator />} />
           <Route path="/tools/stock-comparison" element={<StockComparison />} />
           
-          <Route path="/stocks" element={<StockDirectory />} />
+          <Route path="/stocks" element={<StockDirectory user={user} />} />
           <Route path="/stocks/screener" element={<StockScreener />} />
-          <Route path="/stock/:symbol" element={<StockPage />} />
+          <Route path="/stock/:symbol" element={<StockPage user={user} />} />
 
           <Route path="/pro-picks" element={<ProPicks />} />
           <Route path="/ipos" element={<IPOsPage />} />
@@ -131,7 +131,9 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/learn/dividend-investing" element={<Chapter8 />} />
           <Route path="/learn/common-mistakes" element={<Chapter9 />} />
 
-          <Route path="/login" element={
+          <Route path="/login" element={user ? (
+            <Navigate to="/" replace />
+          ) : (
             <LoginPage
               isDarkMode={isDarkMode}
               onToggleTheme={onToggleTheme}
@@ -143,6 +145,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
                 window.history.back();
               }}
             />
+          )
           } />
           
           <Route

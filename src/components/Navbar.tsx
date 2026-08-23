@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import UpgradeModal from './UpgradeModal';
-import { Moon, Star, Sun, TrendingUp } from 'lucide-react';
+import { Menu, Moon, Star, Sun, TrendingUp, X } from 'lucide-react';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -81,7 +81,15 @@ export default function Navbar({
         </Link>
 
         {/* CENTER (DESKTOP ONLY) */}
-        <div className="hidden md:flex items-center gap-5 text-sm">
+        <div className="hidden lg:flex items-center gap-4 text-sm">
+          {user ? (
+            <>
+              <Link to="/" className="text-lavender-text/70 hover:text-lavender-text transition">Today</Link>
+              <Link to="/stocks" className="text-lavender-text/70 hover:text-lavender-text transition">Stocks</Link>
+              <Link to="/market-wrap" className="text-lavender-text/70 hover:text-lavender-text transition">Market Wrap</Link>
+              <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-text transition">Learn</Link>
+            </>
+          ) : <>
           <Link to="/blog" className="text-lavender-text/70 hover:text-lavender-text transition">
             Blog
           </Link>
@@ -103,6 +111,7 @@ export default function Navbar({
           <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-text transition">
             Learn
           </Link>
+          </>}
         </div>
 
         {/* RIGHT */}
@@ -161,72 +170,43 @@ export default function Navbar({
           <button
             ref={mobileMenuButtonRef}
             onClick={() => setOpen(!open)}
-            className="md:hidden text-lavender-text text-2xl px-2"
+            className="lg:hidden text-lavender-text text-2xl px-2"
             aria-expanded={open}
             aria-label="Toggle navigation menu"
           >
-            ☰
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
         
         {/* MOBILE MENU */}
         {open && (
-          <div ref={mobileMenuRef} className="md:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
-            <Link
-              to="/blog"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Blog
-            </Link>
-
-            <Link
-              to="/tools"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Tools
-            </Link>
-
-            <Link
-              to="/market-wrap"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Market Wrap
-            </Link>
-
-          <Link
-              to="/stocks"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Stocks
-            </Link>
-
-            <Link
-              to="/ipos"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              IPOs
-            </Link>
-
-            <Link
-              to="/track-record"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Track Record
-            </Link>
-
-            <Link
-              to="/learn"
-              onClick={() => setOpen(false)}
-              className="block text-lavender-text/80 hover:text-lavender-text transition"
-            >
-              Learn
-            </Link>
+          <div ref={mobileMenuRef} className="lg:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
+            {(user
+              ? [
+                  { to: '/', label: 'Dashboard & Analysis' },
+                  { to: '/stocks', label: 'Browse Stocks' },
+                  { to: '/market-wrap', label: 'Market Wrap' },
+                  { to: '/learn', label: 'Learn' },
+                ]
+              : [
+                  { to: '/blog', label: 'Blog' },
+                  { to: '/tools', label: 'Tools' },
+                  { to: '/market-wrap', label: 'Market Wrap' },
+                  { to: '/stocks', label: 'Stocks' },
+                  { to: '/ipos', label: 'IPOs' },
+                  { to: '/track-record', label: 'Track Record' },
+                  { to: '/learn', label: 'Learn' },
+                ]
+            ).map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                className="block text-lavender-text/80 hover:text-lavender-text transition"
+              >
+                {item.label}
+              </Link>
+            ))}
 
             <button
               onClick={onToggleTheme}

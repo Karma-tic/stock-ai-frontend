@@ -34,7 +34,7 @@ function timeAgo(value?: string) {
   return hours < 24 ? `${hours}h ago` : `${Math.floor(hours / 24)}d ago`;
 }
 
-export default function TodayRadar() {
+export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => void }) {
   const [events, setEvents] = useState<RadarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -135,8 +135,8 @@ export default function TodayRadar() {
           <section className="app-card p-7 text-center sm:p-10">
             <Search className="mx-auto h-9 w-9 text-lavender-primary" />
             <h2 className="mt-4 text-xl font-bold">Your radar is ready for a watchlist</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-lavender-text/65">Add companies you follow. We’ll surface relevant filings and news here with the original source.</p>
-            <Link to="/stocks" className="mt-5 inline-flex rounded-xl bg-gradient-lavender px-5 py-2.5 text-sm font-bold text-white">Browse stocks</Link>
+            <p className="mx-auto mt-2 max-w-md text-sm text-lavender-text/65">Search any NSE or BSE stock from your dashboard, run its full analysis, and add it to your watchlist. Relevant filings and news will then appear here.</p>
+            <button onClick={onBrowseStocks} className="mt-5 inline-flex rounded-xl bg-gradient-lavender px-5 py-2.5 text-sm font-bold text-white">Search and analyze stocks</button>
           </section>
         ) : lead ? (
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">

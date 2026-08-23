@@ -3,7 +3,7 @@ import { STOCK_PROFILES, getGenericProfile } from '../data/stockProfiles';
 import { TrendingUp, Info, AlertTriangle, BookOpen } from 'lucide-react';
 import SEO from './SEO';
 
-export default function StockPage() {
+export default function StockPage({ user }: { user?: any }) {
   const { symbol } = useParams();
   
   if (!symbol) return null;
@@ -35,7 +35,7 @@ export default function StockPage() {
             
             <div className="flex-shrink-0">
               <Link 
-                to="/login" 
+                to={user ? `/?analyze=${profile.symbol}` : "/login"}
                 className="inline-flex items-center gap-2 bg-gradient-lavender hover:opacity-90 text-white font-bold py-3 px-6 rounded-2xl transition shadow-lavender shadow-amber-500/20"
               >
                 <TrendingUp className="w-5 h-5" />
@@ -110,7 +110,7 @@ export default function StockPage() {
           <p className="text-lavender-text/70 mb-6 max-w-xl mx-auto">
             Join thousands of smart investors using AI to find the best entry and exit points in the Indian stock market.
           </p>
-          <Link to="/login" className="inline-block bg-blue-700 text-white font-bold py-3 px-8 rounded-2xl transition hover:bg-blue-800">
+          <Link to={user ? `/?analyze=${profile.symbol}` : "/login"} className="inline-block bg-blue-700 text-white font-bold py-3 px-8 rounded-2xl transition hover:bg-blue-800">
             Analyze {profile.symbol} Now
           </Link>
         </div>

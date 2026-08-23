@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { STOCK_PROFILES } from '../data/stockProfiles';
 import SEO from './SEO';
 
-export default function StockDirectory() {
+export default function StockDirectory({ user }: { user?: any }) {
   const stocks = Object.values(STOCK_PROFILES).sort((a, b) => 
     a.symbol.localeCompare(b.symbol)
   );
@@ -75,8 +75,8 @@ export default function StockDirectory() {
           <p className="text-lavender-text/70 mb-6 max-w-xl mx-auto">
             Our AI can analyze over 2,000+ NSE and BSE listed stocks in real-time. Simply log in and use the search bar on your dashboard to instantly generate a BUY/HOLD/SELL signal for any stock.
           </p>
-          <Link to="/login" className="inline-block bg-gradient-lavender hover:opacity-90 text-white font-bold py-3 px-8 rounded-2xl transition">
-            Get Free AI Analysis
+          <Link to={user ? "/" : "/login"} className="inline-block bg-gradient-lavender hover:opacity-90 text-white font-bold py-3 px-8 rounded-2xl transition">
+            {user ? 'Search and Analyze Any Stock' : 'Get Free AI Analysis'}
           </Link>
         </div>
 
