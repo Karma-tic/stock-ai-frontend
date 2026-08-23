@@ -106,7 +106,7 @@ export default function UpcomingIpos({ compact = false }: { compact?: boolean })
                 </div>
                 <div className="min-w-0">
                   <h3 className="truncate text-sm font-bold text-lavender-text">{ipo.company_name}</h3>
-                  <p className="mt-0.5 text-xs text-lavender-text/50">{ipo.lot_size || 'Mainboard'}</p>
+                  <p className="mt-0.5 text-xs text-lavender-text/50">{ipo.symbol || 'IPO'}</p>
                 </div>
               </div>
               {getStatusBadge(ipo.status)}
