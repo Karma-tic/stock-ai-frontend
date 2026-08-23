@@ -22,6 +22,14 @@ export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const analyzeStock = (ticker: string) => api.get(`/api/stock/${ticker}/analyze`);
 export const searchStocks = (query: string) => api.get(`/api/market/search/${query}`);
 export const getWatchlist = () => api.get('/api/watchlist');
+export const getEventRadar = () => api.get('/api/event-radar');
+export const getTheses = () => api.get('/api/theses');
+export const getEventCalendar = () => api.get('/api/event-calendar');
+export const getEarningsComparison = (ticker: string) => api.get(`/api/earnings-comparison/${ticker}`);
+export const saveThesis = (ticker: string, data: any) => api.put(`/api/theses/${ticker}`, data);
+export const deleteThesis = (ticker: string) => api.delete(`/api/theses/${ticker}`);
+export const getNotificationPreferences = () => api.get('/api/notification-preferences');
+export const saveNotificationPreferences = (data: any) => api.put('/api/notification-preferences', data);
 export const addToWatchlist = (ticker: string, company_name: string) =>
   api.post('/api/watchlist', { ticker, company_name });
 export const removeFromWatchlist = (ticker: string) =>
