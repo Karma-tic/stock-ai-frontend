@@ -24,19 +24,16 @@ export default function IPOsPage() {
             Upcoming <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">IPOs</span>
           </h1>
           <p className="text-lavender-text/70 text-lg max-w-2xl mx-auto leading-relaxed">
-            Stay ahead of the market with our AI-driven analysis of upcoming Initial Public Offerings. 
-            We analyze market sentiment, financial health, and subscription data to predict listing performance.
+            One factual view of live GMP, issue details, key dates and subscription status for current Indian IPOs.
           </p>
         </div>
 
         <UpcomingIpos />
 
-        <div className="mt-20 app-card p-8 text-center max-w-3xl mx-auto">
-          <h2 className="text-xl font-bold text-lavender-text mb-4">Why track IPOs with us?</h2>
+        <div className="mt-12 app-card p-8 text-center max-w-3xl mx-auto">
+          <h2 className="text-xl font-bold text-lavender-text mb-4">Understand the numbers</h2>
           <p className="text-lavender-text/70 text-sm leading-relaxed">
-            Our proprietary AI models process real-time subscription numbers, grey market premiums (GMP), 
-            and historical sector performance to deliver high-confidence predictions on listing day gains. 
-            Check back daily as predictions are updated in real-time based on live retail and QIB subscription data.
+            GMP is unofficial and can be volatile. We present sourced facts and estimates for research—not a listing prediction or investment recommendation.
           </p>
         </div>
       </div>

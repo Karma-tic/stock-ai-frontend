@@ -36,6 +36,7 @@ import Chapter9 from './components/learn/Chapter9';
 import MarketWrap from './components/MarketWrap';
 import ProPicks from './components/ProPicks';
 import IPOsPage from './components/IPOsPage';
+import IpoDetailPage from './components/IpoDetailPage';
 
 
 function Footer() {
@@ -119,6 +120,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
 
           <Route path="/pro-picks" element={<ProPicks />} />
           <Route path="/ipos" element={<IPOsPage />} />
+          <Route path="/ipos/:id" element={<IpoDetailPage />} />
           
           {/* Learn Wiki Routes */}
           <Route path="/learn/what-is-stock-market" element={<Chapter1 />} />
