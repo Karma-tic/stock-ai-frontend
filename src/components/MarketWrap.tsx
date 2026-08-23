@@ -27,18 +27,16 @@ function trimPoint(value: string) {
 }
 
 function getImportantPoints(html: string) {
-  const matches = [
-    ...Array.from(html.matchAll(/<(?:strong|b)[^>]*>(.*?)<\/(?:strong|b)>/gi)),
-    ...Array.from(html.matchAll(/<li[^>]*>(.*?)<\/li>/gi)),
-    ...Array.from(html.matchAll(/<h[23][^>]*>(.*?)<\/h[23]>/gi)),
-  ].map(match => trimPoint(stripHtml(match[1]))).filter(Boolean);
+  const bulletPoints = Array.from(html.matchAll(/<li[^>]*>(.*?)<\/li>/gi))
+    .map(match => trimPoint(stripHtml(match[1])))
+    .filter(Boolean);
 
   const fallback = stripHtml(html)
     .split(/(?<=[.!?])\s+/)
     .map(trimPoint)
     .filter(sentence => sentence.length > 35);
 
-  return [...matches, ...fallback]
+  return [...bulletPoints, ...fallback]
     .filter((point, index, list) => list.indexOf(point) === index)
     .slice(0, 3);
 }
@@ -178,13 +176,9 @@ const MarketWrap: React.FC = () => {
                 </div>
               )}
               
-              <div 
-                className="max-w-none whitespace-pre-wrap text-sm sm:text-[15px] leading-7 text-lavender-text/80
-                           [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-lavender-text [&_h2]:mt-6 [&_h2]:mb-3
-                           [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-lavender-primary [&_h3]:mt-5 [&_h3]:mb-2
-                           [&_p]:mb-4 [&_ul]:my-4 [&_li]:my-1.5 [&_strong]:text-lavender-text"
-                dangerouslySetInnerHTML={{ __html: currentWrap.content_html }} 
-              />
+              <p className="text-center text-xs text-lavender-text/50">
+                A quick overview designed to be read in under one minute.
+              </p>
             </div>
 
             {/* Pagination Dots (Mobile & Desktop) */}
