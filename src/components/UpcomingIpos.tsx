@@ -16,7 +16,7 @@ interface IPO {
   status?: string;
 }
 
-export default function UpcomingIpos() {
+export default function UpcomingIpos({ compact = false }: { compact?: boolean }) {
   const [ipos, setIpos] = useState<IPO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -70,7 +70,7 @@ export default function UpcomingIpos() {
 
   if (loading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center gap-4">
+      <div className={`${compact ? 'py-10' : 'py-20'} flex flex-col items-center justify-center gap-4`}>
         <div className="relative flex h-12 w-12 items-center justify-center">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
           <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
@@ -84,6 +84,51 @@ export default function UpcomingIpos() {
     return (
       <div className="py-12 text-center text-lavender-text/70 text-sm">
         {error}
+      </div>
+    );
+  }
+
+  if (compact) {
+    const previewIpos = filteredIpos.slice(0, 3);
+
+    return (
+      <div className="grid gap-3 md:grid-cols-3">
+        {previewIpos.length === 0 ? (
+          <div className="app-card col-span-full py-10 text-center text-sm text-lavender-text/60">
+            No upcoming IPOs are available right now.
+          </div>
+        ) : previewIpos.map(ipo => (
+          <article key={ipo.id} className="app-card flex min-w-0 flex-col p-5 transition hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-lavender">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-sm font-bold text-emerald-500">
+                  {ipo.company_name.charAt(0)}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="truncate text-sm font-bold text-lavender-text">{ipo.company_name}</h3>
+                  <p className="mt-0.5 text-xs text-lavender-text/50">{ipo.lot_size || 'Mainboard'}</p>
+                </div>
+              </div>
+              {getStatusBadge(ipo.status)}
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3 border-t border-lavender-text/10 pt-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-lavender-text/45">Price band</p>
+                <p className="mt-1 text-sm font-bold text-lavender-text">{ipo.price_band || 'TBA'}</p>
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-lavender-text/45">Current GMP</p>
+                <p className={`mt-1 text-sm ${getGmpColor(ipo.gmp)}`}>{ipo.gmp || '₹0'}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-2 text-xs text-lavender-text/60">
+              <Clock className="h-3.5 w-3.5 text-emerald-500" />
+              <span>{ipo.open_date} – {ipo.close_date}</span>
+            </div>
+          </article>
+        ))}
       </div>
     );
   }

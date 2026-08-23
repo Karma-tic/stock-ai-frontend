@@ -462,16 +462,23 @@ export default function LandingPage({ onGetStarted }: Props) {
 
 
       {/* Upcoming IPOs Section */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="text-center mb-10">
-          <h2 className="text-lavender-text text-3xl font-bold mb-4">
-            IPO AI Predictions <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2 py-1 rounded-full ml-2 align-middle border border-emerald-500/20">NEW</span>
-          </h2>
-          <p className="text-lavender-text/70">
-            Live grey market premium (GMP) tracking and AI analysis of upcoming IPOs.
-          </p>
+      <section className="border-y border-lavender-text/5 bg-lavender-base/40 py-14">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-500">IPO tracker</span>
+                <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-500">LIVE</span>
+              </div>
+              <h2 className="text-2xl font-bold text-lavender-text sm:text-3xl">Upcoming IPOs at a glance</h2>
+              <p className="mt-2 max-w-2xl text-sm text-lavender-text/65">Track opening dates, price bands and grey-market premiums without leaving the homepage.</p>
+            </div>
+            <Link to="/ipos" className="inline-flex shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-bold text-emerald-500 transition hover:bg-emerald-500/20">
+              View all IPOs →
+            </Link>
+          </div>
+          <UpcomingIpos compact />
         </div>
-        <UpcomingIpos />
       </section>
 
       {/* FAQ — great for SEO and AdSense */}
