@@ -139,7 +139,7 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto mb-4">
+        <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
           {[
             { num: "2,300+", label: "NSE Stocks" },
             { num: "8 sec", label: "Analysis Time" },
@@ -152,12 +152,6 @@ export default function LandingPage({ onGetStarted }: Props) {
           ))}
         </div>
 
-        <Link
-          to="/track-record"
-          className="text-lavender-primary hover:text-blue-300 text-sm font-medium underline"
-        >
-          See our full public track record — every signal, every outcome
-        </Link>
       </section>
 
       {/* Sample Signal — shows real content to Google */}
