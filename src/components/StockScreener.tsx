@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Filter, Search } from 'lucide-react';
+import { ArrowRight, Clock3, Filter, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getStock } from '../lib/api';
 import SEO from './SEO';
 
@@ -35,6 +36,7 @@ export default function StockScreener() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>('all');
   const [query, setQuery] = useState('');
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -45,6 +47,7 @@ export default function StockScreener() {
       );
       if (alive) {
         setStocks(results.filter(Boolean));
+        setLastUpdated(new Date());
         setLoading(false);
       }
     }
@@ -66,8 +69,8 @@ export default function StockScreener() {
   return (
     <div className="min-h-screen bg-lavender-surface px-6 py-16">
       <SEO
-        title="NSE Stock Screener India | Value, Dividend, Momentum Filters | Stock AI"
-        description="Screen popular Indian NSE stocks by valuation, dividend yield, momentum, 52-week position, and price. Free educational stock screener for Indian investors."
+        title="Popular Indian Stock Quick Filters | Stock AI"
+        description="Quickly compare 18 popular Indian stocks by valuation, dividend yield, momentum, 52-week position, and price."
         canonicalPath="/stocks/screener"
       />
 
@@ -76,10 +79,10 @@ export default function StockScreener() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-500/10 border border-white/50 mb-4">
             <Filter className="w-7 h-7 text-green-600" />
           </div>
-          <h1 className="text-4xl font-black text-lavender-text mb-3">NSE Stock Screener</h1>
+          <h1 className="text-3xl sm:text-4xl font-black text-lavender-text mb-3">Popular Stock Quick Filters</h1>
           <p className="text-lavender-text/70 max-w-2xl mx-auto">
-            Quickly filter popular Indian stocks by value, dividend yield, momentum, 52-week position, and price.
-            This is a discovery tool, not a recommendation engine.
+            Compare 18 widely followed Indian stocks and open any result for deeper research.
+            This is a focused discovery list—not a full-market screener or recommendation.
           </p>
         </div>
 
@@ -121,12 +124,18 @@ export default function StockScreener() {
           </div>
         ) : (
           <>
-            <div className="mb-4 text-sm text-lavender-text/70">
-              Showing {filtered.length} of {stocks.length} stocks
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-lavender-text/70">
+              <span>Showing {filtered.length} of {stocks.length} popular stocks</span>
+              {lastUpdated && (
+                <span className="inline-flex items-center gap-1.5 text-xs text-lavender-text/50">
+                  <Clock3 className="h-3.5 w-3.5" />
+                  Refreshed {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(stock => (
-                <div key={stock.display_ticker} className="app-card p-5 hover:border-green-500/25 transition">
+                <Link to={`/stock/${stock.display_ticker}`} key={stock.display_ticker} className="app-card group p-5 hover:border-green-500/25 hover:-translate-y-0.5 transition">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h2 className="text-xl font-black text-lavender-text">{stock.display_ticker}</h2>
@@ -152,20 +161,18 @@ export default function StockScreener() {
                       <p className="font-semibold text-lavender-primary">{stock.position_in_52w || 0}%</p>
                     </div>
                   </div>
-                </div>
+                  <div className="mt-4 flex items-center justify-end gap-1 text-xs font-semibold text-lavender-primary">
+                    View stock research <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
               ))}
             </div>
           </>
         )}
 
-        <article className="mt-12 prose prose-invert max-w-none prose-headings:text-lavender-text prose-p:text-lavender-text/80">
-          <h2 className="text-2xl font-bold text-lavender-text">How to Use This Screener</h2>
-          <p>
-            A screener helps narrow a large market into a smaller research list. The filters here highlight common
-            investor starting points such as reasonable valuation, dividend yield, price momentum, and stocks trading
-            closer to the lower end of their 52-week range. None of these filters should be used alone.
-          </p>
-        </article>
+        <div className="mt-8 rounded-2xl border border-lavender-text/10 bg-white p-4 text-sm leading-6 text-lavender-text/65">
+          Use these filters only to create a research shortlist. Check company filings, results, risks and valuation before making a decision.
+        </div>
       </div>
     </div>
   );

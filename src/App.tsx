@@ -20,7 +20,6 @@ import SIPCalculator from './components/SIPCalculator';
 import LumpsumCalculator from './components/LumpsumCalculator';
 import BrokerageCalculator from './components/BrokerageCalculator';
 import FnOCalculator from './components/FnOCalculator';
-import StockDirectory from './components/StockDirectory';
 import StockPage from './components/StockPage';
 import StockComparison from './components/StockComparison';
 import StockScreener from './components/StockScreener';
@@ -114,7 +113,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/tools/fno-calculator" element={<FnOCalculator />} />
           <Route path="/tools/stock-comparison" element={<StockComparison />} />
           
-          <Route path="/stocks" element={<StockDirectory user={user} />} />
+          <Route path="/stocks" element={<StockScreener />} />
           <Route path="/stocks/screener" element={<StockScreener />} />
           <Route path="/stock/:symbol" element={<StockPage user={user} />} />
 
