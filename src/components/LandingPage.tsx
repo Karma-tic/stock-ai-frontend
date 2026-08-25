@@ -521,35 +521,32 @@ export default function LandingPage({ onGetStarted }: Props) {
         </div>
       </section>
 
-      {/* SEO Article for AdSense - What is Stock AI */}
-      <section className="bg-lavender-base py-16 border-t border-lavender-text/10">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="app-card p-6 sm:p-8 prose prose-invert prose-headings:text-lavender-text prose-a:text-lavender-primary">
-          <h2 className="text-3xl font-bold mb-6 text-center">What is Stock AI and How Does it Analyze the Indian Market?</h2>
-          
-          <p className="mb-4 leading-relaxed">
-            The Indian stock market (comprising the National Stock Exchange and Bombay Stock Exchange) has grown exponentially, bringing in millions of new retail investors. However, trading successfully requires vast amounts of research. Professional fund managers spend hours analyzing balance sheets, earnings reports, global macroeconomic trends, and breaking news. For the average retail investor, conducting this level of deep-dive fundamental and technical analysis is practically impossible due to time constraints.
-          </p>
-          
-          <p className="mb-4 leading-relaxed">
-            This is where <strong>Stock AI</strong> bridges the gap. By leveraging advanced Large Language Models (LLMs) and artificial intelligence algorithms, Stock AI automates the grueling research process. In less than 10 seconds, our AI engines scrape real-time financial data, analyze historical price action, read live news feeds from top financial publications (such as The Economic Times, Moneycontrol, and LiveMint), and synthesize this massive volume of unstructured data into a clear, actionable trading signal.
-          </p>
-
-          <h3 className="text-2xl font-bold mb-4 mt-8 text-lavender-text">Why AI-Driven Analysis Outperforms Traditional Methods</h3>
-          <p className="mb-4 leading-relaxed">
-            Human analysts, no matter how skilled, are subject to cognitive biases—fear, greed, and confirmation bias. They can also only process a limited amount of information at a time. AI models, on the other hand, are completely objective. They can instantly cross-reference a company's P/E ratio, its debt-to-equity metrics, recent insider trading filings, and the overall sentiment of a breaking news article, outputting a completely data-driven probability score.
-          </p>
-
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
-            <li><strong>Unemotional Decision Making:</strong> The AI doesn't panic during market corrections or succumb to FOMO (Fear Of Missing Out) during massive bull runs.</li>
-            <li><strong>Speed of Execution:</strong> The AI processes quarterly earnings results the second they are uploaded to the NSE India portal, analyzing the EPS (Earnings Per Share) and revenue growth instantly.</li>
-            <li><strong>Comprehensive Risk Management:</strong> Every BUY or SELL signal generated is accompanied by a strict Stop Loss and defined Price Targets, ensuring that downside risk is always mitigated.</li>
-          </ul>
-
-          <h3 className="text-2xl font-bold mb-4 mt-8 text-lavender-text">Empowering the Indian Retail Investor</h3>
-          <p className="mb-4 leading-relaxed">
-            Our mission at BytePlay and Karmatix is to democratize financial research. Whether you are looking for long-term delivery investments, quick swing trades, or high-risk penny stocks, Stock AI provides the institutional-grade analytics you need. We believe that with the right educational resources and AI-powered tools, every investor can navigate the complexities of Nifty 50 and BankNifty with confidence.
-          </p>
+      {/* Compact product explanation */}
+      <section className="border-t border-lavender-text/10 bg-lavender-base py-10 sm:py-14">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="app-card p-5 sm:p-8">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-2xl font-bold text-lavender-text sm:text-3xl">Indian stock research, simplified</h2>
+              <p className="mt-3 text-sm leading-6 text-lavender-text/70 sm:text-base">
+                Stock AI combines market data, company filings and relevant news into one quick, structured overview.
+              </p>
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-4">
+              {[
+                { icon: Activity, label: "Market data" },
+                { icon: Newspaper, label: "Filings & news" },
+                { icon: Cpu, label: "Clear summary" },
+              ].map(item => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.label} className="flex min-w-0 flex-col items-center rounded-2xl border border-lavender-text/10 bg-white p-3 text-center sm:p-5">
+                    <Icon className="h-5 w-5 text-lavender-primary sm:h-6 sm:w-6" />
+                    <span className="mt-2 text-[11px] font-semibold leading-tight text-lavender-text/80 sm:text-sm">{item.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-5 text-center text-xs text-lavender-text/50">For research and education—not investment advice.</p>
           </div>
         </div>
       </section>
