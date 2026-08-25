@@ -126,7 +126,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
 
             {mode === 'google' ? (
               <div className="space-y-7">
-                <button onClick={loginWithGoogle} disabled={loading} className="flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-white px-5 text-sm font-semibold text-slate-950 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-[#050b16] disabled:opacity-60">
+                <button onClick={loginWithGoogle} disabled={loading} className="flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#f8fafc] px-5 text-sm font-semibold text-[#0f172a] transition hover:bg-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-[#050b16] disabled:opacity-60">
                   {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <img src="/assets/google.svg" alt="" className="h-5 w-5" />}
                   {loading ? 'Opening Google…' : 'Continue with Google'}
                 </button>
