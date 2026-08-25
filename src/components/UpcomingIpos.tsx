@@ -11,18 +11,66 @@ export interface IPO {
   subscription?: string; issue_size?: string; listing_date?: string; source_updated_at?: string;
 }
 
+const IPO_CACHE_KEY = 'byteplay:ipos:v1';
+const IPO_FILTER_KEY = 'byteplay:ipos:filters:v1';
+const IPO_CACHE_TTL = 5 * 60 * 1000;
+
+type IpoCache = { data: IPO[]; cachedAt: number };
+
+function readIpoCache(): IpoCache | null {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(IPO_CACHE_KEY) || 'null');
+    return Array.isArray(parsed?.data) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function readFilters() {
+  try {
+    return JSON.parse(sessionStorage.getItem(IPO_FILTER_KEY) || 'null') || {};
+  } catch {
+    return {};
+  }
+}
+
 function Score({ value = 1 }: { value?: number }) {
   return <span className="inline-flex items-center gap-1.5" title={`GMP activity ${value} out of 5`}><Activity className="h-3.5 w-3.5 text-violet-400" /><span className="flex gap-0.5">{[1,2,3,4,5].map(i => <i key={i} className={`h-1.5 w-3 rounded-full ${i <= value ? 'bg-violet-400' : 'bg-lavender-text/15'}`} />)}</span></span>;
 }
 
 export default function UpcomingIpos({ compact = false }: { compact?: boolean }) {
-  const [ipos, setIpos] = useState<IPO[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initialCache = useMemo(() => readIpoCache(), []);
+  const initialFilters = useMemo(() => readFilters(), []);
+  const [ipos, setIpos] = useState<IPO[]>(initialCache?.data || []);
+  const [loading, setLoading] = useState(!initialCache?.data?.length);
   const [error, setError] = useState('');
-  const [filter, setFilter] = useState('All');
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState(initialFilters.filter || 'All');
+  const [search, setSearch] = useState(initialFilters.search || '');
 
-  useEffect(() => { axios.get(`${BASE}/api/market/ipos`).then(r => r.data.status === 'success' ? setIpos(r.data.ipos) : setError(r.data.message)).catch(() => setError('IPO data is temporarily unavailable.')).finally(() => setLoading(false)); }, []);
+  useEffect(() => {
+    const cache = readIpoCache();
+    const cacheIsFresh = cache && Date.now() - cache.cachedAt < IPO_CACHE_TTL;
+    if (cacheIsFresh) {
+      setLoading(false);
+      return;
+    }
+
+    axios.get(`${BASE}/api/market/ipos`).then(r => {
+      if (r.data.status === 'success' && Array.isArray(r.data.ipos)) {
+        setIpos(r.data.ipos);
+        setError('');
+        sessionStorage.setItem(IPO_CACHE_KEY, JSON.stringify({ data: r.data.ipos, cachedAt: Date.now() }));
+      } else if (!cache?.data?.length) {
+        setError(r.data.message || 'IPO data is temporarily unavailable.');
+      }
+    }).catch(() => {
+      if (!cache?.data?.length) setError('IPO data is temporarily unavailable.');
+    }).finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!compact) sessionStorage.setItem(IPO_FILTER_KEY, JSON.stringify({ filter, search }));
+  }, [compact, filter, search]);
   const visible = useMemo(() => ipos.filter(ipo => (filter === 'All' || ipo.category === filter) && `${ipo.company_name} ${ipo.symbol}`.toLowerCase().includes(search.toLowerCase())), [ipos, filter, search]);
   const badge = (status = 'Upcoming') => <span className={`rounded-full border px-2 py-1 text-[10px] font-semibold ${status.toLowerCase().includes('open') ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-400' : 'border-violet-400/20 bg-violet-400/10 text-violet-300'}`}>{status}</span>;
 
