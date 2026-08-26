@@ -17,6 +17,19 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  response => response,
+  async error => {
+    if (error?.response?.status === 401 && window.location.pathname !== '/login') {
+      const next = `${window.location.pathname}${window.location.search}`;
+      localStorage.removeItem('sb_token');
+      await supabase.auth.signOut({ scope: 'local' });
+      window.location.assign(`/login?next=${encodeURIComponent(next)}`);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const getTopStocks = () => api.get('/api/market/top');
 export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const analyzeStock = (ticker: string) => api.get(`/api/stock/${ticker}/analyze`);

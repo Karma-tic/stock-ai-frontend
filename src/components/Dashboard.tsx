@@ -16,7 +16,9 @@ import PennyStocks from './PennyStocks';
 import TrendingStocks from './TrendingStocks';
 import TodayRadar from './TodayRadar';
 
-export default function Dashboard() {
+type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny' | 'ipos' | 'radar';
+
+export default function Dashboard({ initialTab = 'market' }: { initialTab?: DashboardTab }) {
   const { isPro } = usePlan();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -36,9 +38,11 @@ export default function Dashboard() {
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   /* ================================================ */
 
-  const [tab, setTab] = useState<
-    'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny' | 'ipos' | 'radar'
-  >('market');
+  const [tab, setTab] = useState<DashboardTab>(initialTab);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
 
   /* ================= PRELOAD ================= */
   useEffect(() => {

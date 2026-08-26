@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, KeyRound, Loader2, LockKeyhole, Mail, Moon, ShieldCheck, Sun, TrendingUp } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -11,16 +11,27 @@ interface Props {
 }
 
 export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }: Props) {
+  const location = useLocation();
   const [mode, setMode] = useState<'google' | 'email'>('google');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'input' | 'verify'>('input');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const requestedPath = new URLSearchParams(location.search).get('next');
+  const safeNext = requestedPath?.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/';
 
   const loginWithGoogle = async () => {
     setLoading(true);
-    await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+    setError('');
+    sessionStorage.setItem('stock_ai_post_auth_redirect', safeNext);
+    const callback = new URL('/login', window.location.origin);
+    callback.searchParams.set('next', safeNext);
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: callback.toString() } });
+    if (oauthError) {
+      setError(oauthError.message || 'Google sign-in could not be started. Please try again.');
+      setLoading(false);
+    }
   };
 
   const sendEmailOtp = async () => {

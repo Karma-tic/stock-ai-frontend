@@ -86,6 +86,8 @@ function Footer() {
 function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode: boolean; onToggleTheme: () => void }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
+  const requestedPath = new URLSearchParams(location.search).get('next');
+  const safeNext = requestedPath?.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -120,6 +122,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/pro-picks" element={<ProPicks />} />
           <Route path="/ipos" element={<IPOsPage />} />
           <Route path="/ipos/:id" element={<IpoDetailPage />} />
+          <Route path="/today" element={user ? <Dashboard initialTab="radar" /> : <Navigate to="/login?next=%2Ftoday" replace />} />
           
           {/* Learn Wiki Routes */}
           <Route path="/learn/what-is-stock-market" element={<Chapter1 />} />
@@ -133,14 +136,14 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/learn/common-mistakes" element={<Chapter9 />} />
 
           <Route path="/login" element={user ? (
-            <Navigate to="/" replace />
+            <Navigate to={safeNext} replace />
           ) : (
             <LoginPage
               isDarkMode={isDarkMode}
               onToggleTheme={onToggleTheme}
               onLogin={(token, u) => {
                 localStorage.setItem('sb_token', token);
-                window.location.href = '/'; 
+                window.location.assign(safeNext);
               }}
               onBack={() => {
                 window.history.back();
@@ -184,19 +187,36 @@ export default function App() {
   }, [isDarkMode]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    const finishPendingRedirect = () => {
+      const pending = sessionStorage.getItem('stock_ai_post_auth_redirect');
+      if (!pending) return;
+      sessionStorage.removeItem('stock_ai_post_auth_redirect');
+      if (pending.startsWith('/') && !pending.startsWith('//') && `${window.location.pathname}${window.location.search}` !== pending) {
+        window.location.replace(pending);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        console.error('Session restoration failed:', error.message);
+        localStorage.removeItem('sb_token');
+      }
       if (data.session) {
         localStorage.setItem('sb_token', data.session.access_token);
         setUser(data.session.user);
+        finishPendingRedirect();
       }
-      setLoading(false);
-    });
+    }).catch((error) => {
+      console.error('Session restoration failed:', error);
+      localStorage.removeItem('sb_token');
+    }).finally(() => setLoading(false));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth event:', event, session?.user?.email);
       if (session) {
         localStorage.setItem('sb_token', session.access_token);
         setUser(session.user);
+        if (event === 'SIGNED_IN') finishPendingRedirect();
       } else {
         setUser(null);
         localStorage.removeItem('sb_token');

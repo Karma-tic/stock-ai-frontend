@@ -49,16 +49,22 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
   const [preferences, setPreferences] = useState({ email_digest: false, high_priority_alerts: false, minimum_severity: 'high' });
   const [savingPreferences, setSavingPreferences] = useState(false);
   const [preferencesSaved, setPreferencesSaved] = useState(false);
+  const [trackedCount, setTrackedCount] = useState(0);
+  const [trackedTickers, setTrackedTickers] = useState<string[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true); setError('');
     try {
-      const [radarResult, thesisResult, calendarResult, preferenceResult] = await Promise.all([getEventRadar(), getTheses(), getEventCalendar(), getNotificationPreferences()]);
-      setEvents(radarResult.data.events || []);
-      setTheses(thesisResult.data.theses || []);
-      setCalendarEvents(calendarResult.data.events || []);
-      setPreferences(preferenceResult.data.preferences);
-      const leadTicker = radarResult.data.events?.[0]?.ticker;
+      const [radarResult, thesisResult, calendarResult, preferenceResult] = await Promise.allSettled([getEventRadar(), getTheses(), getEventCalendar(), getNotificationPreferences()]);
+      if (radarResult.status === 'rejected') throw radarResult.reason;
+      const radarData = radarResult.value.data || {};
+      setEvents(radarData.events || []);
+      setTrackedCount(radarData.tracked_count || 0);
+      setTrackedTickers(radarData.tracked_tickers || []);
+      if (thesisResult.status === 'fulfilled') setTheses(thesisResult.value.data.theses || []);
+      if (calendarResult.status === 'fulfilled') setCalendarEvents(calendarResult.value.data.events || []);
+      if (preferenceResult.status === 'fulfilled' && preferenceResult.value.data.preferences) setPreferences(preferenceResult.value.data.preferences);
+      const leadTicker = radarData.events?.[0]?.ticker;
       setLoading(false);
       if (leadTicker) getEarningsComparison(leadTicker).then(result => setEarnings(result.data)).catch(() => setEarnings(null));
     }
@@ -131,12 +137,22 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
 
         {error && <div className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-700">{error}</div>}
 
-        {!loading && !lead ? (
+        {!loading && !lead && trackedCount === 0 ? (
           <section className="app-card p-7 text-center sm:p-10">
             <Search className="mx-auto h-9 w-9 text-lavender-primary" />
-            <h2 className="mt-4 text-xl font-bold">Your radar is ready for a watchlist</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-lavender-text/65">Search any NSE or BSE stock from your dashboard, run its full analysis, and add it to your watchlist. Relevant filings and news will then appear here.</p>
+            <h2 className="mt-4 text-xl font-bold">Choose what your radar should monitor</h2>
+            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-lavender-text/65">Add companies to your watchlist or portfolio. Today will then filter filings and news for promoter activity, auditor changes, rating downgrades, results and corporate actions.</p>
+            <div className="mx-auto mt-5 grid max-w-2xl gap-3 text-left sm:grid-cols-3">
+              {['Governance & risk alerts', 'Quarterly result changes', 'Dividends, splits & key dates'].map(item => <div key={item} className="rounded-2xl border border-lavender-text/10 bg-lavender-surface p-3 text-xs font-semibold text-lavender-text/75"><ShieldCheck className="mb-2 h-4 w-4 text-lavender-primary" />{item}</div>)}
+            </div>
             <button onClick={onBrowseStocks} className="mt-5 inline-flex rounded-xl bg-gradient-lavender px-5 py-2.5 text-sm font-bold text-white">Search and analyze stocks</button>
+          </section>
+        ) : !loading && !lead ? (
+          <section className="app-card p-7 text-center sm:p-10">
+            <ShieldCheck className="mx-auto h-10 w-10 text-emerald-600" />
+            <h2 className="mt-4 text-xl font-bold">No material changes detected</h2>
+            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-lavender-text/65">We checked {trackedCount} tracked {trackedCount === 1 ? 'company' : 'companies'}{trackedTickers.length ? ` (${trackedTickers.slice(0, 5).join(', ')}${trackedTickers.length > 5 ? '…' : ''})` : ''}. No new high-signal filings or news matched the radar rules.</p>
+            <button onClick={load} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 px-4 py-2 text-sm font-bold text-lavender-text"><RefreshCw className="h-4 w-4" />Check again</button>
           </section>
         ) : lead ? (
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -239,12 +255,6 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
           </div>
         ) : <div className="grid gap-5 lg:grid-cols-[1fr_320px]"><div className="h-80 animate-pulse rounded-3xl bg-white" /><div className="h-52 animate-pulse rounded-3xl bg-white" /></div>}
       </div>
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-lavender-text/10 bg-lavender-base/95 px-2 py-2 backdrop-blur md:hidden" aria-label="Primary mobile navigation">
-        <a href="#today" className="flex flex-col items-center gap-1 rounded-xl py-1.5 text-[10px] font-semibold text-lavender-primary"><Bell className="h-5 w-5" />Today</a>
-        <a href="#timeline" className="flex flex-col items-center gap-1 rounded-xl py-1.5 text-[10px] font-semibold text-lavender-text/50"><Search className="h-5 w-5" />Watchlist</a>
-        <a href="#calendar" className="flex flex-col items-center gap-1 rounded-xl py-1.5 text-[10px] font-semibold text-lavender-text/50"><CalendarDays className="h-5 w-5" />Calendar</a>
-        <Link to="/market-wrap" className="flex flex-col items-center gap-1 rounded-xl py-1.5 text-[10px] font-semibold text-lavender-text/50"><FileText className="h-5 w-5" />Digest</Link>
-      </nav>
     </main>
   );
 }

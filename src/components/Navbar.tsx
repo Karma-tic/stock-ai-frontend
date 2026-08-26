@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import UpgradeModal from './UpgradeModal';
 import { Menu, Moon, Star, Sun, TrendingUp, X } from 'lucide-react';
@@ -20,6 +20,16 @@ export default function Navbar({
   const [isPro, setIsPro] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const navigation = [
+    { to: '/today', label: 'Today' },
+    { to: '/stocks', label: 'Stocks' },
+    { to: '/market-wrap', label: 'Market Wrap' },
+    { to: '/ipos', label: 'IPOs' },
+    { to: '/learn', label: 'Learn' },
+    { to: '/tools', label: 'Tools' },
+    { to: '/track-record', label: 'Track Record' },
+    { to: '/blog', label: 'Blog' },
+  ];
 
   useEffect(() => {
     const token = localStorage.getItem('sb_token');
@@ -81,37 +91,16 @@ export default function Navbar({
         </Link>
 
         {/* CENTER (DESKTOP ONLY) */}
-        <div className="hidden lg:flex items-center gap-4 text-sm">
-          {user ? (
-            <>
-              <Link to="/" className="text-lavender-text/70 hover:text-lavender-text transition">Today</Link>
-              <Link to="/stocks" className="text-lavender-text/70 hover:text-lavender-text transition">Stocks</Link>
-              <Link to="/market-wrap" className="text-lavender-text/70 hover:text-lavender-text transition">Market Wrap</Link>
-              <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-text transition">Learn</Link>
-            </>
-          ) : <>
-          <Link to="/blog" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Blog
-          </Link>
-          <Link to="/tools" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Tools
-          </Link>
-          <Link to="/market-wrap" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Market Wrap
-          </Link>
-          <Link to="/stocks" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Stocks
-          </Link>
-          <Link to="/ipos" className="text-lavender-text/70 hover:text-lavender-text transition">
-            IPOs
-          </Link>
-          <Link to="/track-record" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Track Record
-          </Link>
-          <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-text transition">
-            Learn
-          </Link>
-          </>}
+        <div className="hidden xl:flex items-center gap-4 text-sm">
+          {navigation.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => `${isActive ? 'text-lavender-primary' : 'text-lavender-text/70'} whitespace-nowrap font-medium transition hover:text-lavender-text`}
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </div>
 
         {/* RIGHT */}
@@ -170,7 +159,7 @@ export default function Navbar({
           <button
             ref={mobileMenuButtonRef}
             onClick={() => setOpen(!open)}
-            className="lg:hidden text-lavender-text text-2xl px-2"
+            className="xl:hidden text-lavender-text text-2xl px-2"
             aria-expanded={open}
             aria-label="Toggle navigation menu"
           >
@@ -180,32 +169,16 @@ export default function Navbar({
         
         {/* MOBILE MENU */}
         {open && (
-          <div ref={mobileMenuRef} className="lg:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-4 shadow-lavender z-50">
-            {(user
-              ? [
-                  { to: '/', label: 'Dashboard & Analysis' },
-                  { to: '/stocks', label: 'Browse Stocks' },
-                  { to: '/market-wrap', label: 'Market Wrap' },
-                  { to: '/learn', label: 'Learn' },
-                ]
-              : [
-                  { to: '/blog', label: 'Blog' },
-                  { to: '/tools', label: 'Tools' },
-                  { to: '/market-wrap', label: 'Market Wrap' },
-                  { to: '/stocks', label: 'Stocks' },
-                  { to: '/ipos', label: 'IPOs' },
-                  { to: '/track-record', label: 'Track Record' },
-                  { to: '/learn', label: 'Learn' },
-                ]
-            ).map((item) => (
-              <Link
+          <div ref={mobileMenuRef} className="xl:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-2 shadow-lavender z-50">
+            {navigation.map((item) => (
+              <NavLink
                 key={item.to}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="block text-lavender-text/80 hover:text-lavender-text transition"
+                className={({ isActive }) => `block rounded-xl px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-lavender-secondary/15 text-lavender-primary' : 'text-lavender-text/80 hover:bg-lavender-secondary/10 hover:text-lavender-text'}`}
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
 
             <button
