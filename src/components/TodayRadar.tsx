@@ -52,10 +52,10 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
   const [trackedCount, setTrackedCount] = useState(0);
   const [trackedTickers, setTrackedTickers] = useState<string[]>([]);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (forceRefresh = false) => {
     setLoading(true); setError('');
     try {
-      const [radarResult, thesisResult, calendarResult, preferenceResult] = await Promise.allSettled([getEventRadar(), getTheses(), getEventCalendar(), getNotificationPreferences()]);
+      const [radarResult, thesisResult, calendarResult, preferenceResult] = await Promise.allSettled([getEventRadar(forceRefresh), getTheses(), getEventCalendar(), getNotificationPreferences()]);
       if (radarResult.status === 'rejected') throw radarResult.reason;
       const radarData = radarResult.value.data || {};
       setEvents(radarData.events || []);
@@ -72,6 +72,11 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
     finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    const reloadForTrackedStocks = () => load(true);
+    window.addEventListener('stock-ai:tracked-stocks-changed', reloadForTrackedStocks);
+    return () => window.removeEventListener('stock-ai:tracked-stocks-changed', reloadForTrackedStocks);
+  }, [load]);
 
   const lead = events[0];
   const rest = useMemo(() => events.slice(1, 7), [events]);
@@ -130,7 +135,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
             <h1 className="text-2xl font-bold text-lavender-text sm:text-3xl">What changed today</h1>
             <p className="mt-1 text-sm text-lavender-text/60">{loading ? 'Checking your watchlist…' : `${important || events.length} important ${important === 1 ? 'change' : 'changes'} across stocks you follow`}</p>
           </div>
-          <button onClick={load} disabled={loading} className="inline-flex h-10 items-center gap-2 rounded-xl border border-lavender-text/10 bg-white px-3 text-sm font-semibold text-lavender-text shadow-sm disabled:opacity-50" aria-label="Refresh event radar">
+          <button onClick={() => load(true)} disabled={loading} className="inline-flex h-10 items-center gap-2 rounded-xl border border-lavender-text/10 bg-white px-3 text-sm font-semibold text-lavender-text shadow-sm disabled:opacity-50" aria-label="Refresh event radar">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /><span className="hidden sm:inline">Refresh</span>
           </button>
         </header>
@@ -152,7 +157,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
             <ShieldCheck className="mx-auto h-10 w-10 text-emerald-600" />
             <h2 className="mt-4 text-xl font-bold">No material changes detected</h2>
             <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-lavender-text/65">We checked {trackedCount} tracked {trackedCount === 1 ? 'company' : 'companies'}{trackedTickers.length ? ` (${trackedTickers.slice(0, 5).join(', ')}${trackedTickers.length > 5 ? '…' : ''})` : ''}. No new high-signal filings or news matched the radar rules.</p>
-            <button onClick={load} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 px-4 py-2 text-sm font-bold text-lavender-text"><RefreshCw className="h-4 w-4" />Check again</button>
+            <button onClick={() => load(true)} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 px-4 py-2 text-sm font-bold text-lavender-text"><RefreshCw className="h-4 w-4" />Check again</button>
           </section>
         ) : lead ? (
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">

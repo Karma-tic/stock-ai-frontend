@@ -35,7 +35,7 @@ export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const analyzeStock = (ticker: string) => api.get(`/api/stock/${ticker}/analyze`);
 export const searchStocks = (query: string) => api.get(`/api/market/search/${query}`);
 export const getWatchlist = () => api.get('/api/watchlist');
-export const getEventRadar = () => api.get('/api/event-radar');
+export const getEventRadar = (refresh = false) => api.get('/api/event-radar', { params: refresh ? { refresh: true } : undefined });
 export const getTheses = () => api.get('/api/theses');
 export const getEventCalendar = () => api.get('/api/event-calendar');
 export const getEarningsComparison = (ticker: string) => api.get(`/api/earnings-comparison/${ticker}`);
@@ -43,11 +43,25 @@ export const saveThesis = (ticker: string, data: any) => api.put(`/api/theses/${
 export const deleteThesis = (ticker: string) => api.delete(`/api/theses/${ticker}`);
 export const getNotificationPreferences = () => api.get('/api/notification-preferences');
 export const saveNotificationPreferences = (data: any) => api.put('/api/notification-preferences', data);
-export const addToWatchlist = (ticker: string, company_name: string) =>
-  api.post('/api/watchlist', { ticker, company_name });
-export const removeFromWatchlist = (ticker: string) =>
-  api.delete(`/api/watchlist/${ticker}`);
+const notifyTrackedStocksChanged = () => window.dispatchEvent(new Event('stock-ai:tracked-stocks-changed'));
+export const addToWatchlist = async (ticker: string, company_name: string) => {
+  const response = await api.post('/api/watchlist', { ticker, company_name });
+  notifyTrackedStocksChanged();
+  return response;
+};
+export const removeFromWatchlist = async (ticker: string) => {
+  const response = await api.delete(`/api/watchlist/${ticker}`);
+  notifyTrackedStocksChanged();
+  return response;
+};
 export const getPortfolio = () => api.get('/api/portfolio');
-export const addToPortfolio = (data: any) => api.post('/api/portfolio', data);
-export const removeFromPortfolio = (ticker: string) =>
-  api.delete(`/api/portfolio/${ticker}`);
+export const addToPortfolio = async (data: any) => {
+  const response = await api.post('/api/portfolio', data);
+  notifyTrackedStocksChanged();
+  return response;
+};
+export const removeFromPortfolio = async (ticker: string) => {
+  const response = await api.delete(`/api/portfolio/${ticker}`);
+  notifyTrackedStocksChanged();
+  return response;
+};
