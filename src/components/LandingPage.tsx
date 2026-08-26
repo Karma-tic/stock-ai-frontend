@@ -50,7 +50,7 @@ export default function LandingPage({ onGetStarted }: Props) {
       title: "Free",
       price: "₹0",
       period: "forever",
-      features: ["2 AI analyses/day", "Top 10 stocks", "3 watchlist stocks"],
+      features: ["2 AI analyses/day", "Top 10 stocks", "5 watchlist stocks"],
       badge: null,
       badgeClass: "",
       bgClass: "bg-white",
@@ -490,7 +490,7 @@ export default function LandingPage({ onGetStarted }: Props) {
           {[
             {
               q: "Is Stock AI free to use?",
-              a: "Yes, Stock AI has a free plan that gives you 2 AI analyses per day, 3 watchlist stocks and access to top 10 market stocks. Pro plan at ₹99/month (limited offer, regular price ₹499) gives unlimited access."
+              a: "Yes, Stock AI has a free plan that gives you 2 AI analyses per day, 5 watchlist stocks and access to top 10 market stocks. Pro plan at ₹99/month (limited offer, regular price ₹499) gives unlimited access."
             },
             {
               q: "Is this SEBI registered investment advice?",

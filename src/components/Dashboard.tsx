@@ -316,7 +316,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
                   )}
                   onWatchlistChange={loadWatchlist}
                   onUpgradeNeeded={() => setShowUpgrade(true)}
-                  canAddToWatchlist={isPro || watchlist.length < 3}
+                  canAddToWatchlist={isPro || watchlist.length < 5}
                 />
 
                 {index === 5 && (

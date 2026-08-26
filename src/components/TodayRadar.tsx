@@ -51,6 +51,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
   const [preferencesSaved, setPreferencesSaved] = useState(false);
   const [trackedCount, setTrackedCount] = useState(0);
   const [trackedTickers, setTrackedTickers] = useState<string[]>([]);
+  const [readingMinutes, setReadingMinutes] = useState(0);
 
   const load = useCallback(async (forceRefresh = false) => {
     setLoading(true); setError('');
@@ -61,6 +62,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
       setEvents(radarData.events || []);
       setTrackedCount(radarData.tracked_count || 0);
       setTrackedTickers(radarData.tracked_tickers || []);
+      setReadingMinutes(radarData.reading_minutes || 0);
       if (thesisResult.status === 'fulfilled') setTheses(thesisResult.value.data.theses || []);
       if (calendarResult.status === 'fulfilled') setCalendarEvents(calendarResult.value.data.events || []);
       if (preferenceResult.status === 'fulfilled' && preferenceResult.value.data.preferences) setPreferences(preferenceResult.value.data.preferences);
@@ -133,7 +135,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
           <div>
             <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-lavender-primary">Your daily radar</p>
             <h1 className="text-2xl font-bold text-lavender-text sm:text-3xl">What changed today</h1>
-            <p className="mt-1 text-sm text-lavender-text/60">{loading ? 'Checking your watchlist…' : `${important || events.length} important ${important === 1 ? 'change' : 'changes'} across stocks you follow`}</p>
+            <p className="mt-1 text-sm text-lavender-text/60">{loading ? 'Checking your watchlist…' : `${important || events.length} important ${important === 1 ? 'change' : 'changes'} across stocks you follow${readingMinutes ? ` · ${readingMinutes} min read` : ''}`}</p>
           </div>
           <button onClick={() => load(true)} disabled={loading} className="inline-flex h-10 items-center gap-2 rounded-xl border border-lavender-text/10 bg-white px-3 text-sm font-semibold text-lavender-text shadow-sm disabled:opacity-50" aria-label="Refresh event radar">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /><span className="hidden sm:inline">Refresh</span>
