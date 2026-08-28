@@ -5,16 +5,16 @@ export default function PrivacyPolicy() {
     <PageLayout>
     <div className="min-h-screen bg-lavender-surface p-8 max-w-3xl mx-auto">
       <h1 className="text-lavender-text text-3xl font-bold mb-2">Privacy Policy</h1>
-      <p className="text-lavender-text/70 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
+      <p className="text-lavender-text/70 text-sm mb-8">Last updated: August 2026 | BytePlay Technologies</p>
 
       {[
         {
           title: "1. Information We Collect",
-          content: "We collect your phone number or email address solely for authentication. We store your watchlist, portfolio holdings, and usage data to provide our services. We do not collect any sensitive financial credentials."
+          content: "We collect your phone number or email address for authentication. If you voluntarily apply to our product-research beta, we also collect the name or alias, investor type, watchlist size, research problem, and consent record that you submit. We store your watchlist, portfolio holdings, and usage data to provide our services. We do not collect brokerage passwords or other sensitive financial credentials."
         },
         {
           title: "2. How We Use Your Information",
-          content: "Your data is used exclusively to provide stock market analysis, watchlist tracking, and portfolio P&L features. We do not sell, rent, or share your personal information with any third parties for marketing purposes, except as required for targeted advertising networks like Google AdSense (see section 4)."
+          content: "Your data is used to provide stock research, watchlist tracking, portfolio features, support, and—when you explicitly opt in—to contact you about the BytePlay beta and request product feedback. We do not sell or rent beta-applicant contact information. You may withdraw beta contact consent at any time by using the unsubscribe option in an email or contacting us. Advertising services are described in section 4."
         },
         {
           title: "3. Data Storage & Security",
@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
         },
         {
           title: "6. Data Retention",
-          content: "We retain your data as long as your account is active. You may request deletion of your account and all associated data by emailing contact@karmatix.in."
+          content: "We retain account data while your account is active. Beta application records are retained only while needed for the research programme, consent evidence, and legal compliance. You may opt out or request deletion of your application, account, and associated data by emailing contact@karmatix.in."
         },
         {
           title: "7. Your Rights",

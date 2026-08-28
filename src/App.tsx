@@ -36,6 +36,7 @@ import MarketWrap from './components/MarketWrap';
 import ProPicks from './components/ProPicks';
 import IPOsPage from './components/IPOsPage';
 import IpoDetailPage from './components/IpoDetailPage';
+import BetaApplication from './components/BetaApplication';
 
 
 function Footer() {
@@ -50,6 +51,7 @@ function Footer() {
           <Link to="/refund" className="text-lavender-text/80 hover:text-lavender-text text-sm">Refund</Link>
           <Link to="/disclaimer" className="text-lavender-text/80 hover:text-lavender-text text-sm">Disclaimer</Link>
           <Link to="/contact" className="text-lavender-text/80 hover:text-lavender-text text-sm">Contact</Link>
+          <Link to="/beta" className="text-lavender-text/80 hover:text-lavender-text text-sm">Join Beta</Link>
         </div>
         <p className="text-lavender-text/70 text-xs w-full text-center">
           Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
@@ -103,6 +105,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/contact"    element={<Contact />} />
           <Route path="/about"      element={<About />} />
+          <Route path="/beta"       element={<BetaApplication />} />
           <Route path="/blog"       element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/learn"      element={<Learn />} />

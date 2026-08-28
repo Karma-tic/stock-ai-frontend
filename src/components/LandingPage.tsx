@@ -137,6 +137,9 @@ export default function LandingPage({ onGetStarted }: Props) {
             How It Works
           </a>
         </div>
+        <Link to="/beta" className="-mt-8 mb-10 inline-flex text-sm font-semibold text-lavender-primary underline decoration-lavender-primary/30 underline-offset-4 hover:decoration-lavender-primary">
+          Help shape BytePlay — join the free research beta
+        </Link>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">

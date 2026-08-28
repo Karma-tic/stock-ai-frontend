@@ -31,6 +31,16 @@ api.interceptors.response.use(
 );
 
 export const getTopStocks = () => api.get('/api/market/top');
+export type BetaApplicationPayload = {
+  email: string;
+  name: string;
+  investor_type: string;
+  watchlist_size: number | null;
+  pain_point: string;
+  consent: boolean;
+  website: string;
+};
+export const submitBetaApplication = (data: BetaApplicationPayload) => api.post('/api/beta/apply', data);
 export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const analyzeStock = (ticker: string) => api.get(`/api/stock/${ticker}/analyze`);
 export const searchStocks = (query: string) => api.get(`/api/market/search/${query}`);
