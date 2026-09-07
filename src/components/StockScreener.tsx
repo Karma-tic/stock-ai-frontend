@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Clock3, Filter, Search } from 'lucide-react';
+import { ArrowRight, Clock3, Coins, Filter, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getStock } from '../lib/api';
 import SEO from './SEO';
@@ -115,6 +115,20 @@ export default function StockScreener() {
             </div>
           </div>
         </div>
+
+        <Link
+          to="/stocks/dividends"
+          className="mb-6 flex flex-col gap-4 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-5 transition hover:border-emerald-500/45 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex items-start gap-3">
+            <span className="rounded-xl bg-emerald-500/15 p-2 text-emerald-600"><Coins className="h-5 w-5" /></span>
+            <div>
+              <h2 className="font-bold text-lavender-text">Dividend Tracker</h2>
+              <p className="mt-1 text-sm text-lavender-text/65">Compare yield, cash paid and completed-year dividend consistency.</p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-600">Explore dividend records <ArrowRight className="h-4 w-4" /></span>
+        </Link>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

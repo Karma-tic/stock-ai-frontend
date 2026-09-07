@@ -23,6 +23,7 @@ import FnOCalculator from './components/FnOCalculator';
 import StockPage from './components/StockPage';
 import StockComparison from './components/StockComparison';
 import StockScreener from './components/StockScreener';
+import DividendTracker from './components/DividendTracker';
 import Chapter1 from './components/learn/Chapter1';
 import Chapter2 from './components/learn/Chapter2';
 import Chapter3 from './components/learn/Chapter3';
@@ -120,6 +121,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           
           <Route path="/stocks" element={<StockScreener />} />
           <Route path="/stocks/screener" element={<StockScreener />} />
+          <Route path="/stocks/dividends" element={<DividendTracker />} />
           <Route path="/stock/:symbol" element={<StockPage user={user} />} />
 
           <Route path="/pro-picks" element={<ProPicks />} />
