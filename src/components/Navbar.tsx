@@ -23,6 +23,7 @@ export default function Navbar({
   const navigation = [
     { to: '/today', label: 'Today' },
     { to: '/stocks', label: 'Stocks' },
+    { to: '/stocks/dividends', label: 'Dividends' },
     { to: '/market-wrap', label: 'Market Wrap' },
     { to: '/ipos', label: 'IPOs' },
     { to: '/learn', label: 'Learn' },
@@ -96,6 +97,7 @@ export default function Navbar({
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.to === '/stocks'}
               className={({ isActive }) => `${isActive ? 'text-lavender-primary' : 'text-lavender-text/70'} whitespace-nowrap font-medium transition hover:text-lavender-text`}
             >
               {item.label}
@@ -174,6 +176,7 @@ export default function Navbar({
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.to === '/stocks'}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) => `block rounded-xl px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-lavender-secondary/15 text-lavender-primary' : 'text-lavender-text/80 hover:bg-lavender-secondary/10 hover:text-lavender-text'}`}
               >
