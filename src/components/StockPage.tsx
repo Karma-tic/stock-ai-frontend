@@ -87,18 +87,18 @@ export default function StockPage({ user }: { user?: any }) {
           </div>
 
           <section className="border-t border-lavender-text/10 pt-12">
-            <h2 className="text-2xl font-bold mb-4 text-lavender-text">How to Trade {profile.symbol} using AI</h2>
+            <h2 className="text-2xl font-bold mb-4 text-lavender-text">How to research {profile.symbol} with Stock AI</h2>
             <p>
-              While understanding the fundamental profile of {profile.name} is crucial for long-term investing, short-to-medium term price action is often dictated by market sentiment, quarterly earnings reports, and breaking news. 
+              Business quality and price do not always move together. Use the Stock Story above to compare official filings, results, risks and recent price context before forming your own view.
             </p>
             <p>
-              Stock AI at byteplay.org utilizes advanced Large Language Models (LLMs) to read thousands of news articles, official NSE announcements, and real-time financial data for {profile.symbol}. In just 8 seconds, our AI synthesizes this unstructured data to provide you with a clear, actionable <strong>BUY, HOLD, or SELL signal</strong>.
+              Stock AI collects source-linked company events and market information for {profile.symbol}, then makes the important facts easier to review. It does not provide a personal recommendation, price target or guarantee of outcome.
             </p>
             <ul className="list-disc pl-6 space-y-2 mt-4">
-              <li><strong>Entry Price:</strong> The exact price range to enter the trade.</li>
-              <li><strong>Target Prices:</strong> Short-term (1-3 months) and Long-term (6-12 months) price targets.</li>
-              <li><strong>Stop Loss:</strong> A strictly calculated stop-loss to protect your capital from downside risk.</li>
-              <li><strong>Confidence Score:</strong> A percentage metric indicating the AI's conviction in the trade.</li>
+              <li><strong>Original sources:</strong> Open relevant exchange filings and credible reports.</li>
+              <li><strong>Evidence on both sides:</strong> Separate supporting facts, risks and unresolved developments.</li>
+              <li><strong>Quarterly comparison:</strong> Track changes in revenue, profit and operating performance.</li>
+              <li><strong>What to watch next:</strong> Keep an eye on the disclosures that could support or challenge your view.</li>
             </ul>
           </section>
 
@@ -107,13 +107,13 @@ export default function StockPage({ user }: { user?: any }) {
         {/* Footer CTA */}
         <div className="mt-16 bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-2xl p-8 text-center shadow-sm">
           <h3 className="text-lavender-text text-2xl font-bold mb-3">
-            Don't Guess. Let AI Analyze {profile.symbol}.
+            Build your own evidence-based view of {profile.symbol}.
           </h3>
           <p className="text-lavender-text/70 mb-6 max-w-xl mx-auto">
-            Join thousands of smart investors using AI to find the best entry and exit points in the Indian stock market.
+            Review source-linked company updates, results and risks in one place.
           </p>
           <Link to={user ? `/?analyze=${profile.symbol}` : "/login"} className="inline-block bg-blue-700 text-white font-bold py-3 px-8 rounded-2xl transition hover:bg-blue-800">
-            Analyze {profile.symbol} Now
+            View {profile.symbol} research
           </Link>
         </div>
 
