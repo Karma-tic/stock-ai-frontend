@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { STOCK_PROFILES, getGenericProfile } from '../data/stockProfiles';
 import { TrendingUp, Info, AlertTriangle, BookOpen } from 'lucide-react';
 import SEO from './SEO';
+import StockStory from './StockStory';
 
 export default function StockPage({ user }: { user?: any }) {
   const { symbol } = useParams();
@@ -48,6 +49,7 @@ export default function StockPage({ user }: { user?: any }) {
 
       {/* Main Content - SEO Goldmine */}
       <div className="max-w-4xl mx-auto px-6 py-12">
+        <StockStory ticker={profile.symbol} />
         <article className="prose prose-invert max-w-none prose-headings:text-lavender-text prose-p:leading-relaxed prose-p:text-lavender-text/80">
           
           <section className="mb-12">
