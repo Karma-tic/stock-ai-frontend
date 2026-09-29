@@ -38,6 +38,7 @@ import ProPicks from './components/ProPicks';
 import IPOsPage from './components/IPOsPage';
 import IpoDetailPage from './components/IpoDetailPage';
 import BetaApplication from './components/BetaApplication';
+import InvestExplorer from './components/invest/InvestExplorer';
 
 
 function Footer() {
@@ -112,6 +113,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/learn"      element={<Learn />} />
           <Route path="/track-record" element={<TrackRecord />} />
           <Route path="/market-wrap" element={<MarketWrap />} />
+          <Route path="/invest"     element={<InvestExplorer user={user} />} />
           <Route path="/tools"      element={<ToolsHub />} />
           <Route path="/tools/sip-calculator" element={<SIPCalculator />} />
           <Route path="/tools/lumpsum-calculator" element={<LumpsumCalculator />} />

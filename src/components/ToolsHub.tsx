@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
-import { Calculator, TrendingUp, PieChart, Activity, Scale } from 'lucide-react';
+import { Calculator, TrendingUp, PieChart, Activity, Scale, Compass } from 'lucide-react';
 import SEO from './SEO';
 
 export default function ToolsHub() {
   const tools = [
+    {
+      title: "Invest Explorer",
+      description: "Compare FDs, PPF, mutual funds, gold, bonds, REITs and global investing by return, risk, lock-in and tax, with today's best rates.",
+      path: "/invest",
+      icon: <Compass className="w-8 h-8 text-lavender-primary" />,
+      color: "border-lavender-primary/30 bg-lavender-primary/10",
+      isNew: true
+    },
     {
       title: "SIP Calculator",
       description: "Calculate the future value of your monthly SIP investments with the power of compounding.",

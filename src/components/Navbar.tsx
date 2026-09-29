@@ -26,6 +26,7 @@ export default function Navbar({
     { to: '/stocks/dividends', label: 'Dividends' },
     { to: '/market-wrap', label: 'Market Wrap' },
     { to: '/ipos', label: 'IPOs' },
+    { to: '/invest', label: 'Invest' },
     { to: '/learn', label: 'Learn' },
     { to: '/tools', label: 'Tools' },
     { to: '/track-record', label: 'Track Record' },
