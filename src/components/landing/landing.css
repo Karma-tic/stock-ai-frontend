@@ -1,0 +1,47 @@
+/* Landing page motion. Everything here stops or simplifies under "reduce motion". */
+
+/* Live ticker in the proof strip */
+@keyframes landing-ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: landing-ticker 48s linear infinite;
+}
+.ticker-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+/* Scroll story (desktop): the track is tall so the stage stays pinned while you scroll through it */
+.story-track {
+  height: 270vh;
+}
+.story-stage {
+  perspective: 1600px; /* screens stay flat layers, so no text shows through */
+}
+.story-screen {
+  transform-origin: 50% 65%;
+  will-change: transform, opacity;
+}
+
+/* Scroll story (phones/tablets): each screen tilts up into place as it arrives */
+.story-reveal {
+  transform: perspective(1200px) rotateX(14deg) translateY(28px);
+  transform-origin: 50% 100%;
+  opacity: 0.35;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.8s ease;
+}
+.story-reveal.is-visible {
+  transform: none;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .ticker-mask { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .story-reveal, .story-reveal.is-visible { transform: none; opacity: 1; transition: none; }
+  /* no pinning: desktop gets the simple stacked layout */
+  .story-track { display: none !important; }
+  .story-stacked { display: block !important; }
+}

@@ -1,44 +1,90 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import LoginPage from './components/LoginPage';
-import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
-import RefundPolicy from './components/RefundPolicy';
-import Disclaimer from './components/Disclaimer';
-import Contact from './components/Contact';
-import About from './components/About';
 import LandingPage from './components/LandingPage';
-import Blog from './components/Blog';
-import BlogPost from './components/BlogPost';
-import Learn from './components/Learn';
-import TrackRecord from './components/TrackRecord';
-import ToolsHub from './components/ToolsHub';
-import SIPCalculator from './components/SIPCalculator';
-import LumpsumCalculator from './components/LumpsumCalculator';
-import BrokerageCalculator from './components/BrokerageCalculator';
-import FnOCalculator from './components/FnOCalculator';
-import StockPage from './components/StockPage';
-import StockComparison from './components/StockComparison';
-import StockScreener from './components/StockScreener';
-import DividendTracker from './components/DividendTracker';
-import Chapter1 from './components/learn/Chapter1';
-import Chapter2 from './components/learn/Chapter2';
-import Chapter3 from './components/learn/Chapter3';
-import Chapter4 from './components/learn/Chapter4';
-import Chapter5 from './components/learn/Chapter5';
-import Chapter6 from './components/learn/Chapter6';
-import Chapter7 from './components/learn/Chapter7';
-import Chapter8 from './components/learn/Chapter8';
-import Chapter9 from './components/learn/Chapter9';
-import MarketWrap from './components/MarketWrap';
-import ProPicks from './components/ProPicks';
-import IPOsPage from './components/IPOsPage';
-import IpoDetailPage from './components/IpoDetailPage';
-import BetaApplication from './components/BetaApplication';
-import InvestExplorer from './components/invest/InvestExplorer';
+
+// Every page except the landing page loads on demand, so first-time visitors
+// only download the code for the page they open.
+// If a deploy replaced the chunk files while this tab was open, reload once to pick up the new ones.
+function lazyPage<T extends ComponentType<any>>(load: () => Promise<{ default: T }>) {
+  return lazy(async () => {
+    try {
+      const mod = await load();
+      sessionStorage.removeItem('stock_ai_chunk_reload');
+      return mod;
+    } catch (error) {
+      if (!sessionStorage.getItem('stock_ai_chunk_reload')) {
+        sessionStorage.setItem('stock_ai_chunk_reload', '1');
+        window.location.reload();
+        return new Promise<{ default: T }>(() => {});
+      }
+      throw error;
+    }
+  });
+}
+
+const LoginPage = lazyPage(() => import('./components/LoginPage'));
+const Dashboard = lazyPage(() => import('./components/Dashboard'));
+const PrivacyPolicy = lazyPage(() => import('./components/PrivacyPolicy'));
+const TermsOfService = lazyPage(() => import('./components/TermsOfService'));
+const RefundPolicy = lazyPage(() => import('./components/RefundPolicy'));
+const Disclaimer = lazyPage(() => import('./components/Disclaimer'));
+const Contact = lazyPage(() => import('./components/Contact'));
+const About = lazyPage(() => import('./components/About'));
+const Blog = lazyPage(() => import('./components/Blog'));
+const BlogPost = lazyPage(() => import('./components/BlogPost'));
+const Learn = lazyPage(() => import('./components/Learn'));
+const TrackRecord = lazyPage(() => import('./components/TrackRecord'));
+const ToolsHub = lazyPage(() => import('./components/ToolsHub'));
+const SIPCalculator = lazyPage(() => import('./components/SIPCalculator'));
+const LumpsumCalculator = lazyPage(() => import('./components/LumpsumCalculator'));
+const BrokerageCalculator = lazyPage(() => import('./components/BrokerageCalculator'));
+const FnOCalculator = lazyPage(() => import('./components/FnOCalculator'));
+const StockPage = lazyPage(() => import('./components/StockPage'));
+const StockComparison = lazyPage(() => import('./components/StockComparison'));
+const StockScreener = lazyPage(() => import('./components/StockScreener'));
+const DividendTracker = lazyPage(() => import('./components/DividendTracker'));
+const Chapter1 = lazyPage(() => import('./components/learn/Chapter1'));
+const Chapter2 = lazyPage(() => import('./components/learn/Chapter2'));
+const Chapter3 = lazyPage(() => import('./components/learn/Chapter3'));
+const Chapter4 = lazyPage(() => import('./components/learn/Chapter4'));
+const Chapter5 = lazyPage(() => import('./components/learn/Chapter5'));
+const Chapter6 = lazyPage(() => import('./components/learn/Chapter6'));
+const Chapter7 = lazyPage(() => import('./components/learn/Chapter7'));
+const Chapter8 = lazyPage(() => import('./components/learn/Chapter8'));
+const Chapter9 = lazyPage(() => import('./components/learn/Chapter9'));
+const MarketWrap = lazyPage(() => import('./components/MarketWrap'));
+const ProPicks = lazyPage(() => import('./components/ProPicks'));
+const IPOsPage = lazyPage(() => import('./components/IPOsPage'));
+const IpoDetailPage = lazyPage(() => import('./components/IpoDetailPage'));
+const BetaApplication = lazyPage(() => import('./components/BetaApplication'));
+const InvestExplorer = lazyPage(() => import('./components/invest/InvestExplorer'));
+
+// True when this browser might hold a signed-in session (or is returning from a sign-in).
+// Visitors who have never signed in skip the session check and see the page immediately.
+function mightHaveSession(): boolean {
+  try {
+    const { hash, search } = window.location;
+    if (hash.includes('access_token') || hash.includes('refresh_token') || new URLSearchParams(search).has('code')) return true;
+    if (sessionStorage.getItem('stock_ai_post_auth_redirect')) return true;
+    if (localStorage.getItem('sb_token')) return true;
+    for (let i = 0; i < localStorage.length; i++) {
+      if (/^sb-.+-auth-token$/.test(localStorage.key(i) || '')) return true;
+    }
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+function PageFallback() {
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="Loading page">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-lavender-primary/20 border-t-lavender-primary motion-reduce:animate-none" />
+    </div>
+  );
+}
 
 
 function Footer() {
@@ -100,6 +146,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
       
       {/* The main content area expands to push the footer down */}
       <main className="flex-grow">
+        <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/privacy"    element={<PrivacyPolicy />} />
           <Route path="/terms"      element={<TermsOfService />} />
@@ -170,6 +217,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
             }
           />
         </Routes>
+        </Suspense>
       </main>
 
       {/* Footer stays pinned to the bottom (Hidden on Login Page) */}
@@ -180,7 +228,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(mightHaveSession);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false;
     const saved = localStorage.getItem('stock_ai_theme');

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { supabase } from '../lib/supabase';
+import { loadRazorpay } from '../lib/loadRazorpay';
 import { Target, Unlock, RefreshCw, Check } from 'lucide-react';
 
 
@@ -20,6 +21,11 @@ export default function UpgradeModal({ onClose, onSuccess }: {
   const [loading, setLoading]     = useState(false);
   const [selected, setSelected]   = useState<PlanType>(null);
   const [hasUsedTrial, setHasUsedTrial] = useState(false);
+
+  // Start loading Razorpay Checkout as soon as the modal opens, so it is ready by the time a plan is chosen.
+  useEffect(() => {
+    loadRazorpay();
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -143,7 +149,7 @@ const plans = [
       prefill: { email: session.session?.user?.email || '' },
     };
 
-    if (!window.Razorpay) {
+    if (!(await loadRazorpay())) {
       alert('Payment gateway failed to load. Please refresh the page.');
       setLoading(false);
       return;

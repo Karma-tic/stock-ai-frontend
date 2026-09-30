@@ -1,574 +1,106 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import {
-  Target,
-  IndianRupee,
-  Smartphone,
-  Star,
-  Briefcase,
-  Mail,
-  Coins,
-  Newspaper,
-  RefreshCcw,
-  Activity,
-  Globe,
-  Cpu,
-} from "lucide-react";
-import UpcomingIpos from "./UpcomingIpos";
-import SEO from "./SEO";
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
+import SEO from './SEO';
+import HeroBackdrop from './landing/HeroBackdrop';
+import LiveMarketCard from './landing/LiveMarketCard';
+import ProofStrip from './landing/ProofStrip';
+import ScrollStory from './landing/ScrollStory';
+import Pricing from './landing/Pricing';
+import { Faq, FinalCta, ToolsGrid, Trust } from './landing/Sections';
+import './landing/landing.css';
 
 interface Props {
   onGetStarted: () => void;
 }
 
 export default function LandingPage({ onGetStarted }: Props) {
-  const [trackAccuracy, setTrackAccuracy] = useState<number | null>(null);
- const [activePricing, setActivePricing] = useState(1); // Default to middle card
-  const [touchStart, setTouchStart] = useState(0);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const touchEnd = e.changedTouches[0].clientX;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe && activePricing < 2) {
-      setActivePricing(prev => prev + 1);
-    }
-    if (isRightSwipe && activePricing > 0) {
-      setActivePricing(prev => prev - 1);
-    }
-  };
-
-  const pricingPlans = [
-    {
-      title: "Free",
-      price: "₹0",
-      period: "forever",
-      features: ["2 AI analyses/day", "Top 10 stocks", "5 watchlist stocks"],
-      badge: null,
-      badgeClass: "",
-      bgClass: "bg-white",
-      borderClass: "border border-lavender-text/10 shadow-sm",
-      titleClass: "text-lavender-text/70",
-      dotClass: "bg-slate-500",
-      featureClass: "text-lavender-text/70",
-      btnClass: "border border-lavender-text/10 text-lavender-text/80 hover:border-lavender-primary/30 hover:bg-lavender-base",
-      btnText: "Get Started"
-    },
-    {
-      title: "Trial",
-      price: "₹1",
-      period: "1 day access",
-      features: ["Full Pro access", "All features unlocked", "No commitment"],
-      badge: "TRY IT",
-      badgeClass: "bg-yellow-500 text-black",
-      bgClass: "bg-yellow-500/5",
-      borderClass: "border border-yellow-500/40",
-      titleClass: "text-yellow-400",
-      dotClass: "bg-yellow-400",
-      featureClass: "text-lavender-text/80",
-      btnClass: "bg-yellow-500 hover:bg-yellow-400 text-black",
-      btnText: "Try for ₹1"
-    },
-    {
-      title: "1 Month",
-      price: "₹99",
-      originalPrice: "₹499",
-      period: "no auto-renewal · limited offer",
-      features: ["Unlimited analysis", "500+ stocks", "Portfolio tracker", "Email digest"],
-      badge: "POPULAR",
-      badgeClass: "bg-gradient-lavender text-white",
-      bgClass: "bg-gradient-lavender/10",
-      borderClass: "border-2 border-lavender-primary/25 shadow-lavender",
-      titleClass: "text-lavender-primary",
-      dotClass: "bg-blue-400",
-      featureClass: "text-lavender-text/80",
-      btnClass: "bg-gradient-lavender hover:opacity-90 text-white",
-      btnText: "Get 30 Days for ₹99"
-    }
-  ];
+  // The scroll story pins itself just below the sticky navbar.
   useEffect(() => {
-    const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-    axios.get(`${BASE}/api/track-record`)
-      .then(res => {
-        if (res.data?.overall_accuracy) {
-          setTrackAccuracy(res.data.overall_accuracy);
-        }
-      })
-      .catch(() => {});
+    const setNavHeight = () => {
+      const nav = document.querySelector('nav');
+      if (nav) document.documentElement.style.setProperty('--nav-h', `${Math.round(nav.getBoundingClientRect().height)}px`);
+    };
+    setNavHeight();
+    window.addEventListener('resize', setNavHeight);
+    return () => window.removeEventListener('resize', setNavHeight);
   }, []);
 
   return (
-    <div className="min-h-screen bg-lavender-surface overflow-x-hidden">
+    <div className="min-h-screen overflow-x-clip bg-lavender-surface">
       <SEO
-        title="Stock AI | AI-Powered NSE/BSE Stock Analysis for India"
-        description="Analyze Indian NSE/BSE stocks with AI-powered signals, live data, watchlists, portfolio tracking, IPOs, market wraps, and free investing tools."
+        title="Stock AI | Research Indian Stocks in Seconds"
+        description="Research any NSE-listed company in seconds, built from filings and trusted financial news with sources linked. Plus IPOs, dividends, market wraps and an investment explorer. Free to start."
         canonicalPath="/"
       />
 
-      {/* Hero Section */}
-      <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="inline-block bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1 text-lavender-primary text-sm mb-6">
-          AI-Powered NSE/BSE Stock Analysis
-        </div>
-        <h1 className="text-4xl sm:text-6xl font-black text-lavender-text mb-6 leading-tight">
-          Stop Guessing.<br />
-          <span className="text-lavender-primary">Let AI Analyze</span><br />
-          Indian Stocks For You.
-        </h1>
-        <p className="text-lavender-text/70 text-xl max-w-2xl mx-auto mb-8">
-          Stock AI reads NSE filings, Reuters, Business Standard, Mint and Moneycontrol
-          — then gives you a structured BUY/HOLD/SELL signal with exact price targets
-          in under 10 seconds. Free to start.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button onClick={onGetStarted}
-            className="bg-gradient-lavender hover:opacity-90 text-white px-8 py-4 rounded-2xl text-lg font-bold transition">
-            Start Free Analysis →
-          </button>
-          <a href="#how-it-works"
-            className="border border-lavender-primary/40 bg-lavender-primary/10 text-lavender-primary hover:border-lavender-primary/70 hover:bg-lavender-primary/20 px-8 py-4 rounded-2xl text-lg font-semibold transition-colors">
-            How It Works
-          </a>
-        </div>
-        <Link to="/beta" className="-mt-8 mb-10 inline-flex text-sm font-semibold text-lavender-primary underline decoration-lavender-primary/30 underline-offset-4 hover:decoration-lavender-primary">
-          Help shape BytePlay — join the free research beta
-        </Link>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
-          {[
-            { num: "2,300+", label: "NSE Stocks" },
-            { num: "8 sec", label: "Analysis Time" },
-            { num: trackAccuracy ? `${trackAccuracy}%` : "—", label: "Verified Accuracy" },
-          ].map(s => (
-            <div key={s.label} className="text-center">
-              <p className="text-3xl font-black text-lavender-primary">{s.num}</p>
-              <p className="text-lavender-text/60 text-sm">{s.label}</p>
+      {/* 1. Hero: always dark, animated backdrop (or video), live market card */}
+      <section aria-labelledby="hero-heading" className="dark relative isolate overflow-hidden bg-[#0e0c1b]">
+        <HeroBackdrop />
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-20 pt-14 sm:px-6 sm:pt-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:px-8 lg:pb-28 lg:pt-24">
+          <div className="min-w-0">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/75 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-teal-300" aria-hidden="true" />
+              AI research for Indian investors
+            </p>
+            <h1
+              id="hero-heading"
+              className="mt-6 text-balance text-[2.35rem] font-extrabold leading-[1.06] tracking-[-0.025em] text-white sm:text-[3.4rem] lg:text-[3.6rem]"
+            >
+              Research Indian stocks{' '}
+              <span className="bg-gradient-to-r from-[#c4b5fd] via-[#a5b4fc] to-[#5eead4] bg-clip-text text-transparent">in seconds</span>, with the
+              sources in front of you.
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+              Stock AI reads NSE filings, results and trusted financial news, then gives you a clear, structured view of any listed company, with the
+              sources linked. Free to start.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={onGetStarted}
+                className="rounded-xl bg-gradient-lavender px-6 py-3.5 text-base font-semibold text-white shadow-[0_12px_40px_-12px_rgba(118,75,162,0.95)] transition hover:opacity-90"
+              >
+                Start researching free
+              </button>
+              <Link
+                to="/invest"
+                className="rounded-xl border border-white/15 bg-white/5 px-6 py-3.5 text-center text-base font-semibold text-white transition hover:bg-white/10"
+              >
+                Explore investments
+              </Link>
             </div>
-          ))}
-        </div>
-
-      </section>
-
-      {/* Sample Signal — shows real content to Google */}
-      <section className="bg-lavender-base py-16 border-y border-lavender-text/5">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-lavender-text text-3xl font-bold text-center mb-4">
-            Real AI Analysis — Updated Live
-          </h2>
-          <p className="text-lavender-text/70 text-center mb-10">
-            Here's what our AI said about top NSE stocks today
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { ticker: "RELIANCE", company: "Reliance Industries", signal: "BUY", conf: 78, price: "₹1,360", target: "₹1,520", sector: "Energy" },
-              { ticker: "TCS", company: "Tata Consultancy Services", signal: "HOLD", conf: 65, price: "₹2,283", target: "₹2,400", sector: "IT" },
-              { ticker: "IRFC", company: "Indian Railway Finance Corp", signal: "BUY", conf: 80, price: "₹98", target: "₹118", sector: "Finance" },
-            ].map(s => (
-              <div key={s.ticker} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <p className="text-lavender-text font-bold text-lg">{s.ticker}</p>
-                    <p className="text-lavender-text/70 text-xs">{s.company}</p>
-                    <p className="text-lavender-text/60 text-xs">{s.sector}</p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                    s.signal === 'BUY' ? 'bg-green-500/20 text-green-600' : 'bg-yellow-500/20 text-yellow-400'
-                  }`}>{s.signal}</span>
-                </div>
-                <p className="text-2xl font-bold text-lavender-text mb-1">{s.price}</p>
-                <p className="text-green-600 text-sm">Target: {s.target}</p>
-                <p className="text-lavender-text/70 text-xs mt-2">Confidence: {s.conf}%</p>
-              </div>
-            ))}
+            <p className="mt-5 text-sm text-white/55">
+              Free plan · No card needed ·{' '}
+              <Link to="/beta" className="underline decoration-white/30 underline-offset-4 transition hover:text-white hover:decoration-white">
+                Join the research beta
+              </Link>
+            </p>
           </div>
-          <p className="text-gray-300 text-xs text-center mt-4">
-            AI signals for educational purposes only. Not SEBI-registered advice.
-          </p>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-lavender-text text-3xl font-bold text-center mb-4">How Stock AI Works</h2>
-        <p className="text-lavender-text/70 text-center mb-10 max-w-2xl mx-auto">
-          Our AI reads multiple financial data sources simultaneously and generates
-          structured analysis that would take a human analyst 2+ hours — in under 10 seconds.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-          {[
-            { step: "1", icon: Activity, anim: "animate-[bounce_3s_infinite]", color: "text-lavender-primary", bg: "bg-blue-500/10", title: "Fetch Live Data", desc: "Real-time price, PE ratio, 52-week range, volume and dividend data from NSE/BSE" },
-            { step: "2", icon: Globe, anim: "animate-[spin_8s_linear_infinite]", color: "text-indigo-400", bg: "bg-indigo-500/10", title: "Scrape News", desc: "Reads NSE India announcements, Google News, Economic Times and Moneycontrol simultaneously" },
-            { step: "3", icon: Cpu, anim: "animate-pulse", color: "text-purple-400", bg: "bg-purple-500/10", title: "AI Analysis", desc: "Llama 3.3 AI processes all data and generates structured BUY/HOLD/SELL signal" },
-            { step: "4", icon: Target, anim: "animate-[pulse_2s_infinite]", color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Get Signal", desc: "Receive exact entry price, target prices, stop loss and quantity recommendations" },
-          ].map(s => {
-            const Icon = s.icon;
-            return (
-              <div key={s.step} className="text-center group">
-                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 border border-white/50 ${s.bg}`}>
-                  <Icon className={`w-8 h-8 ${s.color} ${s.anim}`} strokeWidth={1.5} />
-                </div>
-                <div className="text-lavender-primary text-xs font-bold mb-1">STEP {s.step}</div>
-                <p className="text-lavender-text font-semibold mb-2">{s.title}</p>
-                <p className="text-lavender-text/70 text-sm">{s.desc}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-      {/* Features */}
-      {/* Features */}
-      <section className="bg-lavender-base py-16 border-y border-lavender-text/5">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-lavender-text text-3xl font-bold text-center mb-10">
-            Everything You Need to Invest Smarter
-          </h2>
-
-          {/* Add the custom keyframes for the feature icons */}
-          <style>{`
-            @keyframes feature-float {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-4px); }
-            }
-            @keyframes feature-spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-            @keyframes feature-pulse {
-              0%, 100% { transform: scale(1); opacity: 1; }
-              50% { transform: scale(0.9); opacity: 0.7; }
-            }
-          `}</style>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Target,
-                title: "BUY/HOLD/SELL Signals",
-                desc: "Clear signals with confidence percentage so you know how strong the recommendation is",
-                anim: "feature-pulse 2.5s ease-in-out infinite"
-              },
-              {
-                icon: IndianRupee,
-                title: "Price Targets",
-                desc: "Exact entry price, two target levels and stop loss for every analysis",
-                anim: "feature-float 3s ease-in-out infinite"
-              },
-              {
-                icon: Smartphone,
-                title: "Works on Phone",
-                desc: "Fully responsive — check your stocks anywhere from your mobile device",
-                anim: "feature-float 4s ease-in-out infinite"
-              },
-              {
-                icon: Star,
-                title: "Watchlist",
-                desc: "Save your favourite stocks and monitor them with one tap",
-                anim: "feature-pulse 3s ease-in-out infinite"
-              },
-              {
-                icon: Briefcase,
-                title: "Portfolio Tracker",
-                desc: "Track your holdings with live P&L — see your profit or loss in real time",
-                anim: "feature-float 3.5s ease-in-out infinite"
-              },
-              {
-                icon: Mail,
-                title: "Morning Digest",
-                desc: "Pro users get daily email at 8:30 AM with top BUY signals before market opens",
-                anim: "feature-float 2.5s ease-in-out infinite"
-              },
-              {
-                icon: Coins,
-                title: "Penny Stocks",
-                desc: "Dedicated section for NSE stocks under ₹100 — high risk, high reward opportunities",
-                anim: "feature-float 3s ease-in-out infinite"
-              },
-              {
-                icon: Newspaper,
-                title: "Multi-source News",
-                desc: "Reads NSE India, Google News, Economic Times and Moneycontrol for every stock",
-                anim: "feature-float 4s ease-in-out infinite"
-              },
-              {
-                icon: RefreshCcw,
-                title: "Hourly Refresh",
-                desc: "Signals automatically updated every hour during market hours (9 AM - 4 PM IST)",
-                anim: "feature-spin 6s linear infinite"
-              },
-            ].map((f) => {
-              const Icon = f.icon;
-              return (
-                <div
-                  key={f.title}
-                  className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-lavender-text/20 hover:shadow-lavender transition group"
-                >
-                  <div className="w-12 h-12 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center mb-4">
-                    <Icon 
-                      className="w-6 h-6 text-lavender-primary" 
-                      strokeWidth={2} 
-                      style={{ animation: f.anim }}
-                    />
-                  </div>
-                  <p className="text-lavender-text font-semibold mb-2">{f.title}</p>
-                  <p className="text-lavender-text/70 text-sm">{f.desc}</p>
-                </div>
-              );
-            })}
+          <div className="w-full max-w-xl lg:max-w-none">
+            <LiveMarketCard />
           </div>
         </div>
       </section>
 
-      {/* Market Wrap Feature */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-amber-50 to-white border border-amber-200 rounded-2xl p-8 sm:p-12 text-center shadow-lavender">
-          <h2 className="text-lavender-text text-3xl font-bold mb-4">
-            Daily Market Wrap-Up
-          </h2>
-          <p className="text-lavender-text/80 text-lg mb-8 max-w-2xl mx-auto">
-            Get a concise, 500-word daily summary of the Nifty 50, Sensex, and top market news. Updated every weekday at 4:15 PM IST so you never miss a beat.
-          </p>
-          <Link to="/market-wrap" className="inline-block bg-gradient-lavender hover:opacity-90 text-white font-semibold px-6 py-3 rounded-2xl transition shadow-lavender">
-            Read the Latest Wrap →
-          </Link>
-        </div>
-      </section>
+      {/* 2. Live proof: prices, latest wrap, IPOs */}
+      <ProofStrip />
 
-     
-      {/* Pricing — replace existing section */}
-      <section className="bg-lavender-base py-16 overflow-hidden border-y border-lavender-text/5">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-lavender-text text-3xl font-bold mb-2">Simple, Transparent Pricing</h2>
-          <p className="text-lavender-text/70 mb-10">No hidden charges. Cancel anytime.</p>
+      {/* 3. Scroll story (the 3D section) */}
+      <ScrollStory />
 
-          {/* MOBILE: 3D Horizontal Slider */}
-          <div 
-            className="sm:hidden relative h-[380px] w-full flex items-center justify-center"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            {pricingPlans.map((plan, i) => {
-              const offset = i - activePricing;
-              
-              // Determine 3D scaling and fading based on position
-              let transform = 'scale-75 opacity-0 z-0 pointer-events-none hidden';
-              if (offset === 0) transform = 'translate-x-0 scale-100 z-20 opacity-100 shadow-2xl';
-              else if (offset === -1) transform = '-translate-x-[85%] scale-90 z-10 opacity-40 cursor-pointer';
-              else if (offset === 1) transform = 'translate-x-[85%] scale-90 z-10 opacity-40 cursor-pointer';
+      {/* 4. Tools */}
+      <ToolsGrid />
 
-              return (
-                <div 
-                  key={plan.title}
-                  onClick={() => setActivePricing(i)}
-                className={`absolute w-[280px] text-left transition-all duration-300 ease-out rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass} ${transform}`}
-                >
-                  {plan.badge && (
-                    <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
-                      {plan.badge}
-                    </span>
-                  )}
-                  <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
-                  <div className="flex items-center gap-2 mb-1">
-                    {plan.originalPrice && (
-                      <p className="text-lavender-text/60 text-lg line-through">{plan.originalPrice}</p>
-                    )}
-                    <p className="text-3xl font-black text-lavender-text">{plan.price}</p>
-                    {plan.originalPrice && (
-                      <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
-                    )}
-                  </div>
-                  <p className="text-lavender-text/60 text-xs mb-4">{plan.period}</p>
-                  <div className="space-y-2">
-                    {plan.features.map(f => (
-                      <div key={f} className="flex items-center gap-2">
-                        <div className={`w-1.5 h-1.5 rounded-full ${plan.dotClass}`} />
-                        <p className={`${plan.featureClass} text-xs`}>{f}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <button 
-                    onClick={(e) => {
-                      if (offset !== 0) {
-                        // If they click the button on a faded side card, just zoom it in instead of triggering payment
-                        e.stopPropagation(); 
-                        setActivePricing(i);
-                      } else {
-                        onGetStarted();
-                      }
-                    }}
-                    className={`mt-4 w-full py-2 rounded-2xl text-sm font-bold transition ${plan.btnClass}`}
-                  >
-                    {plan.btnText}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+      {/* 5. Trust */}
+      <Trust />
 
-          {/* DESKTOP: Standard Centered Grid */}
-          <div className="hidden sm:grid grid-cols-3 gap-6 justify-items-center">
-            {pricingPlans.map((plan) => (
-              <div key={plan.title} className={`w-full text-left relative rounded-2xl p-5 ${plan.bgClass} ${plan.borderClass}`}>
-                {plan.badge && (
-                  <span className={`absolute -top-3 left-4 text-xs px-2 py-0.5 rounded-full font-bold ${plan.badgeClass}`}>
-                    {plan.badge}
-                  </span>
-                )}
-                <p className={`${plan.titleClass} text-xs font-semibold uppercase mb-2`}>{plan.title}</p>
-                <div className="flex items-center gap-2 mb-1">
-                  {plan.originalPrice && (
-                    <p className="text-lavender-text/60 text-lg line-through">{plan.originalPrice}</p>
-                  )}
-                  <p className="text-3xl font-black text-lavender-text">{plan.price}</p>
-                  {plan.originalPrice && (
-                    <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
-                  )}
-                </div>
-                <p className="text-lavender-text/60 text-xs mb-4">{plan.period}</p>
-                <div className="space-y-2">
-                  {plan.features.map(f => (
-                    <div key={f} className="flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${plan.dotClass}`} />
-                      <p className={`${plan.featureClass} text-xs`}>{f}</p>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={onGetStarted}
-                  className={`mt-4 w-full py-2 rounded-2xl text-sm font-bold transition ${plan.btnClass}`}>
-                  {plan.btnText}
-                </button>
-              </div>
-            ))}
-          </div>
+      {/* 6. Pricing */}
+      <Pricing onGetStarted={onGetStarted} />
 
-          {/* Mobile Pagination Indicator Dots */}
-          <div className="sm:hidden flex justify-center gap-2 mt-6">
-            {pricingPlans.map((_, i) => (
-              <div 
-                key={i} 
-                onClick={() => setActivePricing(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activePricing === i ? 'w-6 bg-blue-500' : 'w-2 bg-lavender-text/20'}`}
-              />
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-
-
-      {/* Upcoming IPOs Section */}
-      <section className="border-y border-lavender-text/5 bg-lavender-base/40 py-14">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="mb-2 flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-500">IPO tracker</span>
-                <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-500">LIVE</span>
-              </div>
-              <h2 className="text-2xl font-bold text-lavender-text sm:text-3xl">Upcoming IPOs at a glance</h2>
-              <p className="mt-2 max-w-2xl text-sm text-lavender-text/65">Track opening dates, price bands and grey-market premiums without leaving the homepage.</p>
-            </div>
-            <Link to="/ipos" className="inline-flex shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-bold text-emerald-500 transition hover:bg-emerald-500/20">
-              View all IPOs →
-            </Link>
-          </div>
-          <UpcomingIpos compact />
-        </div>
-      </section>
-
-      {/* FAQ — great for SEO and AdSense */}
-      <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-lavender-text text-3xl font-bold text-center mb-10">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
-          {[
-            {
-              q: "Is Stock AI free to use?",
-              a: "Yes, Stock AI has a free plan that gives you 2 AI analyses per day, 5 watchlist stocks and access to top 10 market stocks. Pro plan at ₹99/month (limited offer, regular price ₹499) gives unlimited access."
-            },
-            {
-              q: "Is this SEBI registered investment advice?",
-              a: "No. Stock AI is an educational platform. All signals are AI-generated for informational purposes only. We are not SEBI-registered investment advisors. Always consult a qualified financial advisor before investing."
-            },
-            {
-              q: "How accurate are the AI signals?",
-              a: "Our AI analyses price data, valuation metrics and recent news to generate signals. Like any analysis tool, it is not 100% accurate. Always use it as one input among many before making investment decisions."
-            },
-            {
-              q: "Which stocks are covered?",
-              a: "We cover 500+ NSE and BSE listed stocks including all Nifty 50, Nifty Next 50, popular mid-caps, PSU stocks, IT companies, banks, pharma, FMCG and penny stocks."
-            },
-            {
-              q: "How often are signals updated?",
-              a: "Signals are updated every hour during market hours (9 AM to 4 PM IST, Monday to Friday). Pro users also receive a morning digest email at 8:30 AM with top BUY signals."
-            },
-            {
-              q: "Can I track my own portfolio?",
-              a: "Yes. Enter your stocks, quantity and average buy price in the Portfolio tab. Stock AI will show you live P&L — current value versus your invested amount."
-            },
-          ].map((item, i) => (
-            <div key={i} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
-              <p className="text-lavender-text font-semibold mb-2">Q: {item.q}</p>
-              <p className="text-lavender-text/70 text-sm leading-relaxed">A: {item.a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Compact product explanation */}
-      <section className="border-t border-lavender-text/10 bg-lavender-base py-10 sm:py-14">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="app-card p-5 sm:p-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-bold text-lavender-text sm:text-3xl">Indian stock research, simplified</h2>
-              <p className="mt-3 text-sm leading-6 text-lavender-text/70 sm:text-base">
-                Stock AI combines market data, company filings and relevant news into one quick, structured overview.
-              </p>
-            </div>
-            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-4">
-              {[
-                { icon: Activity, label: "Market data" },
-                { icon: Newspaper, label: "Filings & news" },
-                { icon: Cpu, label: "Clear summary" },
-              ].map(item => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="flex min-w-0 flex-col items-center rounded-2xl border border-lavender-text/10 bg-white p-3 text-center sm:p-5">
-                    <Icon className="h-5 w-5 text-lavender-primary sm:h-6 sm:w-6" />
-                    <span className="mt-2 text-[11px] font-semibold leading-tight text-lavender-text/80 sm:text-sm">{item.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-            <p className="mt-5 text-center text-xs text-lavender-text/50">For research and education—not investment advice.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-gradient-lavender py-16 text-center">
-        <h2 className="text-lavender-text text-3xl font-bold mb-4">
-          Start Investing Smarter Today
-        </h2>
-        <p className="text-blue-100 mb-8 max-w-xl mx-auto">
-          Join thousands of Indian investors using AI to analyze stocks.
-          Free to start — no credit card required.
-        </p>
-        <button onClick={onGetStarted}
-          className="bg-lavender-surface text-lavender-primary px-10 py-4 rounded-2xl text-lg font-black hover:bg-blue-50 transition">
-          Get Free AI Stock Analysis →
-        </button>
-      </section>
-
+      {/* 7. FAQ and final call to action */}
+      <Faq />
+      <FinalCta onGetStarted={onGetStarted} />
     </div>
   );
 }
