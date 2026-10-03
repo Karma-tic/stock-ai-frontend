@@ -147,25 +147,10 @@ export default function ProPicks() {
                 </div>
               </div>
 
-              <div className="mb-6 pb-6 border-b border-lavender-text/10">
+              <div>
                 <p className="text-sm leading-relaxed text-lavender-text/80">
                   {isPro ? pick.reasoning : "This masked setup passed our momentum, liquidity, and risk filters. Upgrade to review the exact ticker and reasoning before doing your own research."}
                 </p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="app-tile p-3">
-                  <div className="text-xs text-lavender-text/70 mb-1">Target 1</div>
-                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target1}</div>
-                </div>
-                <div className="app-tile p-3">
-                  <div className="text-xs text-lavender-text/70 mb-1">Target 2</div>
-                  <div className={`font-bold ${isPro ? 'text-green-600' : 'text-lavender-text/80'}`}>₹{pick.target2}</div>
-                </div>
-                <div className="bg-red-50/50 p-3 rounded-2xl border border-red-200/50">
-                  <div className="text-xs text-red-500/70 mb-1">Stop Loss</div>
-                  <div className={`font-bold ${isPro ? 'text-red-600' : 'text-lavender-text/80'}`}>₹{pick.stopLoss}</div>
-                </div>
               </div>
 
             </div>
