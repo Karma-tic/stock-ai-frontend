@@ -2,3 +2,7 @@ node_modules/
 build/
 .env
 .env.local
+
+# local noise
+.DS_Store
+*.log
