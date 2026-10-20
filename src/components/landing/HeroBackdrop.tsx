@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { HERO_VIDEO } from './heroMedia';
+import { HERO_VIDEO, HERO_VIDEO_ENABLED } from './heroMedia';
 import { usePrefersReducedMotion } from './hooks';
 
 // "Signals from the noise": hundreds of faint data points drift, then pull together
 // into one clean rising line, hold, and scatter again. An 11-second loop drawn on a
 // canvas; it pauses when the hero is off screen or the tab is hidden.
+// Why: it is the brand's "thread" idea in motion: noise becomes one line you can follow.
+// While the line holds, onConverge reports 0–1 so the hero threads can fade in with it.
 
 type Particle = {
   hx: number; hy: number; // drifting home position (0–1)
@@ -18,7 +20,7 @@ type Particle = {
 };
 
 const CYCLE_MS = 11000;
-const COLORS = ['196, 181, 253', '165, 180, 252', '94, 234, 212']; // lavender, indigo, teal
+const COLORS = ['143, 162, 255', '200, 210, 228', '74, 222, 128']; // cobalt, mist, up (1 in 8)
 
 const smooth = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 
@@ -32,7 +34,8 @@ function convergence(ms: number) {
 }
 
 // The rising line, in 0–1 coordinates; gentler and lower on narrow screens.
-function lineY(u: number, narrow: boolean) {
+export const lineX = (u: number) => 0.04 + u * 0.94;
+export function lineY(u: number, narrow: boolean) {
   const start = narrow ? 0.9 : 0.86;
   const end = narrow ? 0.6 : 0.2;
   return start + (end - start) * Math.pow(u, 1.2) + Math.sin(u * Math.PI * 3.2) * 0.018;
@@ -45,12 +48,12 @@ function makeParticles(count: number, narrow: boolean): Particle[] {
     list.push({
       hx: Math.random(),
       hy: Math.random(),
-      tx: 0.04 + u * 0.94,
+      tx: lineX(u),
       ty: lineY(u, narrow),
       phase: Math.random() * Math.PI * 2,
       speed: 0.00018 + Math.random() * 0.00032,
       size: 0.6 + Math.random() * 1.3,
-      hue: (Math.random() < 0.12 ? 2 : Math.random() < 0.5 ? 1 : 0) as 0 | 1 | 2,
+      hue: (Math.random() < 0.125 ? 2 : Math.random() < 0.45 ? 1 : 0) as 0 | 1 | 2,
       dash: Math.random() < 0.28,
       lag: Math.random(),
     });
@@ -58,16 +61,18 @@ function makeParticles(count: number, narrow: boolean): Particle[] {
   return list;
 }
 
-export default function HeroBackdrop() {
+export default function HeroBackdrop({ onConverge }: { onConverge?: (c: number) => void }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const reduced = usePrefersReducedMotion();
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [videoSrc, setVideoSrc] = useState<{ mp4: string; webm?: string } | null>(null);
+  const onConvergeRef = useRef(onConverge);
+  onConvergeRef.current = onConverge;
 
   // Load the optional video only after the page is interactive.
   useEffect(() => {
-    if (!HERO_VIDEO || reduced) return;
+    if (!HERO_VIDEO || !HERO_VIDEO_ENABLED || reduced) return;
     const connection = (navigator as any).connection;
     if (connection?.saveData) return;
     const pick = () => {
@@ -121,13 +126,14 @@ export default function HeroBackdrop() {
     const draw = (now: number) => {
       const elapsed = now - start;
       const c = reduced ? 1 : convergence(elapsed);
+      onConvergeRef.current?.(c);
       ctx.clearRect(0, 0, width, height);
 
       // soft glow under the line while it holds
       if (c > 0.05) {
         const grad = ctx.createLinearGradient(0, height * 0.2, 0, height);
-        grad.addColorStop(0, `rgba(165, 180, 252, ${0.1 * c})`);
-        grad.addColorStop(1, 'rgba(165, 180, 252, 0)');
+        grad.addColorStop(0, `rgba(52, 81, 245, ${0.16 * c})`);
+        grad.addColorStop(1, 'rgba(52, 81, 245, 0)');
         ctx.beginPath();
         ctx.moveTo(particles[0].tx * width, height);
         particles.forEach((p) => ctx.lineTo(p.tx * width, p.ty * height));
@@ -165,9 +171,9 @@ export default function HeroBackdrop() {
       if (c > 0.55) {
         const a = (c - 0.55) / 0.45;
         const stroke = ctx.createLinearGradient(0, 0, width, 0);
-        stroke.addColorStop(0, `rgba(196, 181, 253, ${0.15 * a})`);
-        stroke.addColorStop(0.6, `rgba(165, 180, 252, ${0.75 * a})`);
-        stroke.addColorStop(1, `rgba(94, 234, 212, ${0.95 * a})`);
+        stroke.addColorStop(0, `rgba(52, 81, 245, ${0.2 * a})`);
+        stroke.addColorStop(0.6, `rgba(143, 162, 255, ${0.8 * a})`);
+        stroke.addColorStop(1, `rgba(232, 237, 243, ${0.95 * a})`);
         ctx.strokeStyle = stroke;
         ctx.lineJoin = 'round';
         ctx.lineWidth = 2;
@@ -176,7 +182,7 @@ export default function HeroBackdrop() {
         ctx.stroke();
 
         const last = particles[particles.length - 1];
-        ctx.fillStyle = `rgba(94, 234, 212, ${a})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${a})`;
         ctx.beginPath();
         ctx.arc(last.tx * width, last.ty * height, 3.5, 0, Math.PI * 2);
         ctx.fill();
@@ -222,7 +228,7 @@ export default function HeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <canvas ref={canvasRef} className={`h-full w-full transition-opacity duration-1000 ${videoPlaying ? 'opacity-0' : 'opacity-100'}`} />
-      {HERO_VIDEO && videoSrc && (
+      {HERO_VIDEO && HERO_VIDEO_ENABLED && videoSrc && (
         <video
           ref={videoRef}
           className={`absolute inset-0 h-full w-full object-cover object-[65%_50%] mix-blend-screen transition-opacity duration-1000 ${videoPlaying ? 'opacity-100' : 'opacity-0'}`}
@@ -239,11 +245,11 @@ export default function HeroBackdrop() {
         </video>
       )}
       {/* keeps the headline readable over any backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(14,12,27,0.92)_0%,rgba(14,12,27,0.55)_45%,rgba(14,12,27,0.15)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(11,15,20,0.92)_0%,rgba(11,15,20,0.55)_45%,rgba(11,15,20,0.12)_100%)]" />
       {/* phones: text runs over the whole backdrop, so dim it a little more */}
-      <div className="absolute inset-0 bg-[#0e0c1b]/40 lg:hidden" />
-      <div className="absolute inset-y-0 left-0 hidden w-3/5 bg-gradient-to-r from-[#0e0c1b]/85 via-[#0e0c1b]/55 to-transparent lg:block" />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#0e0c1b]" />
+      <div className="absolute inset-0 bg-[#0B0F14]/40 lg:hidden" />
+      <div className="absolute inset-y-0 left-0 hidden w-1/2 bg-gradient-to-r from-[#0B0F14]/85 via-[#0B0F14]/50 to-transparent lg:block" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#0B0F14]" />
     </div>
   );
 }
