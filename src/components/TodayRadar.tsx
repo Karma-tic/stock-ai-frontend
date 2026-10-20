@@ -21,10 +21,10 @@ type CalendarEvent = Pick<RadarEvent, 'ticker' | 'company_name' | 'category' | '
 type EarningsMetric = { key: string; label: string; value: number; qoq_pct?: number | null; yoy_pct?: number | null };
 
 const severityStyle: Record<string, string> = {
-  critical: 'bg-red-500/10 text-red-600 border-red-500/20',
-  high: 'bg-amber-500/10 text-amber-700 border-amber-500/20',
-  medium: 'bg-blue-500/10 text-blue-700 border-blue-500/20',
-  low: 'bg-lavender-secondary/10 text-lavender-primary border-lavender-primary/20',
+  critical: 'bg-down/10 text-down border-down/25',
+  high: 'bg-caution/10 text-caution border-caution/25',
+  medium: 'bg-accent/10 text-accent border-accent/25',
+  low: 'bg-ink/[0.06] text-muted border-line',
 };
 
 function timeAgo(value?: string) {

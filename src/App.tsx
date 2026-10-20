@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import Logo, { LogoMark } from './components/ui/Logo';
 import Skeleton from './components/ui/Skeleton';
+import BottomTabs from './components/app/BottomTabs';
 
 // Every page except the landing page loads on demand, so first-time visitors
 // only download the code for the page they open.
@@ -193,7 +194,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
   const landingDark = !user && location.pathname === '/';
 
   return (
-    <div className={`flex min-h-[100dvh] flex-col bg-canvas ${landingDark ? 'dark' : ''}`}>
+    <div className={`flex min-h-[100dvh] flex-col bg-canvas ${landingDark ? 'dark' : ''} ${user && !isLoginPage ? 'pb-[calc(57px+env(safe-area-inset-bottom))] lg:pb-0' : ''}`}>
       {/* Navbar stays pinned to the top (Hidden on Login Page) */}
       {!isLoginPage && (
         <Navbar user={user} isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
@@ -276,9 +277,8 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
       </main>
 
       {/* Footer stays pinned to the bottom (Hidden on Login Page) */}
-      {!isLoginPage && (
-        <Footer />
-      )}
+      {!isLoginPage && <Footer />}
+      {user && !isLoginPage && <BottomTabs />}
     </div>
   );
 }

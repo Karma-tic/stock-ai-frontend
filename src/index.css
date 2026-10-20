@@ -185,3 +185,15 @@
 .dark .hover\:bg-slate-200:hover,
 .dark .hover\:bg-slate-100:hover,
 .dark .hover\:bg-blue-50:hover { background-color: rgb(var(--text) / 0.08); }
+
+/* Evidence Board: slide in from the right (bottom on phones); a thread runs across while it loads */
+@keyframes board-in-right { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes board-in-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes board-thread { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+.board-panel { animation: board-in-up 260ms var(--ease-ui); }
+@media (min-width: 640px) { .board-panel { animation-name: board-in-right; } }
+.board-thread { animation: board-thread 1.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .board-panel { animation: none; }
+  .board-thread { animation: none; width: 100%; opacity: .5; }
+}
