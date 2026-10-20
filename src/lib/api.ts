@@ -43,6 +43,7 @@ export type BetaApplicationPayload = {
 export const submitBetaApplication = (data: BetaApplicationPayload) => api.post('/api/beta/apply', data);
 export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const getStockStory = (ticker: string) => api.get(`/api/stock/${ticker}/story`);
+export const getStockHistory = (ticker: string, range: string) => api.get(`/api/stock/${ticker}/history`, { params: { range } });
 export const getDividendTracker = () => api.get('/api/market/dividends');
 export const analyzeStock = (ticker: string) => api.get(`/api/stock/${ticker}/analyze`);
 export const searchStocks = (query: string) => api.get(`/api/market/search/${query}`);

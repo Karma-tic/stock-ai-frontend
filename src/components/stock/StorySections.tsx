@@ -1,6 +1,7 @@
 import { AlertTriangle, ExternalLink, Eye, FileText, Newspaper, TrendingDown, TrendingUp } from 'lucide-react';
 import { Change } from '../ui/Price';
 import Skeleton from '../ui/Skeleton';
+import PriceChart from './PriceChart';
 import { Evidence, Quote, Story, allSources, fmtCr, isFiling, latestEvents, shortDate } from './storyData';
 
 // The six parts of a stock's story. Used as swipeable cards on phones and as page
@@ -44,7 +45,7 @@ const Loading = () => (
 );
 
 // 1. Price today
-export function PriceToday({ quote, story }: { quote: Quote | null; story: Story | null }) {
+export function PriceToday({ ticker, quote, story }: { ticker: string; quote: Quote | null; story: Story | null }) {
   const p = story?.price_context;
   const price = quote?.current_price ?? p?.current_price;
   const change = quote?.price_change_pct ?? p?.day_change_pct;
@@ -62,6 +63,8 @@ export function PriceToday({ quote, story }: { quote: Quote | null; story: Story
         {change != null && <Change value={change} className="text-base font-medium" />}
         <span className="text-xs text-muted">today</span>
       </div>
+
+      <PriceChart ticker={ticker} />
 
       {pos != null && (
         <div className="mt-6">
