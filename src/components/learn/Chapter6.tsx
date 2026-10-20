@@ -10,21 +10,21 @@ export default function Chapter6() {
       nextChapter={{ path: '/learn/how-to-start', title: 'How to Start Investing Step by Step' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-cobalt rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="num grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/10 text-base font-semibold text-accent">
           6
         </div>
-        <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Role of AI in Stock Markets</h2>
+        <h2 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Role of AI in Stock Markets</h2>
       </div>
       
       
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-8 mb-8">
-            <p className="text-lavender-text/80 leading-relaxed text-lg mb-4">
-              Artificial Intelligence is transforming how financial markets are analyzed. Hedge funds and institutional investors have used AI for over a decade. Now, platforms like <strong className="text-lavender-text">Stock AI (byteplay.org)</strong> are making these capabilities available to retail investors in India at no cost.
+          <div className="rounded-card border border-line bg-surface p-6 md:p-8 mb-8">
+            <p className="text-ink/85 leading-relaxed text-lg mb-4">
+              Artificial Intelligence is transforming how financial markets are analyzed. Hedge funds and institutional investors have used AI for over a decade. Now, platforms like <strong className="text-ink">Stock AI (byteplay.org)</strong> are making these capabilities available to retail investors in India at no cost.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed text-lg mb-4">
+            <p className="text-ink/85 leading-relaxed text-lg mb-4">
               Modern AI models — particularly Large Language Models (LLMs) like the ones powering Stock AI — can read and understand unstructured text data like news articles, company announcements and earnings reports. They can process thousands of data points simultaneously and identify patterns that human analysts might miss.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed text-lg">
+            <p className="text-ink/85 leading-relaxed text-lg">
               However, AI is not infallible. Markets are influenced by human psychology, unexpected events and irrational behavior that no model can perfectly predict. AI analysis should be used as one input among many, not as the sole basis for investment decisions.
             </p>
           </div>
@@ -60,16 +60,16 @@ export default function Chapter6() {
                 itemColor: "text-down",
               },
             ].map(item => (
-              <div key={item.title} className={`border rounded-2xl p-6 ${item.color}`}>
-                <h4 className="text-lavender-text text-xl font-bold mb-6 flex items-center gap-3">
-                  <span className={`${item.itemColor} bg-lavender-surface w-8 h-8 rounded-full flex items-center justify-center border border-white/50`}>{item.icon}</span>
+              <div key={item.title} className={`border rounded-card p-6 ${item.color}`}>
+                <h4 className="text-ink text-xl font-bold mb-6 flex items-center gap-3">
+                  <span className={`${item.itemColor} bg-ink/[0.04] w-8 h-8 rounded-full flex items-center justify-center border border-line`}>{item.icon}</span>
                   {item.title}
                 </h4>
                 <div className="space-y-4">
                   {item.items.map(i => (
                     <div key={i} className="flex gap-3">
                       <span className={`${item.itemColor} text-sm mt-0.5`}>●</span>
-                      <p className="text-lavender-text/80">{i}</p>
+                      <p className="text-ink/85">{i}</p>
                     </div>
                   ))}
                 </div>
@@ -77,37 +77,37 @@ export default function Chapter6() {
             ))}
           </div>
           
-          <div className="bg-gradient-to-r from-accent/30 to-accent/30 border border-accent/30 rounded-2xl p-8 text-center">
+          <div className="border border-accent/30 bg-accent/[0.06] rounded-card p-8 text-center">
             <h4 className="text-accent text-xl font-bold mb-4">How Stock AI Uses LLM Technology</h4>
-            <p className="text-lavender-text/80 text-lg leading-relaxed max-w-3xl mx-auto">
+            <p className="text-ink/85 text-lg leading-relaxed max-w-3xl mx-auto">
               Stock AI uses advanced models (like Llama 3.3) to analyze each stock. For every request, the AI receives: live price data from NSE, PE ratio, 52-week position, volume data, and the latest news from 4 sources. It generates a structured output with a BUY/HOLD/SELL signal, confidence score, and specific targets in just 8 seconds.
             </p>
           </div>
 
     
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 pt-8 border-t border-lavender-text/10 prose-headings:text-lavender-text prose-a:text-lavender-primary">
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Rise of AI and Algorithmic Trading</h2>
+        <article className="calc-article mt-14 border-t border-line pt-8">
+          <h2 className="text-2xl font-bold mb-4 text-ink">The Rise of AI and Algorithmic Trading</h2>
           <p className="mb-4 leading-relaxed">
             The landscape of the financial markets has been permanently altered by the advent of Artificial Intelligence (AI) and Algorithmic Trading (Algo Trading). The days of floor traders shouting orders are long gone; today, the majority of trading volume on exchanges like the NSE and BSE is driven by machines executing complex algorithms at lightning speeds.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-lavender-text">What is Algorithmic Trading?</h3>
+          <h3 className="text-xl font-bold mb-3 text-ink">What is Algorithmic Trading?</h3>
           <p className="mb-4 leading-relaxed">
             Algorithmic trading involves using computer programs to execute trades based on a pre-defined set of rules or instructions (an algorithm). These rules are usually based on timing, price, quantity, or mathematical models. Once the market conditions meet the criteria set in the algorithm, the software automatically places the order without any human intervention.
           </p>
           <p className="mb-4 leading-relaxed">
             This approach removes human emotion—fear and greed—from the trading equation. It also allows for High-Frequency Trading (HFT), where institutions execute thousands of orders in fractions of a second to profit from minute price discrepancies.
           </p>
-          <h3 className="text-xl font-bold mb-3 text-lavender-text">How AI and Machine Learning are Changing the Game</h3>
+          <h3 className="text-xl font-bold mb-3 text-ink">How AI and Machine Learning are Changing the Game</h3>
           <p className="mb-4 leading-relaxed">
             While basic algorithms follow rigid "if-then" rules, Artificial Intelligence and Machine Learning (ML) introduce a new level of sophistication. ML models can analyze vast, unstructured datasets that would be impossible for humans to process in real-time.
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Natural Language Processing (NLP):</strong> AI can read thousands of news articles, earnings transcripts, and even social media feeds in seconds to gauge market sentiment. If an AI detects overly negative language surrounding a company's CEO, it can instantly trigger a sell signal.</li>
             <li><strong>Pattern Recognition:</strong> Deep learning models can identify complex, non-linear relationships in historical price data that traditional technical indicators might miss.</li>
             <li><strong>Predictive Analytics:</strong> AI models can forecast future price movements by correlating seemingly unrelated data points, such as predicting retail stock performance based on satellite imagery of parking lot traffic.</li>
           </ul>
-          <h3 className="text-xl font-bold mb-3 text-lavender-text">The Democratization of AI for Retail Investors</h3>
+          <h3 className="text-xl font-bold mb-3 text-ink">The Democratization of AI for Retail Investors</h3>
           <p className="mb-4 leading-relaxed">
             Historically, these powerful AI tools were exclusively available to elite hedge funds and large institutional investors. However, platforms are increasingly bringing this technology to retail investors. By leveraging Large Language Models (LLMs) and advanced data scraping, modern platforms can provide retail traders with institutional-grade insights, leveling the playing field and allowing individuals to make data-driven decisions based on comprehensive, real-time analysis.
           </p>

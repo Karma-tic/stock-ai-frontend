@@ -1,69 +1,50 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight, GraduationCap } from 'lucide-react';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
+
+export const CHAPTERS = [
+  { num: 1, title: 'What is the stock market?', slug: 'what-is-stock-market', desc: 'NSE, BSE, Nifty, Sensex and SEBI, explained simply.' },
+  { num: 2, title: 'Types of trading in India', slug: 'types-of-trading', desc: 'Intraday, swing, positional and long-term investing.' },
+  { num: 3, title: 'Essential market terms', slug: 'essential-terms', desc: 'Bull and bear markets, P/E ratio, stop loss, FIIs and DIIs.' },
+  { num: 4, title: 'Fundamental vs technical analysis', slug: 'fundamental-vs-technical', desc: 'Two ways to study a stock before you buy.' },
+  { num: 5, title: 'Stock market risks', slug: 'market-risks', desc: 'What actually causes people to lose money.' },
+  { num: 6, title: 'The role of AI in markets', slug: 'ai-in-markets', desc: 'What AI can and cannot do for a retail investor.' },
+  { num: 7, title: 'How to start investing', slug: 'how-to-start', desc: 'From opening a demat account to your first order.' },
+  { num: 8, title: 'Dividend investing', slug: 'dividend-investing', desc: 'Building income from companies that pay out profits.' },
+  { num: 9, title: '10 common mistakes', slug: 'common-mistakes', desc: 'Beginner traps and how to avoid them.' },
+];
 
 export default function Learn() {
-  const chapters = [
-    { num: 1, title: "What is the Stock Market?", slug: "what-is-stock-market", desc: "The basics of NSE, BSE, Nifty, and SEBI.", iconBg: "bg-gradient-lavender" },
-    { num: 2, title: "Types of Trading in Indian Stock Market", slug: "types-of-trading", desc: "Intraday, Swing, Positional, and Long-term.", iconBg: "bg-cobalt" },
-    { num: 3, title: "Essential Stock Market Terms", slug: "essential-terms", desc: "Bull market, PE Ratio, Stop Loss, DIIs and FIIs.", iconBg: "bg-up/15" },
-    { num: 4, title: "Fundamental vs Technical Analysis", slug: "fundamental-vs-technical", desc: "How to actually pick stocks to buy.", iconBg: "bg-caution/15" },
-    { num: 5, title: "Stock Market Risks", slug: "market-risks", desc: "Understand what causes you to lose money.", iconBg: "bg-down/15" },
-    { num: 6, title: "Role of AI in Stock Markets", slug: "ai-in-markets", desc: "How AI is changing retail investing.", iconBg: "bg-cobalt" },
-    { num: 7, title: "How to Start Investing Step by Step", slug: "how-to-start", desc: "From Demat account to your first trade.", iconBg: "bg-caution/15" },
-    { num: 8, title: "Dividend Investing", slug: "dividend-investing", desc: "Building passive income from stocks.", iconBg: "bg-up/15" },
-    { num: 9, title: "10 Common Mistakes", slug: "common-mistakes", desc: "Avoid these beginner traps.", iconBg: "bg-down/15" }
-  ];
-
   return (
-    <div className="bg-lavender-surface min-h-screen">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Learn Stock Market Investing in India | Free Beginner Guide | Stock AI"
         description="Learn Indian stock market basics, trading types, PE ratio, risks, AI analysis, dividend investing, and beginner mistakes."
         canonicalPath="/learn"
       />
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-lavender-primary text-sm font-semibold uppercase tracking-widest mb-3">
-            Free Learning Hub
-          </p>
-          <h1 className="text-lavender-text text-4xl md:text-5xl font-black mb-6">
-            Complete Guide to Stock Market Investing in India
-          </h1>
-          <p className="text-lavender-text/70 text-lg max-w-2xl mx-auto">
-            Everything you need to know about trading on NSE and BSE —
-            from basics to AI-powered analysis. Choose a chapter below to start reading.
-          </p>
-        </div>
-
-        {/* Wiki Grid */}
-        <div className="space-y-4">
-          {chapters.map((ch) => (
-            <Link 
-              key={ch.num} 
-              to={`/learn/${ch.slug}`}
-              className="app-card flex items-center gap-6 p-6 hover:border-lavender-primary/25 hover:shadow-lavender transition group"
-            >
-              <div className={`w-14 h-14 ${ch.iconBg} rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl flex-shrink-0 shadow-lavender group-hover:scale-110 transition-transform`}>
-                {ch.num}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lavender-text text-xl font-bold mb-1 group-hover:text-lavender-primary transition-colors">
-                  {ch.title}
-                </h3>
-                <p className="text-lavender-text/70 text-sm">{ch.desc}</p>
-              </div>
-              <div className="hidden sm:flex flex-shrink-0 text-lavender-text/60 group-hover:text-lavender-text transition-colors">
-                <ChevronRight className="w-6 h-6" />
-              </div>
-            </Link>
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader
+          eyebrow="Learn"
+          icon={GraduationCap}
+          title="A plain-English guide to investing in India"
+          intro="Nine short chapters, from what the stock market is to the mistakes beginners make. Free, and in order, so each one builds on the last."
+        />
+        <ol className="overflow-hidden rounded-card border border-line bg-surface">
+          {CHAPTERS.map((ch) => (
+            <li key={ch.num} className="border-b border-line last:border-0">
+              <Link to={`/learn/${ch.slug}`} className="group flex items-center gap-4 px-4 py-4 transition hover:bg-ink/[0.03] sm:px-5">
+                <span className="num grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent/10 text-sm font-semibold text-accent">{ch.num}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold text-ink group-hover:text-accent">{ch.title}</span>
+                  <span className="mt-0.5 block text-sm text-muted">{ch.desc}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
+              </Link>
+            </li>
           ))}
-        </div>
-
-      </section>
+        </ol>
+      </div>
     </div>
   );
 }
