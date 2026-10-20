@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface LearnLayoutProps {
   children: React.ReactNode;
@@ -10,71 +10,56 @@ interface LearnLayoutProps {
   prevChapter?: { path: string; title: string };
 }
 
+const TOTAL = 9;
+
 export default function LearnLayout({ children, chapterNumber, title, nextChapter, prevChapter }: LearnLayoutProps) {
   return (
-    <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
-      
-      {/* Top Breadcrumb Nav */}
-      <div className="bg-surface border-b border-lavender-text/10 py-4 px-6 sticky top-[73px] z-30 shadow-lavender">
-        <div className="max-w-4xl mx-auto flex items-center gap-2 text-sm">
-          <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-primary transition flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" />
-            Learn Hub
+    <div className="min-h-[100dvh] bg-canvas">
+      {/* Reading progress through the course, under the navbar */}
+      <div className="sticky top-[var(--nav-h,64px)] z-30 border-b border-line bg-canvas/90 backdrop-blur-[16px]">
+        <div className="mx-auto flex h-12 max-w-3xl items-center gap-3 px-4 text-sm sm:px-6">
+          <Link to="/learn" className="inline-flex shrink-0 items-center gap-1 font-medium text-muted hover:text-ink">
+            <ArrowLeft className="h-4 w-4" /> Learn
           </Link>
-          <ChevronRight className="w-4 h-4 text-muted" />
-          <span className="text-lavender-text/60">Chapter {chapterNumber}</span>
-          <ChevronRight className="w-4 h-4 text-muted" />
-          <span className="text-lavender-text font-semibold truncate">{title}</span>
+          <span className="text-line" aria-hidden="true">/</span>
+          <span className="min-w-0 truncate font-medium text-ink">{title}</span>
+          <span className="num ml-auto shrink-0 text-xs text-muted">
+            {chapterNumber} of {TOTAL}
+          </span>
+        </div>
+        <div className="h-0.5 bg-ink/[0.06]">
+          <div className="h-full bg-cobalt" style={{ width: `${(chapterNumber / TOTAL) * 100}%` }} />
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        
-        {/* Main Content Render */}
-        <div className="app-card p-6 md:p-12 mb-12">
-          {children}
-        </div>
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="learn-chapter text-[15px] leading-relaxed text-ink/85">{children}</div>
 
-        {/* Footer Navigation */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-lavender-text/10 pt-8">
+        <nav aria-label="Chapters" className="mt-14 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
           {prevChapter ? (
-            <Link 
-              to={prevChapter.path}
-              className="flex items-center gap-3 bg-surface hover:bg-lavender-base border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
-            >
-              <ArrowLeft className="w-5 h-5 text-lavender-text/70" />
-              <div className="text-left">
-                <p className="text-xs text-lavender-text/60 uppercase font-bold tracking-wider mb-1">Previous</p>
-                <p className="text-lavender-text font-semibold text-sm">{prevChapter.title}</p>
-              </div>
+            <Link to={prevChapter.path} className="group rounded-card border border-line bg-surface p-4 transition hover:border-accent/40">
+              <span className="flex items-center gap-1 text-xs text-muted">
+                <ArrowLeft className="h-3.5 w-3.5" /> Previous
+              </span>
+              <span className="mt-1 block font-semibold text-ink group-hover:text-accent">{prevChapter.title}</span>
             </Link>
           ) : (
-            <div className="w-full sm:w-auto"></div> // Spacer
+            <span className="hidden sm:block" />
           )}
-
           {nextChapter ? (
-            <Link 
-              to={nextChapter.path}
-              className="flex items-center gap-3 bg-gradient-lavender hover:opacity-90 px-6 py-4 rounded-2xl transition shadow-lavender w-full sm:w-auto justify-between sm:justify-start"
-            >
-              <div className="text-left sm:text-right">
-                <p className="text-xs text-accent uppercase font-bold tracking-wider mb-1">Next Chapter</p>
-                <p className="text-lavender-text font-semibold text-sm">{nextChapter.title}</p>
-              </div>
-              <ChevronRight className="w-5 h-5 text-lavender-text" />
+            <Link to={nextChapter.path} className="group rounded-card border border-accent/40 bg-accent/[0.06] p-4 text-right transition hover:border-accent">
+              <span className="flex items-center justify-end gap-1 text-xs font-medium text-accent">
+                Next chapter <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+              <span className="mt-1 block font-semibold text-ink">{nextChapter.title}</span>
             </Link>
           ) : (
-            <Link 
-              to="/learn"
-              className="flex items-center gap-3 bg-up/15 hover:bg-up/15 px-6 py-4 rounded-2xl transition shadow-lavender w-full sm:w-auto"
-            >
-              <div className="text-center">
-                <p className="text-lavender-text font-bold">Return to Hub</p>
-              </div>
+            <Link to="/learn" className="group rounded-card border border-accent/40 bg-accent/[0.06] p-4 text-right transition hover:border-accent">
+              <span className="text-xs font-medium text-accent">You finished the course</span>
+              <span className="mt-1 block font-semibold text-ink">Back to all chapters</span>
             </Link>
           )}
-        </div>
-
+        </nav>
       </div>
     </div>
   );
