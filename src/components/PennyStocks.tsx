@@ -1,116 +1,107 @@
 // src/components/PennyStocks.tsx
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import StockCard from './StockCard';
+import { AlertTriangle } from 'lucide-react';
 import AnalysisModal from './AnalysisModal';
-import { Coins, AlertTriangle, TrendingUp } from 'lucide-react';
+import StockRow, { StockRowSkeleton } from './app/StockRow';
+import Segmented from './ui/Segmented';
+import { Button } from './ui/Button';
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-export default function PennyStocks() {
-  const [stocks, setStocks]   = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<any>(null);
- const [watchlist] = useState<string[]>([]);
+type Sort = 'move' | 'price' | 'name';
 
-  useEffect(() => { loadPennyStocks(); }, []);
+export default function PennyStocks() {
+  const [stocks, setStocks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [selected, setSelected] = useState<any>(null);
+  const [sort, setSort] = useState<Sort>('move');
+
+  useEffect(() => {
+    loadPennyStocks();
+  }, []);
 
   const loadPennyStocks = async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const res = await axios.get(`${BASE}/api/market/penny-stocks`);
       setStocks(res.data.stocks || []);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      setLoadError(true);
+    }
     setLoading(false);
   };
 
+  const sorted = useMemo(() => {
+    const list = [...stocks];
+    if (sort === 'move') list.sort((a, b) => Math.abs(b.price_change_pct || 0) - Math.abs(a.price_change_pct || 0));
+    if (sort === 'price') list.sort((a, b) => (a.current_price || 0) - (b.current_price || 0));
+    if (sort === 'name') list.sort((a, b) => String(a.display_ticker).localeCompare(String(b.display_ticker)));
+    return list;
+  }, [stocks, sort]);
+
+  const upCount = stocks.filter((s) => (s.price_change_pct || 0) > 0).length;
+  const downCount = stocks.filter((s) => (s.price_change_pct || 0) < 0).length;
+
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="bg-caution/10 border border-caution/30 rounded-2xl p-4 mb-6">
-        <h2 className="text-caution font-bold text-lg mb-1">
-          <span className="inline-flex items-center gap-2">
-  <Coins className="w-5 h-5" />
-  Penny Stocks — Under ₹100
-</span>
-        </h2>
-        <p className="text-lavender-text/70 text-sm">
-          High risk, high reward. These stocks trade below ₹100 on NSE.
-          Always do your research before investing in penny stocks.
-        </p>
-        <p className="text-down text-xs mt-2">
-         <span className="inline-flex items-center gap-1">
-  <AlertTriangle className="w-4 h-4" />
-  Penny stocks are highly volatile and risky.
-</span>
-        </p>
+    <div>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-ink">Penny stocks under ₹100</h2>
+          {!loading && stocks.length > 0 && (
+            <p className="num mt-0.5 text-xs text-muted">
+              {stocks.length} stocks · <span className="text-up">▲ {upCount} up</span> · <span className="text-down">▼ {downCount} down</span> today
+            </p>
+          )}
+        </div>
+        {!loading && stocks.length > 1 && (
+          <Segmented<Sort>
+            label="Sort penny stocks"
+            value={sort}
+            onChange={setSort}
+            options={[
+              { value: 'move', label: 'Biggest move' },
+              { value: 'price', label: 'Lowest price' },
+              { value: 'name', label: 'A–Z' },
+            ]}
+          />
+        )}
       </div>
 
-      {/* Stats bar */}
-      {!loading && stocks.length > 0 && (
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
-            <p className="text-lavender-text/60 text-xs">Total Stocks</p>
-            <p className="text-lavender-text font-bold text-xl">{stocks.length}</p>
+      <p className="mt-3 flex items-start gap-2 rounded-control bg-caution/10 px-3 py-2.5 text-xs leading-relaxed text-ink/85">
+        <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-caution" strokeWidth={2} />
+        <span>
+          Low-priced shares often trade thinly and can swing sharply. A low price does not mean a stock is cheap. Read the filings before you act.
+        </span>
+      </p>
+
+      <div className="mt-2">
+        {loading ? (
+          <StockRowSkeleton rows={8} />
+        ) : loadError ? (
+          <div className="py-10 text-center">
+            <p className="text-sm text-muted">Penny stock prices could not be loaded.</p>
+            <Button variant="ghost" className="mt-3" onClick={loadPennyStocks}>
+              Retry
+            </Button>
           </div>
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
-            <p className="text-lavender-text/60 text-xs">Cheapest</p>
-            <p className="text-up font-bold text-xl">
-              ₹{Math.min(...stocks.map(s => s.current_price || 999)).toFixed(1)}
-            </p>
+        ) : stocks.length === 0 ? (
+          <div className="py-10 text-center">
+            <p className="text-base font-semibold text-ink">No penny stocks right now</p>
+            <p className="mt-1 text-sm text-muted">Prices refresh during market hours. Check back after 9:15 am IST.</p>
           </div>
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
-            <p className="text-lavender-text/60 text-xs">Most stocks up</p>
-            <p className="text-lavender-primary font-bold text-xl">
-             <span className="inline-flex items-center gap-1 justify-center">
-  {stocks.filter(s => (s.price_change || 0) > 0).length}
-  <TrendingUp className="w-4 h-4" />
-</span>
-            </p>
-          </div>
-        </div>
-      )}
+        ) : (
+          <ul>
+            {sorted.map((stock: any) => (
+              <StockRow key={stock.display_ticker} stock={stock} onAnalyze={setSelected} />
+            ))}
+          </ul>
+        )}
+      </div>
 
-      {/* Loading */}
-      {loading && (
-        <div className="text-center py-20">
-          <Coins className="w-10 h-10 mx-auto mb-4 animate-pulse text-caution" />
-          <p className="text-lavender-text/70">Loading penny stocks...</p>
-          <p className="text-lavender-text/60 text-sm mt-2">
-            Fetching live prices for all stocks under ₹100
-          </p>
-        </div>
-      )}
-
-      {/* Stocks grid */}
-      {!loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stocks.map((stock: any) => (
-            <StockCard
-              key={stock.display_ticker}
-              stock={stock}
-              onAnalyze={setSelected}
-              inWatchlist={watchlist.includes(stock.display_ticker)}
-              onWatchlistChange={() => {}}
-              canAddToWatchlist={true}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!loading && stocks.length === 0 && (
-        <div className="text-center py-20">
-         <Coins className="w-10 h-10 mx-auto mb-4 text-caution" />
-          <p className="text-lavender-text font-semibold">No penny stocks found right now</p>
-          <p className="text-lavender-text/70 text-sm mt-2">
-            Check back during market hours
-          </p>
-        </div>
-      )}
-
-      {selected && (
-        <AnalysisModal stock={selected} onClose={() => setSelected(null)} />
-      )}
+      {selected && <AnalysisModal stock={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }
