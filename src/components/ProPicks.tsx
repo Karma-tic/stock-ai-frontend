@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { Target, TrendingUp, Lock, CheckCircle2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, Lock, Sparkles } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import UpgradeModal from './UpgradeModal';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
+import { Button, ButtonLink } from './ui/Button';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -18,26 +20,21 @@ export default function ProPicks() {
   useEffect(() => {
     async function fetchProData() {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        const token = session?.access_token || "";
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const token = session?.access_token || '';
         setIsLoggedIn(!!session);
 
-        // Fetch Accuracy
         const accRes = await fetch(`${BASE}/api/pro-accuracy`);
-        const accData = await accRes.json();
-        setAccuracy(accData);
+        setAccuracy(await accRes.json());
 
-        // Fetch Picks
-        const picksRes = await fetch(`${BASE}/api/pro-picks`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
+        const picksRes = await fetch(`${BASE}/api/pro-picks`, { headers: { Authorization: `Bearer ${token}` } });
         const picksData = await picksRes.json();
         setIsPro(picksData.is_pro);
         setPicks(picksData.picks || []);
       } catch (error) {
-        console.error("Error fetching pro data:", error);
+        console.error('Error fetching pro data:', error);
       } finally {
         setLoading(false);
       }
@@ -45,126 +42,125 @@ export default function ProPicks() {
     fetchProData();
   }, []);
 
-  if (loading) {
-    return <div className="p-8 text-center text-lavender-text/60">Loading AI Engine Data...</div>;
-  }
-
   return (
-    <div className="p-6 md:p-10 max-w-6xl mx-auto min-h-screen">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Pro Picks | Daily AI-Screened NSE Setups | Stock AI"
         description="View daily AI-screened NSE trading setups, Pro accuracy stats, entry levels, targets, and stop loss information for educational use."
         canonicalPath="/pro-picks"
       />
-      {/* HEADER SECTION */}
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-ink mb-4 flex items-center justify-center gap-3">
-          <TrendingUp className="w-10 h-10 text-caution" />
-          Pro Picks
-        </h1>
-        <p className="text-lavender-text/60 text-lg max-w-2xl mx-auto">
-          Every morning at 9:20 AM, our AI screens a broad NSE universe and shortlists 2-5 high-interest setups for further research.
-        </p>
-      </div>
-
-      {/* ACCURACY TRACKER */}
-      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
-        <div className="flex items-center gap-4 mb-4 md:mb-0">
-          <div className="p-3 bg-up/10 rounded-full border border-up/20">
-            <Target className="w-8 h-8 text-up" />
-          </div>
-          <div>
-            <h3 className="text-muted font-medium">All-Time AI Accuracy</h3>
-            <p className="text-sm text-lavender-text/70">Based on End-of-Day Closing Prices</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-8">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-lavender-text">{accuracy?.total_picks || 0}</div>
-            <div className="text-sm text-lavender-text/70">Total Calls</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-extrabold text-up">{accuracy?.win_rate || "0%"}</div>
-            <div className="text-sm text-up/70 font-medium tracking-wider uppercase mt-1">Win Rate</div>
-          </div>
-        </div>
-      </div>
-
-      {/* SECURITY BANNER FOR FREE USERS */}
-      {!isPro && (
-        <div className="bg-caution/10 border border-caution/30 rounded-2xl p-6 mb-8 text-center flex flex-col items-center">
-          <Lock className="w-12 h-12 text-caution mb-3" />
-          <h2 className="text-2xl font-bold text-lavender-text mb-2">Unlock Today's Picks</h2>
-          <p className="text-lavender-text/60 mb-6 max-w-xl">
-            You are currently viewing masked data. Exact ticker names, entry points, and targets are available only to Pro subscribers.
-          </p>
-          {isLoggedIn ? (
-            <button onClick={() => setShowUpgrade(true)} className="bg-gradient-to-r from-caution/20 to-caution/20 hover:from-caution/20 hover:to-caution/20 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
-              Upgrade to Pro Now
-            </button>
-          ) : (
-            <Link to="/login" className="bg-gradient-to-r from-caution/20 to-caution/20 hover:from-caution/20 hover:to-caution/20 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
-              Upgrade to Pro Now
-            </Link>
-          )}
-        </div>
-      )}
-
-      {/* PICKS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {picks.length === 0 ? (
-          <div className="col-span-full app-card text-center p-12 text-lavender-text/70">
-            No picks generated for today yet. Check back after 9:30 AM.
-          </div>
-        ) : (
-          picks.map((pick, index) => (
-            <div key={index} className={`relative overflow-hidden app-card p-6 transition-all ${isPro ? 'hover:border-lavender-primary/25 hover:shadow-lavender hover:-translate-y-1' : ''}`}>
-              
-              {/* Blur Overlay for Free Users */}
-              {!isPro && (
-                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-surface/50 flex items-center justify-center">
-                  <div className="bg-surface px-6 py-2 rounded-full border border-caution/30 text-caution font-bold flex items-center gap-2 shadow-lavender">
-                    <Lock className="w-4 h-4" /> Pro Only
-                  </div>
-                </div>
-              )}
-
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h3 className={`text-3xl font-black ${isPro ? 'text-lavender-text' : 'text-lavender-text/80 font-mono tracking-widest'}`}>
-                    {pick.ticker}
-                  </h3>
-                  <div className="inline-flex items-center gap-1 bg-up/10 text-up text-xs px-2 py-1 rounded mt-2 border border-up/20">
-                    <CheckCircle2 className="w-3 h-3" />
-                    AI Screened
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-lavender-text/70 text-sm mb-1">Entry Price</div>
-                  <div className={`text-xl font-bold ${isPro ? 'text-lavender-text' : 'text-lavender-text/80 font-mono'}`}>
-                    ₹{pick.entry}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-sm leading-relaxed text-lavender-text/80">
-                  {isPro ? pick.reasoning : "This masked setup passed our momentum, liquidity, and risk filters. Upgrade to review the exact ticker and reasoning before doing your own research."}
-                </p>
-              </div>
-
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* UPGRADE MODAL */}
-      {showUpgrade && (
-        <UpgradeModal
-          onClose={() => setShowUpgrade(false)}
-          onSuccess={() => setIsPro(true)}
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader
+          eyebrow="Pro"
+          icon={Sparkles}
+          title="Pro Picks"
+          intro="Each weekday at 9:20 am IST, the AI screens a broad NSE universe and shortlists 2 to 5 setups worth researching. A starting point for your own checks, not a recommendation."
         />
-      )}
+
+        {/* Accuracy, stated plainly with how it is measured */}
+        <section className="grid gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-3">
+          <div className="bg-surface p-5">
+            <p className="text-xs text-muted">Calls tracked</p>
+            <p className="num mt-1 text-3xl font-semibold text-ink">{loading ? '–' : accuracy?.total_picks ?? 0}</p>
+          </div>
+          <div className="bg-surface p-5">
+            <p className="text-xs text-muted">Win rate</p>
+            <p className="num mt-1 text-3xl font-semibold text-ink">{loading ? '–' : accuracy?.win_rate || '0%'}</p>
+          </div>
+          <div className="flex flex-col justify-between gap-3 bg-surface p-5">
+            <p className="text-xs leading-relaxed text-muted">Checked against end-of-day closing prices. Every call stays on the record, right or wrong.</p>
+            <Link to="/track-record" className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline">
+              See the full track record <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
+        {/* Locked state for free users */}
+        {!loading && !isPro && (
+          <section className="mt-8 flex flex-col items-start gap-4 rounded-card border border-accent/30 bg-accent/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-accent/10 text-accent">
+                <Lock className="h-5 w-5" strokeWidth={1.75} />
+              </span>
+              <div>
+                <h2 className="font-semibold text-ink">Today's picks are for Pro members</h2>
+                <p className="mt-0.5 text-sm text-muted">You can see how many setups passed the screen. Pro shows the stock, the entry level and the reasoning.</p>
+              </div>
+            </div>
+            {isLoggedIn ? (
+              <Button onClick={() => setShowUpgrade(true)} className="shrink-0">
+                Unlock with Pro
+              </Button>
+            ) : (
+              <ButtonLink to="/login?next=%2Fpro-picks" className="shrink-0">
+                Sign in to unlock
+              </ButtonLink>
+            )}
+          </section>
+        )}
+
+        {/* Picks */}
+        <section className="mt-8">
+          <h2 className="text-sm font-semibold text-ink">Today's shortlist</h2>
+          {loading ? (
+            <div className="mt-3 grid gap-4 md:grid-cols-2" aria-hidden="true">
+              {[0, 1].map((i) => (
+                <span key={i} className="skeleton block h-40" />
+              ))}
+            </div>
+          ) : picks.length === 0 ? (
+            <p className="mt-3 rounded-card border border-dashed border-line p-8 text-center text-sm text-muted">No picks yet today. The shortlist is published after 9:30 am IST on market days.</p>
+          ) : (
+            <ul className="mt-3 grid gap-4 md:grid-cols-2">
+              {picks.map((pick, index) => (
+                <li key={index} className="relative overflow-hidden rounded-card border border-line bg-surface p-5">
+                  <div className={isPro ? '' : 'select-none blur-[5px]'} aria-hidden={!isPro}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        {isPro ? (
+                          <Link to={`/stock/${pick.ticker}`} className="num text-2xl font-semibold text-ink hover:text-accent">
+                            {pick.ticker}
+                          </Link>
+                        ) : (
+                          <span className="num text-2xl font-semibold text-ink">{pick.ticker}</span>
+                        )}
+                        <p className="mt-1 text-xs text-muted">Passed the morning screen</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted">Entry level</p>
+                        <p className="num text-lg font-semibold text-ink">
+                          ₹{typeof pick.entry === 'number' ? pick.entry.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : pick.entry}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="mt-4 text-sm leading-relaxed text-ink/85">
+                      {isPro
+                        ? pick.reasoning
+                        : 'This setup passed the momentum, liquidity and risk filters. Pro shows the stock and the reasoning so you can check it yourself.'}
+                    </p>
+                  </div>
+                  {!isPro && (
+                    <div className="absolute inset-0 grid place-items-center">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink shadow-sm">
+                        <Lock className="h-3.5 w-3.5 text-accent" /> Pro only
+                      </span>
+                    </div>
+                  )}
+                  {isPro && (
+                    <Link to={`/?analyze=${encodeURIComponent(pick.ticker)}`} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline">
+                      Open the evidence <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <p className="mt-8 text-xs text-muted">For education and research only. Not SEBI-registered investment advice. Past results do not predict future returns.</p>
+      </div>
+
+      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => setIsPro(true)} />}
     </div>
   );
 }
