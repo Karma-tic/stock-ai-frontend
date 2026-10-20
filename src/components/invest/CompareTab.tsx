@@ -6,7 +6,7 @@ import { fmtReturn, RiskMeter } from './investShared';
 interface Props { items: InvestOption[]; onRemove: (id: string) => void; onBrowse: () => void }
 
 const ROWS: [string, (o: InvestOption) => React.ReactNode][] = [
-  ['Typical return', o => <span className="font-bold tabular-nums">{fmtReturn(o)}</span>],
+  ['Typical return', o => <span className="font-bold num">{fmtReturn(o)}</span>],
   ['Risk', o => <RiskMeter risk={o.risk} />],
   ['Liquidity', o => o.liquidity],
   ['Lock-in', o => o.lock_in],
@@ -21,25 +21,25 @@ export default function CompareTab({ items, onRemove, onBrowse }: Props) {
   return (
     <div className="space-y-4">
       <div className="max-w-2xl">
-        <h2 className="text-2xl font-bold text-lavender-text">Side by side</h2>
-        <p className="mt-1 text-lavender-text/70">Add up to four options with the Compare button on any card.</p>
+        <h2 className="text-xl font-semibold tracking-[-0.015em] text-ink">Side by side</h2>
+        <p className="mt-1 text-muted">Add up to four options with the Compare button on any card.</p>
       </div>
       {items.length === 0 ? (
-        <div className="app-card p-10 text-center space-y-3">
-          <p className="text-lavender-text/70">Nothing to compare yet.</p>
-          <button type="button" onClick={onBrowse} className="rounded-xl bg-gradient-lavender px-4 py-2.5 text-sm font-semibold text-white">Browse options</button>
+        <div className="rounded-card border border-line bg-surface p-10 text-center space-y-3">
+          <p className="text-muted">Nothing to compare yet.</p>
+          <button type="button" onClick={onBrowse} className="inline-flex min-h-[44px] items-center justify-center rounded-control bg-cobalt px-4 text-sm font-semibold text-white hover:brightness-110">Browse options</button>
         </div>
       ) : (
-        <div className="app-card overflow-x-auto">
+        <div className="rounded-card border border-line bg-surface overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
-              <tr className="border-b border-lavender-text/10">
+              <tr className="border-b border-line">
                 <th scope="col" className="w-36 p-4" />
                 {items.map(o => (
                   <th key={o.id} scope="col" className="p-4 text-left align-top">
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-base font-bold text-lavender-text">{o.name}</span>
-                      <button type="button" onClick={() => onRemove(o.id)} aria-label={`Remove ${o.name}`} className="text-lavender-text/50 hover:text-lavender-text"><X className="h-4 w-4" /></button>
+                      <span className="text-base font-bold text-ink">{o.name}</span>
+                      <button type="button" onClick={() => onRemove(o.id)} aria-label={`Remove ${o.name}`} className="text-muted hover:text-ink"><X className="h-4 w-4" /></button>
                     </div>
                   </th>
                 ))}
@@ -47,9 +47,9 @@ export default function CompareTab({ items, onRemove, onBrowse }: Props) {
             </thead>
             <tbody>
               {ROWS.map(([label, render]) => (
-                <tr key={label} className="border-b border-lavender-text/10 last:border-0">
-                  <th scope="row" className="p-4 text-left align-top text-xs font-semibold uppercase tracking-wider text-lavender-text/60">{label}</th>
-                  {items.map(o => <td key={o.id} className="p-4 align-top text-lavender-text/85">{render(o)}</td>)}
+                <tr key={label} className="border-b border-line last:border-0">
+                  <th scope="row" className="p-4 text-left align-top text-xs font-semibold text-muted">{label}</th>
+                  {items.map(o => <td key={o.id} className="p-4 align-top text-ink/85">{render(o)}</td>)}
                 </tr>
               ))}
             </tbody>

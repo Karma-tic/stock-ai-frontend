@@ -49,12 +49,12 @@ export default function GlobalTab({ live }: { live: LivePayload | null }) {
   return (
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <h2 className="text-2xl font-bold text-lavender-text">Investing outside India, from India</h2>
-        <p className="mt-1 text-lavender-text/70">Four legal routes, each with different limits, taxes and paperwork.</p>
+        <h2 className="text-xl font-semibold tracking-[-0.015em] text-ink">Investing outside India, from India</h2>
+        <p className="mt-1 text-muted">Four legal routes, each with different limits, taxes and paperwork.</p>
         {live?.usd_inr && (
-          <p className="mt-3 text-sm text-lavender-text/80 tabular-nums">
+          <p className="mt-3 text-sm text-ink/85 num">
             USD/INR right now: <b>₹{live.usd_inr.price.toFixed(2)}</b>
-            <span className={live.usd_inr.change_pct >= 0 ? 'ml-2 text-down dark:text-down' : 'ml-2 text-up dark:text-up'}>
+            <span className={live.usd_inr.change_pct >= 0 ? 'ml-2 text-down' : 'ml-2 text-up'}>
               ({live.usd_inr.change_pct >= 0 ? 'rupee weaker' : 'rupee stronger'} {Math.abs(live.usd_inr.change_pct).toFixed(2)}% today)
             </span>
           </p>
@@ -63,35 +63,35 @@ export default function GlobalTab({ live }: { live: LivePayload | null }) {
 
       <ol className="grid gap-4 lg:grid-cols-2">
         {ROUTES.map((r, i) => (
-          <li key={r.title} className="app-card p-5 space-y-3">
+          <li key={r.title} className="rounded-card border border-line bg-surface p-5 space-y-3">
             <div className="flex items-center gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-lavender text-xs font-bold text-white">{i + 1}</span>
-              <h3 className="text-lg font-bold text-lavender-text">{r.title}</h3>
+              <span className="num flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-semibold text-accent">{i + 1}</span>
+              <h3 className="text-base font-semibold text-ink">{r.title}</h3>
             </div>
-            <p className="text-sm text-lavender-text/80">{r.body}</p>
+            <p className="text-sm text-ink/85">{r.body}</p>
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
               {r.flow.map((s, j) => (
                 <span key={s} className="inline-flex items-center gap-1.5">
-                  {j > 0 && <ArrowRight className="h-3 w-3 text-lavender-text/40" />}
-                  <span className="rounded-lg bg-lavender-surface px-2 py-1 text-lavender-text/80">{s}</span>
+                  {j > 0 && <ArrowRight className="h-3 w-3 text-muted" />}
+                  <span className="rounded-control bg-ink/[0.05] px-2 py-1 text-ink/85">{s}</span>
                 </span>
               ))}
             </div>
             {r.live && <LiveTag symbol={r.live} quote={live?.prices[r.live]} />}
-            <p className="text-sm text-lavender-text/60">{r.note}</p>
+            <p className="text-sm text-muted">{r.note}</p>
           </li>
         ))}
       </ol>
 
-      <section className="app-card p-5 space-y-3">
-        <h3 className="text-lg font-bold text-lavender-text">Rules that apply to direct overseas investing</h3>
-        <ul className="list-disc space-y-1.5 pl-5 text-sm text-lavender-text/85 marker:text-lavender-primary">
+      <section className="rounded-card border border-line bg-surface p-5 space-y-3">
+        <h3 className="text-base font-semibold text-ink">Rules that apply to direct overseas investing</h3>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm text-ink/85 marker:text-accent">
           {RULES.map((r, i) => <li key={i}>{r}</li>)}
         </ul>
-        <p className="text-xs text-lavender-text/60">
+        <p className="text-xs text-muted">
           Sources:{' '}
           {SOURCES.map(([n, u], i) => (
-            <span key={u}>{i > 0 && ', '}<a href={u} target="_blank" rel="noopener noreferrer" className="text-lavender-primary underline underline-offset-2">{n}</a></span>
+            <span key={u}>{i > 0 && ', '}<a href={u} target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-2">{n}</a></span>
           ))}. Rules as of September 2026.
         </p>
       </section>

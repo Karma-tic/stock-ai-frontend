@@ -4,15 +4,16 @@ import { InvestOption, LiveQuote, RiskLevel } from '../../data/investCatalog';
 export const RISK_NAME: Record<RiskLevel, string> = { 1: 'Very low', 2: 'Low', 3: 'Moderate', 4: 'High', 5: 'Very high' };
 
 // Tailwind classes per risk level (full strings so Tailwind's scanner keeps them).
+// Risk reads as a quiet 1–5 scale in one ink colour; only "very high" gets the warning colour.
 export const RISK_TEXT: Record<RiskLevel, string> = {
-  1: 'text-up dark:text-up',
-  2: 'text-up dark:text-up',
-  3: 'text-caution dark:text-caution',
-  4: 'text-caution dark:text-caution',
-  5: 'text-down dark:text-down',
+  1: 'text-ink/85',
+  2: 'text-ink/85',
+  3: 'text-ink/85',
+  4: 'text-caution',
+  5: 'text-down',
 };
 export const RISK_BAR: Record<RiskLevel, string> = {
-  1: 'bg-up/15', 2: 'bg-up/15', 3: 'bg-caution/15', 4: 'bg-caution/15', 5: 'bg-down/15',
+  1: 'bg-ink/70', 2: 'bg-ink/70', 3: 'bg-ink/70', 4: 'bg-caution', 5: 'bg-down',
 };
 
 export function RiskMeter({ risk }: { risk: RiskLevel }) {
@@ -20,7 +21,7 @@ export function RiskMeter({ risk }: { risk: RiskLevel }) {
     <span className="inline-flex items-center gap-2" aria-label={`Risk ${risk} of 5, ${RISK_NAME[risk]}`}>
       <span className="flex gap-0.5">
         {[1, 2, 3, 4, 5].map(i => (
-          <span key={i} className={`h-1.5 w-4 rounded-sm ${i <= risk ? RISK_BAR[risk] : 'bg-lavender-text/10'}`} />
+          <span key={i} className={`h-1.5 w-4 rounded-sm ${i <= risk ? RISK_BAR[risk] : 'bg-ink/10'}`} />
         ))}
       </span>
       <span className={`text-xs font-semibold ${RISK_TEXT[risk]}`}>{RISK_NAME[risk]} risk</span>
@@ -42,11 +43,13 @@ export function LiveTag({ symbol, quote }: { symbol: string; quote?: LiveQuote }
   if (!quote) return null;
   const up = quote.change_pct >= 0;
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-lavender-text/70 tabular-nums">
-      <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-up/15 opacity-60 animate-ping motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-up" /></span>
-      {symbol} {fmtPrice(quote.price)}
-      <span className={up ? 'text-up dark:text-up' : 'text-down dark:text-down'}>
-        {up ? '+' : ''}{quote.change_pct.toFixed(2)}%
+    <span className="num inline-flex items-center gap-1.5 text-xs text-muted">
+      <span className="h-1.5 w-1.5 rounded-full bg-up" aria-hidden="true" />
+      <span className="sr-only">Live price:</span>
+      {symbol} <span className="text-ink">{fmtPrice(quote.price)}</span>
+      <span className={up ? 'text-up' : 'text-down'}>
+        {up ? '▲ +' : '▼ −'}
+        {Math.abs(quote.change_pct).toFixed(2)}%
       </span>
     </span>
   );
@@ -77,17 +80,17 @@ const PROFILES: Record<ProfileKey, Omit<Profile, 'key' | 'score'>> = {
   conservative: {
     name: 'Conservative', maxRisk: 2,
     text: 'Protecting capital matters more than growth. Government schemes and FDs form the base, with a small equity slice so inflation does not erode savings.',
-    mix: [['Fixed income & govt schemes', 70, 'bg-up/15'], ['Equity', 15, 'bg-lavender-primary'], ['Gold', 10, 'bg-caution/15'], ['Cash', 5, 'bg-lavender-text/40']],
+    mix: [['Fixed income & govt schemes', 70, 'bg-cobalt/45'], ['Equity', 15, 'bg-cobalt'], ['Gold', 10, 'bg-caution/70'], ['Cash', 5, 'bg-ink/25']],
   },
   moderate: {
     name: 'Moderate', maxRisk: 3,
     text: 'You accept some ups and downs for better growth. Hybrid and index funds for growth, with government schemes and FDs as the stable base.',
-    mix: [['Fixed income & govt schemes', 45, 'bg-up/15'], ['Equity', 40, 'bg-lavender-primary'], ['Gold', 10, 'bg-caution/15'], ['Cash', 5, 'bg-lavender-text/40']],
+    mix: [['Fixed income & govt schemes', 45, 'bg-cobalt/45'], ['Equity', 40, 'bg-cobalt'], ['Gold', 10, 'bg-caution/70'], ['Cash', 5, 'bg-ink/25']],
   },
   aggressive: {
     name: 'Growth-seeking', maxRisk: 5,
     text: 'Long horizon and a strong stomach for swings. Index and flexi-cap funds at the core, global funds for diversification, a small safe base.',
-    mix: [['Fixed income', 20, 'bg-up/15'], ['Indian equity', 55, 'bg-lavender-primary'], ['Global equity', 15, 'bg-cobalt'], ['Gold', 10, 'bg-caution/15']],
+    mix: [['Fixed income', 20, 'bg-cobalt/45'], ['Indian equity', 55, 'bg-cobalt'], ['Global equity', 15, 'bg-cobalt/70'], ['Gold', 10, 'bg-caution/70']],
   },
 };
 

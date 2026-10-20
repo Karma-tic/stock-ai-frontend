@@ -37,15 +37,15 @@ export default function OptionDrawer({ option: o, categories, live, inCompare, o
   ];
 
   return (
-    <div className="fixed inset-0 z-[60] flex justify-end bg-black/40" onMouseDown={e => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="invest-drawer-title" className="h-full w-full max-w-xl overflow-y-auto bg-surface dark:bg-lavender-base p-6 sm:p-8 space-y-6 shadow-2xl">
+    <div className="fixed inset-0 z-[60] flex justify-end bg-[#0B0F14]/55" onMouseDown={e => e.target === e.currentTarget && onClose()}>
+      <div role="dialog" aria-modal="true" aria-labelledby="invest-drawer-title" className="h-full w-full max-w-xl overflow-y-auto bg-surface p-6 sm:p-8 space-y-6 shadow-lift">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">{categories[o.category]}</p>
-            <h2 id="invest-drawer-title" className="text-2xl font-bold text-lavender-text">{o.name}</h2>
-            <p className="mt-1 text-lavender-text/75">{o.best_for}.</p>
+            <p className="text-xs font-medium text-muted">{categories[o.category]}</p>
+            <h2 id="invest-drawer-title" className="text-xl font-semibold tracking-[-0.015em] text-ink">{o.name}</h2>
+            <p className="mt-1 text-ink/85">{o.best_for}.</p>
           </div>
-          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close" className="rounded-xl border border-lavender-text/15 p-2 text-lavender-text/70 hover:text-lavender-text">
+          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close" className="rounded-control border border-line p-2 text-muted hover:text-ink">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -53,55 +53,55 @@ export default function OptionDrawer({ option: o, categories, live, inCompare, o
         {o.live_symbol && <LiveTag symbol={o.live_symbol} quote={live?.prices[o.live_symbol]} />}
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="app-tile p-3">
-            <p className="text-[11px] text-lavender-text/60">Risk</p>
+          <div className="rounded-control bg-ink/[0.04] p-3">
+            <p className="text-[11px] text-muted">Risk</p>
             <p className={`font-bold ${RISK_TEXT[o.risk]}`}>{o.risk}/5 · {RISK_NAME[o.risk]}</p>
           </div>
           {facts.map(([k, v]) => (
-            <div key={k} className="app-tile p-3">
-              <p className="text-[11px] text-lavender-text/60">{k}</p>
-              <p className="font-bold text-lavender-text tabular-nums">{v}</p>
+            <div key={k} className="rounded-control bg-ink/[0.04] p-3">
+              <p className="text-[11px] text-muted">{k}</p>
+              <p className="font-bold text-ink num">{v}</p>
             </div>
           ))}
         </div>
 
         <section className="space-y-2">
-          <h3 className="text-lg font-bold text-lavender-text">What can go wrong</h3>
+          <h3 className="text-base font-semibold text-ink">What can go wrong</h3>
           <ul className="space-y-2">
             {o.risks.map(r => (
-              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-down" />{r}</li>
+              <li key={r} className="flex gap-2 text-sm text-ink/85"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-down" />{r}</li>
             ))}
           </ul>
         </section>
 
         <section className="space-y-2">
-          <h3 className="text-lg font-bold text-lavender-text">Why people choose it</h3>
+          <h3 className="text-base font-semibold text-ink">Why people choose it</h3>
           <ul className="space-y-2">
             {o.pros.map(r => (
-              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-up" />{r}</li>
+              <li key={r} className="flex gap-2 text-sm text-ink/85"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-up" />{r}</li>
             ))}
           </ul>
         </section>
 
         <section className="space-y-1">
-          <h3 className="text-lg font-bold text-lavender-text">Tax</h3>
-          <p className="text-sm text-lavender-text/85">{o.tax}</p>
+          <h3 className="text-base font-semibold text-ink">Tax</h3>
+          <p className="text-sm text-ink/85">{o.tax}</p>
         </section>
 
         <section className="space-y-1">
-          <h3 className="text-lg font-bold text-lavender-text">Where to invest</h3>
-          <p className="text-sm text-lavender-text/85">{o.how_to_invest}</p>
+          <h3 className="text-base font-semibold text-ink">Where to invest</h3>
+          <p className="text-sm text-ink/85">{o.how_to_invest}</p>
         </section>
 
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => onToggleCompare(o.id)} className="rounded-xl bg-gradient-lavender px-4 py-2.5 text-sm font-semibold text-white shadow-lavender">
+          <button type="button" onClick={() => onToggleCompare(o.id)} className="inline-flex min-h-[44px] items-center justify-center rounded-control bg-cobalt px-4 text-sm font-semibold text-white hover:brightness-110">
             {inCompare ? 'Remove from compare' : 'Add to compare'}
           </button>
-          <button type="button" onClick={() => onProject(o)} className="rounded-xl border border-lavender-text/15 px-4 py-2.5 text-sm font-semibold text-lavender-text">
+          <button type="button" onClick={() => onProject(o)} className="inline-flex min-h-[44px] items-center justify-center rounded-control border border-line px-4 text-sm font-semibold text-ink hover:bg-ink/[0.06]">
             Project growth
           </button>
         </div>
-        <p className="text-xs text-lavender-text/60">Figures are typical ranges and not a guarantee. Confirm current terms with the issuer before investing.</p>
+        <p className="text-xs text-muted">Figures are typical ranges and not a guarantee. Confirm current terms with the issuer before investing.</p>
       </div>
     </div>
   );
