@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowLeft, Check, KeyRound, Loader2, LockKeyhole, Mail, Moon, ShieldCheck, Sun, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Check, FileText, Loader2, LockKeyhole, Mail, Moon, Radar, Scale, Star, Sun } from 'lucide-react';
+import Logo from './ui/Logo';
+import { buttonClass } from './ui/Button';
 import { supabase } from '../lib/supabase';
 
 interface Props {
@@ -66,111 +68,180 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
     setOtp('');
   };
 
-  return (
-    <div className="min-h-screen overflow-hidden bg-[#050b16] text-muted">
-      <style>{`
-        @keyframes auth-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes auth-chart { 0%, 100% { transform: translateX(-0.5%); opacity: .78; } 50% { transform: translateX(.5%); opacity: 1; } }
-        @keyframes auth-live { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
-        @media (prefers-reduced-motion: reduce) { .auth-motion { animation: none !important; } }
-      `}</style>
+  const field =
+    'h-12 w-full rounded-control border border-line bg-surface px-4 text-[15px] text-ink outline-none transition placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25';
 
-      <header className="relative z-20 flex h-[72px] items-center justify-between border-b border-white/[0.07] px-5 sm:px-8 lg:px-12">
-        <button onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-muted transition hover:text-white">
-          <ArrowLeft className="h-4 w-4" />
+  return (
+    <div className="min-h-[100dvh] bg-canvas text-ink">
+      <header className="flex h-16 items-center justify-between border-b border-line px-4 sm:px-8">
+        <button type="button" onClick={onBack} className="inline-flex h-11 items-center gap-2 rounded-control px-2 text-sm font-medium text-muted transition hover:text-ink">
+          <ArrowLeft className="h-4 w-4" strokeWidth={1.75} />
           Home
         </button>
-        <div className="flex items-center gap-3 lg:hidden">
-          <TrendingUp className="h-5 w-5 text-accent" />
-          <span className="text-sm font-semibold tracking-[0.2em] text-white">STOCK AI</span>
-        </div>
-        {onToggleTheme && (
-          <button onClick={onToggleTheme} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-muted transition hover:border-white/20 hover:text-white" aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}>
-            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        <Link to="/" aria-label="Stock AI home" className="lg:hidden">
+          <Logo />
+        </Link>
+        {onToggleTheme ? (
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="grid h-11 w-11 place-items-center rounded-control text-muted transition hover:bg-ink/[0.06] hover:text-ink"
+            aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            {isDarkMode ? <Sun className="h-[18px] w-[18px]" strokeWidth={1.75} /> : <Moon className="h-[18px] w-[18px]" strokeWidth={1.75} />}
           </button>
+        ) : (
+          <span className="w-11" />
         )}
       </header>
 
-      <main className="grid min-h-[calc(100vh-72px)] lg:grid-cols-[1.12fr_0.88fr]">
-        <section className="relative hidden overflow-hidden border-r border-white/[0.08] lg:flex lg:flex-col lg:justify-between lg:px-16 lg:py-14 xl:px-20">
-          <div className="relative z-10 auth-motion" style={{ animation: 'auth-enter .65s ease-out both' }}>
-            <div className="mb-16 flex items-center gap-3">
-              <TrendingUp className="h-7 w-7 text-accent" />
-              <span className="text-base font-semibold tracking-[0.22em] text-white">STOCK AI</span>
-            </div>
-            <h1 className="max-w-2xl text-5xl font-semibold leading-[1.08] tracking-[-0.035em] text-white xl:text-6xl">
-              Market intelligence.<br />
-              <span className="text-accent">Built for Indian investors.</span>
+      <main className="grid min-h-[calc(100dvh-4rem)] lg:grid-cols-[1.05fr_0.95fr]">
+        {/* What you get: the sources-first promise, shown once */}
+        <section className="hidden border-r border-line bg-surface lg:flex lg:flex-col lg:justify-center lg:px-14 xl:px-20">
+          <div className="max-w-xl">
+            <Link to="/" aria-label="Stock AI home">
+              <Logo />
+            </Link>
+            <h1 className="mt-12 text-4xl font-bold leading-[1.1] tracking-[-0.03em] text-ink xl:text-5xl text-balance">
+              Research Indian stocks with the sources attached.
             </h1>
-            <div className="my-8 h-px w-8 bg-cobalt" />
-            <p className="max-w-lg text-base leading-7 text-muted">
-              Understand NSE and BSE stocks, follow what matters, and keep your research organized in one focused workspace.
+            <p className="mt-5 max-w-md text-base leading-relaxed text-muted">
+              Every point links back to the filing or article it came from, so you can check it yourself.
             </p>
-          </div>
 
-          <div className="relative -mx-10 -mb-4 mt-4 h-[330px] xl:h-[390px]">
-            <img src="/assets/auth-market-visual.png" alt="Subtle Indian market trend visualization" className="auth-motion h-full w-full object-cover opacity-85" style={{ animation: 'auth-chart 8s ease-in-out infinite' }} />
-          </div>
+            {/* An illustrative evidence point, labelled as an example */}
+            <figure className="mt-10 rounded-card border border-line bg-canvas p-4">
+              <figcaption className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted">Example evidence point</figcaption>
+              <p className="mt-2 text-sm leading-relaxed text-ink/90">Quarterly revenue rose against the previous quarter, per the company's results filing.</p>
+              <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent">
+                <FileText className="h-3 w-3" strokeWidth={1.75} aria-hidden="true" /> NSE filing
+              </span>
+            </figure>
 
-          <div className="relative z-10 grid grid-cols-3 gap-6 border-t border-white/[0.08] pt-6 text-xs text-muted">
-            <div className="flex items-start gap-3"><ShieldCheck className="mt-0.5 h-4 w-4 text-muted" /><span><b className="block font-medium text-muted">Private workspace</b>Your saved research stays with your account</span></div>
-            <div className="flex items-start gap-3"><KeyRound className="mt-0.5 h-4 w-4 text-muted" /><span><b className="block font-medium text-muted">Passwordless access</b>Google or secure email OTP</span></div>
-            <div className="flex items-start gap-3"><TrendingUp className="mt-0.5 h-4 w-4 text-muted" /><span><b className="block font-medium text-muted">Indian markets</b>NSE and BSE research tools</span></div>
+            <ul className="mt-10 space-y-4 text-sm">
+              {[
+                { Icon: Scale, title: 'Evidence Board', text: 'What supports and what worries, side by side, for any NSE stock.' },
+                { Icon: Radar, title: 'Today', text: 'Filings and news for your stocks, in time order.' },
+                { Icon: Star, title: 'Watchlist and portfolio', text: 'Saved to your account, on every device.' },
+              ].map(({ Icon, title, text }) => (
+                <li key={title} className="flex items-start gap-3">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-accent/10 text-accent">
+                    <Icon className="h-4 w-4" strokeWidth={1.75} />
+                  </span>
+                  <span>
+                    <b className="block font-semibold text-ink">{title}</b>
+                    <span className="text-muted">{text}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
-        <section className="relative flex items-center justify-center px-5 py-10 sm:px-10 lg:px-14">
-          <div className="auth-motion w-full max-w-[480px]" style={{ animation: 'auth-enter .65s .12s ease-out both' }}>
-            <div className="mb-9">
-              <h2 className="text-3xl font-semibold tracking-[-0.025em] text-white sm:text-4xl">Welcome back</h2>
-              <p className="mt-3 text-sm leading-6 text-muted">Sign in to continue to your Stock AI dashboard.</p>
-            </div>
-
-            <div className="mb-8 grid grid-cols-2 border-b border-white/10">
-              {(['google', 'email'] as const).map(item => (
-                <button key={item} onClick={() => resetMode(item)} className={`relative px-3 pb-4 text-sm font-semibold transition ${mode === item ? 'text-accent' : 'text-muted hover:text-muted'}`}>
-                  {item === 'google' ? 'Google' : 'Email OTP'}
-                  {mode === item && <span className="absolute inset-x-0 -bottom-px h-0.5 bg-cobalt" />}
-                </button>
-              ))}
-            </div>
+        {/* The form */}
+        <section className="flex items-start justify-center px-4 py-10 sm:items-center sm:px-10">
+          <div className="w-full max-w-[420px]">
+            <h2 className="text-3xl font-bold tracking-[-0.025em] text-ink">Sign in or sign up</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">One step either way. New here? An account is created the first time you sign in.</p>
 
             {mode === 'google' ? (
-              <div className="space-y-7">
-                <button onClick={loginWithGoogle} disabled={loading} className="flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#f8fafc] px-5 text-sm font-semibold text-[#0f172a] transition hover:bg-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-accent/40 focus:ring-offset-2 focus:ring-offset-[#050b16] disabled:opacity-60">
+              <div className="mt-8 space-y-4">
+                <button
+                  type="button"
+                  onClick={loginWithGoogle}
+                  disabled={loading}
+                  className={buttonClass('ghost', 'lg', 'w-full bg-surface')}
+                >
                   {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <img src="/assets/google.svg" alt="" className="h-5 w-5" />}
                   {loading ? 'Opening Google…' : 'Continue with Google'}
                 </button>
-                <div className="flex items-center gap-4"><span className="h-px flex-1 bg-surface/10" /><span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted">or</span><span className="h-px flex-1 bg-surface/10" /></div>
-                <button onClick={() => resetMode('email')} className="flex h-14 w-full items-center justify-center gap-3 rounded-lg border border-white/15 text-sm font-semibold text-muted transition hover:border-accent/60 hover:bg-surface/[0.03]">
-                  <Mail className="h-5 w-5 text-muted" />
-                  Continue with Email OTP
+                <div className="flex items-center gap-4" aria-hidden="true">
+                  <span className="h-px flex-1 bg-line" />
+                  <span className="text-xs text-muted">or</span>
+                  <span className="h-px flex-1 bg-line" />
+                </div>
+                <button type="button" onClick={() => resetMode('email')} className={buttonClass('ghost', 'lg', 'w-full bg-surface')}>
+                  <Mail className="h-5 w-5 text-muted" strokeWidth={1.75} />
+                  Continue with email
                 </button>
               </div>
             ) : step === 'input' ? (
-              <div className="space-y-5">
-                <label className="block"><span className="mb-2 block text-sm font-medium text-muted">Email address</span><div className="relative"><Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" /><input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendEmailOtp()} placeholder="you@example.com" autoComplete="email" className="h-14 w-full rounded-lg border border-white/15 bg-transparent pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-muted focus:border-accent/40 focus:ring-1 focus:ring-accent/40" /></div></label>
-                <button onClick={sendEmailOtp} disabled={loading || !email.includes('@')} className="flex h-14 w-full items-center justify-center gap-2 rounded-lg bg-cobalt text-sm font-semibold text-white transition hover:bg-cobalt disabled:cursor-not-allowed disabled:opacity-40">{loading && <Loader2 className="h-4 w-4 animate-spin" />}{loading ? 'Sending code…' : 'Send OTP'}</button>
-                <p className="flex items-center gap-2 text-xs text-muted"><LockKeyhole className="h-3.5 w-3.5" />No password. We’ll email you a six-digit code.</p>
+              <div className="mt-8 space-y-4">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-ink">Email address</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && sendEmailOtp()}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    autoFocus
+                    className={field}
+                  />
+                </label>
+                <button type="button" onClick={sendEmailOtp} disabled={loading || !email.includes('@')} className={buttonClass('primary', 'lg', 'w-full')}>
+                  {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {loading ? 'Sending code…' : 'Email me a code'}
+                </button>
+                <p className="flex items-center gap-2 text-xs text-muted">
+                  <LockKeyhole className="h-3.5 w-3.5" strokeWidth={1.75} /> No password. We'll email you a six-digit code.
+                </p>
+                <button type="button" onClick={() => resetMode('google')} className="text-sm font-medium text-accent hover:underline">
+                  Use Google instead
+                </button>
               </div>
             ) : (
-              <div className="space-y-5">
-                <div className="flex items-start gap-3 border-l-2 border-up/40 bg-up/[0.06] px-4 py-3"><Check className="mt-0.5 h-4 w-4 text-up" /><p className="text-sm leading-6 text-muted">Code sent to <strong className="font-semibold text-white">{email}</strong></p></div>
-                <label className="block"><span className="mb-2 block text-sm font-medium text-muted">Six-digit code</span><input type="text" value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, ''))} onKeyDown={e => e.key === 'Enter' && verifyEmailOtp()} placeholder="000000" maxLength={6} inputMode="numeric" autoComplete="one-time-code" className="h-14 w-full rounded-lg border border-white/15 bg-transparent px-4 text-center text-xl tracking-[0.3em] text-white outline-none transition placeholder:text-ink focus:border-accent/40 focus:ring-1 focus:ring-accent/40" /></label>
-                <button onClick={verifyEmailOtp} disabled={loading || otp.length < 6} className="flex h-14 w-full items-center justify-center gap-2 rounded-lg bg-cobalt text-sm font-semibold text-white transition hover:bg-cobalt disabled:opacity-40">{loading && <Loader2 className="h-4 w-4 animate-spin" />}{loading ? 'Verifying…' : 'Verify and continue'}</button>
-                <button onClick={() => { setStep('input'); setOtp(''); setError(''); }} className="w-full text-sm font-medium text-muted transition hover:text-muted">Use a different email</button>
+              <div className="mt-8 space-y-4">
+                <p className="flex items-start gap-2 rounded-control bg-up/10 px-3 py-2.5 text-sm text-ink">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-up" strokeWidth={2} />
+                  <span>
+                    Code sent to <strong className="font-semibold">{email}</strong>. Check spam if it isn't there in a minute.
+                  </span>
+                </p>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-ink">Six-digit code</span>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    onKeyDown={(e) => e.key === 'Enter' && verifyEmailOtp()}
+                    placeholder="000000"
+                    maxLength={6}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    autoFocus
+                    className={`${field} num text-center text-xl tracking-[0.4em]`}
+                  />
+                </label>
+                <button type="button" onClick={verifyEmailOtp} disabled={loading || otp.length < 6} className={buttonClass('primary', 'lg', 'w-full')}>
+                  {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {loading ? 'Verifying…' : 'Verify and continue'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep('input');
+                    setOtp('');
+                    setError('');
+                  }}
+                  className="text-sm font-medium text-accent hover:underline"
+                >
+                  Use a different email
+                </button>
               </div>
             )}
 
-            {error && <div className="mt-5 border-l-2 border-down/40 bg-down/[0.06] px-4 py-3 text-sm text-down">{error}</div>}
+            {error && (
+              <p role="alert" className="mt-5 rounded-control bg-down/10 px-3 py-2.5 text-sm text-down">
+                {error}
+              </p>
+            )}
 
-            <div className="mt-9 flex items-start gap-3 border-t border-white/[0.08] pt-6">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <p className="text-xs leading-5 text-muted">Passwordless authentication keeps access simple while your watchlist and research remain connected to one account.</p>
-            </div>
-
-            <p className="mt-10 text-xs leading-5 text-muted">
-              Stock AI is an educational research platform, not SEBI-registered investment advice. By continuing, you agree to our <Link to="/terms" className="text-muted hover:text-white">Terms</Link> and <Link to="/privacy" className="text-muted hover:text-white">Privacy Policy</Link>.
+            <p className="mt-10 border-t border-line pt-6 text-xs leading-5 text-muted">
+              Stock AI is an educational research tool, not SEBI-registered investment advice. By continuing you agree to our{' '}
+              <Link to="/terms" className="text-ink underline-offset-2 hover:underline">Terms</Link> and{' '}
+              <Link to="/privacy" className="text-ink underline-offset-2 hover:underline">Privacy Policy</Link>.
             </p>
           </div>
         </section>
