@@ -73,7 +73,7 @@ ReactGA.event({
   };
 
   return (
-    <div className="bg-white border border-lavender-text/10 shadow-sm hover:border-lavender-text/20 hover:shadow-lavender rounded-2xl p-4 transition-all">
+    <div className="bg-surface border border-lavender-text/10 shadow-sm hover:border-lavender-text/20 hover:shadow-lavender rounded-2xl p-4 transition-all">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div
@@ -82,7 +82,7 @@ ReactGA.event({
         >
           <div className="flex items-center gap-2">
             <span className="font-bold text-lavender-text text-lg">{stock.display_ticker}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'}`}>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isUp ? 'bg-up/20 text-up' : 'bg-down/20 text-down'}`}>
               {isUp ? '▲' : '▼'} {Math.abs(stock.price_change_pct || 0)}%
             </span>
           </div>
@@ -98,9 +98,9 @@ ReactGA.event({
             e.stopPropagation();
             handleWatchlist();
           }}
-          className="w-9 h-9 flex items-center justify-center rounded-2xl hover:bg-gray-200 transition"
+          className="w-9 h-9 flex items-center justify-center rounded-2xl hover:bg-surface2 transition"
         >
-          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-yellow-400' : 'text-lavender-text/60 hover:text-yellow-400'}`}>
+          <span className={`text-xl ${loading ? 'opacity-50' : ''} ${localWatchlist ? 'text-caution' : 'text-lavender-text/60 hover:text-caution'}`}>
             {loading ? '⏳' : localWatchlist ? '★' : '☆'}
           </span>
         </button>
@@ -111,7 +111,7 @@ ReactGA.event({
         <span className="text-2xl font-bold text-lavender-text">
           ₹{(stock.current_price || 0).toLocaleString('en-IN')}
         </span>
-        <span className={`ml-2 text-sm ${isUp ? 'text-green-600' : 'text-red-600'}`}>
+        <span className={`ml-2 text-sm ${isUp ? 'text-up' : 'text-down'}`}>
           {isUp ? '+' : ''}{stock.price_change || 0}
         </span>
       </div>
@@ -124,7 +124,7 @@ ReactGA.event({
         </div>
         <div className="bg-lavender-surface/50 border border-lavender-text/5 rounded-2xl p-2 cursor-pointer">
           <p className="text-lavender-text/60 text-xs">Div%</p>
-          <p className="text-green-600 text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
+          <p className="text-up text-sm font-semibold">{stock.dividend_yield_pct || 0}%</p>
         </div>
         <div className="bg-lavender-surface/50 border border-lavender-text/5 rounded-2xl p-2 cursor-pointer">
           <p className="text-lavender-text/60 text-xs">52W%</p>

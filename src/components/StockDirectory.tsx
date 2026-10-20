@@ -28,14 +28,14 @@ export default function StockDirectory({ user }: { user?: any }) {
           </p>
         </div>
 
-        <div className="mb-10 bg-green-500/10 border border-green-500/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-10 bg-up/10 border border-up/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 className="text-lavender-text text-xl font-bold mb-1">Screen stocks by valuation, dividend and momentum</h2>
             <p className="text-lavender-text/70 text-sm">
               Use the free screener to narrow your research list before opening a detailed stock profile.
             </p>
           </div>
-          <Link to="/stocks/screener" className="bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-3 rounded-2xl text-sm transition text-center">
+          <Link to="/stocks/screener" className="bg-up/15 hover:bg-up/15 text-up font-semibold px-5 py-3 rounded-2xl text-sm transition text-center">
             Open Screener
           </Link>
         </div>
@@ -45,14 +45,14 @@ export default function StockDirectory({ user }: { user?: any }) {
             <Link 
               key={stock.symbol} 
               to={`/stock/${stock.symbol}`}
-              className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 hover:border-lavender-text/20 hover:shadow-lavender hover:bg-lavender-surface transition duration-300 group block"
+              className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 hover:border-lavender-text/20 hover:shadow-lavender hover:bg-lavender-surface transition duration-300 group block"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lavender-text text-xl font-bold">{stock.symbol}</h3>
                   <p className="text-lavender-text/60 text-sm truncate max-w-[200px]">{stock.name}</p>
                 </div>
-                <span className="text-xs font-semibold bg-blue-500/10 text-lavender-primary px-2 py-1 rounded-full">
+                <span className="text-xs font-semibold bg-accent/10 text-lavender-primary px-2 py-1 rounded-full">
                   {stock.marketCapRank}
                 </span>
               </div>
@@ -70,7 +70,7 @@ export default function StockDirectory({ user }: { user?: any }) {
         </div>
 
         {/* Dynamic Fallback Notice */}
-        <div className="mt-16 bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8 text-center">
+        <div className="mt-16 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-8 text-center">
           <h3 className="text-lavender-text text-xl font-bold mb-3">Looking for another stock?</h3>
           <p className="text-lavender-text/70 mb-6 max-w-xl mx-auto">
             Our AI can analyze over 2,000+ NSE and BSE listed stocks in real-time. Simply log in and use the search bar on your dashboard to instantly generate a BUY/HOLD/SELL signal for any stock.

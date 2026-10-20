@@ -134,7 +134,7 @@ const MarketWrap: React.FC = () => {
             {currentIndex > 0 && (
               <button 
                 onClick={goToPrev}
-                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
+                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-surface border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-surface2 transition shadow-lavender z-10"
                 aria-label="Newer wrap"
               >
                 <ChevronLeft size={24} />
@@ -144,7 +144,7 @@ const MarketWrap: React.FC = () => {
             {currentIndex < wraps.length - 1 && (
               <button 
                 onClick={goToNext}
-                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-white border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-gray-200 transition shadow-lavender z-10"
+                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-surface border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-surface2 transition shadow-lavender z-10"
                 aria-label="Older wrap"
               >
                 <ChevronRight size={24} />
@@ -154,21 +154,21 @@ const MarketWrap: React.FC = () => {
             <div className="app-card p-5 sm:p-7">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 border-b border-lavender-text/10 pb-4 gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-lavender-text">{currentWrap.title}</h2>
-                <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto shrink-0">
+                <span className="bg-caution/10 text-caution border border-caution/30 px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto shrink-0">
                   {new Date(currentWrap.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </span>
               </div>
 
               {highlights.length > 0 && (
-                <div className="mb-5 rounded-2xl border border-emerald-500/25 bg-gradient-to-r from-emerald-50 to-white p-4">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-bold text-emerald-700">
+                <div className="mb-5 rounded-2xl border border-up/25 bg-gradient-to-r from-up/10 to-surface p-4">
+                  <div className="mb-3 flex items-center gap-2 text-sm font-bold text-up">
                     <Sparkles className="h-4 w-4" />
                     Key points that matter
                   </div>
                   <div className="grid gap-2">
                     {highlights.map(point => (
                       <div key={point} className="flex gap-2 text-sm leading-relaxed text-lavender-text/80">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-up shrink-0" />
                         <span>{point}</span>
                       </div>
                     ))}
@@ -188,8 +188,8 @@ const MarketWrap: React.FC = () => {
                   key={idx}
                   onClick={() => setCurrentIndex(idx)}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    currentIndex === idx ? 'w-8 bg-blue-500' : 'w-2 bg-lavender-text/20 hover:bg-lavender-text/30'
-                  }`}
+ currentIndex === idx ? 'w-8 bg-cobalt' : 'w-2 bg-lavender-text/20 hover:bg-lavender-text/30'
+ }`}
                   aria-label={`Go to wrap ${idx + 1}`}
                 />
               ))}

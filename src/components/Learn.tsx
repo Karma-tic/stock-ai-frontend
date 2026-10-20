@@ -6,14 +6,14 @@ import SEO from './SEO';
 export default function Learn() {
   const chapters = [
     { num: 1, title: "What is the Stock Market?", slug: "what-is-stock-market", desc: "The basics of NSE, BSE, Nifty, and SEBI.", iconBg: "bg-gradient-lavender" },
-    { num: 2, title: "Types of Trading in Indian Stock Market", slug: "types-of-trading", desc: "Intraday, Swing, Positional, and Long-term.", iconBg: "bg-indigo-600" },
-    { num: 3, title: "Essential Stock Market Terms", slug: "essential-terms", desc: "Bull market, PE Ratio, Stop Loss, DIIs and FIIs.", iconBg: "bg-green-600" },
-    { num: 4, title: "Fundamental vs Technical Analysis", slug: "fundamental-vs-technical", desc: "How to actually pick stocks to buy.", iconBg: "bg-orange-600" },
-    { num: 5, title: "Stock Market Risks", slug: "market-risks", desc: "Understand what causes you to lose money.", iconBg: "bg-red-600" },
-    { num: 6, title: "Role of AI in Stock Markets", slug: "ai-in-markets", desc: "How AI is changing retail investing.", iconBg: "bg-cyan-600" },
-    { num: 7, title: "How to Start Investing Step by Step", slug: "how-to-start", desc: "From Demat account to your first trade.", iconBg: "bg-yellow-600" },
-    { num: 8, title: "Dividend Investing", slug: "dividend-investing", desc: "Building passive income from stocks.", iconBg: "bg-emerald-600" },
-    { num: 9, title: "10 Common Mistakes", slug: "common-mistakes", desc: "Avoid these beginner traps.", iconBg: "bg-rose-600" }
+    { num: 2, title: "Types of Trading in Indian Stock Market", slug: "types-of-trading", desc: "Intraday, Swing, Positional, and Long-term.", iconBg: "bg-cobalt" },
+    { num: 3, title: "Essential Stock Market Terms", slug: "essential-terms", desc: "Bull market, PE Ratio, Stop Loss, DIIs and FIIs.", iconBg: "bg-up/15" },
+    { num: 4, title: "Fundamental vs Technical Analysis", slug: "fundamental-vs-technical", desc: "How to actually pick stocks to buy.", iconBg: "bg-caution/15" },
+    { num: 5, title: "Stock Market Risks", slug: "market-risks", desc: "Understand what causes you to lose money.", iconBg: "bg-down/15" },
+    { num: 6, title: "Role of AI in Stock Markets", slug: "ai-in-markets", desc: "How AI is changing retail investing.", iconBg: "bg-cobalt" },
+    { num: 7, title: "How to Start Investing Step by Step", slug: "how-to-start", desc: "From Demat account to your first trade.", iconBg: "bg-caution/15" },
+    { num: 8, title: "Dividend Investing", slug: "dividend-investing", desc: "Building passive income from stocks.", iconBg: "bg-up/15" },
+    { num: 9, title: "10 Common Mistakes", slug: "common-mistakes", desc: "Avoid these beginner traps.", iconBg: "bg-down/15" }
   ];
 
   return (

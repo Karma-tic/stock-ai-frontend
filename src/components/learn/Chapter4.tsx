@@ -10,7 +10,7 @@ export default function Chapter4() {
       nextChapter={{ path: '/learn/market-risks', title: 'Stock Market Risks' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-orange-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-caution/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           4
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Fundamental vs Technical Analysis</h2>
@@ -18,7 +18,7 @@ export default function Chapter4() {
       
       
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <h4 className="text-lavender-text font-bold text-xl mb-4">Fundamental Analysis</h4>
               <p className="text-lavender-text/80 leading-relaxed mb-6">
                 Evaluating a company's intrinsic value by examining financial statements, business model, management quality, competitive advantages and growth prospects. Used for long-term investment decisions.
@@ -32,7 +32,7 @@ export default function Chapter4() {
                   { metric: "Cash Flow", desc: "Is it generating real cash, not just paper profits?" },
                 ].map(item => (
                   <div key={item.metric} className="flex gap-3 app-tile p-3">
-                    <div className="w-2 h-2 rounded-full bg-blue-400 mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-cobalt mt-2 flex-shrink-0" />
                     <div>
                       <span className="text-lavender-text font-semibold block mb-1">{item.metric}</span>
                       <span className="text-lavender-text/70 text-sm">{item.desc}</span>
@@ -42,7 +42,7 @@ export default function Chapter4() {
               </div>
             </div>
             
-            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               <h4 className="text-lavender-text font-bold text-xl mb-4">Technical Analysis</h4>
               <p className="text-lavender-text/80 leading-relaxed mb-6">
                 Studying price charts and patterns to predict future price movements. Based on the belief that historical price action repeats. Used primarily for short-term trading decisions.
@@ -56,7 +56,7 @@ export default function Chapter4() {
                   { metric: "Candlestick Patterns", desc: "Doji, hammer, engulfing patterns signal reversals." },
                 ].map(item => (
                   <div key={item.metric} className="flex gap-3 app-tile p-3">
-                    <div className="w-2 h-2 rounded-full bg-purple-400 mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-cobalt mt-2 flex-shrink-0" />
                     <div>
                       <span className="text-lavender-text font-semibold block mb-1">{item.metric}</span>
                       <span className="text-lavender-text/70 text-sm">{item.desc}</span>
@@ -66,8 +66,8 @@ export default function Chapter4() {
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-emerald-900/40 to-gray-50 border border-emerald-500/30 rounded-2xl p-6">
-            <h4 className="text-emerald-400 font-bold text-lg mb-3">How Stock AI Combines Both Approaches</h4>
+          <div className="bg-gradient-to-r from-up/40 to-surface2 border border-up/30 rounded-2xl p-6">
+            <h4 className="text-up font-bold text-lg mb-3">How Stock AI Combines Both Approaches</h4>
             <p className="text-lavender-text/80 leading-relaxed">
               Stock AI at <strong>byteplay.org</strong> combines fundamental data (PE ratio, EPS, dividend yield, market cap) with price action data (52-week position, volume ratio, daily change) and real-time news sentiment to generate signals. This multi-factor approach is more robust than using either method alone. Our AI reads 4 news sources simultaneously and integrates qualitative news analysis with quantitative market data — something that would take a human analyst several hours per stock.
             </p>

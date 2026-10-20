@@ -10,17 +10,17 @@ export default function Chapter5() {
       nextChapter={{ path: '/learn/ai-in-markets', title: 'Role of AI in Stock Markets' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-down/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           5
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Stock Market Risks</h2>
       </div>
       
       
-          <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 mb-8 flex gap-4 items-start">
-            <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-1 text-red-600 font-bold">!</div>
+          <div className="bg-down/10 border border-down/30 rounded-2xl p-6 mb-8 flex gap-4 items-start">
+            <div className="w-8 h-8 rounded-full bg-down/20 flex items-center justify-center flex-shrink-0 mt-1 text-down font-bold">!</div>
             <div>
-              <p className="text-red-600 font-bold text-lg mb-2">Important Warning</p>
+              <p className="text-down font-bold text-lg mb-2">Important Warning</p>
               <p className="text-lavender-text/80 leading-relaxed">
                 Stock market investments are subject to market risks. You can lose some or all of your invested capital. Never invest money you cannot afford to lose. Stock AI provides AI-generated analysis for educational purposes — it is not SEBI-registered investment advice.
               </p>
@@ -59,12 +59,12 @@ export default function Chapter5() {
                 level:  "HIGH",
               },
             ].map(item => (
-              <div key={item.risk} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 hover:border-red-500/30 transition">
+              <div key={item.risk} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 hover:border-down/30 transition">
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-lavender-text font-bold text-lg">{item.risk}</h4>
                   <span className={`text-xs px-3 py-1 rounded-full font-bold tracking-wider ${
-                    item.level === 'HIGH' ? 'bg-red-500/20 text-red-600' : 'bg-yellow-500/20 text-yellow-400'
-                  }`}>
+ item.level === 'HIGH' ? 'bg-down/20 text-down' : 'bg-caution/20 text-caution'
+ }`}>
                     {item.level}
                   </span>
                 </div>

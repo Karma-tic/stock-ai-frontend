@@ -10,14 +10,14 @@ export default function Chapter6() {
       nextChapter={{ path: '/learn/how-to-start', title: 'How to Start Investing Step by Step' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-cyan-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-cobalt rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           6
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Role of AI in Stock Markets</h2>
       </div>
       
       
-          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-8 mb-8">
+          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-8 mb-8">
             <p className="text-lavender-text/80 leading-relaxed text-lg mb-4">
               Artificial Intelligence is transforming how financial markets are analyzed. Hedge funds and institutional investors have used AI for over a decade. Now, platforms like <strong className="text-lavender-text">Stock AI (byteplay.org)</strong> are making these capabilities available to retail investors in India at no cost.
             </p>
@@ -33,7 +33,7 @@ export default function Chapter6() {
             {[
               {
                 title: "What AI Does Well",
-                color: "border-green-500/40 bg-green-900/10",
+                color: "border-up/40 bg-up/10",
                 items: [
                   "Processing large volumes of news simultaneously",
                   "Identifying patterns in price and volume data",
@@ -43,11 +43,11 @@ export default function Chapter6() {
                   "Combining multiple data sources into one signal",
                 ],
                 icon: "✓",
-                itemColor: "text-green-600",
+                itemColor: "text-up",
               },
               {
                 title: "What AI Cannot Do",
-                color: "border-red-500/40 bg-red-900/10",
+                color: "border-down/40 bg-down/10",
                 items: [
                   "Predict black swan events (wars, pandemics)",
                   "Guarantee future stock price movements",
@@ -57,7 +57,7 @@ export default function Chapter6() {
                   "Provide SEBI-registered investment advice",
                 ],
                 icon: "✗",
-                itemColor: "text-red-600",
+                itemColor: "text-down",
               },
             ].map(item => (
               <div key={item.title} className={`border rounded-2xl p-6 ${item.color}`}>
@@ -77,8 +77,8 @@ export default function Chapter6() {
             ))}
           </div>
           
-          <div className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 border border-cyan-500/30 rounded-2xl p-8 text-center">
-            <h4 className="text-cyan-400 text-xl font-bold mb-4">How Stock AI Uses LLM Technology</h4>
+          <div className="bg-gradient-to-r from-accent/30 to-accent/30 border border-accent/30 rounded-2xl p-8 text-center">
+            <h4 className="text-accent text-xl font-bold mb-4">How Stock AI Uses LLM Technology</h4>
             <p className="text-lavender-text/80 text-lg leading-relaxed max-w-3xl mx-auto">
               Stock AI uses advanced models (like Llama 3.3) to analyze each stock. For every request, the AI receives: live price data from NSE, PE ratio, 52-week position, volume data, and the latest news from 4 sources. It generates a structured output with a BUY/HOLD/SELL signal, confidence score, and specific targets in just 8 seconds.
             </p>

@@ -125,7 +125,7 @@ export default function StockComparison() {
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-500/10 border border-white/50 mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 border border-white/50 mb-4">
             <Scale className="w-7 h-7 text-lavender-primary" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-lavender-text mb-3">Stock Comparison Tool</h1>
@@ -143,7 +143,7 @@ export default function StockComparison() {
                   {symbol}
                   <button
                     onClick={() => removeSymbol(symbol)}
-                    className="text-lavender-text/50 hover:text-red-600"
+                    className="text-lavender-text/50 hover:text-down"
                     aria-label={`Remove ${symbol}`}
                   >
                     <X className="w-4 h-4" />
@@ -164,7 +164,7 @@ export default function StockComparison() {
                   onBlur={() => window.setTimeout(() => setShowSuggestions(false), 120)}
                   onKeyDown={e => { if (e.key === 'Enter') addSymbol(); }}
                   placeholder="Search stock or symbol"
-                  className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-3 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
+                  className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-3 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
                 />
                 {showSuggestions && symbols.length < 4 && suggestions.length > 0 && (
                   <div className="absolute left-0 right-0 top-full mt-2 z-30 app-card overflow-hidden">
@@ -182,7 +182,7 @@ export default function StockComparison() {
                           <span className="block text-sm font-bold text-lavender-text">{stock.symbol}</span>
                           <span className="block text-xs text-lavender-text/60 leading-snug">{stock.name}</span>
                         </span>
-                        <span className="text-[11px] text-lavender-primary bg-blue-500/10 border border-blue-500/10 rounded-full px-2 py-1 shrink-0">
+                        <span className="text-[11px] text-lavender-primary bg-accent/10 border border-accent/10 rounded-full px-2 py-1 shrink-0">
                           NSE
                         </span>
                       </button>
@@ -212,12 +212,12 @@ export default function StockComparison() {
             ))}
           </div>
         ) : error ? (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 text-red-600 text-center">{error}</div>
+          <div className="bg-down/10 border border-down/30 rounded-2xl p-6 text-down text-center">{error}</div>
         ) : (
           <>
             {best && (
-              <div className="bg-gradient-to-r from-green-50 to-white border border-green-500/30 rounded-2xl p-4 sm:p-5 mb-6 shadow-sm">
-                <p className="text-green-600 font-semibold">
+              <div className="bg-gradient-to-r from-up/10 to-surface border border-up/30 rounded-2xl p-4 sm:p-5 mb-6 shadow-sm">
+                <p className="text-up font-semibold">
                   Highest educational score: {best.display_ticker} ({scoreStock(best)}/100)
                 </p>
                 <p className="text-lavender-text/70 text-sm mt-1">
@@ -239,7 +239,7 @@ export default function StockComparison() {
                     </span>
                   </div>
                   <p className="text-2xl font-bold text-lavender-text mb-1">{formatCurrency(stock.current_price)}</p>
-                  <p className={`text-sm font-semibold ${(stock.price_change_pct || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`text-sm font-semibold ${(stock.price_change_pct || 0) >= 0 ? 'text-up' : 'text-down'}`}>
                     {(stock.price_change_pct || 0) >= 0 ? '+' : ''}{stock.price_change_pct || 0}%
                   </p>
                   <div className="grid grid-cols-2 gap-2 mt-4 text-center">

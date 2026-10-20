@@ -24,8 +24,8 @@ interface Props {
 
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1 text-xs font-medium transition ${
-    on ? 'border-lavender-primary bg-lavender-primary text-white' : 'border-lavender-text/15 bg-white text-lavender-text/80 hover:border-lavender-primary/40'
-  }`;
+ on ? 'border-lavender-primary bg-lavender-primary text-white' : 'border-lavender-text/15 bg-surface text-lavender-text/80 hover:border-lavender-primary/40'
+ }`;
 
 export default function ExploreTab(p: Props) {
   const { filters: f, setFilters } = p;
@@ -80,12 +80,12 @@ export default function ExploreTab(p: Props) {
           <label htmlFor="invest-max-risk" className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60 flex justify-between">
             <span>Max risk</span><span className="normal-case tracking-normal text-lavender-primary">{f.maxRisk} · {RISK_NAME[f.maxRisk]}</span>
           </label>
-          <input id="invest-max-risk" type="range" min={1} max={5} value={f.maxRisk} onChange={e => setFilters({ ...f, maxRisk: Number(e.target.value) as RiskLevel })} className="w-full accent-purple-600" />
+          <input id="invest-max-risk" type="range" min={1} max={5} value={f.maxRisk} onChange={e => setFilters({ ...f, maxRisk: Number(e.target.value) as RiskLevel })} className="w-full accent-cobalt" />
         </div>
 
         <div className="space-y-2">
           <label htmlFor="invest-horizon" className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">I can stay invested for</label>
-          <select id="invest-horizon" value={f.horizon} onChange={e => setFilters({ ...f, horizon: Number(e.target.value) })} className="w-full rounded-xl border border-lavender-text/15 bg-white px-3 py-2 text-sm">
+          <select id="invest-horizon" value={f.horizon} onChange={e => setFilters({ ...f, horizon: Number(e.target.value) })} className="w-full rounded-xl border border-lavender-text/15 bg-surface px-3 py-2 text-sm">
             <option value={99}>Any period</option>
             <option value={1}>Under 1 year</option>
             <option value={3}>1–3 years</option>
@@ -114,14 +114,14 @@ export default function ExploreTab(p: Props) {
           <div className="relative flex-1 min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-lavender-text/50" />
             <input type="search" id="invest-search" value={f.q} onChange={e => setFilters({ ...f, q: e.target.value })} placeholder="Search: tax saving, gold, monthly income…" aria-label="Search options"
-              className="w-full rounded-xl border border-lavender-text/15 bg-white py-2.5 pl-9 pr-3 text-sm" />
+              className="w-full rounded-xl border border-lavender-text/15 bg-surface py-2.5 pl-9 pr-3 text-sm" />
           </div>
-          <select id="invest-sort" aria-label="Sort by" value={f.sort} onChange={e => setFilters({ ...f, sort: e.target.value as Sort })} className="rounded-xl border border-lavender-text/15 bg-white px-3 py-2.5 text-sm">
+          <select id="invest-sort" aria-label="Sort by" value={f.sort} onChange={e => setFilters({ ...f, sort: e.target.value as Sort })} className="rounded-xl border border-lavender-text/15 bg-surface px-3 py-2.5 text-sm">
             <option value="fit">{p.profile ? 'Best match for my profile' : 'Recommended order'}</option>
             <option value="retHi">Highest typical return</option>
             <option value="riskLo">Lowest risk</option>
           </select>
-          <button type="button" onClick={() => setShowFilters(s => !s)} className="lg:hidden inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 bg-white px-3 py-2.5 text-sm font-medium">
+          <button type="button" onClick={() => setShowFilters(s => !s)} className="lg:hidden inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 bg-surface px-3 py-2.5 text-sm font-medium">
             <SlidersHorizontal className="h-4 w-4" /> Filters{activeCount ? ` (${activeCount})` : ''}
           </button>
         </div>
@@ -152,7 +152,7 @@ export default function ExploreTab(p: Props) {
                   <div className="flex flex-wrap items-center gap-2">
                     <RiskMeter risk={o.risk} />
                     {fit && <span className="rounded-full bg-lavender-primary/10 px-2 py-0.5 text-[11px] font-bold text-lavender-primary">Matches your profile</span>}
-                    {o.tags.includes('warning') && <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-300">Caution</span>}
+                    {o.tags.includes('warning') && <span className="rounded-full bg-caution/15 px-2 py-0.5 text-[11px] font-bold text-caution dark:text-caution">Caution</span>}
                   </div>
                   <p className="text-sm text-lavender-text/75">{o.best_for}</p>
                   {o.live_symbol && <LiveTag symbol={o.live_symbol} quote={p.live?.prices[o.live_symbol]} />}

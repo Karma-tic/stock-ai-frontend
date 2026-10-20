@@ -10,7 +10,7 @@ export default function Chapter7() {
       nextChapter={{ path: '/learn/dividend-investing', title: 'Dividend Investing' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-yellow-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-caution/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           7
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">How to Start Investing Step by Step</h2>
@@ -44,8 +44,8 @@ export default function Chapter7() {
                 desc:  "Use Stock AI's portfolio tracker at byteplay.org to monitor your live P&L. Enter your holdings, buy prices and quantities — the app shows your current profit or loss updated in real time. Review your portfolio at least once a week and rebalance based on changed fundamentals.",
               },
             ].map((item, index) => (
-              <div key={item.step} className="flex flex-col sm:flex-row gap-6 bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 sm:p-8 hover:border-yellow-500/30 transition">
-                <div className="flex-shrink-0 w-12 h-12 bg-yellow-500/20 border border-yellow-500/30 rounded-2xl flex items-center justify-center text-yellow-400 font-black text-xl">
+              <div key={item.step} className="flex flex-col sm:flex-row gap-6 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 sm:p-8 hover:border-caution/30 transition">
+                <div className="flex-shrink-0 w-12 h-12 bg-caution/20 border border-caution/30 rounded-2xl flex items-center justify-center text-caution font-black text-xl">
                   {index + 1}
                 </div>
                 <div>

@@ -222,9 +222,9 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 pt-6 sm:px-6 xl:grid-cols-[280px_minmax(0,1fr)_320px] lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className={`mx-auto grid max-w-7xl gap-6 px-4 pt-6 sm:px-6 ${tab === 'radar' ? '' : 'lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_320px]'}`}>
         {/* Left rail: watchlist (larger screens) */}
-        <aside className="hidden lg:block">
+        <aside className={tab === 'radar' ? 'hidden' : 'hidden lg:block'}>
           <div className="sticky top-[calc(var(--nav-h,64px)+72px)] rounded-card border border-line bg-surface p-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-ink">Watchlist</h2>
@@ -352,7 +352,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
         </main>
 
         {/* Right rail: market status and what is next for your stocks (wide screens) */}
-        <aside className="hidden xl:block">
+        <aside className={tab === 'radar' ? 'hidden' : 'hidden xl:block'}>
           <div className="sticky top-[calc(var(--nav-h,64px)+72px)]">
             <NextUp />
           </div>

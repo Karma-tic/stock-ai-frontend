@@ -84,8 +84,8 @@ export default function FnOCalculator() {
       />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl">
-            <Calculator className="w-8 h-8 text-indigo-400" />
+          <div className="p-3 bg-accent/10 border border-accent/20 rounded-2xl">
+            <Calculator className="w-8 h-8 text-accent" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-lavender-text">F&O Calculator</h1>
@@ -96,18 +96,18 @@ export default function FnOCalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Inputs Section */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
               
               {/* Toggle Options / Futures */}
               <div className="flex bg-lavender-base rounded-2xl p-1 mb-6 border border-lavender-text/10">
                 <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'options' ? 'bg-indigo-600 text-white' : 'text-lavender-text/70 hover:text-gray-800'}`}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'options' ? 'bg-cobalt text-white' : 'text-lavender-text/70 hover:text-ink'}`}
                   onClick={() => setTradeType('options')}
                 >
                   Options
                 </button>
                 <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'futures' ? 'bg-indigo-600 text-white' : 'text-lavender-text/70 hover:text-gray-800'}`}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'futures' ? 'bg-cobalt text-white' : 'text-lavender-text/70 hover:text-ink'}`}
                   onClick={() => setTradeType('futures')}
                 >
                   Futures
@@ -121,7 +121,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={buyPrice}
                     onChange={(e) => setBuyPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
                     placeholder="e.g. 150"
                   />
                 </div>
@@ -131,7 +131,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={sellPrice}
                     onChange={(e) => setSellPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
                     placeholder="e.g. 180"
                   />
                 </div>
@@ -141,7 +141,7 @@ export default function FnOCalculator() {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
                     placeholder="e.g. 50"
                   />
                 </div>
@@ -153,13 +153,13 @@ export default function FnOCalculator() {
                     type="number"
                     value={brokeragePerOrder}
                     onChange={(e) => setBrokeragePerOrder(Number(e.target.value))}
-                    className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-indigo-500 transition"
+                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
                   />
                 </div>
               </div>
             </div>
             
-            <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 flex gap-3 text-sm text-lavender-text/80 shadow-lavender">
+            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 flex gap-3 text-sm text-lavender-text/80 shadow-lavender">
               <Info className="w-5 h-5 text-lavender-text/80 flex-shrink-0" />
               <p>This calculator estimates taxes based on standard Indian equity F&O rates. Actual brokerage may vary slightly based on your broker's specific GST policies.</p>
             </div>
@@ -168,24 +168,24 @@ export default function FnOCalculator() {
           {/* Results Section */}
           <div className="lg:col-span-7">
             {results ? (
-              <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col">
+              <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col">
                 <h3 className="text-lg font-semibold text-lavender-text mb-6">Trade Summary</h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                  <div className={`p-5 rounded-2xl border ${results.netPnL >= 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                  <div className={`p-5 rounded-2xl border ${results.netPnL >= 0 ? 'bg-up/10 border-up/30' : 'bg-down/10 border-down/30'}`}>
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-lavender-text/70 text-sm sm:text-base">Net P&L</p>
-                      {results.netPnL >= 0 ? <TrendingUp className="w-5 h-5 text-emerald-400" /> : <TrendingDown className="w-5 h-5 text-red-600" />}
+                      {results.netPnL >= 0 ? <TrendingUp className="w-5 h-5 text-up" /> : <TrendingDown className="w-5 h-5 text-down" />}
                     </div>
-                    <p className={`text-2xl sm:text-3xl font-bold truncate ${results.netPnL >= 0 ? 'text-emerald-400' : 'text-red-600'}`}>
+                    <p className={`text-2xl sm:text-3xl font-bold truncate ${results.netPnL >= 0 ? 'text-up' : 'text-down'}`}>
                       {formatCurrency(results.netPnL)}
                     </p>
-                    <p className={`text-sm mt-1 ${results.netPnL >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                    <p className={`text-sm mt-1 ${results.netPnL >= 0 ? 'text-up' : 'text-down'}`}>
                       {results.roi >= 0 ? '+' : ''}{results.roi.toFixed(2)}% ROI
                     </p>
                   </div>
                   
-                  <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5">
+                  <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-5">
                     <p className="text-lavender-text/70 text-sm sm:text-base mb-2">Gross P&L</p>
                     <p className="text-2xl sm:text-3xl font-bold text-lavender-text truncate">
                       {formatCurrency(results.grossPnL)}
@@ -198,7 +198,7 @@ export default function FnOCalculator() {
 
                 <div className="flex-grow">
                   <h4 className="text-lavender-text font-medium mb-4 flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-indigo-400" /> Charges Breakdown
+                    <DollarSign className="w-4 h-4 text-accent" /> Charges Breakdown
                   </h4>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
@@ -226,15 +226,15 @@ export default function FnOCalculator() {
                       <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.stampDuty)}</span>
                     </div>
                     <div className="flex justify-between items-center pt-3 mt-1">
-                      <span className="text-gray-800 font-semibold text-sm">Total Charges</span>
-                      <span className="text-indigo-400 font-bold text-sm">{formatCurrency(results.totalCharges)}</span>
+                      <span className="text-ink font-semibold text-sm">Total Charges</span>
+                      <span className="text-accent font-bold text-sm">{formatCurrency(results.totalCharges)}</span>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center">
-                <Calculator className="w-16 h-16 text-slate-800 mb-4" />
+              <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center">
+                <Calculator className="w-16 h-16 text-ink mb-4" />
                 <h3 className="text-xl font-bold text-lavender-text mb-2">Enter Trade Details</h3>
                 <p className="text-lavender-text/70 max-w-sm">
                   Fill in your buy price, sell price, and quantity on the left to see your actual net profit and detailed tax breakdown.
@@ -288,8 +288,8 @@ export default function FnOCalculator() {
             The calculator will instantly break down every single charge, showing you exactly how much money will actually hit your ledger balance at the end of the day. This is crucial for scalpers who trade for small point movements.
           </p>
 
-          <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-2xl p-6 mt-8">
-            <h3 className="text-yellow-400 font-bold mb-2">SEBI Warning & Disclaimer</h3>
+          <div className="bg-caution/20 border border-caution/30 rounded-2xl p-6 mt-8">
+            <h3 className="text-caution font-bold mb-2">SEBI Warning & Disclaimer</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               9 out of 10 individual traders in equity Futures and Options Segment incur net losses. On average, loss makers register net trading loss close to ₹ 50,000. F&O trading carries high risk and is not suitable for everyone. This calculator provides estimates based on standard Indian F&O tax rates; actual amounts may vary slightly. Stock AI does not provide financial advice.
             </p>

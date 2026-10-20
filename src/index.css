@@ -139,53 +139,6 @@
   .flash-up, .flash-down { animation: none; }
 }
 
-/* ── Compatibility layer for app pages not yet migrated to tokens ──────────
-   These pages still use raw Tailwind palette classes. Until they are rebuilt on
-   the tokens (Phase 3), map the ones that break in dark mode onto the tokens.
-   New code should use the token classes instead of adding rules here. */
-.dark .bg-white { background-color: rgb(var(--surface)); }
-.dark .from-white {
-  --tw-gradient-from: rgb(var(--surface)) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--surface) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark .to-white { --tw-gradient-to: rgb(var(--surface)) var(--tw-gradient-to-position); }
-.dark .from-gray-50 {
-  --tw-gradient-from: rgb(var(--surface)) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--surface) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark .to-gray-50 { --tw-gradient-to: rgb(var(--surface)) var(--tw-gradient-to-position); }
-.dark .from-amber-50 {
-  --tw-gradient-from: rgb(var(--caution) / 0.14) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--caution) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark .from-green-50, .dark .from-emerald-50 {
-  --tw-gradient-from: rgb(var(--up) / 0.12) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--up) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark .from-blue-50 {
-  --tw-gradient-from: rgb(var(--accent) / 0.12) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--accent) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark .bg-amber-50 { background-color: rgb(var(--caution) / 0.14); }
-.dark .bg-green-50, .dark .bg-emerald-50 { background-color: rgb(var(--up) / 0.12); }
-.dark .bg-blue-50 { background-color: rgb(var(--accent) / 0.12); }
-.dark .border-amber-200 { border-color: rgb(var(--caution) / 0.4); }
-.dark .border-green-200, .dark .border-emerald-200 { border-color: rgb(var(--up) / 0.35); }
-.dark .border-blue-200 { border-color: rgb(var(--accent) / 0.35); }
-.dark .text-gray-800, .dark .text-slate-900, .dark .text-blue-900 { color: rgb(var(--text)); }
-.dark .text-amber-700 { color: rgb(var(--caution)); }
-.dark .text-emerald-700, .dark .text-green-600 { color: rgb(var(--up)); }
-.dark .text-red-600 { color: rgb(var(--down)); }
-.dark .hover\:bg-gray-200:hover,
-.dark .hover\:bg-slate-200:hover,
-.dark .hover\:bg-slate-100:hover,
-.dark .hover\:bg-blue-50:hover { background-color: rgb(var(--text) / 0.08); }
-
 /* Evidence Board: slide in from the right (bottom on phones); a thread runs across while it loads */
 @keyframes board-in-right { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes board-in-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -197,3 +150,7 @@
   .board-panel { animation: none; }
   .board-thread { animation: none; width: 100%; opacity: .5; }
 }
+
+/* Long-form copy under the calculators */
+.calc-article h2 { margin-top: 2.25rem; }
+.calc-article h2:first-child { margin-top: 0; }

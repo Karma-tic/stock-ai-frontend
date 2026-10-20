@@ -7,8 +7,8 @@ import { futureValue, inr } from './investShared';
 export interface Series { id: string; rate: number }
 interface Props { options: InvestOption[]; series: Series[]; setSeries: (s: Series[]) => void; defaultRate: (o: InvestOption) => number }
 
-const COLORS = ['text-emerald-500', 'text-amber-500', 'text-lavender-primary'];
-const SWATCH = ['bg-emerald-500', 'bg-amber-500', 'bg-lavender-primary'];
+const COLORS = ['text-up', 'text-caution', 'text-lavender-primary'];
+const SWATCH = ['bg-up', 'bg-caution', 'bg-lavender-primary'];
 
 function niceMax(v: number) {
   const p = Math.pow(10, Math.floor(Math.log10(Math.max(v, 1))));
@@ -22,7 +22,7 @@ function Slider({ id, label, value, display, min, max, step, onChange }: { id: s
       <label htmlFor={id} className="flex justify-between text-sm font-semibold text-lavender-text">
         <span>{label}</span><span className="tabular-nums text-lavender-primary">{display}</span>
       </label>
-      <input id={id} type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-purple-600" />
+      <input id={id} type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-cobalt" />
     </div>
   );
 }
@@ -71,12 +71,12 @@ export default function GrowthTab({ options, series, setSeries, defaultRate }: P
             {series.map((s, k) => (
               <div key={k} className="grid grid-cols-[10px_1fr_72px] items-center gap-2">
                 <span className={`h-2.5 w-2.5 rounded-sm ${SWATCH[k]}`} />
-                <select id={`invest-series-${k}`} aria-label={`Option ${k + 1}`} value={s.id} className="min-w-0 rounded-xl border border-lavender-text/15 bg-white px-2 py-2 text-sm"
+                <select id={`invest-series-${k}`} aria-label={`Option ${k + 1}`} value={s.id} className="min-w-0 rounded-xl border border-lavender-text/15 bg-surface px-2 py-2 text-sm"
                   onChange={e => { const o = byId(e.target.value)!; const next = [...series]; next[k] = { id: o.id, rate: defaultRate(o) }; setSeries(next); }}>
                   {pickable.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
                 </select>
                 <input id={`invest-rate-${k}`} aria-label={`Return % for option ${k + 1}`} type="number" step={0.1} min={-20} max={40} value={s.rate}
-                  className="rounded-xl border border-lavender-text/15 bg-white px-2 py-2 text-sm tabular-nums"
+                  className="rounded-xl border border-lavender-text/15 bg-surface px-2 py-2 text-sm tabular-nums"
                   onChange={e => { const next = [...series]; next[k] = { ...s, rate: parseFloat(e.target.value) || 0 }; setSeries(next); }} />
               </div>
             ))}

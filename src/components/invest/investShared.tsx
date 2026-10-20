@@ -5,14 +5,14 @@ export const RISK_NAME: Record<RiskLevel, string> = { 1: 'Very low', 2: 'Low', 3
 
 // Tailwind classes per risk level (full strings so Tailwind's scanner keeps them).
 export const RISK_TEXT: Record<RiskLevel, string> = {
-  1: 'text-emerald-600 dark:text-emerald-400',
-  2: 'text-lime-600 dark:text-lime-400',
-  3: 'text-amber-600 dark:text-amber-400',
-  4: 'text-orange-600 dark:text-orange-400',
-  5: 'text-red-600 dark:text-red-400',
+  1: 'text-up dark:text-up',
+  2: 'text-up dark:text-up',
+  3: 'text-caution dark:text-caution',
+  4: 'text-caution dark:text-caution',
+  5: 'text-down dark:text-down',
 };
 export const RISK_BAR: Record<RiskLevel, string> = {
-  1: 'bg-emerald-500', 2: 'bg-lime-500', 3: 'bg-amber-500', 4: 'bg-orange-500', 5: 'bg-red-500',
+  1: 'bg-up/15', 2: 'bg-up/15', 3: 'bg-caution/15', 4: 'bg-caution/15', 5: 'bg-down/15',
 };
 
 export function RiskMeter({ risk }: { risk: RiskLevel }) {
@@ -43,9 +43,9 @@ export function LiveTag({ symbol, quote }: { symbol: string; quote?: LiveQuote }
   const up = quote.change_pct >= 0;
   return (
     <span className="inline-flex items-center gap-1.5 text-xs text-lavender-text/70 tabular-nums">
-      <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" /></span>
+      <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-up/15 opacity-60 animate-ping motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-up" /></span>
       {symbol} {fmtPrice(quote.price)}
-      <span className={up ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
+      <span className={up ? 'text-up dark:text-up' : 'text-down dark:text-down'}>
         {up ? '+' : ''}{quote.change_pct.toFixed(2)}%
       </span>
     </span>
@@ -77,17 +77,17 @@ const PROFILES: Record<ProfileKey, Omit<Profile, 'key' | 'score'>> = {
   conservative: {
     name: 'Conservative', maxRisk: 2,
     text: 'Protecting capital matters more than growth. Government schemes and FDs form the base, with a small equity slice so inflation does not erode savings.',
-    mix: [['Fixed income & govt schemes', 70, 'bg-emerald-500'], ['Equity', 15, 'bg-lavender-primary'], ['Gold', 10, 'bg-amber-500'], ['Cash', 5, 'bg-lavender-text/40']],
+    mix: [['Fixed income & govt schemes', 70, 'bg-up/15'], ['Equity', 15, 'bg-lavender-primary'], ['Gold', 10, 'bg-caution/15'], ['Cash', 5, 'bg-lavender-text/40']],
   },
   moderate: {
     name: 'Moderate', maxRisk: 3,
     text: 'You accept some ups and downs for better growth. Hybrid and index funds for growth, with government schemes and FDs as the stable base.',
-    mix: [['Fixed income & govt schemes', 45, 'bg-emerald-500'], ['Equity', 40, 'bg-lavender-primary'], ['Gold', 10, 'bg-amber-500'], ['Cash', 5, 'bg-lavender-text/40']],
+    mix: [['Fixed income & govt schemes', 45, 'bg-up/15'], ['Equity', 40, 'bg-lavender-primary'], ['Gold', 10, 'bg-caution/15'], ['Cash', 5, 'bg-lavender-text/40']],
   },
   aggressive: {
     name: 'Growth-seeking', maxRisk: 5,
     text: 'Long horizon and a strong stomach for swings. Index and flexi-cap funds at the core, global funds for diversification, a small safe base.',
-    mix: [['Fixed income', 20, 'bg-emerald-500'], ['Indian equity', 55, 'bg-lavender-primary'], ['Global equity', 15, 'bg-sky-500'], ['Gold', 10, 'bg-amber-500']],
+    mix: [['Fixed income', 20, 'bg-up/15'], ['Indian equity', 55, 'bg-lavender-primary'], ['Global equity', 15, 'bg-cobalt'], ['Gold', 10, 'bg-caution/15']],
   },
 };
 

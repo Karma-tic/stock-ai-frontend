@@ -53,8 +53,8 @@ const plans = [
     amount:   100,
     days:     1,
     badge:    'TRY IT',
-    badgeColor: 'bg-yellow-500',
-    border:   'border-yellow-500',
+    badgeColor: 'bg-caution/15',
+    border:   'border-caution/40',
   },
   {
     id:       'onetime' as PlanType,
@@ -67,15 +67,15 @@ const plans = [
     amount:   9900,
     days:     30,
     badge:    'POPULAR',
-    badgeColor: 'bg-blue-500',
+    badgeColor: 'bg-cobalt',
     border:   'border-white/50',
   },
   // REMOVED subscription plan — UPI AutoPay not supported yet
 ];
   const planIcons: Record<PlanType, React.ReactNode> = {
-  trial: <Target className="w-5 h-5 text-yellow-400" />,
+  trial: <Target className="w-5 h-5 text-caution" />,
   onetime: <Unlock className="w-5 h-5 text-lavender-primary" />,
-  subscription: <RefreshCw className="w-5 h-5 text-green-600" />
+  subscription: <RefreshCw className="w-5 h-5 text-up" />
 };
 
   const handlePayment = async (plan: typeof plans[0]) => {
@@ -172,7 +172,7 @@ const plans = [
 
   return (
     <div className="fixed inset-0 bg-lavender-surface/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
         <div className="p-6 text-center border-b border-white/50">
@@ -186,7 +186,7 @@ const plans = [
 
        {features.map(f => (
   <div key={f} className="flex items-center gap-2">
-    <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+    <Check className="w-4 h-4 text-up flex-shrink-0" />
     <p className="text-lavender-text/80 text-xs">{f}</p>
   </div>
 ))}
@@ -198,10 +198,10 @@ const plans = [
               key={plan.id}
               onClick={() => setSelected(plan.id)}
               className={`relative border-2 rounded-2xl p-4 cursor-pointer transition ${
-                selected === plan.id
-                  ? plan.border + ' bg-lavender-surface'
-                  : 'border-white/50 hover:border-slate-500'
-              }`}
+ selected === plan.id
+ ? plan.border + ' bg-lavender-surface'
+ : 'border-white/50 hover:border-line'
+ }`}
             >
               {/* Badge */}
               <span className={`absolute -top-2.5 left-4 text-xs text-lavender-text px-2 py-0.5 rounded-full font-bold ${plan.badgeColor}`}>
@@ -215,7 +215,7 @@ const plans = [
                     selected === plan.id ? plan.border : 'border-white/50'
                   }`}>
                     {selected === plan.id && (
-                      <div className="w-2.5 h-2.5 rounded-full bg-blue-400" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-cobalt" />
                     )}
                   </div>
                   <div>
@@ -234,7 +234,7 @@ const plans = [
                     )}
                     <p className="text-lavender-text font-black text-xl">{plan.price}</p>
                     {'originalPrice' in plan && (
-                      <span className="text-xs bg-green-500 text-black px-1.5 py-0.5 rounded font-bold">80% OFF</span>
+                      <span className="text-xs bg-up/15 text-up px-1.5 py-0.5 rounded font-bold">80% OFF</span>
                     )}
                   </div>
                 </div>
@@ -259,7 +259,7 @@ const plans = [
           <button onClick={onClose} className="w-full text-lavender-text/60 text-sm mt-3 py-2">
             Maybe later
           </button>
-          <p className="text-gray-300 text-xs text-center mt-2">
+          <p className="text-muted text-xs text-center mt-2">
             Secured by Razorpay • contact@karmatix.in
           </p>
         </div>

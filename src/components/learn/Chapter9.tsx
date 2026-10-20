@@ -10,7 +10,7 @@ export default function Chapter9() {
       nextChapter={undefined}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-rose-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-down/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           9
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">10 Common Mistakes</h2>
@@ -30,13 +30,13 @@ export default function Chapter9() {
               { mistake: "FOMO buying at 52-week highs",  fix: "Check 52-week position. Avoid chasing stocks already at all-time highs without strong news." },
               { mistake: "Not reviewing your portfolio",  fix: "Review monthly. Use the Stock AI portfolio tracker for live P&L monitoring." },
             ].map((item, i) => (
-              <div key={item.mistake} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 flex items-start gap-4 hover:border-rose-500/30 transition">
-                <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center flex-shrink-0 border border-rose-500/20">
-                  <span className="text-rose-400 font-black text-lg">{i + 1}</span>
+              <div key={item.mistake} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 flex items-start gap-4 hover:border-down/30 transition">
+                <div className="w-10 h-10 rounded-full bg-down/10 flex items-center justify-center flex-shrink-0 border border-down/20">
+                  <span className="text-down font-black text-lg">{i + 1}</span>
                 </div>
                 <div>
                   <h4 className="text-lavender-text font-bold text-lg mb-2">{item.mistake}</h4>
-                  <p className="text-lavender-text/70 leading-relaxed"><span className="text-green-600 font-semibold">The Fix:</span> {item.fix}</p>
+                  <p className="text-lavender-text/70 leading-relaxed"><span className="text-up font-semibold">The Fix:</span> {item.fix}</p>
                 </div>
               </div>
             ))}

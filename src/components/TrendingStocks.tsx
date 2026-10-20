@@ -44,10 +44,10 @@ export default function TrendingStocks() {
         <button
           onClick={() => setActiveTab('bought')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-2xl text-sm font-semibold transition ${
-            activeTab === 'bought'
-              ? 'bg-green-600 text-lavender-text'
-              : 'text-lavender-text/70 hover:text-lavender-text'
-          }`}
+ activeTab === 'bought'
+ ? 'bg-up/15 text-lavender-text'
+ : 'text-lavender-text/70 hover:text-lavender-text'
+ }`}
         >
           <TrendingUp className="w-4 h-4" />
           Most Bought
@@ -55,10 +55,10 @@ export default function TrendingStocks() {
         <button
           onClick={() => setActiveTab('sold')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-2xl text-sm font-semibold transition ${
-            activeTab === 'sold'
-              ? 'bg-red-600 text-lavender-text'
-              : 'text-lavender-text/70 hover:text-lavender-text'
-          }`}
+ activeTab === 'sold'
+ ? 'bg-down/15 text-lavender-text'
+ : 'text-lavender-text/70 hover:text-lavender-text'
+ }`}
         >
           <TrendingDown className="w-4 h-4" />
           Most Sold
@@ -67,13 +67,13 @@ export default function TrendingStocks() {
 
       {/* Info banner */}
       <div className={`rounded-2xl p-3 mb-4 border ${
-  activeTab === 'bought'
-    ? 'bg-green-500/10 border-green-500/30'
-    : 'bg-red-500/10 border-red-500/30'
+ activeTab === 'bought'
+ ? 'bg-up/10 border-up/30'
+ : 'bg-down/10 border-down/30'
 }`}>
   <p className={`text-sm font-medium ${
-    activeTab === 'bought' ? 'text-green-600' : 'text-red-600'
-  }`}>
+ activeTab === 'bought' ? 'text-up' : 'text-down'
+ }`}>
     {activeTab === 'bought'
       ? 'Stocks gaining the most right now — not a prediction, this is happening live'
       : 'Stocks losing the most right now — not a prediction, this is happening live'
@@ -88,7 +88,7 @@ export default function TrendingStocks() {
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 animate-pulse">
+            <div key={i} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 animate-pulse">
               <div className="h-5 w-24 bg-lavender-surface rounded mb-2" />
               <div className="h-3 w-32 bg-lavender-surface rounded mb-3" />
               <div className="h-8 w-28 bg-lavender-surface rounded mb-3" />
@@ -109,8 +109,8 @@ export default function TrendingStocks() {
             <div key={stock.display_ticker} className="relative">
               {/* Rank badge */}
               <div className={`absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-lavender-text ${
-                activeTab === 'bought' ? 'bg-green-600' : 'bg-red-600'
-              }`}>
+ activeTab === 'bought' ? 'bg-up/15' : 'bg-down/15'
+ }`}>
                 #{index + 1}
               </div>
               <StockCard

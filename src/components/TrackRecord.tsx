@@ -79,7 +79,7 @@ export default function TrackRecord() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
+        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">Overall Accuracy</p>
           <p className="text-4xl font-black text-lavender-primary">
             {data.overall_accuracy}%
@@ -88,18 +88,18 @@ export default function TrackRecord() {
             {data.total_signals} signals tracked
           </p>
         </div>
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
+        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">Avg Return on BUY</p>
-          <p className={`text-4xl font-black ${data.avg_buy_return >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`text-4xl font-black ${data.avg_buy_return >= 0 ? 'text-up' : 'text-down'}`}>
             {data.avg_buy_return >= 0 ? '+' : ''}{data.avg_buy_return}%
           </p>
           <p className="text-lavender-text/60 text-xs mt-1">
             Per signal, 7 days later
           </p>
         </div>
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
+        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 text-center">
           <p className="text-lavender-text/70 text-sm mb-1">BUY Accuracy</p>
-          <p className="text-4xl font-black text-green-600">
+          <p className="text-4xl font-black text-up">
             {data.breakdown?.BUY?.accuracy ?? 0}%
           </p>
           <p className="text-lavender-text/60 text-xs mt-1">
@@ -126,7 +126,7 @@ export default function TrackRecord() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl overflow-x-auto">
+      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl overflow-x-auto">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="bg-lavender-surface text-lavender-text/70 text-left">
@@ -146,25 +146,25 @@ export default function TrackRecord() {
                 <td className="p-3 font-bold text-lavender-text">{s.ticker}</td>
                 <td className="p-3">
                   <span className={`font-semibold ${
-                    s.signal === 'BUY' ? 'text-green-600' :
-                    s.signal === 'SELL' ? 'text-red-600' : 'text-yellow-400'
-                  }`}>
+ s.signal === 'BUY' ? 'text-up' :
+ s.signal === 'SELL' ? 'text-down' : 'text-caution'
+ }`}>
                     {s.signal}
                   </span>
                 </td>
                 <td className="p-3 text-lavender-text/80">{s.confidence}%</td>
                 <td className="p-3 text-lavender-text/80">₹{s.entry_price}</td>
                 <td className="p-3 text-lavender-text/80">₹{s.price_at_check}</td>
-                <td className={`p-3 font-semibold ${s.pct_change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <td className={`p-3 font-semibold ${s.pct_change >= 0 ? 'text-up' : 'text-down'}`}>
                   {s.pct_change >= 0 ? '+' : ''}{s.pct_change}%
                 </td>
                 <td className="p-3">
                   {s.was_correct ? (
-                    <span className="flex items-center gap-1 text-green-600">
+                    <span className="flex items-center gap-1 text-up">
                       <CheckCircle2 className="w-4 h-4" /> Correct
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-red-600">
+                    <span className="flex items-center gap-1 text-down">
                       <XCircle className="w-4 h-4" /> Wrong
                     </span>
                   )}

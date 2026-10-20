@@ -1,175 +1,80 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { Calculator } from 'lucide-react';
 import SEO from './SEO';
+import { GrowthChart, NumberSlider, RollingNumber, ShareResult, YearPoint, useUrlNumber } from './calc/CalcKit';
 
 export default function SIPCalculator() {
-  const [monthlyInvestment, setMonthlyInvestment] = useState(5000);
-  const [expectedReturnRate, setExpectedReturnRate] = useState(12);
-  const [timePeriodYears, setTimePeriodYears] = useState(10);
-  
-  const [totalInvested, setTotalInvested] = useState(0);
-  const [estimatedReturns, setEstimatedReturns] = useState(0);
-  const [totalWealth, setTotalWealth] = useState(0);
+  const [monthly, setMonthly] = useUrlNumber('amount', 5000, 500, 1000000);
+  const [rate, setRate] = useUrlNumber('rate', 12, 1, 30);
+  const [years, setYears] = useUrlNumber('years', 10, 1, 40);
 
-  useEffect(() => {
-    // SIP Formula: M = P × ({[1 + i]^n - 1} / i) × (1 + i)
-    // P = amount, i = periodic interest rate (yearly rate/12/100), n = total number of months
-    const P = monthlyInvestment;
-    const i = expectedReturnRate / 12 / 100;
-    const n = timePeriodYears * 12;
-
-    const M = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-    
-    const invested = P * n;
-    const returns = M - invested;
-
-    setTotalInvested(invested);
-    setTotalWealth(M);
-    setEstimatedReturns(returns);
-  }, [monthlyInvestment, expectedReturnRate, timePeriodYears]);
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(value);
-  };
+  // Year-by-year values for the chart and table
+  const points = useMemo<YearPoint[]>(() => {
+    const i = rate / 12 / 100;
+    return Array.from({ length: years + 1 }, (_, y) => {
+      const n = y * 12;
+      const value = n === 0 ? 0 : i === 0 ? monthly * n : monthly * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+      return { year: y, invested: monthly * n, value };
+    });
+  }, [monthly, rate, years]);
+  const last = points[points.length - 1];
+  const invested = last.invested;
+  const total = last.value;
+  const gains = total - invested;
 
   return (
-    <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="SIP Calculator India | Monthly Investment Return Calculator | Stock AI"
         description="Calculate future value, invested amount, and estimated returns for monthly SIP investments in India with a free SIP calculator."
         canonicalPath="/tools/sip-calculator"
       />
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Calculator className="w-8 h-8 text-lavender-primary" />
-            <h1 className="text-4xl font-bold text-lavender-text">SIP Calculator</h1>
-          </div>
-          <p className="text-lavender-text/70 text-lg">
-            Calculate the future value of your systematic investment plan (SIP).
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <header className="mb-10 max-w-2xl">
+          <p className="flex items-center gap-2 text-sm font-medium text-accent">
+            <Calculator className="h-4 w-4" strokeWidth={1.75} /> Calculator
           </p>
-        </div>
+          <h1 className="mt-2 text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl">SIP calculator</h1>
+          <p className="mt-3 text-base text-muted">See what a fixed monthly investment could grow to. Change any number; the link updates so you can share the result.</p>
+        </header>
 
-        {/* Interactive Calculator Section */}
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
-          
-          {/* Controls */}
-          <div className="flex-1 space-y-8">
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-lavender-text font-semibold">Monthly Investment</label>
-                <span className="text-lavender-primary font-bold bg-blue-500/10 px-3 py-1 rounded-2xl">
-                  {formatCurrency(monthlyInvestment)}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="500"
-                max="100000"
-                step="500"
-                value={monthlyInvestment}
-                onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                className="w-full h-2 bg-lavender-surface rounded-2xl appearance-none cursor-pointer accent-blue-500"
-              />
-              <div className="flex justify-between text-xs text-lavender-text/60 mt-2">
-                <span>₹500</span>
-                <span>₹1,00,000</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-lavender-text font-semibold">Expected Return Rate (p.a)</label>
-                <span className="text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1 rounded-2xl">
-                  {expectedReturnRate}%
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="30"
-                step="0.5"
-                value={expectedReturnRate}
-                onChange={(e) => setExpectedReturnRate(Number(e.target.value))}
-                className="w-full h-2 bg-lavender-surface rounded-2xl appearance-none cursor-pointer accent-emerald-500"
-              />
-              <div className="flex justify-between text-xs text-lavender-text/60 mt-2">
-                <span>1%</span>
-                <span>30%</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-lavender-text font-semibold">Time Period</label>
-                <span className="text-purple-400 font-bold bg-purple-500/10 px-3 py-1 rounded-2xl">
-                  {timePeriodYears} Years
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="40"
-                step="1"
-                value={timePeriodYears}
-                onChange={(e) => setTimePeriodYears(Number(e.target.value))}
-                className="w-full h-2 bg-lavender-surface rounded-2xl appearance-none cursor-pointer accent-purple-500"
-              />
-              <div className="flex justify-between text-xs text-lavender-text/60 mt-2">
-                <span>1 Yr</span>
-                <span>40 Yrs</span>
-              </div>
-            </div>
+        <section className="mb-16 grid gap-6 rounded-card border border-line bg-surface p-5 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+          <div className="space-y-7">
+            <NumberSlider label="Monthly investment" value={monthly} onChange={setMonthly} min={500} max={100000} step={500} prefix="₹" suffix="" minLabel="₹500" maxLabel="₹1,00,000" />
+            <NumberSlider label="Expected return a year" value={rate} onChange={setRate} min={1} max={30} step={0.5} prefix="" suffix="%" minLabel="1%" maxLabel="30%" />
+            <NumberSlider label="Time period" value={years} onChange={setYears} min={1} max={40} step={1} prefix="" suffix="yrs" minLabel="1 yr" maxLabel="40 yrs" />
           </div>
 
-          {/* Results Summary */}
-          <div className="md:w-72 app-card-accent p-6 flex flex-col justify-center">
-            <div className="space-y-6">
+          <div className="flex flex-col">
+            <dl className="grid grid-cols-3 gap-3">
               <div>
-                <p className="text-lavender-text/70 text-sm mb-1">Invested Amount</p>
-                <p className="text-xl text-lavender-text font-bold">{formatCurrency(totalInvested)}</p>
+                <dt className="text-xs text-muted">Invested</dt>
+                <dd className="mt-1 text-base font-semibold text-ink sm:text-lg"><RollingNumber value={invested} /></dd>
               </div>
               <div>
-                <p className="text-lavender-text/70 text-sm mb-1">Est. Returns</p>
-                <p className="text-xl text-emerald-400 font-bold">{formatCurrency(estimatedReturns)}</p>
+                <dt className="text-xs text-muted">Est. growth</dt>
+                <dd className="mt-1 text-base font-semibold text-up sm:text-lg"><RollingNumber value={gains} /></dd>
               </div>
-              <div className="pt-4 border-t border-lavender-text/10">
-                <p className="text-lavender-text/70 text-sm mb-1">Total Value</p>
-                <p className="text-3xl text-lavender-primary font-black">{formatCurrency(totalWealth)}</p>
+              <div>
+                <dt className="text-xs text-muted">Total value</dt>
+                <dd className="mt-1 text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl"><RollingNumber value={total} /></dd>
               </div>
+            </dl>
+            <div className="mt-6">
+              <GrowthChart points={points} />
             </div>
-            
-            {/* Simple Progress Bar Chart */}
-            <div className="mt-8 h-4 flex rounded-full overflow-hidden">
-              <div 
-                className="bg-blue-500 h-full" 
-                style={{ width: `${(totalInvested / totalWealth) * 100}%` }}
-                title="Invested Amount"
-              ></div>
-              <div 
-                className="bg-emerald-500 h-full" 
-                style={{ width: `${(estimatedReturns / totalWealth) * 100}%` }}
-                title="Estimated Returns"
-              ></div>
-            </div>
-            <div className="flex justify-between mt-2 text-xs text-lavender-text/60">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500"></span> Invested</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Returns</span>
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
+              <p className="text-xs text-muted">Illustration only. Returns are not guaranteed.</p>
+              <ShareResult />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="calc-article mx-auto max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">What is a Systematic Investment Plan (SIP)?</h2>
           <p className="mb-6 leading-relaxed">
-            A Systematic Investment Plan, commonly known as an SIP, is an investment strategy offered by mutual funds to investors, allowing them to invest a fixed amount of money at regular intervals—usually monthly or quarterly. In the Indian context, SIPs have become the cornerstone of retail investing, helping millions build wealth over the long term without needing to time the volatile stock market.
+            A Systematic Investment Plan, commonly known as an SIP, is an investment strategy offered by mutual funds to investors, allowing them to invest a fixed amount of money at regular intervals, usually monthly or quarterly. In the Indian context, SIPs have become the cornerstone of retail investing, helping millions build wealth over the long term without needing to time the volatile stock market.
           </p>
 
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Power of Compounding</h2>
@@ -177,7 +82,7 @@ export default function SIPCalculator() {
             Albert Einstein is famously attributed with calling compound interest the "eighth wonder of the world." Compounding happens when the returns on your investments start generating their own returns. The longer you stay invested, the more pronounced this effect becomes.
           </p>
           <p className="mb-6 leading-relaxed">
-            For example, using the SIP calculator above, if you invest ₹10,000 every month for 20 years at an expected return rate of 12% p.a., your total invested amount is ₹24 Lakhs. However, due to compounding, your estimated returns will be over ₹75 Lakhs, bringing your total wealth to nearly ₹1 Crore. The key variable here is <strong>time</strong>—delaying your investments by even 5 years can cost you tens of lakhs in future wealth.
+            For example, using the SIP calculator above, if you invest ₹10,000 every month for 20 years at an expected return rate of 12% p.a., your total invested amount is ₹24 Lakhs. However, due to compounding, your estimated returns will be over ₹75 Lakhs, bringing your total wealth to nearly ₹1 Crore. The key variable here is <strong>time</strong>, delaying your investments by even 5 years can cost you tens of lakhs in future wealth.
           </p>
 
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Rupee Cost Averaging</h2>
@@ -202,10 +107,10 @@ export default function SIPCalculator() {
           <ol className="list-decimal pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li><strong>Monthly Investment:</strong> Adjust the slider to reflect the amount you can comfortably invest every month. Start small if you need to; consistency matters more than the initial amount.</li>
             <li><strong>Expected Return Rate (p.a):</strong> Set this based on your asset allocation. Use 10-12% for equities and 6-8% for debt.</li>
-            <li><strong>Time Period:</strong> Select the number of years you plan to keep investing without withdrawing. Notice how increasing the time period drastically increases the blue "Returns" portion of the graph!</li>
+            <li><strong>Time Period:</strong> Select the number of years you plan to keep investing without withdrawing. Notice how increasing the time period drastically increases the green "Growth" part of the chart!</li>
           </ol>
 
-          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
+          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
             <h3 className="text-lavender-text font-bold mb-2">Disclaimer</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               Mutual Fund investments are subject to market risks, read all scheme related documents carefully. The SIP calculator is for illustration purposes only and does not guarantee any returns. Historical returns of the Indian stock market (NSE/BSE) are not indicative of future performance. Always consult with a SEBI-registered financial advisor before making investment decisions.

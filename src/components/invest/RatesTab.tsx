@@ -24,7 +24,7 @@ function Sources({ rows }: { rows: InvestRate[] }) {
 
 function StaleBanner({ message }: { message: string }) {
   return (
-    <div className="flex gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+    <div className="flex gap-2 rounded-xl border border-caution/30 bg-caution/10 p-3 text-sm text-caution">
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /><span>{message}</span>
     </div>
   );
@@ -81,7 +81,7 @@ export default function RatesTab({ data }: { data: RatesPayload }) {
                       <span className="block text-[11px] text-lavender-text/50">checked {fmtDate(r.as_of)}</span>
                     </td>
                     <td className="p-3 text-lavender-text/75">{r.tenure}</td>
-                    <td className={`p-3 text-right font-bold tabular-nums ${r.rate === topFd ? 'text-emerald-600 dark:text-emerald-400' : 'text-lavender-text'}`}>{r.rate.toFixed(2)}%</td>
+                    <td className={`p-3 text-right font-bold tabular-nums ${r.rate === topFd ? 'text-up dark:text-up' : 'text-lavender-text'}`}>{r.rate.toFixed(2)}%</td>
                   </tr>
                 ))}
               </tbody>

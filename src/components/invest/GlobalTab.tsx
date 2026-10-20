@@ -54,7 +54,7 @@ export default function GlobalTab({ live }: { live: LivePayload | null }) {
         {live?.usd_inr && (
           <p className="mt-3 text-sm text-lavender-text/80 tabular-nums">
             USD/INR right now: <b>₹{live.usd_inr.price.toFixed(2)}</b>
-            <span className={live.usd_inr.change_pct >= 0 ? 'ml-2 text-red-600 dark:text-red-400' : 'ml-2 text-emerald-600 dark:text-emerald-400'}>
+            <span className={live.usd_inr.change_pct >= 0 ? 'ml-2 text-down dark:text-down' : 'ml-2 text-up dark:text-up'}>
               ({live.usd_inr.change_pct >= 0 ? 'rupee weaker' : 'rupee stronger'} {Math.abs(live.usd_inr.change_pct).toFixed(2)}% today)
             </span>
           </p>

@@ -24,7 +24,7 @@ export default function AdBanner({ slot, format = 'auto' }: Props) {
 
   return (
     <div className="my-3 text-center">
-      <p className="text-gray-300 text-xs mb-1">Advertisement</p>
+      <p className="text-muted text-xs mb-1">Advertisement</p>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}

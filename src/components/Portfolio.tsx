@@ -86,10 +86,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           {[
             { label: 'Invested', value: `₹${(summary.total_invested||0).toLocaleString('en-IN')}`, color: 'text-lavender-text' },
             { label: 'Current', value: `₹${(summary.current_value||0).toLocaleString('en-IN')}`, color: 'text-lavender-primary' },
-            { label: 'P&L', value: `${isProfitable ? '+' : ''}₹${(summary.total_pnl||0).toLocaleString('en-IN')}`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
-            { label: 'Return', value: `${isProfitable ? '+' : ''}${(summary.total_pnl_pct||0).toFixed(2)}%`, color: isProfitable ? 'text-green-600' : 'text-red-600' },
+            { label: 'P&L', value: `${isProfitable ? '+' : ''}₹${(summary.total_pnl||0).toLocaleString('en-IN')}`, color: isProfitable ? 'text-up' : 'text-down' },
+            { label: 'Return', value: `${isProfitable ? '+' : ''}${(summary.total_pnl_pct||0).toFixed(2)}%`, color: isProfitable ? 'text-up' : 'text-down' },
           ].map(item => (
-            <div key={item.label} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
+            <div key={item.label} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
               <p className="text-lavender-text/60 text-xs mb-1">{item.label}</p>
               <p className={`font-bold text-lg ${item.color}`}>{item.value}</p>
             </div>
@@ -126,7 +126,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Add Stock Form */}
       {showAdd && (
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4 mb-4">
+        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 mb-4">
           <h3 className="text-lavender-text font-semibold mb-3">Add Stock to Portfolio</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             <div>
@@ -136,7 +136,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. RELIANCE"
                 value={form.ticker}
                 onChange={e => setForm({ ...form, ticker: e.target.value.toUpperCase() })}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
@@ -146,7 +146,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. 10"
                 value={form.quantity}
                 onChange={e => setForm({ ...form, quantity: e.target.value })}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
             <div>
@@ -156,12 +156,12 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 placeholder="e.g. 1450.50"
                 value={form.avg_buy_price}
                 onChange={e => setForm({ ...form, avg_buy_price: e.target.value })}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
               />
             </div>
           </div>
           {error && (
-  <p className="text-red-600 text-sm mb-3 flex items-center gap-1">
+  <p className="text-down text-sm mb-3 flex items-center gap-1">
     <AlertTriangle className="w-4 h-4" />
     {error}
   </p>
@@ -169,7 +169,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           <button
             onClick={handleAdd}
             disabled={adding}
-            className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-lavender-text px-6 py-2 rounded-2xl font-semibold text-sm transition"
+            className="bg-up/15 hover:bg-up/15 disabled:opacity-50 text-lavender-text px-6 py-2 rounded-2xl font-semibold text-sm transition"
           >
             {adding ? 'Adding...' : 'Add to Portfolio'}
           </button>
@@ -178,7 +178,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
       {/* Empty State */}
       {portfolio.length === 0 && !showAdd && (
-        <div className="text-center py-16 bg-white border border-lavender-text/10 shadow-sm rounded-2xl">
+        <div className="text-center py-16 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl">
           <Coins className="w-12 h-12 mx-auto mb-4 text-lavender-primary" />
           <p className="text-lavender-text font-semibold text-lg mb-2">No stocks yet</p>
           <p className="text-lavender-text/70 text-sm mb-4">Add your stocks to track live P&L</p>
@@ -197,17 +197,17 @@ const [showUpgrade, setShowUpgrade] = useState(false);
           {portfolio.map((item: any) => {
             const pnlUp = (item.pnl || 0) >= 0;
             return (
-              <div key={item.ticker} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
+              <div key={item.ticker} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4">
                 <div className="flex justify-between items-start">
                   {/* Left — stock info */}
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-bold text-lavender-text text-lg">{item.ticker}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-                        (item.price_change_pct||0) >= 0
-                          ? 'bg-green-500/20 text-green-600'
-                          : 'bg-red-500/20 text-red-600'
-                      }`}>
+ (item.price_change_pct||0) >= 0
+ ? 'bg-up/20 text-up'
+ : 'bg-down/20 text-down'
+ }`}>
                        <div className="flex items-center gap-1">
   <TrendingUp className={`w-3 h-3 ${(item.price_change_pct||0) >= 0 ? '' : 'rotate-180'}`} />
   {Math.abs(item.price_change_pct||0)}%
@@ -219,10 +219,10 @@ const [showUpgrade, setShowUpgrade] = useState(false);
 
                   {/* Right — P&L */}
                   <div className="text-right">
-                    <p className={`font-bold text-lg ${pnlUp ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className={`font-bold text-lg ${pnlUp ? 'text-up' : 'text-down'}`}>
                       {pnlUp ? '+' : ''}₹{(item.pnl||0).toLocaleString('en-IN')}
                     </p>
-                    <p className={`text-sm ${pnlUp ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className={`text-sm ${pnlUp ? 'text-up' : 'text-down'}`}>
                       {pnlUp ? '+' : ''}{(item.pnl_pct||0).toFixed(2)}%
                     </p>
                   </div>
@@ -251,7 +251,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                   </div>
                   <div className="h-1.5 bg-lavender-surface rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all ${pnlUp ? 'bg-green-500' : 'bg-red-500'}`}
+                      className={`h-full rounded-full transition-all ${pnlUp ? 'bg-up/15' : 'bg-down/15'}`}
                       style={{
                         width: `${Math.min(((item.current_value||0) / (item.invested_value||1)) * 100, 150)}%`
                       }}
@@ -262,7 +262,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
                 {/* Remove button */}
                 <button
                   onClick={() => handleRemove(item.ticker)}
-                  className="mt-3 text-lavender-text/60 hover:text-red-600 text-xs transition"
+                  className="mt-3 text-lavender-text/60 hover:text-down text-xs transition"
                 >
                   <span className="flex items-center gap-1">
   <AlertTriangle className="w-3 h-3" />
@@ -275,7 +275,7 @@ const [showUpgrade, setShowUpgrade] = useState(false);
         </div>
       )}
 
-      <p className="text-gray-300 text-xs text-center mt-6">
+      <p className="text-muted text-xs text-center mt-6">
         <span className="flex items-center justify-center gap-1">
   <AlertTriangle className="w-3 h-3" />
   P&L is indicative only. Not SEBI-registered advice.
