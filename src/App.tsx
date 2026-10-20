@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react
 import { supabase } from './lib/supabase';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
+import Logo, { LogoMark } from './components/ui/Logo';
+import Skeleton from './components/ui/Skeleton';
 
 // Every page except the landing page loads on demand, so first-time visitors
 // only download the code for the page they open.
@@ -80,52 +82,101 @@ function mightHaveSession(): boolean {
 
 function PageFallback() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="Loading page">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-lavender-primary/20 border-t-lavender-primary motion-reduce:animate-none" />
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6" role="status" aria-label="Loading page">
+      <Skeleton className="h-8 w-56" />
+      <Skeleton className="mt-3 h-4 w-80 max-w-full" />
+      <div className="mt-8 space-y-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-14 w-full" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Shown while a returning visitor's session is restored: the app's shape, not a spinner.
+function BootSkeleton() {
+  return (
+    <div className="min-h-[100dvh] bg-canvas" role="status" aria-label="Loading Stock AI">
+      <div className="border-b border-line">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
+          <LogoMark />
+          <Skeleton className="hidden h-10 w-60 lg:block" />
+          <div className="ml-auto flex gap-2">
+            <Skeleton className="h-10 w-10" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+        </div>
+      </div>
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <div className="flex gap-2 overflow-hidden">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-9 w-24 shrink-0 rounded-full" />
+          ))}
+        </div>
+        <div className="mt-6 space-y-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full" />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 
+const FOOTER_LINKS = [
+  { to: '/about', label: 'About' },
+  { to: '/privacy', label: 'Privacy' },
+  { to: '/terms', label: 'Terms' },
+  { to: '/refund', label: 'Refund' },
+  { to: '/disclaimer', label: 'Disclaimer' },
+  { to: '/contact', label: 'Contact' },
+  { to: '/beta', label: 'Join the research beta' },
+];
+const DATA_SOURCES = [
+  { label: 'NSE India', url: 'https://www.nseindia.com' },
+  { label: 'BSE India', url: 'https://www.bseindia.com' },
+  { label: 'Economic Times Markets', url: 'https://economictimes.indiatimes.com/markets' },
+  { label: 'SEBI', url: 'https://www.sebi.gov.in' },
+  { label: 'Moneycontrol', url: 'https://www.moneycontrol.com' },
+];
+
 function Footer() {
   return (
-    <footer className="bg-lavender-surface border-t border-white/50 py-8">
-      <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-between items-center gap-4">
-        <p className="text-lavender-text/80 text-sm">© 2026 BytePlay Technologies. All rights reserved.</p>
-        <div className="flex gap-4 flex-wrap">
-          <Link to="/about" className="text-lavender-text/80 hover:text-lavender-text text-sm">About</Link>
-          <Link to="/privacy" className="text-lavender-text/80 hover:text-lavender-text text-sm">Privacy</Link>
-          <Link to="/terms" className="text-lavender-text/80 hover:text-lavender-text text-sm">Terms</Link>
-          <Link to="/refund" className="text-lavender-text/80 hover:text-lavender-text text-sm">Refund</Link>
-          <Link to="/disclaimer" className="text-lavender-text/80 hover:text-lavender-text text-sm">Disclaimer</Link>
-          <Link to="/contact" className="text-lavender-text/80 hover:text-lavender-text text-sm">Contact</Link>
-          <Link to="/beta" className="text-lavender-text/80 hover:text-lavender-text text-sm">Join Beta</Link>
+    <footer className="border-t border-line bg-canvas py-12">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
+        <div>
+          <Logo />
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
+            Research, not advice. Not SEBI-registered. AI analysis is for education only; invest at your own risk.
+          </p>
+          <p className="mt-4 text-xs text-muted">© 2026 BytePlay Technologies. All rights reserved.</p>
         </div>
-        <p className="text-lavender-text/70 text-xs w-full text-center">
-          Not SEBI-registered. AI signals for educational purposes only. Invest at your own risk.
-        </p>
-        
-        {/* Data Sources */}
-        <div className="border-t border-white/50 pt-6 mt-6 w-full">
-          <p className="text-lavender-text/70 text-xs text-center mb-3">Data Sources</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {[
-              { label: "NSE India", url: "https://www.nseindia.com" },
-              { label: "BSE India", url: "https://www.bseindia.com" },
-              { label: "Economic Times Markets", url: "https://economictimes.indiatimes.com/markets" },
-              { label: "SEBI", url: "https://www.sebi.gov.in" },
-              { label: "Moneycontrol", url: "https://www.moneycontrol.com" },
-            ].map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lavender-text/70 hover:text-lavender-text text-xs transition underline"
-              >
-                {link.label}
-              </a>
-            ))}
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-medium text-muted">Company</p>
+            <ul className="mt-3 space-y-1">
+              {FOOTER_LINKS.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className="inline-flex min-h-[36px] items-center text-sm text-ink/80 hover:text-ink">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-muted">Data sources</p>
+            <ul className="mt-3 space-y-1">
+              {DATA_SOURCES.map((link) => (
+                <li key={link.label}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[36px] items-center text-sm text-ink/80 hover:text-ink">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -138,11 +189,15 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
   const isLoginPage = location.pathname === '/login';
   const requestedPath = new URLSearchParams(location.search).get('next');
   const safeNext = requestedPath?.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/';
+  // The public landing page is one dark theme, so its navbar and footer join it.
+  const landingDark = !user && location.pathname === '/';
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex min-h-[100dvh] flex-col bg-canvas ${landingDark ? 'dark' : ''}`}>
       {/* Navbar stays pinned to the top (Hidden on Login Page) */}
-      {!isLoginPage && <Navbar user={user} isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />}
+      {!isLoginPage && (
+        <Navbar user={user} isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      )}
       
       {/* The main content area expands to push the footer down */}
       <main className="flex-grow">
@@ -221,7 +276,9 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
       </main>
 
       {/* Footer stays pinned to the bottom (Hidden on Login Page) */}
-      {!isLoginPage && <Footer />}
+      {!isLoginPage && (
+        <Footer />
+      )}
     </div>
   );
 }
@@ -232,8 +289,9 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false;
     const saved = localStorage.getItem('stock_ai_theme');
-    if (saved) return saved === 'dark';
-    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    const dark = saved ? saved === 'dark' : window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    document.documentElement.classList.toggle('dark', dark); // before first paint, so there is no flash
+    return dark;
   });
 
   useEffect(() => {
@@ -281,19 +339,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-lavender-surface flex flex-col items-center justify-center gap-4">
-        <div className="relative flex h-12 w-12 items-center justify-center">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-25"></span>
-          <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></div>
-        </div>
-        <p className="text-lavender-text/70 text-xs tracking-widest uppercase animate-pulse">
-          Fetching Real-time Intelligence
-        </p>
-      </div>
-    );
-  }
+  if (loading) return <BootSkeleton />;
 
   return (
     <BrowserRouter>

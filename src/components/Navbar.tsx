@@ -1,74 +1,124 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { ChevronDown, LogOut, Menu, Moon, Search, Star, Sun, X } from 'lucide-react';
 import UpgradeModal from './UpgradeModal';
-import { Menu, Moon, Star, Sun, TrendingUp, X } from 'lucide-react';
+import SearchDialog from './SearchDialog';
+import Logo from './ui/Logo';
+import { Button, ButtonLink } from './ui/Button';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-export default function Navbar({
-  user,
-  isDarkMode,
-  onToggleTheme,
-}: {
-  user: any;
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
-}) {
-  const [open, setOpen] = useState(false);
+const PRIMARY = [
+  { to: '/today', label: 'Today' },
+  { to: '/stocks', label: 'Stocks', end: true },
+  { to: '/ipos', label: 'IPOs' },
+  { to: '/invest', label: 'Invest' },
+  { to: '/learn', label: 'Learn' },
+];
+const MORE = [
+  { to: '/pro-picks', label: 'Pro Picks' },
+  { to: '/market-wrap', label: 'Market Wrap' },
+  { to: '/stocks/dividends', label: 'Dividends' },
+  { to: '/tools', label: 'Tools' },
+  { to: '/track-record', label: 'Track Record' },
+  { to: '/blog', label: 'Blog' },
+];
+
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+function useDismiss(open: boolean, close: () => void, refs: React.RefObject<HTMLElement | null>[]) {
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const t = e.target as Node;
+      if (refs.some((r) => r.current?.contains(t))) return;
+      close();
+    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, close]);
+}
+
+export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode: boolean; onToggleTheme: () => void }) {
+  const location = useLocation();
+  const navRef = useRef<HTMLElement | null>(null);
+  const [sheet, setSheet] = useState(false);
+  const [more, setMore] = useState(false);
+  const [account, setAccount] = useState(false);
+  const [search, setSearch] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isPro, setIsPro] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
-  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
-  const navigation = [
-    { to: '/today', label: 'Today' },
-    { to: '/stocks', label: 'Stocks' },
-    { to: '/stocks/dividends', label: 'Dividends' },
-    { to: '/market-wrap', label: 'Market Wrap' },
-    { to: '/ipos', label: 'IPOs' },
-    { to: '/invest', label: 'Invest' },
-    { to: '/learn', label: 'Learn' },
-    { to: '/tools', label: 'Tools' },
-    { to: '/track-record', label: 'Track Record' },
-    { to: '/blog', label: 'Blog' },
-  ];
+  const moreRef = useRef<HTMLDivElement | null>(null);
+  const accountRef = useRef<HTMLDivElement | null>(null);
+
+  const closeMore = useCallback(() => setMore(false), []);
+  const closeAccount = useCallback(() => setAccount(false), []);
+  const closeSearch = useCallback(() => setSearch(false), []);
+  useDismiss(more, closeMore, [moreRef]);
+  useDismiss(account, closeAccount, [accountRef]);
 
   useEffect(() => {
     const token = localStorage.getItem('sb_token');
     if (!token) return;
-
     axios
-      .get(`${BASE}/api/payment/status`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        setIsPro(res.data.plan === 'pro');
-      })
+      .get(`${BASE}/api/payment/status`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setIsPro(res.data.plan === 'pro'))
       .catch(() => {});
   }, []);
 
+  // Close menus on navigation
   useEffect(() => {
-    if (!open) return;
+    setSheet(false);
+    setMore(false);
+    setAccount(false);
+  }, [location.pathname]);
 
-    const closeOnOutsideClick = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as Node;
-      if (
-        mobileMenuRef.current?.contains(target) ||
-        mobileMenuButtonRef.current?.contains(target)
-      ) {
-        return;
+  // Publish the nav height for sticky/pinned sections (no scroll or resize listeners)
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const set = () => document.documentElement.style.setProperty('--nav-h', `${Math.round(nav.getBoundingClientRect().height)}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(nav);
+    return () => ro.disconnect();
+  }, []);
+
+  // ⌘K / Ctrl K / "/" open search
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement;
+      const typing = el?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el?.tagName);
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearch(true);
+      } else if (e.key === '/' && !typing) {
+        e.preventDefault();
+        setSearch(true);
       }
-      setOpen(false);
     };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
 
-    document.addEventListener('mousedown', closeOnOutsideClick);
-    document.addEventListener('touchstart', closeOnOutsideClick);
-
+  // Lock page scroll behind the mobile sheet
+  useEffect(() => {
+    if (!sheet) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('mousedown', closeOnOutsideClick);
-      document.removeEventListener('touchstart', closeOnOutsideClick);
+      document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [sheet]);
 
   const logout = async () => {
     const { supabase } = await import('../lib/supabase');
@@ -77,168 +127,212 @@ export default function Navbar({
     window.location.reload();
   };
 
-
+  const moreActive = MORE.some((m) => location.pathname.startsWith(m.to));
+  const linkCls = ({ isActive }: { isActive: boolean }) =>
+    `relative inline-flex h-16 items-center px-1 text-sm font-medium transition duration-micro ${
+      isActive ? 'text-ink after:absolute after:inset-x-1 after:bottom-3 after:h-[2px] after:rounded-full after:bg-accent' : 'text-muted hover:text-ink'
+    }`;
 
   return (
     <>
-      {/* NAVBAR */}
-      <nav className="bg-lavender-surface/90 backdrop-blur-md border-b border-lavender-text/10 px-4 sm:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        {/* LEFT */}
-        <Link to="/" className="flex items-center gap-2 min-w-0">
-          <span className="text-2xl shrink-0"><TrendingUp className="w-6 h-6 text-lavender-primary shrink-0" /></span>
-          <span className="font-bold text-lg text-lavender-text whitespace-nowrap">Stock AI</span>
-          <span className="text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
-            LIVE
-          </span>
-        </Link>
-
-        {/* CENTER (DESKTOP ONLY) */}
-        <div className="hidden xl:flex items-center gap-4 text-sm">
-          {navigation.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/stocks'}
-              className={({ isActive }) => `${isActive ? 'text-lavender-primary' : 'text-lavender-text/70'} whitespace-nowrap font-medium transition hover:text-lavender-text`}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
-
-        {/* RIGHT */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            onClick={onToggleTheme}
-            className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-lavender-text/10 bg-white text-lavender-text shadow-sm transition hover:border-lavender-primary/30 hover:bg-lavender-base"
-            aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}
-            title={isDarkMode ? 'Light theme' : 'Dark theme'}
-          >
-            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
-
-          {/* PRO PICKS BUTTON - ALWAYS VISIBLE */}
-          <Link 
-            to="/pro-picks" 
-            className={`flex items-center gap-1.5 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 hover:from-yellow-500/20 hover:to-yellow-600/20 border border-yellow-500/30 text-yellow-500 text-xs sm:text-sm font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl transition-all ${user ? 'animate-pulse shadow-[0_0_10px_rgba(234,179,8,0.2)]' : ''}`}
-          >
-            <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-yellow-500" />
-            <span className="whitespace-nowrap">Pro Picks</span>
+      <nav ref={navRef} className="nav-glass sticky top-0 z-50 border-b border-line bg-canvas/80 backdrop-blur-[16px]">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:gap-5">
+          <Link to="/" className="flex min-h-[44px] shrink-0 items-center" aria-label="Stock AI home">
+            <Logo />
           </Link>
 
-          {user ? (
-            <div className="hidden sm:flex items-center gap-2">
-              {isPro ? (
-                <span className="flex items-center gap-1 text-xs bg-blue-500 text-lavender-text px-2 py-0.5 rounded-full font-semibold">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  PRO
-                </span>
-              ) : (
-                <button
-                  onClick={() => setShowUpgrade(true)}
-                  className="text-xs bg-gradient-lavender hover:opacity-90 text-white px-3 py-1.5 rounded-2xl font-semibold transition"
-                >
-                  Upgrade ₹99
-                </button>
-              )}
-
-              <button
-                onClick={logout}
-                className="text-sm bg-lavender-surface hover:bg-gray-200 px-3 py-1.5 rounded-2xl text-lavender-text transition"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="hidden sm:block text-sm bg-gradient-lavender hover:opacity-90 px-4 py-2 rounded-2xl text-lavender-text font-semibold transition whitespace-nowrap"
-            >
-              Get Started
-            </Link>
-          )}
-
-          {/* MOBILE MENU BUTTON */}
+          {/* Search: looks like an input, opens the palette */}
           <button
-            ref={mobileMenuButtonRef}
-            onClick={() => setOpen(!open)}
-            className="xl:hidden text-lavender-text text-2xl px-2"
-            aria-expanded={open}
-            aria-label="Toggle navigation menu"
+            type="button"
+            onClick={() => setSearch(true)}
+            className="hidden h-10 min-w-0 items-center gap-2 rounded-control border border-line bg-surface/70 px-3 text-sm text-muted transition hover:border-accent/40 hover:text-ink lg:flex lg:w-44 xl:w-60"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <Search className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+            <span className="truncate">Search stocks</span>
+            <kbd className="ml-auto hidden rounded border border-line px-1.5 font-mono text-[11px] xl:inline">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
           </button>
-        </div>
-        
-        {/* MOBILE MENU */}
-        {open && (
-          <div ref={mobileMenuRef} className="xl:hidden absolute top-[100%] left-0 w-full bg-lavender-surface border-b border-lavender-text/10 px-4 py-4 space-y-2 shadow-lavender z-50">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/stocks'}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) => `block rounded-xl px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-lavender-secondary/15 text-lavender-primary' : 'text-lavender-text/80 hover:bg-lavender-secondary/10 hover:text-lavender-text'}`}
-              >
+
+          <div className="hidden items-center gap-4 lg:flex xl:gap-5">
+            {PRIMARY.map((item) => (
+              <NavLink key={item.to} to={item.to} end={item.end} className={linkCls}>
                 {item.label}
               </NavLink>
             ))}
+            <div ref={moreRef} className="relative">
+              <button
+                type="button"
+                aria-expanded={more}
+                aria-haspopup="menu"
+                onClick={() => setMore((m) => !m)}
+                className={`inline-flex h-16 items-center gap-1 px-1 text-sm font-medium transition ${moreActive || more ? 'text-ink' : 'text-muted hover:text-ink'}`}
+              >
+                More <ChevronDown className={`h-4 w-4 transition duration-ui ${more ? 'rotate-180' : ''}`} strokeWidth={1.75} />
+              </button>
+              {more && (
+                <div role="menu" className="absolute left-0 top-[calc(100%-8px)] w-56 rounded-card border border-line bg-surface p-1.5 shadow-lift">
+                  {MORE.map((m) => (
+                    <NavLink
+                      key={m.to}
+                      to={m.to}
+                      role="menuitem"
+                      className={({ isActive }) =>
+                        `flex min-h-[40px] items-center rounded-control px-3 text-sm transition ${isActive ? 'bg-accent/10 font-medium text-accent' : 'text-ink hover:bg-ink/[0.06]'}`
+                      }
+                    >
+                      {m.label}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
             <button
-              onClick={onToggleTheme}
-              className="flex w-full items-center justify-between rounded-2xl border border-lavender-text/10 bg-white px-3 py-2 text-lavender-text transition hover:bg-lavender-base"
+              type="button"
+              onClick={() => setSearch(true)}
+              aria-label="Search stocks"
+              className="flex h-11 w-11 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] lg:hidden"
             >
-              <span className="text-sm font-semibold">
-                {isDarkMode ? 'Light theme' : 'Dark theme'}
-              </span>
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <Search className="h-5 w-5" strokeWidth={1.75} />
+            </button>
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}
+              className="hidden h-10 w-10 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] sm:flex"
+            >
+              {isDarkMode ? <Sun className="h-[18px] w-[18px]" strokeWidth={1.75} /> : <Moon className="h-[18px] w-[18px]" strokeWidth={1.75} />}
             </button>
 
-            {/* Mobile Actions */}
             {user ? (
-              <div className="pt-4 border-t border-white/50 space-y-3">
+              <>
                 {isPro ? (
-                  <span className="inline-flex items-center gap-1 text-xs bg-blue-500 text-lavender-text px-2 py-1 rounded-full font-semibold">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    PRO
+                  <span className="hidden items-center gap-1 rounded-full border border-accent/40 px-2.5 py-1 text-xs font-semibold text-accent sm:inline-flex">
+                    <Star className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> Pro
                   </span>
                 ) : (
-                  <button
-                    onClick={() => setShowUpgrade(true)}
-                    className="block w-full text-center text-sm bg-gradient-lavender hover:opacity-90 text-white px-3 py-2 rounded-2xl font-semibold transition"
-                  >
-                    Upgrade ₹99
-                  </button>
+                  <Button size="sm" onClick={() => setShowUpgrade(true)} className="hidden sm:inline-flex">
+                    Go Pro
+                  </Button>
                 )}
-                <button
-                  onClick={logout}
-                  className="block w-full text-center text-sm bg-lavender-surface hover:bg-gray-200 px-3 py-2 rounded-2xl text-lavender-text transition"
-                >
-                  Logout
-                </button>
-              </div>
+                <div ref={accountRef} className="relative hidden lg:block">
+                  <button
+                    type="button"
+                    aria-expanded={account}
+                    aria-haspopup="menu"
+                    aria-label="Account menu"
+                    onClick={() => setAccount((a) => !a)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-sm font-semibold uppercase text-ink hover:border-accent/50"
+                  >
+                    {(user?.email || '?').slice(0, 1)}
+                  </button>
+                  {account && (
+                    <div role="menu" className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-card border border-line bg-surface p-1.5 shadow-lift">
+                      <p className="truncate px-3 py-2 text-xs text-muted">{user?.email}</p>
+                      <button type="button" role="menuitem" onClick={logout} className="flex min-h-[40px] w-full items-center gap-2 rounded-control px-3 text-sm text-ink hover:bg-ink/[0.06]">
+                        <LogOut className="h-4 w-4" strokeWidth={1.75} /> Log out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
-              <div className="pt-4 border-t border-white/50">
-                <Link
-                  to="/login"
-                  className="block w-full text-center text-sm bg-gradient-lavender hover:opacity-90 text-white px-3 py-2 rounded-2xl font-semibold transition"
-                >
-                  Get Started
+              <>
+                <Link to="/login" className="hidden min-h-[40px] items-center px-2 text-sm font-medium text-muted hover:text-ink lg:inline-flex">
+                  Log in
                 </Link>
-              </div>
+                <ButtonLink to="/login" size="sm" className="hidden sm:inline-flex">
+                  Start free
+                </ButtonLink>
+              </>
             )}
+
+            <button
+              type="button"
+              onClick={() => setSheet(true)}
+              aria-expanded={sheet}
+              aria-label="Open menu"
+              className="flex h-11 w-11 items-center justify-center rounded-control text-ink hover:bg-ink/[0.06] lg:hidden"
+            >
+              <Menu className="h-5 w-5" strokeWidth={1.75} />
+            </button>
           </div>
-        )}
+        </div>
       </nav>
 
-      {/* UPGRADE MODAL */}
-      {showUpgrade && (
-        <UpgradeModal
-          onClose={() => setShowUpgrade(false)}
-          onSuccess={() => setIsPro(true)}
-        />
+      {/* Phones and tablets: a full-height sheet with grouped links and the main action at the bottom */}
+      {sheet && (
+        <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+          <div className="absolute inset-0 bg-[#0B0F14]/60" onClick={() => setSheet(false)} aria-hidden="true" />
+          <div className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-canvas pb-[env(safe-area-inset-bottom)] shadow-lift">
+            <div className="flex h-16 items-center justify-between border-b border-line px-4">
+              <Logo />
+              <button type="button" autoFocus onClick={() => setSheet(false)} aria-label="Close menu" className="flex h-11 w-11 items-center justify-center rounded-control hover:bg-ink/[0.06]">
+                <X className="h-5 w-5" strokeWidth={1.75} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 py-5">
+              <p className="px-2 text-xs font-medium text-muted">Research</p>
+              <ul className="mt-1">
+                {PRIMARY.map((item) => (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      end={item.end}
+                      className={({ isActive }) => `flex min-h-[48px] items-center rounded-control px-2 text-base ${isActive ? 'font-semibold text-accent' : 'text-ink'}`}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 px-2 text-xs font-medium text-muted">More</p>
+              <ul className="mt-1">
+                {MORE.map((item) => (
+                  <li key={item.to}>
+                    <NavLink to={item.to} className={({ isActive }) => `flex min-h-[48px] items-center rounded-control px-2 text-base ${isActive ? 'font-semibold text-accent' : 'text-ink'}`}>
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+              <button type="button" onClick={onToggleTheme} className="mt-5 flex min-h-[48px] w-full items-center justify-between rounded-control border border-line px-3 text-sm text-ink">
+                {isDarkMode ? 'Light theme' : 'Dark theme'}
+                {isDarkMode ? <Sun className="h-4 w-4" strokeWidth={1.75} /> : <Moon className="h-4 w-4" strokeWidth={1.75} />}
+              </button>
+            </div>
+            <div className="space-y-2 border-t border-line p-4">
+              {user ? (
+                <>
+                  {isPro ? (
+                    <p className="text-center text-sm font-semibold text-accent">You are on Pro</p>
+                  ) : (
+                    <Button size="lg" className="w-full" onClick={() => setShowUpgrade(true)}>
+                      Go Pro
+                    </Button>
+                  )}
+                  <Button variant="ghost" size="lg" className="w-full" onClick={logout}>
+                    Log out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <ButtonLink to="/login" size="lg" className="w-full">
+                    Start free
+                  </ButtonLink>
+                  <ButtonLink to="/login" variant="quiet" size="lg" className="w-full">
+                    Log in
+                  </ButtonLink>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       )}
+
+      <SearchDialog open={search} onClose={closeSearch} />
+      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => setIsPro(true)} />}
     </>
   );
 }

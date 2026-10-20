@@ -138,6 +138,23 @@ export interface TopStocks {
 export interface MarketWrap {
   date: string;
   title: string;
+  summary?: string;
+  content?: string;
+}
+export interface TrackOutcome {
+  id: string;
+  ticker: string;
+  signal: string;
+  signal_date: string;
+  check_date?: string;
+  pct_change?: number | null;
+  was_correct?: boolean | null;
+}
+export interface TrackRecordData {
+  total_signals: number;
+  overall_accuracy?: number;
+  signals: TrackOutcome[];
+  last_updated?: string;
 }
 export interface Ipo {
   id: string;
@@ -153,7 +170,8 @@ export interface Ipo {
 export const fmtINR = (v: number, digits = 2) =>
   `₹${v.toLocaleString('en-IN', { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
 
-export const fmtPct = (v: number) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}%`;
+// Always carries ▲/▼ and a sign, so gains and losses never rely on colour alone.
+export const fmtPct = (v: number) => `${v >= 0 ? '▲ +' : '▼ −'}${Math.abs(v).toFixed(2)}%`;
 
 export const fmtRate = (v: number) => `${v.toFixed(2)}%`;
 
@@ -163,8 +181,7 @@ export const fmtTimeIST = (iso: string) =>
 export const fmtDay = (isoDate: string) =>
   new Date(`${isoDate.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
-export const changeClass = (v: number) =>
-  v >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
+export const changeClass = (v: number) => (v >= 0 ? 'text-up' : 'text-down');
 
 // Open IPOs first, then upcoming by opening date.
 export function pickIpos(ipos: Ipo[]) {

@@ -2,48 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens: "Ink + Cobalt" ─────────────────────────────────────────
+   One accent (cobalt). Up/down are semantic and always ship with ▲/▼ and a sign.
+   Values are "R G B" so Tailwind can add alpha: bg-canvas, text-ink/70, border-line… */
 @layer base {
   :root {
     color-scheme: light;
-    --color-lavender-text: 45 36 74;
-    --color-lavender-primary: 118 75 162;
-    --color-lavender-secondary: 162 155 254;
-    --color-lavender-surface: 243 240 255;
-    --color-lavender-base: 253 251 255;
+    --bg: 243 245 248;
+    --surface: 255 255 255;
+    --surface-2: 233 237 242;
+    --text: 15 23 32;
+    --muted: 74 85 101;
+    --line: 220 226 234;
+    --accent: 52 81 245;
+    --accent-ink: 255 255 255;
+    --cobalt: 52 81 245;
+    --up: 21 128 61;
+    --down: 194 38 31;
+    --caution: 161 92 0;
+
+    --ease-micro: cubic-bezier(.2, .8, .2, 1);
+    --ease-ui: cubic-bezier(.16, 1, .3, 1);
   }
 
   .dark {
     color-scheme: dark;
-    --color-lavender-text: 241 237 255;
-    --color-lavender-primary: 183 148 246;
-    --color-lavender-secondary: 122 111 207;
-    --color-lavender-surface: 18 16 30;
-    --color-lavender-base: 27 24 43;
+    --bg: 11 15 20;
+    --surface: 18 24 33;
+    --surface-2: 26 34 48;
+    --text: 232 237 243;
+    --muted: 154 166 184;
+    --line: 37 48 66;
+    --accent: 143 162 255;
+    --accent-ink: 11 15 20;
+    --up: 74 222 128;
+    --down: 248 113 113;
+    --caution: 245 181 68;
+  }
+
+  /* Legacy names mapped onto the tokens. Declared on both selectors so a nested
+     .dark section (the landing page) resolves them against its own dark values. */
+  :root, .dark {
+    --color-lavender-text: var(--text);
+    --color-lavender-primary: var(--accent);
+    --color-lavender-secondary: var(--accent);
+    --color-lavender-surface: var(--bg);
+    --color-lavender-base: var(--surface);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    font-family: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'ss01' on;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Visible 2px cobalt focus ring with a 2px offset, everywhere */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 }
 
 @layer components {
   .app-card {
-    @apply bg-white dark:bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 shadow-sm rounded-2xl;
+    @apply rounded-card border border-line bg-surface;
   }
 
   .app-card-accent {
-    @apply bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 shadow-sm rounded-2xl;
+    @apply rounded-card border border-line bg-surface;
   }
 
   .app-tile {
-    @apply bg-lavender-base border border-lavender-text/10 dark:border-lavender-text/15 rounded-2xl;
+    @apply rounded-card border border-line bg-surface;
+  }
+
+  /* Prices, tickers and any number that updates: tabular so digits never jitter */
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  .num {
+    font-family: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
   }
 }
 
-body {
-  background-color: rgb(var(--color-lavender-surface));
-  color: rgb(var(--color-lavender-text));
-  font-family: 'Inter', sans-serif;
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
 }
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', sans-serif;
-}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -52,97 +112,76 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-.dark .bg-white {
-  background-color: rgb(var(--color-lavender-base));
+/* Price flash: a 600ms tint behind the digits when a value changes. No continuous blinking. */
+@keyframes price-flash-up {
+  from { background-color: rgb(var(--up) / 0.12); }
+  to { background-color: transparent; }
+}
+@keyframes price-flash-down {
+  from { background-color: rgb(var(--down) / 0.12); }
+  to { background-color: transparent; }
+}
+.flash-up { animation: price-flash-up 600ms var(--ease-ui); }
+.flash-down { animation: price-flash-down 600ms var(--ease-ui); }
+
+/* Skeleton shimmer, off under reduced motion */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.skeleton {
+  background-color: rgb(var(--text) / 0.08);
+  border-radius: 6px;
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+  .flash-up, .flash-down { animation: none; }
 }
 
+/* ── Compatibility layer for app pages not yet migrated to tokens ──────────
+   These pages still use raw Tailwind palette classes. Until they are rebuilt on
+   the tokens (Phase 3), map the ones that break in dark mode onto the tokens.
+   New code should use the token classes instead of adding rules here. */
+.dark .bg-white { background-color: rgb(var(--surface)); }
 .dark .from-white {
-  --tw-gradient-from: rgb(var(--color-lavender-base)) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--color-lavender-base) / 0) var(--tw-gradient-to-position);
+  --tw-gradient-from: rgb(var(--surface)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--surface) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-
-.dark .to-white {
-  --tw-gradient-to: rgb(var(--color-lavender-base)) var(--tw-gradient-to-position);
-}
-
+.dark .to-white { --tw-gradient-to: rgb(var(--surface)) var(--tw-gradient-to-position); }
 .dark .from-gray-50 {
-  --tw-gradient-from: rgb(var(--color-lavender-base)) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--color-lavender-base) / 0) var(--tw-gradient-to-position);
+  --tw-gradient-from: rgb(var(--surface)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--surface) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-
+.dark .to-gray-50 { --tw-gradient-to: rgb(var(--surface)) var(--tw-gradient-to-position); }
 .dark .from-amber-50 {
-  --tw-gradient-from: rgb(69 46 17 / 0.72) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(69 46 17 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-from: rgb(var(--caution) / 0.14) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--caution) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-
-.dark .from-green-50,
-.dark .from-emerald-50 {
-  --tw-gradient-from: rgb(6 78 59 / 0.62) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(6 78 59 / 0) var(--tw-gradient-to-position);
+.dark .from-green-50, .dark .from-emerald-50 {
+  --tw-gradient-from: rgb(var(--up) / 0.12) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--up) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-
 .dark .from-blue-50 {
-  --tw-gradient-from: rgb(30 58 138 / 0.58) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(30 58 138 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-from: rgb(var(--accent) / 0.12) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--accent) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-
-.dark .to-gray-50 {
-  --tw-gradient-to: rgb(var(--color-lavender-base)) var(--tw-gradient-to-position);
-}
-
-.dark .bg-amber-50 {
-  background-color: rgb(69 46 17 / 0.72);
-}
-
-.dark .bg-green-50,
-.dark .bg-emerald-50 {
-  background-color: rgb(6 78 59 / 0.58);
-}
-
-.dark .bg-blue-50 {
-  background-color: rgb(30 58 138 / 0.52);
-}
-
-.dark .border-amber-200 {
-  border-color: rgb(245 158 11 / 0.45);
-}
-
-.dark .border-green-200,
-.dark .border-emerald-200 {
-  border-color: rgb(16 185 129 / 0.38);
-}
-
-.dark .border-blue-200 {
-  border-color: rgb(96 165 250 / 0.38);
-}
-
-.dark .text-gray-800,
-.dark .text-slate-900,
-.dark .text-blue-900 {
-  color: rgb(var(--color-lavender-text));
-}
-
-.dark .text-amber-700 {
-  color: rgb(252 211 77);
-}
-
-.dark .text-emerald-700,
-.dark .text-green-600 {
-  color: rgb(74 222 128);
-}
-
-.dark .text-red-600 {
-  color: rgb(248 113 113);
-}
-
+.dark .bg-amber-50 { background-color: rgb(var(--caution) / 0.14); }
+.dark .bg-green-50, .dark .bg-emerald-50 { background-color: rgb(var(--up) / 0.12); }
+.dark .bg-blue-50 { background-color: rgb(var(--accent) / 0.12); }
+.dark .border-amber-200 { border-color: rgb(var(--caution) / 0.4); }
+.dark .border-green-200, .dark .border-emerald-200 { border-color: rgb(var(--up) / 0.35); }
+.dark .border-blue-200 { border-color: rgb(var(--accent) / 0.35); }
+.dark .text-gray-800, .dark .text-slate-900, .dark .text-blue-900 { color: rgb(var(--text)); }
+.dark .text-amber-700 { color: rgb(var(--caution)); }
+.dark .text-emerald-700, .dark .text-green-600 { color: rgb(var(--up)); }
+.dark .text-red-600 { color: rgb(var(--down)); }
 .dark .hover\:bg-gray-200:hover,
 .dark .hover\:bg-slate-200:hover,
 .dark .hover\:bg-slate-100:hover,
-.dark .hover\:bg-blue-50:hover {
-  background-color: rgb(var(--color-lavender-text) / 0.08);
-}
+.dark .hover\:bg-blue-50:hover { background-color: rgb(var(--text) / 0.08); }
