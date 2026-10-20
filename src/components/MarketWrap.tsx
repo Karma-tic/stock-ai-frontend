@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Newspaper } from 'lucide-react';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
 
 interface MarketWrapItem {
   id: string;
@@ -94,110 +95,101 @@ const MarketWrap: React.FC = () => {
     fetchWraps();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-lavender-surface">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/50"></div>
-      </div>
-    );
-  }
+  const dayLabel = (iso: string, long = false) =>
+    new Date(iso).toLocaleDateString('en-IN', long ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' } : { weekday: 'short', day: 'numeric', month: 'short' });
+  const fullText = currentWrap ? stripHtml(currentWrap.content_html) : '';
 
   return (
-    <div className="min-h-screen bg-lavender-surface pt-24 pb-12">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Daily Market Wrap India | Nifty, Sensex and Market News | Stock AI"
         description="Read daily Indian stock market wrap-ups covering Nifty, Sensex, major news, market sentiment, and key events after market close."
         canonicalPath="/market-wrap"
       />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-lavender-text mb-4">
-            Daily Market Wrap-Up
-          </h1>
-          <p className="text-base sm:text-lg text-lavender-text/70 max-w-2xl mx-auto">
-            A concise summary of Nifty 50, Sensex, major news, and market sentiment.
-            Updated every weekday at 4:15 PM IST.
-          </p>
-        </div>
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader
+          eyebrow="Market wrap"
+          icon={Newspaper}
+          title="The day in the market, in one minute"
+          intro="Nifty 50, Sensex and the news that moved them. Published every weekday at 4:15 pm IST."
+        />
 
-        {wraps.length === 0 ? (
-          <div className="text-center text-lavender-text/60 py-12">
-            No market wrap-ups available yet. Check back after market close!
+        {loading ? (
+          <div aria-hidden="true">
+            <span className="skeleton block h-11 w-80 max-w-full" />
+            <span className="skeleton mt-4 block h-64" />
           </div>
+        ) : wraps.length === 0 ? (
+          <p className="rounded-card border border-dashed border-line p-10 text-center text-sm text-muted">No wrap yet. The first one appears after the market closes at 3:30 pm IST.</p>
         ) : (
-          <div 
-            className="relative"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            {/* Desktop Navigation Arrows */}
-            {currentIndex > 0 && (
-              <button 
-                onClick={goToPrev}
-                className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-surface border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-surface2 transition shadow-lavender z-10"
-                aria-label="Newer wrap"
-              >
-                <ChevronLeft size={24} />
-              </button>
-            )}
-            
-            {currentIndex < wraps.length - 1 && (
-              <button 
-                onClick={goToNext}
-                className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-12 bg-surface border border-lavender-text/10 shadow-sm rounded-full items-center justify-center text-lavender-text/70 hover:text-lavender-text hover:bg-surface2 transition shadow-lavender z-10"
-                aria-label="Older wrap"
-              >
-                <ChevronRight size={24} />
-              </button>
-            )}
-
-            <div className="app-card p-5 sm:p-7">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 border-b border-lavender-text/10 pb-4 gap-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-lavender-text">{currentWrap.title}</h2>
-                <span className="bg-caution/10 text-caution border border-caution/30 px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto shrink-0">
-                  {new Date(currentWrap.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                </span>
-              </div>
-
-              {highlights.length > 0 && (
-                <div className="mb-5 rounded-2xl border border-up/25 bg-gradient-to-r from-up/10 to-surface p-4">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-bold text-up">
-                    <Sparkles className="h-4 w-4" />
-                    Key points that matter
-                  </div>
-                  <div className="grid gap-2">
-                    {highlights.map(point => (
-                      <div key={point} className="flex gap-2 text-sm leading-relaxed text-lavender-text/80">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-up shrink-0" />
-                        <span>{point}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              <p className="text-center text-xs text-lavender-text/50">
-                A quick overview designed to be read in under one minute.
-              </p>
-            </div>
-
-            {/* Pagination Dots (Mobile & Desktop) */}
-            <div className="flex justify-center gap-2 mt-8">
-              {wraps.map((_, idx) => (
+          <>
+            {/* Day picker: newest first */}
+            <div className="scrollbar-hide -mx-4 flex gap-2 overflow-x-auto px-4" role="tablist" aria-label="Choose a day">
+              {wraps.map((w, idx) => (
                 <button
-                  key={idx}
+                  key={w.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={currentIndex === idx}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
- currentIndex === idx ? 'w-8 bg-cobalt' : 'w-2 bg-lavender-text/20 hover:bg-lavender-text/30'
- }`}
-                  aria-label={`Go to wrap ${idx + 1}`}
-                />
+                  className={`min-h-[40px] shrink-0 rounded-full border px-3.5 text-sm font-medium transition ${
+                    currentIndex === idx ? 'border-cobalt bg-cobalt text-white' : 'border-line text-muted hover:text-ink'
+                  }`}
+                >
+                  {idx === 0 ? 'Latest' : dayLabel(w.date)}
+                </button>
               ))}
             </div>
-            <div className="text-center mt-2 text-lavender-text/60 text-xs">
-              Swipe left for older wraps
-            </div>
-          </div>
+
+            <article className="mt-4 rounded-card border border-line bg-surface p-5 sm:p-7" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+              <p className="text-xs text-muted">{dayLabel(currentWrap.date, true)}</p>
+              <h2 className="mt-1 text-xl font-semibold tracking-[-0.015em] text-ink sm:text-2xl">{currentWrap.title}</h2>
+
+              {highlights.length > 0 && (
+                <>
+                  <h3 className="mt-6 text-xs font-medium text-muted">What mattered</h3>
+                  <ol className="mt-2 space-y-3">
+                    {highlights.map((point, i) => (
+                      <li key={point} className="flex gap-3 text-[15px] leading-relaxed text-ink/90">
+                        <span className="num mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-accent/10 text-xs font-semibold text-accent">{i + 1}</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </>
+              )}
+
+              {fullText && (
+                <details className="group mt-6 border-t border-line pt-4">
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-accent hover:underline">
+                    <span className="group-open:hidden">Read the full wrap</span>
+                    <span className="hidden group-open:inline">Hide the full wrap</span>
+                  </summary>
+                  <p className="mt-3 text-[15px] leading-relaxed text-ink/85">{fullText}</p>
+                </details>
+              )}
+
+              <div className="mt-6 flex items-center justify-between border-t border-line pt-4">
+                <button
+                  type="button"
+                  onClick={goToNext}
+                  disabled={currentIndex >= wraps.length - 1}
+                  className="inline-flex min-h-[40px] items-center gap-1 rounded-control px-2 text-sm font-medium text-muted hover:text-ink disabled:opacity-40"
+                >
+                  <ChevronLeft className="h-4 w-4" /> Older
+                </button>
+                <button
+                  type="button"
+                  onClick={goToPrev}
+                  disabled={currentIndex === 0}
+                  className="inline-flex min-h-[40px] items-center gap-1 rounded-control px-2 text-sm font-medium text-muted hover:text-ink disabled:opacity-40"
+                >
+                  Newer <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </article>
+            <p className="mt-4 text-xs text-muted">AI-written summary of the day's market data and headlines. Not investment advice.</p>
+          </>
         )}
       </div>
     </div>
