@@ -1,292 +1,313 @@
 // src/components/Portfolio.tsx
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Plus, Trash2, X } from 'lucide-react';
 import { getPortfolio, addToPortfolio, removeFromPortfolio } from '../lib/api';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
-import { Coins, AlertTriangle, TrendingUp } from 'lucide-react';
+import Price, { Change } from './ui/Price';
+import { Button } from './ui/Button';
+
+const FREE_LIMIT = 3;
+const money = (v: number) => `₹${(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const signedMoney = (v: number) => `${v >= 0 ? '+' : '−'}${money(Math.abs(v || 0))}`;
+// Cobalt shades for the allocation bar, darkest first (the same family as the calculators)
+const SHADES = ['bg-cobalt', 'bg-cobalt/75', 'bg-cobalt/55', 'bg-cobalt/40', 'bg-cobalt/25', 'bg-cobalt/15'];
+
+const field =
+  'h-11 w-full rounded-control border border-line bg-canvas px-3 text-[15px] text-ink outline-none transition placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25';
 
 export default function Portfolio() {
-    const { isPro } = usePlan();
-const [showUpgrade, setShowUpgrade] = useState(false);
+  const { isPro } = usePlan();
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const [portfolio, setPortfolio] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>({});
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ ticker: '', quantity: '', avg_buy_price: '' });
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
+  const [confirming, setConfirming] = useState<string | null>(null);
+  const confirmTimer = useRef<number | undefined>(undefined);
 
-  useEffect(() => { loadPortfolio(); }, []);
+  useEffect(() => {
+    loadPortfolio();
+    return () => window.clearTimeout(confirmTimer.current);
+  }, []);
 
   const loadPortfolio = async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const res = await getPortfolio();
       setPortfolio(res.data.portfolio || []);
       setSummary({
         total_invested: res.data.total_invested,
-        current_value:  res.data.current_value,
-        total_pnl:      res.data.total_pnl,
-        total_pnl_pct:  res.data.total_pnl_pct,
+        current_value: res.data.current_value,
+        total_pnl: res.data.total_pnl,
+        total_pnl_pct: res.data.total_pnl_pct,
       });
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      setLoadError(true);
+    }
     setLoading(false);
   };
 
-  const handleAdd = async () => {
-     if (!isPro && portfolio.length >= 3) {
-    setShowUpgrade(true);
-    return;
-  }
+  const atLimit = !isPro && portfolio.length >= FREE_LIMIT;
 
-  if (!form.ticker || !form.quantity || !form.avg_buy_price) {
-    setError('All fields required'); return;
-  }
-    if (!form.ticker || !form.quantity || !form.avg_buy_price) {
-      setError('All fields required'); return;
+  const openAdd = () => {
+    if (atLimit) return setShowUpgrade(true);
+    setError('');
+    setShowAdd(true);
+  };
+
+  const handleAdd = async () => {
+    if (atLimit) return setShowUpgrade(true);
+    const qty = parseInt(form.quantity, 10);
+    const avg = parseFloat(form.avg_buy_price);
+    if (!form.ticker.trim() || !(qty > 0) || !(avg > 0)) {
+      setError('Enter a symbol, a quantity above 0 and an average price above 0.');
+      return;
     }
-    setAdding(true); setError('');
+    setAdding(true);
+    setError('');
     try {
       await addToPortfolio({
-        ticker:        form.ticker.toUpperCase().replace('.NS','').replace('.BO',''),
-        quantity:      parseInt(form.quantity),
-        avg_buy_price: parseFloat(form.avg_buy_price),
+        ticker: form.ticker.trim().toUpperCase().replace('.NS', '').replace('.BO', ''),
+        quantity: qty,
+        avg_buy_price: avg,
       });
       setForm({ ticker: '', quantity: '', avg_buy_price: '' });
       setShowAdd(false);
       await loadPortfolio();
     } catch (e: any) {
-      setError(e?.response?.data?.detail || 'Failed to add stock');
+      setError(e?.response?.data?.detail || 'Could not add this stock. Check the symbol and try again.');
     }
     setAdding(false);
   };
 
+  // Two taps to remove, so a stray tap never deletes a holding
   const handleRemove = async (ticker: string) => {
+    if (confirming !== ticker) {
+      setConfirming(ticker);
+      window.clearTimeout(confirmTimer.current);
+      confirmTimer.current = window.setTimeout(() => setConfirming(null), 4000);
+      return;
+    }
+    setConfirming(null);
     try {
       await removeFromPortfolio(ticker);
       await loadPortfolio();
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const isProfitable = (summary.total_pnl || 0) >= 0;
+  const totalValue = portfolio.reduce((s, h) => s + (h.current_value || 0), 0);
+  const allocation = [...portfolio].sort((a, b) => (b.current_value || 0) - (a.current_value || 0));
 
-  if (loading) return (
-    <div className="text-center py-20">
-      <Coins className="w-10 h-10 mx-auto mb-4 animate-spin text-lavender-primary" />
-      <p className="text-lavender-text/70">Loading portfolio...</p>
-    </div>
-  );
+  if (loading)
+    return (
+      <div aria-hidden="true">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="skeleton block h-[68px]" />
+          ))}
+        </div>
+        <span className="skeleton mt-6 block h-4 w-32" />
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="skeleton mt-3 block h-14" />
+        ))}
+      </div>
+    );
+
+  if (loadError)
+    return (
+      <div className="py-10 text-center">
+        <p className="text-sm text-muted">Your portfolio could not be loaded.</p>
+        <Button variant="ghost" className="mt-3" onClick={loadPortfolio}>
+          Retry
+        </Button>
+      </div>
+    );
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-
-      {/* Summary Cards */}
+    <div>
+      {/* Summary */}
       {portfolio.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          {[
-            { label: 'Invested', value: `₹${(summary.total_invested||0).toLocaleString('en-IN')}`, color: 'text-lavender-text' },
-            { label: 'Current', value: `₹${(summary.current_value||0).toLocaleString('en-IN')}`, color: 'text-lavender-primary' },
-            { label: 'P&L', value: `${isProfitable ? '+' : ''}₹${(summary.total_pnl||0).toLocaleString('en-IN')}`, color: isProfitable ? 'text-up' : 'text-down' },
-            { label: 'Return', value: `${isProfitable ? '+' : ''}${(summary.total_pnl_pct||0).toFixed(2)}%`, color: isProfitable ? 'text-up' : 'text-down' },
-          ].map(item => (
-            <div key={item.label} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-3 text-center">
-              <p className="text-lavender-text/60 text-xs mb-1">{item.label}</p>
-              <p className={`font-bold text-lg ${item.color}`}>{item.value}</p>
-            </div>
-          ))}
+        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="rounded-control bg-surface2/60 p-3">
+            <dt className="text-xs text-muted">Invested</dt>
+            <dd className="num mt-1 text-lg font-semibold text-ink">{money(summary.total_invested)}</dd>
+          </div>
+          <div className="rounded-control bg-surface2/60 p-3">
+            <dt className="text-xs text-muted">Current value</dt>
+            <dd className="mt-1 text-lg font-semibold text-ink">
+              <Price value={summary.current_value || 0} />
+            </dd>
+          </div>
+          <div className={`col-span-2 rounded-control p-3 sm:col-span-1 ${(summary.total_pnl || 0) >= 0 ? 'bg-up/10' : 'bg-down/10'}`}>
+            <dt className="text-xs text-muted">Total profit or loss</dt>
+            <dd className="mt-1 flex flex-wrap items-baseline gap-x-2">
+              <span className={`num text-lg font-semibold ${(summary.total_pnl || 0) >= 0 ? 'text-up' : 'text-down'}`}>{signedMoney(summary.total_pnl || 0)}</span>
+              <Change value={summary.total_pnl_pct || 0} className="text-sm" />
+            </dd>
+          </div>
+        </dl>
+      )}
+
+      {/* Allocation */}
+      {portfolio.length > 1 && totalValue > 0 && (
+        <div className="mt-5">
+          <p className="text-xs font-medium text-muted">Where your money is</p>
+          <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-ink/[0.06]" role="img" aria-label={allocation.map((h) => `${h.ticker} ${(((h.current_value || 0) / totalValue) * 100).toFixed(0)}%`).join(', ')}>
+            {allocation.map((h, i) => (
+              <span key={h.ticker} className={`${SHADES[Math.min(i, SHADES.length - 1)]} border-r border-surface last:border-0`} style={{ width: `${((h.current_value || 0) / totalValue) * 100}%` }} />
+            ))}
+          </div>
+          <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+            {allocation.map((h, i) => (
+              <li key={h.ticker} className="flex items-center gap-1.5">
+                <span className={`h-2 w-2 rounded-sm ${SHADES[Math.min(i, SHADES.length - 1)]}`} aria-hidden="true" />
+                <span className="num text-ink">{h.ticker}</span> {(((h.current_value || 0) / totalValue) * 100).toFixed(0)}%
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
-      {/* Add Stock Button */}
-<div className="flex justify-between items-center mb-4">
-  <h2 className="text-lavender-text font-bold text-lg flex items-center gap-2">
-  <Coins className="w-5 h-5" />
-  My Portfolio
-</h2>
-  <div className="flex items-center gap-2">
-    {!isPro && (
-      <span className="text-lavender-text/60 text-xs">
-        {portfolio.length}/3 free
-      </span>
-    )}
-    <button
-      onClick={() => {
-        if (!isPro && portfolio.length >= 3) {
-          setShowUpgrade(true);
-          return;
-        }
-        setShowAdd(!showAdd);
-      }}
-      className="bg-gradient-lavender hover:opacity-90 text-white text-sm px-4 py-2 rounded-2xl font-semibold transition"
-    >
-      {showAdd ? 'Cancel' : 'Add Stock'}
-    </button>
-  </div>
-</div>
+      {/* Header + add */}
+      <div className={`flex items-center justify-between gap-3 ${portfolio.length ? 'mt-7' : ''}`}>
+        <h2 className="text-sm font-semibold text-ink">
+          Holdings{portfolio.length > 0 && <span className="num font-normal text-muted"> · {portfolio.length}</span>}
+        </h2>
+        <div className="flex items-center gap-3">
+          {!isPro && (
+            <span className="num text-xs text-muted">
+              {portfolio.length}/{FREE_LIMIT} on the free plan
+            </span>
+          )}
+          {!showAdd && portfolio.length > 0 && (
+            <Button size="sm" onClick={openAdd}>
+              <Plus className="h-4 w-4" strokeWidth={2} /> Add holding
+            </Button>
+          )}
+        </div>
+      </div>
 
-      {/* Add Stock Form */}
+      {/* Add form */}
       {showAdd && (
-        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 mb-4">
-          <h3 className="text-lavender-text font-semibold mb-3">Add Stock to Portfolio</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-            <div>
-              <label className="text-lavender-text/70 text-xs mb-1 block">NSE Symbol</label>
+        <form
+          className="mt-4 rounded-card border border-line bg-canvas/50 p-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAdd();
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-ink">Add a holding</h3>
+            <button type="button" onClick={() => setShowAdd(false)} aria-label="Close" className="grid h-9 w-9 place-items-center rounded-control text-muted hover:bg-ink/[0.06] hover:text-ink">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-ink">NSE symbol</span>
               <input
                 type="text"
                 placeholder="e.g. RELIANCE"
                 value={form.ticker}
-                onChange={e => setForm({ ...form, ticker: e.target.value.toUpperCase() })}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
+                autoFocus
+                autoCapitalize="characters"
+                onChange={(e) => setForm({ ...form, ticker: e.target.value.toUpperCase() })}
+                className={`${field} num`}
               />
-            </div>
-            <div>
-              <label className="text-lavender-text/70 text-xs mb-1 block">Quantity (shares)</label>
-              <input
-                type="number"
-                placeholder="e.g. 10"
-                value={form.quantity}
-                onChange={e => setForm({ ...form, quantity: e.target.value })}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
-              />
-            </div>
-            <div>
-              <label className="text-lavender-text/70 text-xs mb-1 block">Avg Buy Price (₹)</label>
-              <input
-                type="number"
-                placeholder="e.g. 1450.50"
-                value={form.avg_buy_price}
-                onChange={e => setForm({ ...form, avg_buy_price: e.target.value })}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-3 py-2 text-lavender-text focus:outline-none focus:border-white/50 text-sm"
-              />
-            </div>
+            </label>
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-ink">Quantity (shares)</span>
+              <input type="number" inputMode="numeric" min={1} placeholder="e.g. 10" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} className={`${field} num`} />
+            </label>
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-ink">Average buy price (₹)</span>
+              <input type="number" inputMode="decimal" min={0} step="0.01" placeholder="e.g. 1450.50" value={form.avg_buy_price} onChange={(e) => setForm({ ...form, avg_buy_price: e.target.value })} className={`${field} num`} />
+            </label>
           </div>
           {error && (
-  <p className="text-down text-sm mb-3 flex items-center gap-1">
-    <AlertTriangle className="w-4 h-4" />
-    {error}
-  </p>
-)}
-          <button
-            onClick={handleAdd}
-            disabled={adding}
-            className="bg-up/15 hover:bg-up/15 disabled:opacity-50 text-lavender-text px-6 py-2 rounded-2xl font-semibold text-sm transition"
-          >
-            {adding ? 'Adding...' : 'Add to Portfolio'}
-          </button>
-        </div>
+            <p role="alert" className="mt-3 rounded-control bg-down/10 px-3 py-2 text-sm text-down">
+              {error}
+            </p>
+          )}
+          <div className="mt-4 flex gap-2">
+            <Button type="submit" disabled={adding}>
+              {adding ? 'Adding…' : 'Add to portfolio'}
+            </Button>
+            <Button variant="quiet" onClick={() => setShowAdd(false)}>
+              Cancel
+            </Button>
+          </div>
+        </form>
       )}
 
-      {/* Empty State */}
+      {/* Empty state */}
       {portfolio.length === 0 && !showAdd && (
-        <div className="text-center py-16 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl">
-          <Coins className="w-12 h-12 mx-auto mb-4 text-lavender-primary" />
-          <p className="text-lavender-text font-semibold text-lg mb-2">No stocks yet</p>
-          <p className="text-lavender-text/70 text-sm mb-4">Add your stocks to track live P&L</p>
-          <button
-            onClick={() => setShowAdd(true)}
-            className="bg-gradient-lavender hover:opacity-90 text-white px-6 py-2 rounded-2xl font-semibold transition"
-          >
-            + Add First Stock
-          </button>
+        <div className="py-10 text-center">
+          <p className="text-base font-semibold text-ink">No holdings yet</p>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Add the shares you own to see their live value and your profit or loss in one place.</p>
+          <Button className="mt-5" onClick={openAdd}>
+            <Plus className="h-4 w-4" strokeWidth={2} /> Add your first holding
+          </Button>
         </div>
       )}
 
-      {/* Portfolio Table */}
+      {/* Holdings */}
       {portfolio.length > 0 && (
-        <div className="space-y-3">
+        <ul className="mt-3">
           {portfolio.map((item: any) => {
-            const pnlUp = (item.pnl || 0) >= 0;
+            const pnl = item.pnl || 0;
+            const up = pnl >= 0;
             return (
-              <div key={item.ticker} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4">
-                <div className="flex justify-between items-start">
-                  {/* Left — stock info */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-lavender-text text-lg">{item.ticker}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
- (item.price_change_pct||0) >= 0
- ? 'bg-up/20 text-up'
- : 'bg-down/20 text-down'
- }`}>
-                       <div className="flex items-center gap-1">
-  <TrendingUp className={`w-3 h-3 ${(item.price_change_pct||0) >= 0 ? '' : 'rotate-180'}`} />
-  {Math.abs(item.price_change_pct||0)}%
-</div>
-                      </span>
+              <li key={item.ticker} className="border-b border-line py-3.5 last:border-0">
+                <div className="flex items-start gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-baseline gap-x-2">
+                      <Link to={`/stock/${item.ticker}`} className="num text-[15px] font-semibold text-ink hover:text-accent">
+                        {item.ticker}
+                      </Link>
+                      {item.price_change_pct != null && <Change value={item.price_change_pct || 0} className="text-xs" />}
+                      <span className="text-[11px] text-muted">today</span>
                     </div>
-                    <p className="text-lavender-text/70 text-xs">{item.company_name}</p>
+                    <p className="truncate text-xs text-muted">{item.company_name}</p>
                   </div>
-
-                  {/* Right — P&L */}
                   <div className="text-right">
-                    <p className={`font-bold text-lg ${pnlUp ? 'text-up' : 'text-down'}`}>
-                      {pnlUp ? '+' : ''}₹{(item.pnl||0).toLocaleString('en-IN')}
-                    </p>
-                    <p className={`text-sm ${pnlUp ? 'text-up' : 'text-down'}`}>
-                      {pnlUp ? '+' : ''}{(item.pnl_pct||0).toFixed(2)}%
-                    </p>
+                    <p className={`num text-[15px] font-semibold ${up ? 'text-up' : 'text-down'}`}>{signedMoney(pnl)}</p>
+                    <Change value={item.pnl_pct || 0} className="text-xs" />
                   </div>
                 </div>
-
-                {/* Stats grid */}
-                <div className="grid grid-cols-4 gap-2 mt-3">
-                  {[
-                    { label: 'Qty', value: item.quantity },
-                    { label: 'Avg Price', value: `₹${item.avg_buy_price}` },
-                    { label: 'CMP', value: `₹${(item.current_price||0).toLocaleString('en-IN')}` },
-                    { label: 'Curr Value', value: `₹${(item.current_value||0).toLocaleString('en-IN')}` },
-                  ].map(stat => (
-                    <div key={stat.label} className="bg-lavender-surface rounded-2xl p-2 text-center">
-                      <p className="text-lavender-text/60 text-xs">{stat.label}</p>
-                      <p className="text-lavender-text text-sm font-semibold">{stat.value}</p>
-                    </div>
-                  ))}
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+                  <p className="num text-xs text-muted">
+                    {item.quantity} × avg {money(item.avg_buy_price)} · now <Price value={item.current_price || 0} className="text-ink" /> · value {money(item.current_value)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(item.ticker)}
+                    className={`inline-flex min-h-[32px] items-center gap-1 rounded-control px-2 text-xs font-medium transition ${
+                      confirming === item.ticker ? 'bg-down/10 text-down' : 'text-muted hover:text-down'
+                    }`}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    {confirming === item.ticker ? 'Tap again to remove' : 'Remove'}
+                  </button>
                 </div>
-
-                {/* Invested vs Current bar */}
-                <div className="mt-3">
-                  <div className="flex justify-between text-xs text-lavender-text/60 mb-1">
-                    <span>Invested: ₹{(item.invested_value||0).toLocaleString('en-IN')}</span>
-                    <span>Current: ₹{(item.current_value||0).toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="h-1.5 bg-lavender-surface rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${pnlUp ? 'bg-up/15' : 'bg-down/15'}`}
-                      style={{
-                        width: `${Math.min(((item.current_value||0) / (item.invested_value||1)) * 100, 150)}%`
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* Remove button */}
-                <button
-                  onClick={() => handleRemove(item.ticker)}
-                  className="mt-3 text-lavender-text/60 hover:text-down text-xs transition"
-                >
-                  <span className="flex items-center gap-1">
-  <AlertTriangle className="w-3 h-3" />
-  Remove from portfolio
-</span>
-                </button>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
 
-      <p className="text-muted text-xs text-center mt-6">
-        <span className="flex items-center justify-center gap-1">
-  <AlertTriangle className="w-3 h-3" />
-  P&L is indicative only. Not SEBI-registered advice.
-</span>
-      </p>
-      {showUpgrade && (
-  <UpgradeModal
-    onClose={() => setShowUpgrade(false)}
-    onSuccess={() => window.location.reload()}
-  />
-)}
+      <p className="mt-6 text-xs text-muted">Values use the latest NSE price and are indicative. Not SEBI-registered advice.</p>
+      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => window.location.reload()} />}
     </div>
   );
 }
