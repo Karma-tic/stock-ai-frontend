@@ -1,251 +1,117 @@
-import { useState, useMemo } from 'react';
-import { Calculator, Info, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { useMemo } from 'react';
+import { Calculator } from 'lucide-react';
 import SEO from './SEO';
+import Segmented from './ui/Segmented';
+import { ChargesResult, NumberField, ShareResult, useUrlChoice, useUrlNumber } from './calc/CalcKit';
+
+const TYPES = ['options', 'futures'] as const;
+
+// Indian F&O charges (approximate). Formulas unchanged from the previous version.
+const OPTION_STT = 0.001; // 0.1% on sell premium
+const FUTURE_STT = 0.0002; // 0.02% on sell turnover
+const OPTION_EXCHANGE_TXN = 0.0005; // 0.05% on premium turnover
+const FUTURE_EXCHANGE_TXN = 0.00002; // 0.002% on turnover
+const SEBI_TURNOVER = 0.000001; // ₹10 per crore
 
 export default function FnOCalculator() {
-  const [tradeType, setTradeType] = useState<'options' | 'futures'>('options');
-  const [buyPrice, setBuyPrice] = useState<number | ''>('');
-  const [sellPrice, setSellPrice] = useState<number | ''>('');
-  const [quantity, setQuantity] = useState<number | ''>(50); // Default Nifty lot size is 50
-  const [brokeragePerOrder, setBrokeragePerOrder] = useState<number>(20);
+  const [tradeType, setTradeType] = useUrlChoice('type', 'options', TYPES);
+  const [buyPrice, setBuyPrice] = useUrlNumber('buy', 0, 0, 10000000);
+  const [sellPrice, setSellPrice] = useUrlNumber('sell', 0, 0, 10000000);
+  const [quantity, setQuantity] = useUrlNumber('qty', 50, 0, 100000000);
+  const [brokeragePerOrder, setBrokeragePerOrder] = useUrlNumber('brokerage', 20, 0, 100000);
 
-  // Constants for Indian F&O Taxes (approx)
-  const OPTION_STT = 0.001; // 0.1% on sell premium
-  const FUTURE_STT = 0.0002; // 0.02% on sell turnover
-  const OPTION_EXCHANGE_TXN = 0.0005; // 0.05% on premium turnover
-  const FUTURE_EXCHANGE_TXN = 0.00002; // 0.002% on turnover
-  const SEBI_TURNOVER = 0.000001; // ₹10 per crore
-
-  const results = useMemo(() => {
-    const buy = Number(buyPrice) || 0;
-    const sell = Number(sellPrice) || 0;
-    const qty = Number(quantity) || 0;
-    const brk = Number(brokeragePerOrder) || 0;
-
+  const r = useMemo(() => {
+    const buy = buyPrice || 0;
+    const sell = sellPrice || 0;
+    const qty = quantity || 0;
     if (!buy || !sell || !qty) return null;
-
     const buyTurnover = buy * qty;
     const sellTurnover = sell * qty;
-    const totalTurnover = buyTurnover + sellTurnover;
-    
-    // Gross P&L
-    const grossPnL = sellTurnover - buyTurnover;
-    
-    // Taxes & Charges
-    const brokerage = brk * 2; // Buy & Sell
-    
-    let stt = 0;
-    let exchangeTxn = 0;
-    
-    if (tradeType === 'options') {
-      stt = sellTurnover * OPTION_STT;
-      exchangeTxn = totalTurnover * OPTION_EXCHANGE_TXN;
-    } else {
-      stt = sellTurnover * FUTURE_STT;
-      exchangeTxn = totalTurnover * FUTURE_EXCHANGE_TXN;
-    }
-    
-    const sebiCharges = totalTurnover * SEBI_TURNOVER;
-    const gst = (brokerage + exchangeTxn + sebiCharges) * 0.18; // 18% GST on brokerage + exchange + sebi
-    const stampDuty = buyTurnover * 0.00003; // 0.003% on buy side only
-
-    const totalCharges = brokerage + stt + exchangeTxn + sebiCharges + gst + stampDuty;
-    const netPnL = grossPnL - totalCharges;
-
-    // ROI calculation (assuming capital is buy turnover for long trade)
-    const roi = buyTurnover > 0 ? (netPnL / buyTurnover) * 100 : 0;
-
+    const turnover = buyTurnover + sellTurnover;
+    const gross = sellTurnover - buyTurnover;
+    const brokerage = (brokeragePerOrder || 0) * 2; // buy and sell orders
+    const stt = sellTurnover * (tradeType === 'options' ? OPTION_STT : FUTURE_STT);
+    const exchangeTxn = turnover * (tradeType === 'options' ? OPTION_EXCHANGE_TXN : FUTURE_EXCHANGE_TXN);
+    const sebi = turnover * SEBI_TURNOVER;
+    const gst = (brokerage + exchangeTxn + sebi) * 0.18;
+    const stamp = buyTurnover * 0.00003; // 0.003% on buy side
+    const charges = brokerage + stt + exchangeTxn + sebi + gst + stamp;
+    const net = gross - charges;
     return {
-      grossPnL,
-      netPnL,
-      totalCharges,
-      breakdown: {
-        brokerage,
-        stt,
-        exchangeTxn,
-        gst,
-        stampDuty,
-        sebiCharges
-      },
-      turnover: totalTurnover,
-      roi
+      turnover,
+      gross,
+      net,
+      roi: buyTurnover > 0 ? (net / buyTurnover) * 100 : 0,
+      rows: [
+        { label: 'STT', value: stt },
+        { label: 'Exchange transaction charge', value: exchangeTxn },
+        { label: 'Brokerage', value: brokerage },
+        { label: 'GST (18%)', value: gst },
+        { label: 'Stamp duty', value: stamp },
+        { label: 'SEBI charges', value: sebi },
+      ],
     };
   }, [buyPrice, sellPrice, quantity, brokeragePerOrder, tradeType]);
 
-  const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(val);
-
   return (
-    <div className="min-h-screen bg-lavender-surface pt-24 pb-16 px-6">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="F&O Calculator India | Futures and Options Charges Calculator | Stock AI"
         description="Calculate true F&O profit and loss after brokerage, STT, GST, exchange charges, stamp duty, and SEBI charges for Indian derivatives."
         canonicalPath="/tools/fno-calculator"
       />
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 bg-accent/10 border border-accent/20 rounded-2xl">
-            <Calculator className="w-8 h-8 text-accent" />
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <header className="mb-10 max-w-2xl">
+          <p className="flex items-center gap-2 text-sm font-medium text-accent">
+            <Calculator className="h-4 w-4" strokeWidth={1.75} /> Calculator
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl">F&amp;O calculator</h1>
+          <p className="mt-3 text-base text-muted">Your real profit or loss on a futures or options trade after brokerage, STT, GST and exchange charges. The link updates so you can share the result.</p>
+        </header>
+
+        <section className="grid gap-8 rounded-card border border-line bg-surface p-5 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+          <div className="space-y-5">
+            <Segmented<(typeof TYPES)[number]>
+              label="Instrument"
+              value={tradeType}
+              onChange={setTradeType}
+              options={[
+                { value: 'options', label: 'Options' },
+                { value: 'futures', label: 'Futures' },
+              ]}
+            />
+            <NumberField label={tradeType === 'options' ? 'Buy premium' : 'Buy price'} prefix="₹" placeholder="e.g. 150" value={buyPrice} onChange={setBuyPrice} />
+            <NumberField label={tradeType === 'options' ? 'Sell premium' : 'Sell price'} prefix="₹" placeholder="e.g. 180" value={sellPrice} onChange={setSellPrice} />
+            <NumberField label="Quantity (lot size × lots)" placeholder="e.g. 75" value={quantity} onChange={setQuantity} hint="Check your contract's current lot size on NSE." />
+            <NumberField label="Brokerage per executed order" prefix="₹" value={brokeragePerOrder} onChange={setBrokeragePerOrder} />
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-lavender-text">F&O Calculator</h1>
-            <p className="text-lavender-text/70 mt-1">Calculate your true Profit & Loss after brokerage and taxes</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Inputs Section */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
-              
-              {/* Toggle Options / Futures */}
-              <div className="flex bg-lavender-base rounded-2xl p-1 mb-6 border border-lavender-text/10">
-                <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'options' ? 'bg-cobalt text-white' : 'text-lavender-text/70 hover:text-ink'}`}
-                  onClick={() => setTradeType('options')}
-                >
-                  Options
-                </button>
-                <button
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${tradeType === 'futures' ? 'bg-cobalt text-white' : 'text-lavender-text/70 hover:text-ink'}`}
-                  onClick={() => setTradeType('futures')}
-                >
-                  Futures
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-lavender-text/70 mb-1">Buy Price (₹)</label>
-                  <input
-                    type="number"
-                    value={buyPrice}
-                    onChange={(e) => setBuyPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
-                    placeholder="e.g. 150"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-lavender-text/70 mb-1">Sell Price (₹)</label>
-                  <input
-                    type="number"
-                    value={sellPrice}
-                    onChange={(e) => setSellPrice(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
-                    placeholder="e.g. 180"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-lavender-text/70 mb-1">Quantity (Total shares)</label>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
-                    placeholder="e.g. 50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-lavender-text/70 mb-1 flex items-center justify-between">
-                    <span>Brokerage per Executed Order (₹)</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={brokeragePerOrder}
-                    onChange={(e) => setBrokeragePerOrder(Number(e.target.value))}
-                    className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-accent/40 transition"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 flex gap-3 text-sm text-lavender-text/80 shadow-lavender">
-              <Info className="w-5 h-5 text-lavender-text/80 flex-shrink-0" />
-              <p>This calculator estimates taxes based on standard Indian equity F&O rates. Actual brokerage may vary slightly based on your broker's specific GST policies.</p>
-            </div>
-          </div>
-
-          {/* Results Section */}
-          <div className="lg:col-span-7">
-            {results ? (
-              <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col">
-                <h3 className="text-lg font-semibold text-lavender-text mb-6">Trade Summary</h3>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                  <div className={`p-5 rounded-2xl border ${results.netPnL >= 0 ? 'bg-up/10 border-up/30' : 'bg-down/10 border-down/30'}`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-lavender-text/70 text-sm sm:text-base">Net P&L</p>
-                      {results.netPnL >= 0 ? <TrendingUp className="w-5 h-5 text-up" /> : <TrendingDown className="w-5 h-5 text-down" />}
-                    </div>
-                    <p className={`text-2xl sm:text-3xl font-bold truncate ${results.netPnL >= 0 ? 'text-up' : 'text-down'}`}>
-                      {formatCurrency(results.netPnL)}
-                    </p>
-                    <p className={`text-sm mt-1 ${results.netPnL >= 0 ? 'text-up' : 'text-down'}`}>
-                      {results.roi >= 0 ? '+' : ''}{results.roi.toFixed(2)}% ROI
-                    </p>
-                  </div>
-                  
-                  <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-5">
-                    <p className="text-lavender-text/70 text-sm sm:text-base mb-2">Gross P&L</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-lavender-text truncate">
-                      {formatCurrency(results.grossPnL)}
-                    </p>
-                    <p className="text-lavender-text/60 text-sm mt-1">
-                      Before charges
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex-grow">
-                  <h4 className="text-lavender-text font-medium mb-4 flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-accent" /> Charges Breakdown
-                  </h4>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">Brokerage</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.brokerage)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">STT/CTT</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.stt)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">Exchange Txn Charge</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.exchangeTxn)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">GST (18%)</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.gst)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">SEBI Charges</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.sebiCharges)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-lavender-text/10">
-                      <span className="text-lavender-text/70 text-sm">Stamp Duty</span>
-                      <span className="text-lavender-text text-sm">{formatCurrency(results.breakdown.stampDuty)}</span>
-                    </div>
-                    <div className="flex justify-between items-center pt-3 mt-1">
-                      <span className="text-ink font-semibold text-sm">Total Charges</span>
-                      <span className="text-accent font-bold text-sm">{formatCurrency(results.totalCharges)}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="flex flex-col">
+            {r ? (
+              <ChargesResult
+                rows={r.rows}
+                gross={r.gross}
+                net={r.net}
+                turnover={r.turnover}
+                extra={<p className="num mt-1 text-xs text-muted">Return on buy value {r.roi >= 0 ? '+' : '−'}{Math.abs(r.roi).toFixed(2)}%</p>}
+              />
             ) : (
-              <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center">
-                <Calculator className="w-16 h-16 text-ink mb-4" />
-                <h3 className="text-xl font-bold text-lavender-text mb-2">Enter Trade Details</h3>
-                <p className="text-lavender-text/70 max-w-sm">
-                  Fill in your buy price, sell price, and quantity on the left to see your actual net profit and detailed tax breakdown.
-                </p>
+              <div className="flex flex-1 flex-col items-center justify-center rounded-card border border-dashed border-line p-8 text-center">
+                <Calculator className="h-8 w-8 text-muted" strokeWidth={1.5} />
+                <p className="mt-3 font-semibold text-ink">Enter a trade</p>
+                <p className="mt-1 max-w-xs text-sm text-muted">Add a buy price, sell price and quantity to see your net result and every charge.</p>
+              </div>
+            )}
+            {r && (
+              <div className="mt-auto flex justify-end pt-5">
+                <ShareResult />
               </div>
             )}
           </div>
-        </div>
+        </section>
+        <p className="mt-4 text-xs text-muted">Approximate rates. Your broker's charges may differ.</p>
 
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none mt-16 prose-headings:text-lavender-text prose-a:text-lavender-primary">
+        <article className="calc-article mx-auto mt-16 max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">What is Futures & Options (F&O) Trading?</h2>
           <p className="mb-6 leading-relaxed">
             Futures and Options (F&O) are derivative instruments traded on stock exchanges like the NSE and BSE in India. Unlike cash market trading where you actually own the underlying shares, F&O allows you to trade contracts that derive their value from an underlying asset (like Nifty 50, BankNifty, or individual stocks like Reliance and HDFC Bank). These instruments are primarily used for hedging against market risk, speculation, and arbitrage.
@@ -281,7 +147,7 @@ export default function FnOCalculator() {
           </p>
           <ol className="list-decimal pl-6 mb-6 space-y-2 text-lavender-text/80">
             <li><strong>Select Trade Type:</strong> Toggle between Options or Futures, as the STT and Exchange charges differ significantly.</li>
-            <li><strong>Enter Prices & Quantity:</strong> Enter your Buy Price, Sell Price, and the total quantity (Lot size × Number of lots). For example, Nifty's lot size is currently 50.</li>
+            <li><strong>Enter Prices & Quantity:</strong> Enter your Buy Price, Sell Price, and the total quantity (Lot size × Number of lots). Lot sizes change from time to time, so check the current lot size for your contract on the NSE website.</li>
             <li><strong>Adjust Brokerage:</strong> Enter the brokerage your specific broker charges per executed order.</li>
           </ol>
           <p className="mb-6 leading-relaxed">

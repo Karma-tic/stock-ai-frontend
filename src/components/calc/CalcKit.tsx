@@ -17,8 +17,9 @@ export function useUrlNumber(key: string, fallback: number, min: number, max: nu
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => {
       setParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
+        () => {
+          // Read the live URL: router's `prev` can be stale when several fields write in the same tick.
+          const next = new URLSearchParams(window.location.search);
           if (value === fallback) next.delete(key);
           else next.set(key, String(value));
           return next;
@@ -230,5 +231,126 @@ export function ShareResult() {
       {copied ? <Check className="h-4 w-4 text-up" /> : <Link2 className="h-4 w-4" />}
       {copied ? 'Link copied' : 'Share this result'}
     </button>
+  );
+}
+
+// A choice kept in the URL (?type=intraday).
+export function useUrlChoice<T extends string>(key: string, fallback: T, allowed: readonly T[]) {
+  const [params, setParams] = useSearchParams();
+  const raw = params.get(key) as T | null;
+  const [value, setValue] = useState<T>(raw && allowed.includes(raw) ? raw : fallback);
+  useEffect(() => {
+    setParams(
+      () => {
+        const next = new URLSearchParams(window.location.search);
+        if (value === fallback) next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true },
+    );
+  }, [value, key, fallback, setParams]);
+  return [value, setValue] as const;
+}
+
+// A plain number field (for prices and quantities, where a slider would not help).
+export function NumberField({
+  label,
+  value,
+  onChange,
+  prefix = '',
+  placeholder,
+  hint,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  prefix?: string;
+  placeholder?: string;
+  hint?: string;
+}) {
+  const id = useId();
+  return (
+    <div>
+      <label htmlFor={id} className="text-sm font-medium text-ink">
+        {label}
+      </label>
+      <div className="mt-1.5 flex h-12 items-center rounded-control border border-line bg-surface px-3 focus-within:border-accent/60">
+        {prefix && <span className="num mr-1 text-sm text-muted">{prefix}</span>}
+        <input
+          id={id}
+          type="number"
+          inputMode="decimal"
+          min={0}
+          value={value ? String(value) : ''}
+          placeholder={placeholder}
+          onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+          className="num h-full min-w-0 flex-1 bg-transparent text-base text-ink placeholder:text-muted/70 focus:outline-none"
+        />
+      </div>
+      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
+    </div>
+  );
+}
+
+const inr2 = (v: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v || 0);
+
+// Charges list, a bar of where the charges go, and the net result.
+export function ChargesResult({
+  rows,
+  gross,
+  net,
+  turnover,
+  extra,
+}: {
+  rows: { label: string; value: number }[];
+  gross: number;
+  net: number;
+  turnover: number;
+  extra?: React.ReactNode;
+}) {
+  const total = rows.reduce((s, r) => s + r.value, 0);
+  const shades = ['bg-cobalt', 'bg-cobalt/75', 'bg-cobalt/55', 'bg-cobalt/40', 'bg-cobalt/25', 'bg-cobalt/15'];
+  const up = net >= 0;
+  return (
+    <div className="flex flex-col">
+      <div className={`rounded-card border p-4 ${up ? 'border-up/30 bg-up/10' : 'border-down/30 bg-down/10'}`}>
+        <p className="text-xs text-muted">Net profit or loss after charges</p>
+        <p className={`mt-1 flex items-baseline gap-2 text-3xl font-semibold tracking-[-0.02em] ${up ? 'text-up' : 'text-down'}`}>
+          <span aria-hidden="true" className="text-lg">{up ? '▲' : '▼'}</span>
+          <RollingNumber value={net} format={(v) => `${v >= 0 ? '+' : '−'}${inr2(Math.abs(v))}`} />
+        </p>
+        <p className="num mt-1 text-xs text-muted">
+          Gross {gross >= 0 ? '+' : '−'}
+          {inr2(Math.abs(gross))} · charges {inr2(total)} · turnover {inr2(turnover)}
+        </p>
+        {extra}
+      </div>
+
+      {total > 0 && (
+        <div className="mt-5">
+          <p className="text-xs font-medium text-muted">Where the charges go</p>
+          <div className="mt-2 flex h-2.5 overflow-hidden rounded-full bg-ink/10" aria-hidden="true">
+            {rows.map((r, i) => (r.value > 0 ? <span key={r.label} className={shades[i % shades.length]} style={{ width: `${(r.value / total) * 100}%` }} /> : null))}
+          </div>
+        </div>
+      )}
+
+      <dl className="mt-4 divide-y divide-line text-sm">
+        {rows.map((r, i) => (
+          <div key={r.label} className="flex items-center justify-between gap-3 py-2">
+            <dt className="flex items-center gap-2 text-ink/85">
+              <span className={`h-2.5 w-2.5 rounded-sm ${shades[i % shades.length]}`} aria-hidden="true" />
+              {r.label}
+            </dt>
+            <dd className="num text-ink">{inr2(r.value)}</dd>
+          </div>
+        ))}
+        <div className="flex items-center justify-between gap-3 py-2 font-semibold">
+          <dt className="text-ink">Total charges</dt>
+          <dd className="num text-down">{inr2(total)}</dd>
+        </div>
+      </dl>
+    </div>
   );
 }

@@ -1,202 +1,96 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { PieChart } from 'lucide-react';
 import SEO from './SEO';
+import Segmented from './ui/Segmented';
+import { ChargesResult, NumberField, ShareResult, useUrlChoice, useUrlNumber } from './calc/CalcKit';
+
+const TYPES = ['delivery', 'intraday'] as const;
 
 export default function BrokerageCalculator() {
-  const [buyPrice, setBuyPrice] = useState(1000);
-  const [sellPrice, setSellPrice] = useState(1100);
-  const [quantity, setQuantity] = useState(100);
-  const [tradeType, setTradeType] = useState<'delivery' | 'intraday'>('delivery');
-  
-  const [turnover, setTurnover] = useState(0);
-  const [brokerage, setBrokerage] = useState(0);
-  const [stt, setStt] = useState(0);
-  const [txnCharge, setTxnCharge] = useState(0);
-  const [gst, setGst] = useState(0);
-  const [sebiCharge, setSebiCharge] = useState(0);
-  const [stampDuty, setStampDuty] = useState(0);
-  const [totalCharges, setTotalCharges] = useState(0);
-  const [netProfit, setNetProfit] = useState(0);
+  const [tradeType, setTradeType] = useUrlChoice('type', 'delivery', TYPES);
+  const [buyPrice, setBuyPrice] = useUrlNumber('buy', 1000, 0, 10000000);
+  const [sellPrice, setSellPrice] = useUrlNumber('sell', 1100, 0, 10000000);
+  const [quantity, setQuantity] = useUrlNumber('qty', 100, 0, 100000000);
 
-  useEffect(() => {
+  // Approximate discount-broker rates. Formulas unchanged from the previous version.
+  const r = useMemo(() => {
     const buyValue = buyPrice * quantity;
     const sellValue = sellPrice * quantity;
-    const totalTurnover = buyValue + sellValue;
-    
-    // Approximate discount broker rates (like Zerodha/Groww)
-    let calcBrokerage = 0;
-    let calcStt = 0;
-    let calcStamp = 0;
-
+    const turnover = buyValue + sellValue;
+    let brokerage = 0;
+    let stt = 0;
+    let stamp = 0;
     if (tradeType === 'delivery') {
-      calcBrokerage = 0; // Zero brokerage for delivery
-      calcStt = Math.round((buyValue * 0.001) + (sellValue * 0.001)); // 0.1% on both buy and sell
-      calcStamp = Math.round(buyValue * 0.00015); // 0.015% on buy side only
+      brokerage = 0; // zero brokerage for delivery
+      stt = Math.round(buyValue * 0.001 + sellValue * 0.001); // 0.1% on buy and sell
+      stamp = Math.round(buyValue * 0.00015); // 0.015% on buy side
     } else {
-      // Intraday
-      const buyBrokerage = Math.min(20, buyValue * 0.0003);
-      const sellBrokerage = Math.min(20, sellValue * 0.0003);
-      calcBrokerage = +(buyBrokerage + sellBrokerage).toFixed(2);
-      calcStt = Math.round(sellValue * 0.00025); // 0.025% on sell side only
-      calcStamp = Math.round(buyValue * 0.00003); // 0.003% on buy side only
+      brokerage = +(Math.min(20, buyValue * 0.0003) + Math.min(20, sellValue * 0.0003)).toFixed(2);
+      stt = Math.round(sellValue * 0.00025); // 0.025% on sell side
+      stamp = Math.round(buyValue * 0.00003); // 0.003% on buy side
     }
-
-    const calcTxn = +(totalTurnover * 0.0000325).toFixed(2); // NSE transaction charge ~0.00325%
-    const calcGst = +((calcBrokerage + calcTxn) * 0.18).toFixed(2); // 18% on brokerage and txn charges
-    const calcSebi = +(totalTurnover * 0.000001).toFixed(2); // ₹10 per crore
-
-    const totalTaxes = calcBrokerage + calcStt + calcTxn + calcGst + calcSebi + calcStamp;
-    const grossProfit = sellValue - buyValue;
-    const net = grossProfit - totalTaxes;
-
-    setTurnover(totalTurnover);
-    setBrokerage(calcBrokerage);
-    setStt(calcStt);
-    setTxnCharge(calcTxn);
-    setGst(calcGst);
-    setSebiCharge(calcSebi);
-    setStampDuty(calcStamp);
-    setTotalCharges(+totalTaxes.toFixed(2));
-    setNetProfit(+net.toFixed(2));
-
+    const txn = +(turnover * 0.0000325).toFixed(2); // NSE transaction charge about 0.00325%
+    const gst = +((brokerage + txn) * 0.18).toFixed(2); // 18% on brokerage and transaction charges
+    const sebi = +(turnover * 0.000001).toFixed(2); // ₹10 per crore
+    const charges = brokerage + stt + txn + gst + sebi + stamp;
+    const gross = sellValue - buyValue;
+    return {
+      turnover,
+      gross,
+      net: +(gross - charges).toFixed(2),
+      rows: [
+        { label: 'STT', value: stt },
+        { label: 'Brokerage', value: brokerage },
+        { label: 'Exchange transaction charge', value: txn },
+        { label: 'GST (18%)', value: gst },
+        { label: 'Stamp duty', value: stamp },
+        { label: 'SEBI charges', value: sebi },
+      ],
+    };
   }, [buyPrice, sellPrice, quantity, tradeType]);
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(value);
-  };
-
   return (
-    <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Brokerage Calculator India | STT, GST and Trading Charges | Stock AI"
         description="Calculate Indian equity delivery and intraday brokerage, STT, exchange charges, GST, stamp duty, SEBI charges, and net P&L."
         canonicalPath="/tools/brokerage-calculator"
       />
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <PieChart className="w-8 h-8 text-accent" />
-            <h1 className="text-4xl font-bold text-lavender-text">Brokerage Calculator</h1>
-          </div>
-          <p className="text-lavender-text/70 text-lg">
-            Calculate exactly how much you'll pay in taxes, STT, and brokerage per trade.
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <header className="mb-10 max-w-2xl">
+          <p className="flex items-center gap-2 text-sm font-medium text-accent">
+            <PieChart className="h-4 w-4" strokeWidth={1.75} /> Calculator
           </p>
-        </div>
+          <h1 className="mt-2 text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl">Brokerage calculator</h1>
+          <p className="mt-3 text-base text-muted">See exactly what a trade costs in STT, brokerage, GST and other charges, and what you keep. The link updates so you can share the result.</p>
+        </header>
 
-        {/* Interactive Calculator Section */}
-        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
-          
-          {/* Controls */}
-          <div className="flex-1 space-y-6">
-            
-            {/* Trade Type Toggle */}
-            <div className="flex p-1 bg-lavender-base border border-lavender-text/10 rounded-2xl mb-6">
-              <button 
-                onClick={() => setTradeType('delivery')}
-                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'delivery' ? 'bg-cobalt text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
-              >
-                Delivery (CNC)
-              </button>
-              <button 
-                onClick={() => setTradeType('intraday')}
-                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'intraday' ? 'bg-cobalt text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
-              >
-                Intraday (MIS)
-              </button>
-            </div>
-
-            <div>
-              <label className="block text-lavender-text font-semibold mb-2">Buy Price (₹)</label>
-              <input
-                type="number"
-                min="0"
-                value={buyPrice}
-                onChange={(e) => setBuyPrice(Number(e.target.value))}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-lavender-text font-semibold mb-2">Sell Price (₹)</label>
-              <input
-                type="number"
-                min="0"
-                value={sellPrice}
-                onChange={(e) => setSellPrice(Number(e.target.value))}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-lavender-text font-semibold mb-2">Quantity (Shares)</label>
-              <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
-              />
+        <section className="grid gap-8 rounded-card border border-line bg-surface p-5 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+          <div className="space-y-5">
+            <Segmented<(typeof TYPES)[number]>
+              label="Trade type"
+              value={tradeType}
+              onChange={setTradeType}
+              options={[
+                { value: 'delivery', label: 'Delivery (CNC)' },
+                { value: 'intraday', label: 'Intraday (MIS)' },
+              ]}
+            />
+            <NumberField label="Buy price" prefix="₹" value={buyPrice} onChange={setBuyPrice} />
+            <NumberField label="Sell price" prefix="₹" value={sellPrice} onChange={setSellPrice} />
+            <NumberField label="Quantity (shares)" value={quantity} onChange={setQuantity} />
+            <p className="text-xs text-muted">Rates approximate a typical discount broker. Your broker's charges may differ.</p>
+          </div>
+          <div className="flex flex-col">
+            <ChargesResult rows={r.rows} gross={r.gross} net={r.net} turnover={r.turnover} />
+            <div className="mt-auto flex justify-end pt-5">
+              <ShareResult />
             </div>
           </div>
-
-          {/* Results Summary */}
-          <div className="md:w-80 app-card-accent p-6">
-            <h3 className="text-lavender-text font-bold text-lg border-b border-lavender-text/10 pb-3 mb-4">Charges Breakdown</h3>
-            
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">Turnover</span>
-                <span className="text-lavender-text">{formatCurrency(turnover)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">Brokerage</span>
-                <span className="text-lavender-text">{formatCurrency(brokerage)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">STT Total</span>
-                <span className="text-lavender-text">{formatCurrency(stt)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">Exchange Txn Charge</span>
-                <span className="text-lavender-text">{formatCurrency(txnCharge)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">GST (18%)</span>
-                <span className="text-lavender-text">{formatCurrency(gst)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">SEBI Charges</span>
-                <span className="text-lavender-text">{formatCurrency(sebiCharge)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lavender-text/70">Stamp Duty</span>
-                <span className="text-lavender-text">{formatCurrency(stampDuty)}</span>
-              </div>
-              
-              <div className="pt-3 border-t border-lavender-text/10 flex justify-between font-bold">
-                <span className="text-down">Total Charges</span>
-                <span className="text-down">{formatCurrency(totalCharges)}</span>
-              </div>
-            </div>
-
-            <div className={`mt-6 p-4 rounded-2xl text-center border ${netProfit >= 0 ? 'bg-up/10 border-up/30' : 'bg-down/10 border-down/30'}`}>
-              <p className="text-lavender-text/70 text-sm mb-1">Net P&L</p>
-              <p className={`text-2xl font-black ${netProfit >= 0 ? 'text-up' : 'text-down'}`}>
-                {netProfit >= 0 ? '+' : ''}{formatCurrency(netProfit)}
-              </p>
-            </div>
-          </div>
-        </div>
+        </section>
 
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none prose-headings:text-lavender-text prose-a:text-accent">
+        <article className="calc-article mx-auto mt-16 max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Why Do You Need a Brokerage Calculator?</h2>
           <p className="mb-6 leading-relaxed">
             When you buy or sell shares in the Indian stock market (NSE or BSE), the price you see on the screen is not the only amount you pay or receive. Every transaction attracts a series of fees, taxes, and statutory charges. A brokerage calculator helps you uncover these hidden costs so you can accurately determine your net profit or loss (Net P&L) before you even place the trade.
