@@ -1,16 +1,16 @@
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
 
         {/* Hero */}
-        <div className="text-center mb-16">
-          <p className="text-lavender-primary text-sm font-semibold uppercase tracking-widest mb-3">
+        <div className="mb-12 max-w-2xl">
+          <p className="text-accent text-sm font-medium mb-2">
             About Us
           </p>
-          <h1 className="text-4xl font-black text-lavender-text mb-4">
-            Making Stock Market Analysis<br />Accessible to Every Indian Investor
+          <h1 className="mb-4 text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">
+            Making stock market research accessible to every Indian investor
           </h1>
-          <p className="text-lavender-text/70 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base leading-relaxed text-muted">
             Stock AI is an AI-powered stock market intelligence platform built for
             retail investors in India. We believe every investor — not just
             institutional traders — deserves access to fast, data-driven analysis.
@@ -26,36 +26,36 @@ export default function About() {
             { number: "Free",   label: "To Start" },
           ].map(stat => (
             <div key={stat.label}
-              className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-5 text-center">
-              <p className="text-3xl font-black text-lavender-primary mb-1">{stat.number}</p>
-              <p className="text-lavender-text/70 text-sm">{stat.label}</p>
+              className="rounded-card border border-line bg-surface p-5">
+              <p className="num mb-1 text-2xl font-semibold text-ink">{stat.number}</p>
+              <p className="text-muted text-sm">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Our Story */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">Our Story</h2>
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-8">
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">Our Story</h2>
+          <div className="rounded-card border border-line bg-surface p-8">
+            <p className="text-ink/85 leading-relaxed mb-4">
               Stock AI was born out of a simple frustration. As retail investors in
               India, we found ourselves spending hours every day reading NSE filings,
               scrolling through Economic Times, checking Moneycontrol, and trying to
               make sense of conflicting information — only to still feel uncertain
               about what to do.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+            <p className="text-ink/85 leading-relaxed mb-4">
               Professional traders and institutional investors have entire teams of
               analysts doing this research for them. The retail investor has to do it
               alone, after work hours, with limited time and tools.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+            <p className="text-ink/85 leading-relaxed mb-4">
               We asked a simple question: what if AI could read all the relevant
               sources simultaneously and give a structured, actionable signal in
               seconds? Not a vague prediction, but a specific entry price, target
               levels, stop loss, and the reasoning behind it.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed">
+            <p className="text-ink/85 leading-relaxed">
               That question became Stock AI. Built in India, for Indian investors,
               covering NSE and BSE markets, with a deep understanding of the Indian
               financial ecosystem.
@@ -65,7 +65,7 @@ export default function About() {
 
         {/* What We Do */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">What Stock AI Does</h2>
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">What Stock AI Does</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
               {
@@ -94,9 +94,9 @@ export default function About() {
               },
             ].map(item => (
               <div key={item.title}
-                className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
-                <h3 className="text-lavender-text font-bold text-lg mb-3">{item.title}</h3>
-                <p className="text-lavender-text/70 leading-relaxed text-sm">{item.desc}</p>
+                className="rounded-card border border-line bg-surface p-6">
+                <h3 className="text-ink font-bold text-lg mb-3">{item.title}</h3>
+                <p className="text-muted leading-relaxed text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ export default function About() {
 
         {/* How it works */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">How Our Technology Works</h2>
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">How Our Technology Works</h2>
           <div className="space-y-4">
             {[
               {
@@ -129,13 +129,13 @@ export default function About() {
               },
             ].map(item => (
               <div key={item.step}
-                className="flex gap-6 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-lavender/20 border border-white/50 rounded-2xl flex items-center justify-center">
-                  <span className="text-lavender-primary font-black text-sm">{item.step}</span>
+                className="flex gap-6 rounded-card border border-line bg-surface p-6">
+                <div className="num grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/10">
+                  <span className="text-sm font-semibold text-accent">{item.step}</span>
                 </div>
                 <div>
-                  <h3 className="text-lavender-text font-bold mb-2">{item.title}</h3>
-                  <p className="text-lavender-text/70 text-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="text-ink font-bold mb-2">{item.title}</h3>
+                  <p className="text-muted text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -144,32 +144,32 @@ export default function About() {
 
         {/* Important disclaimer */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">
             Important — Please Read
           </h2>
-          <div className="bg-caution/10 border border-caution/30 rounded-2xl p-8">
+          <div className="rounded-card border border-caution/30 bg-caution/[0.06] p-6 sm:p-8">
             <h3 className="text-caution font-bold text-lg mb-4">
               Educational Platform — Not Investment Advice
             </h3>
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+            <p className="text-ink/85 leading-relaxed mb-4">
               Stock AI is an educational and informational platform. All signals,
               price targets, buy/hold/sell recommendations and analysis generated
               by our AI are for educational purposes only. They do not constitute
               financial advice, investment advice or trading recommendations.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+            <p className="text-ink/85 leading-relaxed mb-4">
               Stock AI and BytePlay Technologies are not registered with the
               Securities and Exchange Board of India (SEBI) as investment advisors,
               portfolio managers, or research analysts. We do not provide any
               regulated financial services.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed mb-4">
+            <p className="text-ink/85 leading-relaxed mb-4">
               Stock market investments are subject to market risks. The value of
               investments can go up or down significantly. AI systems can make
               errors and generate inaccurate analysis. Never invest money that
               you cannot afford to lose.
             </p>
-            <p className="text-lavender-text/80 leading-relaxed">
+            <p className="text-ink/85 leading-relaxed">
               Always consult a SEBI-registered financial advisor before making
               investment decisions. Conduct your own research and due diligence.
               Past performance is not indicative of future results.
@@ -179,8 +179,8 @@ export default function About() {
 
         {/* Data sources */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">Our Data Sources</h2>
-          <p className="text-lavender-text/70 mb-6 leading-relaxed">
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">Our Data Sources</h2>
+          <p className="text-muted mb-6 leading-relaxed">
             We use the following publicly available data sources to power our
             analysis. All data is sourced in real time and attributed correctly.
           </p>
@@ -218,12 +218,12 @@ export default function About() {
               },
             ].map(source => (
               <div key={source.name}
-                className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-5">
+                className="rounded-card border border-line bg-surface p-5">
                 <a href={source.url} target="_blank" rel="noopener noreferrer"
-                  className="text-lavender-primary font-bold hover:text-accent transition">
+                  className="text-accent font-bold hover:text-accent transition">
                   {source.name} ↗
                 </a>
-                <p className="text-lavender-text/60 text-sm mt-2 leading-relaxed">
+                <p className="text-muted text-sm mt-2 leading-relaxed">
                   {source.desc}
                 </p>
               </div>
@@ -233,47 +233,47 @@ export default function About() {
 
         {/* Company info */}
         <div className="mb-16">
-          <h2 className="text-lavender-text text-2xl font-bold mb-6">Company Information</h2>
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-8">
+          <h2 className="mb-4 text-xl font-semibold tracking-[-0.015em] text-ink">Company Information</h2>
+          <div className="rounded-card border border-line bg-surface p-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lavender-text/70 text-xs uppercase tracking-widest mb-3">
+                <h3 className="text-muted text-xs mb-3">
                   Organisation
                 </h3>
-                <p className="text-lavender-text font-semibold">Karmatix</p>
-                <p className="text-lavender-text/70 text-sm mt-1">
+                <p className="text-ink font-semibold">Karmatix</p>
+                <p className="text-muted text-sm mt-1">
                   Parent company of BytePlay. Independent software and technology company building
                   financial tools for Indian retail investors.
                 </p>
               </div>
               <div>
-                <h3 className="text-lavender-text/70 text-xs uppercase tracking-widest mb-3">
+                <h3 className="text-muted text-xs mb-3">
                   Location & Address
                 </h3>
-                <p className="text-lavender-text font-semibold">Headquarters</p>
-                <p className="text-lavender-text/70 text-sm mt-1">
+                <p className="text-ink font-semibold">Headquarters</p>
+                <p className="text-muted text-sm mt-1">
                   Bhopal, Madhya Pradesh, India<br />
                   (Operating fully remote across India)
                 </p>
               </div>
               <div>
-                <h3 className="text-lavender-text/70 text-xs uppercase tracking-widest mb-3">
+                <h3 className="text-muted text-xs mb-3">
                   Contact & Support
                 </h3>
                 <a href="mailto:contact@karmatix.in"
-                  className="text-lavender-primary hover:text-accent transition">
+                  className="text-accent hover:text-accent transition">
                   contact@karmatix.in
                 </a>
-                <p className="text-lavender-text/70 text-sm mt-2">
+                <p className="text-muted text-sm mt-2">
                   Business Hours: Monday to Friday, 9:00 AM - 6:00 PM IST
                 </p>
               </div>
               <div>
-                <h3 className="text-lavender-text/70 text-xs uppercase tracking-widest mb-3">
+                <h3 className="text-muted text-xs mb-3">
                   Leadership
                 </h3>
-                <p className="text-lavender-text font-semibold">Founded by Indian Retail Traders</p>
-                <p className="text-lavender-text/70 text-sm mt-1">
+                <p className="text-ink font-semibold">Founded by Indian Retail Traders</p>
+                <p className="text-muted text-sm mt-1">
                   Built by a dedicated team of quantitative developers and financial researchers who understand the challenges faced by everyday investors in the NSE/BSE markets.
                 </p>
               </div>
@@ -282,17 +282,16 @@ export default function About() {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-lavender/10 border border-white/50 rounded-2xl p-8 text-center">
-          <h2 className="text-lavender-text text-2xl font-bold mb-3">
+        <div className="rounded-card border border-accent/30 bg-accent/[0.06] p-6 text-center sm:p-8">
+          <h2 className="mb-2 text-xl font-semibold tracking-[-0.015em] text-ink">
             Start Analyzing Indian Stocks for Free
           </h2>
-          <p className="text-lavender-text/70 mb-6 max-w-lg mx-auto">
+          <p className="text-muted mb-6 max-w-lg mx-auto">
             Join thousands of Indian retail investors using AI to make
             more informed investment decisions. No credit card required.
           </p>
           <a href="https://byteplay.org"
-            className="inline-block bg-gradient-lavender hover:opacity-90 text-white
-                       px-8 py-3 rounded-2xl font-bold transition">
+            className="inline-flex h-12 items-center rounded-control bg-cobalt px-6 font-semibold text-white transition hover:brightness-110">
             Get Started Free
           </a>
         </div>
