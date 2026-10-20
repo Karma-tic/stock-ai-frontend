@@ -1,118 +1,43 @@
 import { Link } from 'react-router-dom';
-import { Calculator, TrendingUp, PieChart, Activity, Scale, Compass } from 'lucide-react';
+import { Activity, ArrowRight, Calculator, Compass, PieChart, Scale, TrendingUp, Wrench } from 'lucide-react';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
+
+const TOOLS = [
+  { title: 'Invest Explorer', description: "Compare FDs, PPF, mutual funds, gold, bonds, REITs and global investing by return, risk, lock-in and tax, with today's best rates.", path: '/invest', Icon: Compass },
+  { title: 'SIP calculator', description: 'See what a monthly SIP could grow to, year by year, with compounding.', path: '/tools/sip-calculator', Icon: Calculator },
+  { title: 'Lumpsum calculator', description: 'Estimate how a one-time investment could grow over the years you choose.', path: '/tools/lumpsum-calculator', Icon: TrendingUp },
+  { title: 'Compare stocks', description: 'Put NSE stocks side by side on price, P/E, dividend yield, 52-week range and market cap.', path: '/tools/stock-comparison', Icon: Scale },
+  { title: 'Brokerage calculator', description: 'Every charge on a delivery or intraday trade: STT, brokerage, GST, stamp duty, and what you keep.', path: '/tools/brokerage-calculator', Icon: PieChart },
+  { title: 'F&O calculator', description: 'Your real profit or loss on a futures or options trade after all charges.', path: '/tools/fno-calculator', Icon: Activity },
+];
 
 export default function ToolsHub() {
-  const tools = [
-    {
-      title: "Invest Explorer",
-      description: "Compare FDs, PPF, mutual funds, gold, bonds, REITs and global investing by return, risk, lock-in and tax, with today's best rates.",
-      path: "/invest",
-      icon: <Compass className="w-8 h-8 text-lavender-primary" />,
-      color: "border-lavender-primary/30 bg-lavender-primary/10",
-      isNew: true
-    },
-    {
-      title: "SIP Calculator",
-      description: "Calculate the future value of your monthly SIP investments with the power of compounding.",
-      path: "/tools/sip-calculator",
-      icon: <Calculator className="w-8 h-8 text-lavender-primary" />,
-      color: "border-white/50 bg-accent/10",
-      isNew: true
-    },
-    // Placeholders for future tools to show the user what else is possible
-    {
-      title: "Stock Comparison",
-      description: "Compare NSE stocks side by side by price, PE, dividend yield, 52-week range, and market cap.",
-      path: "/tools/stock-comparison",
-      icon: <Scale className="w-8 h-8 text-up" />,
-      color: "border-up/30 bg-up/10",
-      isNew: true
-    },
-    {
-      title: "Lumpsum Calculator",
-      description: "Estimate returns on your one-time investments over a long period.",
-      path: "/tools/lumpsum-calculator",
-      icon: <TrendingUp className="w-8 h-8 text-up" />,
-      isNew: true
-    },
-    {
-      title: "F&O Calculator",
-      description: "Calculate your exact P&L, Margin, Brokerage, and STT for Futures and Options.",
-      path: "/tools/fno-calculator",
-      icon: <Activity className="w-8 h-8 text-accent" />,
-      color: "border-accent/30 bg-accent/10",
-      isNew: true
-    },
-    {
-      title: "Brokerage Calculator",
-      description: "Calculate exactly how much you'll pay in taxes, STT, and brokerage per trade.",
-      path: "/tools/brokerage-calculator",
-      icon: <PieChart className="w-8 h-8 text-accent" />,
-      color: "border-white/50 bg-accent/10",
-      isNew: true
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-lavender-surface py-16 px-6">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Free Financial Calculators for Indian Investors | Stock AI"
         description="Use free SIP, lumpsum, brokerage, F&O, and stock comparison tools built for Indian stock market investors."
         canonicalPath="/tools"
       />
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <p className="text-lavender-primary text-sm font-semibold uppercase tracking-widest mb-3">
-            Financial Tools
-          </p>
-          <h1 className="text-lavender-text text-4xl font-bold mb-4">
-            Smart Calculators for Smart Investors
-          </h1>
-          <p className="text-lavender-text/70 max-w-2xl mx-auto text-lg">
-            Plan your financial future with our suite of free, interactive tools designed specifically for the Indian market.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
-            tool.path !== "#" ? (
-              <Link key={tool.title} to={tool.path} className={`block p-6 rounded-2xl border ${tool.color} hover:scale-105 transition duration-300 relative overflow-hidden group`}>
-                {tool.isNew && (
-                  <div className="absolute top-4 right-4 bg-gradient-lavender text-white text-xs font-bold px-2 py-1 rounded-full shadow-lavender">
-                    NEW
-                  </div>
-                )}
-                <div className="mb-4">
-                  {tool.icon}
-                </div>
-                <h3 className="text-lavender-text text-xl font-bold mb-2">{tool.title}</h3>
-                <p className="text-lavender-text/70 text-sm leading-relaxed mb-6">
-                  {tool.description}
-                </p>
-                <div className="text-lavender-primary text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Calculate Now <span>→</span>
-                </div>
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader eyebrow="Tools" icon={Wrench} title="Free calculators for Indian investors" intro="Plan, compare and check the numbers. Every result has a link you can share." />
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TOOLS.map(({ title, description, path, Icon }) => (
+            <li key={path}>
+              <Link to={path} className="group flex h-full flex-col rounded-card border border-line bg-surface p-5 transition hover:border-accent/40">
+                <span className="grid h-10 w-10 place-items-center rounded-control bg-accent/10 text-accent">
+                  <Icon className="h-5 w-5" strokeWidth={1.75} />
+                </span>
+                <h2 className="mt-4 text-lg font-semibold text-ink">{title}</h2>
+                <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">{description}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent">
+                  Open <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
               </Link>
-            ) : (
-              <div key={tool.title} className={`p-6 rounded-2xl border ${tool.color} opacity-60 relative overflow-hidden`}>
-                <div className="absolute top-4 right-4 bg-lavender-surface text-lavender-text/70 text-xs font-bold px-2 py-1 rounded-full">
-                  COMING SOON
-                </div>
-                <div className="mb-4 grayscale">
-                  {tool.icon}
-                </div>
-                <h3 className="text-lavender-text text-xl font-bold mb-2">{tool.title}</h3>
-                <p className="text-lavender-text/70 text-sm leading-relaxed mb-6">
-                  {tool.description}
-                </p>
-                <div className="text-lavender-text/60 text-sm font-semibold flex items-center gap-1">
-                  Available Soon
-                </div>
-              </div>
-            )
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
