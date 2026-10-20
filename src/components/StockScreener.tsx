@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Clock3, Coins, Filter, Search } from 'lucide-react';
+import { ArrowRight, Clock3, Coins, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getStock } from '../lib/api';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
+import Segmented from './ui/Segmented';
+import SearchField from './ui/SearchField';
+import { Change } from './ui/Price';
 
 const SCREENER_SYMBOLS = [
   'RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK', 'SBIN',
@@ -17,7 +21,7 @@ const FILTERS: { id: FilterType; label: string; helper: string }[] = [
   { id: 'value', label: 'Value', helper: 'PE below 25' },
   { id: 'dividend', label: 'Dividend', helper: 'Yield above 1%' },
   { id: 'momentum', label: 'Momentum', helper: 'Positive today' },
-  { id: 'nearLow', label: 'Near 52W Low', helper: 'Below 35% of range' },
+  { id: 'nearLow', label: 'Near 52-week low', helper: 'Below 35% of range' },
   { id: 'penny', label: 'Under ₹100', helper: 'Low-priced stocks' },
 ];
 
@@ -66,127 +70,108 @@ export default function StockScreener() {
       .sort((a, b) => (Number(b.price_change_pct) || 0) - (Number(a.price_change_pct) || 0));
   }, [filter, query, stocks]);
 
+  const helper = FILTERS.find((f) => f.id === filter)?.helper;
+
   return (
-    <div className="min-h-screen bg-lavender-surface px-6 py-16">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Popular Indian Stock Quick Filters | Stock AI"
         description="Quickly compare 18 popular Indian stocks by valuation, dividend yield, momentum, 52-week position, and price."
         canonicalPath="/stocks/screener"
       />
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader
+          eyebrow="Quick filters"
+          icon={Filter}
+          title="Filter 18 widely followed stocks"
+          intro="A short discovery list, not a full-market screener or a recommendation. Open any stock for its evidence and sources."
+        />
 
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-up/10 border border-white/50 mb-4">
-            <Filter className="w-7 h-7 text-up" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-lavender-text mb-3">Popular Stock Quick Filters</h1>
-          <p className="text-lavender-text/70 max-w-2xl mx-auto">
-            Compare 18 widely followed Indian stocks and open any result for deeper research.
-            This is a focused discovery list—not a full-market screener or recommendation.
-          </p>
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <Segmented<FilterType> label="Filter" value={filter} onChange={setFilter} options={FILTERS.map((f) => ({ value: f.id, label: f.label }))} />
+          <SearchField value={query} onChange={setQuery} placeholder="Search symbol, company, sector" className="lg:w-72" />
         </div>
 
-        <div className="app-card p-4 mb-6">
-          <div className="flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {FILTERS.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => setFilter(item.id)}
-                  className={`shrink-0 px-4 py-2 rounded-2xl text-sm font-semibold transition ${
-                    filter === item.id
-                      ? 'bg-gradient-lavender text-white'
-                      : 'bg-lavender-base border border-lavender-text/10 text-lavender-text/70 hover:text-lavender-text'
-                  }`}
-                  title={item.helper}
-                >
-                  {item.label}
-                </button>
+        <div className="mb-3 mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+          <span>
+            {loading ? 'Loading live prices…' : `${filtered.length} of ${stocks.length} stocks`}
+            {helper && filter !== 'all' && <> · {helper}</>}
+          </span>
+          {lastUpdated && (
+            <span className="inline-flex items-center gap-1.5">
+              <Clock3 className="h-3.5 w-3.5" /> Refreshed {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          )}
+        </div>
+
+        <section className="overflow-hidden rounded-card border border-line bg-surface">
+          {loading ? (
+            <div aria-hidden="true" className="space-y-px">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <span key={i} className="skeleton block h-14 rounded-none" />
               ))}
             </div>
-            <div className="relative">
-              <Search className="w-4 h-4 text-lavender-text/50 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                placeholder="Search symbol, company, sector"
-                className="w-full lg:w-72 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
-              />
-            </div>
-          </div>
-        </div>
+          ) : filtered.length === 0 ? (
+            <p className="p-8 text-center text-sm text-muted">No stock in this list matches. Try another filter.</p>
+          ) : (
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-line text-xs text-muted">
+                <tr>
+                  <th scope="col" className="px-4 py-2.5 font-medium sm:px-5">Stock</th>
+                  <th scope="col" className="px-3 py-2.5 text-right font-medium">Price</th>
+                  <th scope="col" className="hidden px-3 py-2.5 text-right font-medium sm:table-cell">P/E</th>
+                  <th scope="col" className="hidden px-3 py-2.5 text-right font-medium sm:table-cell">Div. yield</th>
+                  <th scope="col" className="hidden px-3 py-2.5 font-medium md:table-cell">52-week range</th>
+                  <th scope="col" className="w-8 px-2" />
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {filtered.map((stock) => {
+                  const pos = Math.max(0, Math.min(100, Number(stock.position_in_52w) || 0));
+                  return (
+                    <tr key={stock.display_ticker} className="group relative hover:bg-ink/[0.03]">
+                      <td className="px-4 py-3 sm:px-5">
+                        <Link to={`/stock/${stock.display_ticker}`} className="num font-semibold text-ink after:absolute after:inset-0 group-hover:text-accent">
+                          {stock.display_ticker}
+                        </Link>
+                        <span className="block max-w-[11rem] truncate text-xs text-muted sm:max-w-[16rem]">{stock.company_name}</span>
+                      </td>
+                      <td className="px-3 py-3 text-right">
+                        <span className="num block font-medium text-ink">₹{(stock.current_price || 0).toLocaleString('en-IN')}</span>
+                        <Change value={Number(stock.price_change_pct) || 0} className="text-xs" />
+                      </td>
+                      <td className="num hidden px-3 py-3 text-right text-ink/85 sm:table-cell">{stock.pe_ratio ?? 'n/a'}</td>
+                      <td className="num hidden px-3 py-3 text-right text-ink/85 sm:table-cell">{stock.dividend_yield_pct ? `${stock.dividend_yield_pct}%` : '–'}</td>
+                      <td className="hidden px-3 py-3 md:table-cell">
+                        <span className="relative block h-1.5 w-28 rounded-full bg-ink/10" aria-label={`At ${pos}% of its 52-week range`}>
+                          <span className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent" style={{ left: `${pos}%` }} />
+                        </span>
+                      </td>
+                      <td className="px-2 py-3">
+                        <ArrowRight className="h-4 w-4 text-muted group-hover:text-accent" />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </section>
 
-        <Link
-          to="/stocks/dividends"
-          className="mb-6 flex flex-col gap-4 rounded-2xl border border-up/25 bg-up/10 p-5 transition hover:border-up/45 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div className="flex items-start gap-3">
-            <span className="rounded-xl bg-up/15 p-2 text-up"><Coins className="h-5 w-5" /></span>
-            <div>
-              <h2 className="font-bold text-lavender-text">Dividend Tracker</h2>
-              <p className="mt-1 text-sm text-lavender-text/65">Compare yield, cash paid and completed-year dividend consistency.</p>
-            </div>
-          </div>
-          <span className="inline-flex items-center gap-1 text-sm font-bold text-up">Explore dividend records <ArrowRight className="h-4 w-4" /></span>
+        <Link to="/stocks/dividends" className="group mt-6 flex items-center justify-between gap-4 rounded-card border border-line bg-surface p-5 transition hover:border-accent/40">
+          <span className="flex items-start gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-accent/10 text-accent">
+              <Coins className="h-5 w-5" strokeWidth={1.75} />
+            </span>
+            <span>
+              <span className="block font-semibold text-ink">Dividend tracker</span>
+              <span className="mt-0.5 block text-sm text-muted">Yield, cash paid and year-by-year consistency, with the payment source.</span>
+            </span>
+          </span>
+          <ArrowRight className="h-4 w-4 shrink-0 text-muted group-hover:text-accent" />
         </Link>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="app-card p-5 h-44 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-lavender-text/70">
-              <span>Showing {filtered.length} of {stocks.length} popular stocks</span>
-              {lastUpdated && (
-                <span className="inline-flex items-center gap-1.5 text-xs text-lavender-text/50">
-                  <Clock3 className="h-3.5 w-3.5" />
-                  Refreshed {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              )}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filtered.map(stock => (
-                <Link to={`/stock/${stock.display_ticker}`} key={stock.display_ticker} className="app-card group p-5 hover:border-up/25 hover:-translate-y-0.5 transition">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h2 className="text-xl font-black text-lavender-text">{stock.display_ticker}</h2>
-                      <p className="text-lavender-text/60 text-xs">{stock.company_name}</p>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full font-bold ${(stock.price_change_pct || 0) >= 0 ? 'bg-up/10 text-up' : 'bg-down/10 text-down'}`}>
-                      {(stock.price_change_pct || 0) >= 0 ? '+' : ''}{stock.price_change_pct || 0}%
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-lavender-text">₹{(stock.current_price || 0).toLocaleString('en-IN')}</p>
-                  <p className="text-lavender-text/60 text-xs mt-1">{stock.sector || 'Sector unavailable'}</p>
-                  <div className="grid grid-cols-3 gap-2 mt-4 text-center">
-                    <div className="app-tile p-2">
-                      <p className="text-lavender-text/60 text-xs">PE</p>
-                      <p className="font-semibold text-lavender-text">{stock.pe_ratio ?? 'N/A'}</p>
-                    </div>
-                    <div className="app-tile p-2">
-                      <p className="text-lavender-text/60 text-xs">Div%</p>
-                      <p className="font-semibold text-up">{stock.dividend_yield_pct || 0}%</p>
-                    </div>
-                    <div className="app-tile p-2">
-                      <p className="text-lavender-text/60 text-xs">52W</p>
-                      <p className="font-semibold text-lavender-primary">{stock.position_in_52w || 0}%</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center justify-end gap-1 text-xs font-semibold text-lavender-primary">
-                    View stock research <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </>
-        )}
-
-        <div className="mt-8 rounded-2xl border border-lavender-text/10 bg-surface p-4 text-sm leading-6 text-lavender-text/65">
-          Use these filters only to create a research shortlist. Check company filings, results, risks and valuation before making a decision.
-        </div>
+        <p className="mt-6 text-xs text-muted">Use these filters to build a research list. Check filings, results, risks and valuation before you decide.</p>
       </div>
     </div>
   );

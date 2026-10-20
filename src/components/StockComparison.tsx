@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Plus, Scale, Search, X } from 'lucide-react';
 import { getStock } from '../lib/api';
 import { STOCK_PROFILES } from '../data/stockProfiles';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
+import { Button } from './ui/Button';
+import { Change } from './ui/Price';
+import { ShareResult } from './calc/CalcKit';
 
 const DEFAULT_SYMBOLS = ['RELIANCE', 'TCS', 'HDFCBANK'];
 const EXTRA_STOCK_OPTIONS = [
@@ -33,11 +38,11 @@ const STOCK_OPTIONS = [
 ].filter((stock, index, list) => list.findIndex(item => item.symbol === stock.symbol) === index);
 
 function formatCurrency(value: number | null | undefined) {
-  if (!value) return 'N/A';
+  if (!value) return 'n/a';
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(value);
 }
 
@@ -60,7 +65,22 @@ function scoreStock(stock: any) {
 }
 
 export default function StockComparison() {
-  const [symbols, setSymbols] = useState(DEFAULT_SYMBOLS);
+  // The chosen stocks live in the link (?s=TCS,INFY) so a comparison can be shared
+  const [params, setParams] = useSearchParams();
+  const [symbols, setSymbolsState] = useState<string[]>(() => {
+    const fromUrl = (params.get('s') || '')
+      .split(',')
+      .map((x) => x.trim().toUpperCase())
+      .filter((x) => /^[A-Z0-9&-]{1,20}$/.test(x));
+    const unique = fromUrl.filter((x, i) => fromUrl.indexOf(x) === i).slice(0, 4);
+    return unique.length >= 2 ? unique : DEFAULT_SYMBOLS;
+  });
+  const setSymbols = (next: string[]) => {
+    setSymbolsState(next);
+    const p = new URLSearchParams(window.location.search);
+    p.set('s', next.join(','));
+    setParams(p, { replace: true });
+  };
   const [input, setInput] = useState('');
   const [stocks, setStocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -115,180 +135,142 @@ export default function StockComparison() {
     setSymbols(symbols.filter(s => s !== symbol));
   };
 
+  const ROWS = [
+    ['Price', (x: any) => <span className="num">{formatCurrency(x.current_price)}</span>],
+    ['Today', (x: any) => <Change value={Number(x.price_change_pct) || 0} className="text-sm" />],
+    ['Sector', (x: any) => x.sector || 'n/a'],
+    ['Market cap', (x: any) => <span className="num">{x.market_cap_cr ? `₹${Number(x.market_cap_cr).toLocaleString('en-IN')} Cr` : 'n/a'}</span>],
+    ['P/E ratio', (x: any) => <span className="num">{x.pe_ratio ?? 'n/a'}</span>],
+    ['EPS', (x: any) => <span className="num">{x.eps ?? 'n/a'}</span>],
+    ['Dividend yield', (x: any) => <span className="num">{x.dividend_yield_pct ? `${x.dividend_yield_pct}%` : '–'}</span>],
+    ['52-week range', (x: any) => {
+      const pos = Math.max(0, Math.min(100, Number(x.position_in_52w) || 0));
+      return (
+        <span className="block">
+          <span className="relative mt-1 block h-1.5 w-full max-w-[9rem] rounded-full bg-ink/10" aria-label={`At ${pos}% of its 52-week range`}>
+            <span className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent" style={{ left: `${pos}%` }} />
+          </span>
+          <span className="num mt-1.5 block text-xs text-muted">{formatCurrency(x.week52_low)} – {formatCurrency(x.week52_high)}</span>
+        </span>
+      );
+    }],
+    ['Day range', (x: any) => <span className="num text-sm">{formatCurrency(x.day_low)} – {formatCurrency(x.day_high)}</span>],
+    ['Simple score', (x: any) => <span className="num">{scoreStock(x)}<span className="text-muted">/100</span></span>],
+  ] as [string, (x: any) => React.ReactNode][];
+
   return (
-    <div className="min-h-screen bg-lavender-surface px-4 sm:px-6 py-14 sm:py-16">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Stock Comparison Tool India | Compare NSE Stocks | Stock AI"
         description="Compare Indian NSE stocks by price, PE ratio, dividend yield, 52-week position, market cap, and a simple educational quality score."
         canonicalPath="/tools/stock-comparison"
       />
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+        <PageHeader eyebrow="Compare" icon={Scale} title="Compare stocks side by side" intro="Up to four NSE stocks on live price, valuation, dividend yield and where they sit in their 52-week range. The link updates so you can share it." />
 
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 border border-white/50 mb-4">
-            <Scale className="w-7 h-7 text-lavender-primary" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-lavender-text mb-3">Stock Comparison Tool</h1>
-          <p className="text-lavender-text/70 max-w-2xl mx-auto text-base sm:text-lg">
-            Compare up to four NSE stocks side by side using live price data, valuation, dividend yield,
-            52-week position, and a simple educational score.
-          </p>
-        </div>
-
-        <div className="app-card p-4 sm:p-5 mb-6">
-          <div className="flex flex-col lg:flex-row gap-4 lg:items-start justify-between">
-            <div className="flex flex-wrap gap-2">
-              {symbols.map(symbol => (
-                <span key={symbol} className="inline-flex items-center gap-2 bg-lavender-base border border-lavender-text/10 text-lavender-text px-3 py-2 rounded-2xl text-sm font-semibold">
+        <section className="rounded-card border border-line bg-surface p-4 sm:p-5">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <ul className="flex flex-wrap gap-2" aria-label="Stocks being compared">
+              {symbols.map((symbol) => (
+                <li key={symbol} className="num inline-flex min-h-[36px] items-center gap-1 rounded-full border border-line pl-3 pr-1 text-sm font-semibold text-ink">
                   {symbol}
                   <button
+                    type="button"
                     onClick={() => removeSymbol(symbol)}
-                    className="text-lavender-text/50 hover:text-down"
+                    disabled={symbols.length <= 2}
+                    className="grid h-7 w-7 place-items-center rounded-full text-muted hover:bg-ink/[0.06] hover:text-down disabled:opacity-30"
                     aria-label={`Remove ${symbol}`}
                   >
-                    <X className="w-4 h-4" />
+                    <X className="h-3.5 w-3.5" />
                   </button>
-                </span>
+                </li>
               ))}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
-              <div className="relative w-full sm:w-80">
-                <Search className="w-4 h-4 text-lavender-text/50 absolute left-3 top-1/2 -translate-y-1/2" />
+            </ul>
+            <div className="flex w-full gap-2 lg:w-auto">
+              <div className="relative min-w-0 flex-1 lg:w-72">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
                 <input
                   value={input}
-                  onChange={e => {
+                  onChange={(e) => {
                     setInput(e.target.value);
                     setShowSuggestions(true);
                   }}
                   onFocus={() => setShowSuggestions(true)}
                   onBlur={() => window.setTimeout(() => setShowSuggestions(false), 120)}
-                  onKeyDown={e => { if (e.key === 'Enter') addSymbol(); }}
-                  placeholder="Search stock or symbol"
-                  className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-3 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') addSymbol();
+                  }}
+                  disabled={symbols.length >= 4}
+                  placeholder={symbols.length >= 4 ? 'Remove one to add another' : 'Add a stock, e.g. Infosys'}
+                  aria-label="Add a stock"
+                  className="h-10 w-full rounded-control border border-line bg-canvas pl-9 pr-3 text-sm text-ink outline-none placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25 disabled:opacity-60"
                 />
                 {showSuggestions && symbols.length < 4 && suggestions.length > 0 && (
-                  <div className="absolute left-0 right-0 top-full mt-2 z-30 app-card overflow-hidden">
-                    {suggestions.map(stock => (
-                      <button
-                        key={stock.symbol}
-                        type="button"
-                        onMouseDown={(event) => {
-                          event.preventDefault();
-                          addSymbol(stock.symbol);
-                        }}
-                        className="w-full flex items-start justify-between gap-3 px-4 py-3 text-left hover:bg-lavender-surface transition border-b border-lavender-text/5 last:border-b-0"
-                      >
-                        <span>
-                          <span className="block text-sm font-bold text-lavender-text">{stock.symbol}</span>
-                          <span className="block text-xs text-lavender-text/60 leading-snug">{stock.name}</span>
-                        </span>
-                        <span className="text-[11px] text-lavender-primary bg-accent/10 border border-accent/10 rounded-full px-2 py-1 shrink-0">
-                          NSE
-                        </span>
-                      </button>
+                  <ul className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-card border border-line bg-surface shadow-lift">
+                    {suggestions.map((stock) => (
+                      <li key={stock.symbol}>
+                        <button
+                          type="button"
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            addSymbol(stock.symbol);
+                          }}
+                          className="flex w-full items-center justify-between gap-3 border-b border-line px-4 py-2.5 text-left last:border-0 hover:bg-ink/[0.04]"
+                        >
+                          <span className="min-w-0">
+                            <span className="num block text-sm font-semibold text-ink">{stock.symbol}</span>
+                            <span className="block truncate text-xs text-muted">{stock.name}</span>
+                          </span>
+                          <Plus className="h-4 w-4 shrink-0 text-accent" />
+                        </button>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
               </div>
-              <button
-                onClick={() => addSymbol()}
-                disabled={symbols.length >= 4 || !input.trim()}
-                className="inline-flex items-center justify-center gap-2 bg-gradient-lavender disabled:opacity-40 text-white px-5 py-3 rounded-2xl text-sm font-semibold w-full sm:w-auto shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                Add
-              </button>
+              <Button onClick={() => addSymbol()} disabled={symbols.length >= 4 || !input.trim()} className="shrink-0">
+                <Plus className="h-4 w-4" /> Add
+              </Button>
             </div>
           </div>
-          <p className="mt-3 text-xs text-lavender-text/60">
-            Tip: type a company name like Tata, HDFC, Reliance, or a ticker. You can compare up to four stocks.
-          </p>
-        </div>
+        </section>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {symbols.map(symbol => (
-              <div key={symbol} className="app-card p-6 animate-pulse h-56" />
-            ))}
-          </div>
-        ) : error ? (
-          <div className="bg-down/10 border border-down/30 rounded-2xl p-6 text-down text-center">{error}</div>
-        ) : (
-          <>
-            {best && (
-              <div className="bg-gradient-to-r from-up/10 to-surface border border-up/30 rounded-2xl p-4 sm:p-5 mb-6 shadow-sm">
-                <p className="text-up font-semibold">
-                  Highest educational score: {best.display_ticker} ({scoreStock(best)}/100)
-                </p>
-                <p className="text-lavender-text/70 text-sm mt-1">
-                  This is a simplified comparison score, not investment advice. Always read the underlying metrics.
-                </p>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {stocks.map(stock => (
-                <div key={stock.display_ticker} className="app-card p-5 hover:border-lavender-primary/20 transition">
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div>
-                      <h2 className="text-xl font-black text-lavender-text">{stock.display_ticker}</h2>
-                      <p className="text-lavender-text/60 text-xs">{stock.company_name}</p>
-                    </div>
-                    <span className="bg-lavender-primary/10 text-lavender-primary rounded-full px-2 py-1 text-xs font-bold">
-                      {scoreStock(stock)}
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-lavender-text mb-1">{formatCurrency(stock.current_price)}</p>
-                  <p className={`text-sm font-semibold ${(stock.price_change_pct || 0) >= 0 ? 'text-up' : 'text-down'}`}>
-                    {(stock.price_change_pct || 0) >= 0 ? '+' : ''}{stock.price_change_pct || 0}%
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 mt-4 text-center">
-                    {[
-                      ['PE', stock.pe_ratio ?? 'N/A'],
-                      ['Div%', `${stock.dividend_yield_pct || 0}%`],
-                      ['52W', `${stock.position_in_52w || 0}%`],
-                      ['MCap', stock.market_cap_cr ? `₹${stock.market_cap_cr} Cr` : 'N/A'],
-                    ].map(([label, value]) => (
-                      <div key={label} className="app-tile p-2">
-                        <p className="text-lavender-text/60 text-xs">{label}</p>
-                        <p className="text-lavender-text text-sm font-semibold">{value}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+        <section className="mt-6 overflow-hidden rounded-card border border-line bg-surface">
+          {loading ? (
+            <div aria-hidden="true" className="space-y-px">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <span key={i} className="skeleton block h-12 rounded-none" />
               ))}
             </div>
-
-            <div className="app-card overflow-x-auto">
-              <table className="w-full min-w-[720px] text-sm">
-                <thead className="bg-lavender-base text-lavender-text/70">
-                  <tr>
-                    <th className="p-3 text-left">Metric</th>
-                    {stocks.map(stock => <th key={stock.display_ticker} className="p-3 text-left">{stock.display_ticker}</th>)}
+          ) : error ? (
+            <p className="p-8 text-center text-sm text-muted">{error}</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[560px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-line">
+                    <th scope="col" className="sticky left-0 z-10 w-32 bg-surface px-4 py-3 text-xs font-medium text-muted sm:w-40 sm:px-5">
+                      <span className="sr-only">Metric</span>
+                    </th>
+                    {stocks.map((x) => (
+                      <th key={x.display_ticker} scope="col" className="min-w-[150px] px-3 py-3 align-top">
+                        <Link to={`/stock/${x.display_ticker}`} className="num text-base font-semibold text-ink hover:text-accent">
+                          {x.display_ticker}
+                        </Link>
+                        <span className="block truncate text-xs font-normal text-muted">{x.company_name}</span>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody>
-                  {[
-                    ['Company', 'company_name'],
-                    ['Sector', 'sector'],
-                    ['Current Price', 'current_price'],
-                    ['PE Ratio', 'pe_ratio'],
-                    ['EPS', 'eps'],
-                    ['Dividend Yield', 'dividend_yield_pct'],
-                    ['52W High', 'week52_high'],
-                    ['52W Low', 'week52_low'],
-                    ['Day High', 'day_high'],
-                    ['Day Low', 'day_low'],
-                  ].map(([label, key]) => (
-                    <tr key={key} className="border-t border-lavender-text/5">
-                      <td className="p-3 font-semibold text-lavender-text">{label}</td>
-                      {stocks.map(stock => (
-                        <td key={`${stock.display_ticker}-${key}`} className="p-3 text-lavender-text/80">
-                          {key.includes('price') || key.includes('high') || key.includes('low')
-                            ? formatCurrency(stock[key])
-                            : key === 'dividend_yield_pct'
-                              ? `${stock[key] || 0}%`
-                              : stock[key] ?? 'N/A'}
+                <tbody className="divide-y divide-line">
+                  {ROWS.map(([label, render]) => (
+                    <tr key={label}>
+                      <th scope="row" className="sticky left-0 z-10 bg-surface px-4 py-3 text-xs font-medium text-muted sm:px-5">
+                        {label}
+                      </th>
+                      {stocks.map((x) => (
+                        <td key={x.display_ticker} className="px-3 py-3 text-ink/90">
+                          {render(x)}
                         </td>
                       ))}
                     </tr>
@@ -296,15 +278,21 @@ export default function StockComparison() {
                 </tbody>
               </table>
             </div>
-          </>
-        )}
+          )}
+        </section>
 
-        <article className="mt-12 prose prose-invert max-w-none prose-headings:text-lavender-text prose-p:text-lavender-text/80">
-          <h2 className="text-2xl font-bold text-lavender-text">How to Compare Stocks Sensibly</h2>
-          <p>
-            A stock comparison should not stop at price. Two companies with the same share price can have completely
-            different earnings, dividend policies, risk levels, and valuation. Use this page as a first-pass checklist,
-            then read company filings and independent research before making decisions.
+        <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
+          <p className="max-w-xl text-xs leading-relaxed text-muted">
+            {best && <>Highest simple score here: <span className="num font-semibold text-ink">{best.display_ticker}</span>. </>}
+            The simple score adds points for a moderate P/E, a dividend above 2%, a positive day and a mid-range 52-week position. It is a teaching aid, not advice.
+          </p>
+          <ShareResult />
+        </div>
+
+        <article className="calc-article mx-auto mt-16 max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
+          <h2 className="text-2xl font-bold text-ink">How to compare stocks sensibly</h2>
+          <p className="mt-3">
+            A comparison should not stop at price. Two companies with the same share price can have very different earnings, dividend policies, risk levels and valuations. Use this page as a first-pass checklist, then read company filings and independent research before you decide.
           </p>
         </article>
       </div>
