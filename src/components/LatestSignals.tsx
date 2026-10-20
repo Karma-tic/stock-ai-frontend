@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { supabase } from '../lib/supabase';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+// Recent AI reads as a quiet, swipeable strip (no auto-scrolling). The verdict stays small:
+// the Evidence Board, one tap away, is where the reasoning lives.
 export default function LatestSignals() {
   const [signals, setSignals] = useState<any[]>([]);
 
@@ -12,112 +15,43 @@ export default function LatestSignals() {
       const { data: session } = await supabase.auth.getSession();
       const token = session.session?.access_token;
       if (!token) return;
-
-      axios.get(`${BASE}/api/signals/latest`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
-        // Only show signals with real confidence
-        const real = (res.data.signals || [])
-          .filter((s: any) => s.confidence > 0)
-          .slice(0, 6); // Keeping it at 6 so it centers beautifully on desktop
-        setSignals(real);
-      }).catch(() => {});
+      axios
+        .get(`${BASE}/api/signals/latest`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => setSignals((res.data.signals || []).filter((s: any) => s.confidence > 0).slice(0, 8)))
+        .catch(() => {});
     };
     load();
   }, []);
 
   if (!signals.length) return null;
 
-  // We duplicate the signals array multiple times to ensure the ticker 
-  // is wide enough to cover the screen and loop seamlessly on mobile.
-  const tickerItems = [...signals, ...signals, ...signals, ...signals];
-
   return (
-    <div className="px-4 py-3 bg-surface border-b border-lavender-text/10 overflow-hidden shadow-sm">
-      
-      {/* Inline styles for the seamless ticker animation */}
-      <style>{`
-        @keyframes ticker-scroll {
-          0% { transform: translateX(0); }
-          /* Translating by -50% perfectly loops because we duplicated the array evenly */
-          100% { transform: translateX(-50%); } 
-        }
-        .animate-ticker {
-          animation: ticker-scroll 30s linear infinite;
-        }
-        /* Pause the animation when the user hovers over it to read */
-        .animate-ticker:hover {
-          animation-play-state: paused;
-        }
-        
-        /* 
-         * CRITICAL FIX FOR DESKTOP:
-         * On medium screens and up (md:), we completely disable the animation
-         * so it stays perfectly static and centered.
-         */
-        @media (min-width: 768px) {
-          .animate-ticker {
-            animation: none !important;
-            transform: none !important;
-          }
-        }
-      `}</style>
-
-      <div className="max-w-7xl mx-auto w-full">
-        <p className="text-lavender-text/60 text-xs mb-2 uppercase tracking-wider font-semibold md:text-center">
-          Live AI Signals
-        </p>
-        
-        <div className="relative overflow-hidden w-full flex justify-center">
-          
-          {/* Mobile fade edges - hidden on desktop (md:hidden) so it looks clean */}
-          <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-surface2 to-transparent z-10 pointer-events-none"></div>
-          <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-surface2 to-transparent z-10 pointer-events-none"></div>
-
-          {/* 
-            The scrolling container:
-            - Mobile: w-max (wide enough to hold all duplicates) and animated
-            - Desktop: md:w-full md:justify-center (centers the non-duplicated items)
-          */}
-          <div className="flex gap-2 w-max animate-ticker pt-1 pb-1 md:w-full md:justify-center">
-            {tickerItems.map((s, i) => {
-              // Identify if this item is a duplicate
-              const isDuplicate = i >= signals.length;
-              
-              const colors: Record<string, string> = {
-                BUY:  'border-up/40 bg-up/10',
-                HOLD: 'border-caution/40 bg-caution/10',
-                SELL: 'border-down/40 bg-down/10'
-              };
-              const textColors: Record<string, string> = {
-                BUY:  'text-up',
-                HOLD: 'text-caution',
-                SELL: 'text-down'
-              };
-              
-              return (
-                <div 
-                  key={`${s.ticker}-${i}`} 
-                  // If it IS a duplicate, we hide it completely on desktop (md:hidden).
-                  // This leaves only the original 6 items perfectly centered!
-                  className={`flex-shrink-0 border rounded-2xl px-3 py-2 w-[140px] cursor-default transition-colors hover:bg-lavender-surface ${colors[s.signal] || 'border-white/50'} ${isDuplicate ? 'md:hidden' : ''}`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-lavender-text font-bold text-sm truncate">{s.ticker}</span>
-                    <span className={`text-xs font-bold ${textColors[s.signal] || 'text-lavender-text'}`}>
-                      {s.signal}
-                    </span>
-                  </div>
-                  <div className="flex justify-between mt-1 items-center">
-                    <p className="text-lavender-text/70 text-xs truncate">₹{s.current_price}</p>
-                    <p className="text-lavender-text/60 text-[10px] font-medium">{s.confidence}% conf</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    <section aria-label="Recent AI reads" className="rounded-card border border-line bg-surface px-4 py-3 sm:px-5">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-sm font-semibold text-ink">Recent AI reads</h2>
+        <span className="text-xs text-muted">Tap one for the evidence</span>
       </div>
-    </div>
+      <ul className="scrollbar-hide -mx-1 mt-2 flex snap-x gap-2 overflow-x-auto px-1 pb-1">
+        {signals.map((s) => {
+          const price = Number(s.current_price);
+          return (
+            <li key={s.ticker} className="snap-start">
+              <Link
+                to={`/?analyze=${encodeURIComponent(s.ticker)}`}
+                className="flex min-h-[56px] w-[156px] flex-col justify-center rounded-control border border-line px-3 py-2 transition hover:border-accent/50"
+              >
+                <span className="num truncate text-sm font-semibold text-ink">{s.ticker}</span>
+                <span className="mt-0.5 flex items-center justify-between gap-2 whitespace-nowrap text-[11px] text-muted">
+                  <span className="num">{Number.isFinite(price) ? `₹${price.toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : ''}</span>
+                  <span>
+                    {String(s.signal || '').toLowerCase()} · <span className="num">{s.confidence}%</span>
+                  </span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
