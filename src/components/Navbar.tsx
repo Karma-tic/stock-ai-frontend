@@ -93,6 +93,18 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
     return () => ro.disconnect();
   }, []);
 
+  // The signed-in bottom bar opens search and the menu through these events
+  useEffect(() => {
+    const onSearch = () => setSearch(true);
+    const onMenu = () => setSheet(true);
+    window.addEventListener('stockai:open-search', onSearch);
+    window.addEventListener('stockai:open-menu', onMenu);
+    return () => {
+      window.removeEventListener('stockai:open-search', onSearch);
+      window.removeEventListener('stockai:open-menu', onMenu);
+    };
+  }, []);
+
   // ⌘K / Ctrl K / "/" open search
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -192,7 +204,7 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
               type="button"
               onClick={() => setSearch(true)}
               aria-label="Search stocks"
-              className="flex h-11 w-11 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] lg:hidden"
+              className={`h-11 w-11 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] lg:hidden ${user ? 'hidden' : 'flex'}`}
             >
               <Search className="h-5 w-5" strokeWidth={1.75} />
             </button>
@@ -200,7 +212,7 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
               type="button"
               onClick={onToggleTheme}
               aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}
-              className="hidden h-10 w-10 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] sm:flex"
+              className={`h-10 w-10 items-center justify-center rounded-control text-ink/80 hover:bg-ink/[0.06] sm:flex ${user ? 'flex' : 'hidden'}`}
             >
               {isDarkMode ? <Sun className="h-[18px] w-[18px]" strokeWidth={1.75} /> : <Moon className="h-[18px] w-[18px]" strokeWidth={1.75} />}
             </button>
@@ -253,7 +265,7 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
               onClick={() => setSheet(true)}
               aria-expanded={sheet}
               aria-label="Open menu"
-              className="flex h-11 w-11 items-center justify-center rounded-control text-ink hover:bg-ink/[0.06] lg:hidden"
+              className={`h-11 w-11 items-center justify-center rounded-control text-ink hover:bg-ink/[0.06] lg:hidden ${user ? 'hidden' : 'flex'}`}
             >
               <Menu className="h-5 w-5" strokeWidth={1.75} />
             </button>
