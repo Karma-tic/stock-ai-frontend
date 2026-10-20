@@ -38,7 +38,7 @@ export default function OptionDrawer({ option: o, categories, live, inCompare, o
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end bg-black/40" onMouseDown={e => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="invest-drawer-title" className="h-full w-full max-w-xl overflow-y-auto bg-white dark:bg-lavender-base p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div role="dialog" aria-modal="true" aria-labelledby="invest-drawer-title" className="h-full w-full max-w-xl overflow-y-auto bg-surface dark:bg-lavender-base p-6 sm:p-8 space-y-6 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">{categories[o.category]}</p>
@@ -69,7 +69,7 @@ export default function OptionDrawer({ option: o, categories, live, inCompare, o
           <h3 className="text-lg font-bold text-lavender-text">What can go wrong</h3>
           <ul className="space-y-2">
             {o.risks.map(r => (
-              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />{r}</li>
+              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-down" />{r}</li>
             ))}
           </ul>
         </section>
@@ -78,7 +78,7 @@ export default function OptionDrawer({ option: o, categories, live, inCompare, o
           <h3 className="text-lg font-bold text-lavender-text">Why people choose it</h3>
           <ul className="space-y-2">
             {o.pros.map(r => (
-              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />{r}</li>
+              <li key={r} className="flex gap-2 text-sm text-lavender-text/85"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-up" />{r}</li>
             ))}
           </ul>
         </section>

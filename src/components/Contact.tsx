@@ -17,13 +17,13 @@ export default function Contact() {
   ].map(({ icon: Icon, title, value }) => (
     <div
       key={title}
-      className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4"
+      className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4"
     >
       <Icon className="w-6 h-6 text-lavender-primary mb-2" />
       <p className="text-lavender-text font-semibold">{title}</p>
       <a
         href={`mailto:${value}`}
-        className="text-lavender-primary hover:text-blue-300 text-sm transition"
+        className="text-lavender-primary hover:text-accent text-sm transition"
       >
         {value}
       </a>
@@ -31,7 +31,7 @@ export default function Contact() {
   ))}
 </div>
 
-      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6">
+      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6">
         <h2 className="text-lavender-text font-bold text-lg mb-4">Response Times</h2>
         <div className="space-y-3">
           {[
@@ -42,13 +42,13 @@ export default function Contact() {
           ].map(item => (
             <div key={item.type} className="flex justify-between items-center border-b border-white/50 pb-3">
               <span className="text-lavender-text/80 text-sm">{item.type}</span>
-              <span className="text-green-600 text-sm font-semibold">{item.time}</span>
+              <span className="text-up text-sm font-semibold">{item.time}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-6 bg-blue-500/10 border border-white/50 rounded-2xl p-4">
+      <div className="mt-6 bg-accent/10 border border-white/50 rounded-2xl p-4">
         <p className="text-lavender-primary text-sm mb-2">
           <strong>Corporate Headquarters:</strong><br />
           Bhopal, Madhya Pradesh, India<br />

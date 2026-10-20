@@ -17,7 +17,7 @@ export default function ToolsHub() {
       description: "Calculate the future value of your monthly SIP investments with the power of compounding.",
       path: "/tools/sip-calculator",
       icon: <Calculator className="w-8 h-8 text-lavender-primary" />,
-      color: "border-white/50 bg-blue-500/10",
+      color: "border-white/50 bg-accent/10",
       isNew: true
     },
     // Placeholders for future tools to show the user what else is possible
@@ -25,31 +25,31 @@ export default function ToolsHub() {
       title: "Stock Comparison",
       description: "Compare NSE stocks side by side by price, PE, dividend yield, 52-week range, and market cap.",
       path: "/tools/stock-comparison",
-      icon: <Scale className="w-8 h-8 text-green-600" />,
-      color: "border-green-500/30 bg-green-500/10",
+      icon: <Scale className="w-8 h-8 text-up" />,
+      color: "border-up/30 bg-up/10",
       isNew: true
     },
     {
       title: "Lumpsum Calculator",
       description: "Estimate returns on your one-time investments over a long period.",
       path: "/tools/lumpsum-calculator",
-      icon: <TrendingUp className="w-8 h-8 text-emerald-400" />,
+      icon: <TrendingUp className="w-8 h-8 text-up" />,
       isNew: true
     },
     {
       title: "F&O Calculator",
       description: "Calculate your exact P&L, Margin, Brokerage, and STT for Futures and Options.",
       path: "/tools/fno-calculator",
-      icon: <Activity className="w-8 h-8 text-indigo-400" />,
-      color: "border-indigo-500/30 bg-indigo-500/10",
+      icon: <Activity className="w-8 h-8 text-accent" />,
+      color: "border-accent/30 bg-accent/10",
       isNew: true
     },
     {
       title: "Brokerage Calculator",
       description: "Calculate exactly how much you'll pay in taxes, STT, and brokerage per trade.",
       path: "/tools/brokerage-calculator",
-      icon: <PieChart className="w-8 h-8 text-purple-400" />,
-      color: "border-white/50 bg-purple-500/10",
+      icon: <PieChart className="w-8 h-8 text-accent" />,
+      color: "border-white/50 bg-accent/10",
       isNew: true
     }
   ];

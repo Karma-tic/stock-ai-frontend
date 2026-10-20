@@ -10,7 +10,7 @@ export default function Chapter2() {
       nextChapter={{ path: '/learn/essential-terms', title: 'Essential Stock Market Terms' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-cobalt rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lavender flex-shrink-0">
           2
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Types of Trading in Indian Stock Market</h2>
@@ -21,36 +21,36 @@ export default function Chapter2() {
             {[
               {
                 title:  "Intraday Trading",
-                color:  "border-red-500/40 bg-red-500/5",
+                color:  "border-down/40 bg-down/5",
                 badge:  "High Risk",
-                badgeC: "bg-red-500/20 text-red-600",
+                badgeC: "bg-down/20 text-down",
                 desc:   "Buying and selling stocks within the same trading day. Positions must be closed before 3:30 PM. Requires significant time, discipline and risk management. Not recommended for beginners.",
                 pros:   ["No overnight risk", "Can profit in falling markets"],
                 cons:   ["Very high risk", "Requires constant monitoring", "Most beginners lose money"],
               },
               {
                 title:  "Swing Trading",
-                color:  "border-yellow-500/40 bg-yellow-500/5",
+                color:  "border-caution/40 bg-caution/5",
                 badge:  "Medium Risk",
-                badgeC: "bg-yellow-500/20 text-yellow-400",
+                badgeC: "bg-caution/20 text-caution",
                 desc:   "Holding stocks for 2 days to several weeks to capture short-term price movements. Combines technical analysis with fundamental research. Suitable for part-time traders.",
                 pros:   ["Less time intensive than intraday", "Can capture multi-day trends"],
                 cons:   ["Overnight gap risk", "Requires technical knowledge"],
               },
               {
                 title:  "Positional Trading",
-                color:  "border-white/50 bg-blue-500/5",
+                color:  "border-white/50 bg-accent/5",
                 badge:  "Medium Risk",
-                badgeC: "bg-blue-500/20 text-lavender-primary",
+                badgeC: "bg-accent/20 text-lavender-primary",
                 desc:   "Holding stocks for weeks to months based on a medium-term view. Focuses on fundamental analysis and sector trends. Good balance between active and passive investing.",
                 pros:   ["Less stress than intraday", "Captures large moves"],
                 cons:   ["Requires patience", "Capital locked for months"],
               },
               {
                 title:  "Long-term Investing",
-                color:  "border-green-500/40 bg-green-500/5",
+                color:  "border-up/40 bg-up/5",
                 badge:  "Lower Risk",
-                badgeC: "bg-green-500/20 text-green-600",
+                badgeC: "bg-up/20 text-up",
                 desc:   "Buying quality stocks and holding for years or decades. Warren Buffett's preferred approach. Power of compounding works best here. Ideal for wealth building over time.",
                 pros:   ["Benefits from compounding", "Lower tax on LTCG", "Less time required"],
                 cons:   ["Returns take years", "Patience required"],
@@ -66,18 +66,18 @@ export default function Chapter2() {
                 <p className="text-lavender-text/70 text-sm leading-relaxed mb-4">{item.desc}</p>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <p className="text-green-600 text-xs font-semibold mb-1">Pros</p>
+                    <p className="text-up text-xs font-semibold mb-1">Pros</p>
                     {item.pros.map(p => <p key={p} className="text-lavender-text/70 text-xs">+ {p}</p>)}
                   </div>
                   <div>
-                    <p className="text-red-600 text-xs font-semibold mb-1">Cons</p>
+                    <p className="text-down text-xs font-semibold mb-1">Cons</p>
                     {item.cons.map(c => <p key={c} className="text-lavender-text/70 text-xs">- {c}</p>)}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-6">
+          <div className="bg-accent/10 border border-accent/20 rounded-2xl p-6">
             <p className="text-lavender-primary text-sm font-semibold mb-2">Stock AI Recommendation</p>
             <p className="text-lavender-text/80 leading-relaxed">
               For most retail investors, a combination of positional trading and long-term investing works best. Stock AI at <strong>byteplay.org</strong> generates BUY/HOLD/SELL signals with 1-3 month and 6-12 month targets — perfectly suited for both positional and long-term approaches.

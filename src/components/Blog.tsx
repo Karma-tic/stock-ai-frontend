@@ -51,7 +51,7 @@ export default function Blog() {
             <div key={a.title} className="app-card p-8 hover:border-lavender-primary/25 hover:shadow-lavender transition">
               <h3 className="text-lavender-text font-bold text-xl mb-4">{a.title}</h3>
               <p className="text-lavender-text/70 leading-relaxed mb-6">{a.desc}</p>
-              <Link to={a.link} className="text-lavender-primary hover:text-blue-300 font-semibold transition flex items-center gap-2">
+              <Link to={a.link} className="text-lavender-primary hover:text-accent font-semibold transition flex items-center gap-2">
                 Read full article
               </Link>
             </div>

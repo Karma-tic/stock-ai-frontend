@@ -10,7 +10,7 @@ export default function Chapter3() {
       nextChapter={{ path: '/learn/fundamental-vs-technical', title: 'Fundamental vs Technical Analysis' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-up/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           3
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Essential Stock Market Terms</h2>
@@ -32,8 +32,8 @@ export default function Chapter3() {
               { term: "Circuit Breaker", def: "Automatic trading halt when a stock moves beyond a limit (typically ±5%, ±10%, ±20%). Prevents panic buying or selling." },
               { term: "Demat Account", def: "Dematerialised account that holds your shares electronically. Required to trade on NSE/BSE. Provided by brokers like Zerodha, Groww, Upstox." },
             ].map(item => (
-              <div key={item.term} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-green-500/30 transition">
-                <p className="text-green-600 font-bold text-lg mb-2">{item.term}</p>
+              <div key={item.term} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-5 hover:border-up/30 transition">
+                <p className="text-up font-bold text-lg mb-2">{item.term}</p>
                 <p className="text-lavender-text/80 leading-relaxed">{item.def}</p>
               </div>
             ))}

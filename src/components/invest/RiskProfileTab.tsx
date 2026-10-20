@@ -31,7 +31,7 @@ export default function RiskProfileTab({ answers, profile, options, signedIn, sa
                 const on = answers[q.key] === v;
                 return (
                   <button key={label} type="button" aria-pressed={on} onClick={() => onAnswer(q.key, v)}
-                    className={`rounded-xl border px-4 py-3 text-left text-sm transition ${on ? 'border-lavender-primary bg-lavender-primary/10 font-semibold text-lavender-text' : 'border-lavender-text/15 bg-white text-lavender-text/80 hover:border-lavender-primary/40'}`}>
+                    className={`rounded-xl border px-4 py-3 text-left text-sm transition ${on ? 'border-lavender-primary bg-lavender-primary/10 font-semibold text-lavender-text' : 'border-lavender-text/15 bg-surface text-lavender-text/80 hover:border-lavender-primary/40'}`}>
                     {label}
                   </button>
                 );

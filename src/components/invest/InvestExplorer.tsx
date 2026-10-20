@@ -35,7 +35,7 @@ function PulseItem({ label, value, sub, live }: { label: string; value: string; 
   return (
     <div className="min-w-0 px-4 py-3">
       <p className="flex items-center gap-1.5 truncate text-[11px] font-medium text-lavender-text/60">
-        {live && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden />}
+        {live && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-up" aria-hidden />}
         {label}
       </p>
       <p className="text-lg font-bold tabular-nums text-lavender-text">{value}</p>
@@ -45,7 +45,7 @@ function PulseItem({ label, value, sub, live }: { label: string; value: string; 
 }
 
 const pct = (v: number) => (
-  <span className={v >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>{v >= 0 ? '+' : ''}{v.toFixed(2)}% today</span>
+  <span className={v >= 0 ? 'text-up dark:text-up' : 'text-down dark:text-down'}>{v >= 0 ? '+' : ''}{v.toFixed(2)}% today</span>
 );
 
 export default function InvestExplorer({ user }: { user: any }) {
@@ -173,7 +173,7 @@ export default function InvestExplorer({ user }: { user: any }) {
           <PulseItem live label="Gold ETF" value={gold ? fmtPrice(gold.price) : '—'} sub={gold ? pct(gold.change_pct) : <span className="text-lavender-text/50">loading</span>} />
         </section>
         {rates.status.small_savings?.stale && (
-          <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-700">{rates.status.small_savings.message}</p>
+          <p className="rounded-xl border border-caution/30 bg-caution/10 px-4 py-2.5 text-sm text-caution">{rates.status.small_savings.message}</p>
         )}
 
         {/* Portfolio tie-in */}
@@ -223,6 +223,26 @@ export default function InvestExplorer({ user }: { user: any }) {
           <p>Verify every rate with the issuer before investing. {offline && 'Showing the last saved rates while live data is unavailable. '}See our <Link to="/disclaimer" className="underline">disclaimer</Link>.</p>
         </footer>
       </div>
+
+      {/* Compare tray: the options you picked collect here while you browse */}
+      {tab === 'explore' && compareItems.length > 0 && (
+        <div className={`fixed inset-x-0 z-40 border-t border-line bg-canvas/90 backdrop-blur-[16px] ${user ? 'bottom-[calc(57px+env(safe-area-inset-bottom))] lg:bottom-0' : 'bottom-0 pb-[env(safe-area-inset-bottom)]'}`}>
+          <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
+            <p className="hidden shrink-0 text-xs font-medium text-muted sm:block">Comparing</p>
+            <ul className="flex min-w-0 flex-1 gap-2 overflow-x-auto scrollbar-hide" aria-label="Options to compare">
+              {compareItems.map(o => (
+                <li key={o.id} className="flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface py-1 pl-3 pr-1 text-xs font-medium text-ink">
+                  <span className="max-w-[10rem] truncate">{o.name}</span>
+                  <button type="button" onClick={() => toggleCompare(o.id)} aria-label={`Remove ${o.name} from compare`} className="flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-ink/[0.06] hover:text-ink">×</button>
+                </li>
+              ))}
+            </ul>
+            <button type="button" onClick={() => setTab('compare')} className="inline-flex h-10 shrink-0 items-center rounded-control bg-cobalt px-4 text-sm font-semibold text-white">
+              Compare ({compareItems.length})
+            </button>
+          </div>
+        </div>
+      )}
 
       <OptionDrawer option={open} categories={catalog.categories} live={live} inCompare={!!open && compare.includes(open.id)}
         onClose={closeDrawer} onToggleCompare={toggleCompare} onProject={project} />

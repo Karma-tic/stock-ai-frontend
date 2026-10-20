@@ -58,8 +58,8 @@ export default function ProPicks() {
       />
       {/* HEADER SECTION */}
       <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent mb-4 flex items-center justify-center gap-3">
-          <TrendingUp className="w-10 h-10 text-yellow-500" />
+        <h1 className="text-4xl md:text-5xl font-extrabold text-ink mb-4 flex items-center justify-center gap-3">
+          <TrendingUp className="w-10 h-10 text-caution" />
           Pro Picks
         </h1>
         <p className="text-lavender-text/60 text-lg max-w-2xl mx-auto">
@@ -68,13 +68,13 @@ export default function ProPicks() {
       </div>
 
       {/* ACCURACY TRACKER */}
-      <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
+      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between shadow-lavender">
         <div className="flex items-center gap-4 mb-4 md:mb-0">
-          <div className="p-3 bg-green-500/10 rounded-full border border-green-500/20">
-            <Target className="w-8 h-8 text-green-600" />
+          <div className="p-3 bg-up/10 rounded-full border border-up/20">
+            <Target className="w-8 h-8 text-up" />
           </div>
           <div>
-            <h3 className="text-gray-300 font-medium">All-Time AI Accuracy</h3>
+            <h3 className="text-muted font-medium">All-Time AI Accuracy</h3>
             <p className="text-sm text-lavender-text/70">Based on End-of-Day Closing Prices</p>
           </div>
         </div>
@@ -84,26 +84,26 @@ export default function ProPicks() {
             <div className="text-sm text-lavender-text/70">Total Calls</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-extrabold text-green-600">{accuracy?.win_rate || "0%"}</div>
-            <div className="text-sm text-green-500/70 font-medium tracking-wider uppercase mt-1">Win Rate</div>
+            <div className="text-4xl font-extrabold text-up">{accuracy?.win_rate || "0%"}</div>
+            <div className="text-sm text-up/70 font-medium tracking-wider uppercase mt-1">Win Rate</div>
           </div>
         </div>
       </div>
 
       {/* SECURITY BANNER FOR FREE USERS */}
       {!isPro && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-6 mb-8 text-center flex flex-col items-center">
-          <Lock className="w-12 h-12 text-yellow-500 mb-3" />
+        <div className="bg-caution/10 border border-caution/30 rounded-2xl p-6 mb-8 text-center flex flex-col items-center">
+          <Lock className="w-12 h-12 text-caution mb-3" />
           <h2 className="text-2xl font-bold text-lavender-text mb-2">Unlock Today's Picks</h2>
           <p className="text-lavender-text/60 mb-6 max-w-xl">
             You are currently viewing masked data. Exact ticker names, entry points, and targets are available only to Pro subscribers.
           </p>
           {isLoggedIn ? (
-            <button onClick={() => setShowUpgrade(true)} className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
+            <button onClick={() => setShowUpgrade(true)} className="bg-gradient-to-r from-caution/20 to-caution/20 hover:from-caution/20 hover:to-caution/20 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
               Upgrade to Pro Now
             </button>
           ) : (
-            <Link to="/login" className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
+            <Link to="/login" className="bg-gradient-to-r from-caution/20 to-caution/20 hover:from-caution/20 hover:to-caution/20 text-black font-bold py-3 px-8 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
               Upgrade to Pro Now
             </Link>
           )}
@@ -122,8 +122,8 @@ export default function ProPicks() {
               
               {/* Blur Overlay for Free Users */}
               {!isPro && (
-                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-white/50 flex items-center justify-center">
-                  <div className="bg-white px-6 py-2 rounded-full border border-yellow-500/30 text-yellow-500 font-bold flex items-center gap-2 shadow-lavender">
+                <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-surface/50 flex items-center justify-center">
+                  <div className="bg-surface px-6 py-2 rounded-full border border-caution/30 text-caution font-bold flex items-center gap-2 shadow-lavender">
                     <Lock className="w-4 h-4" /> Pro Only
                   </div>
                 </div>
@@ -134,7 +134,7 @@ export default function ProPicks() {
                   <h3 className={`text-3xl font-black ${isPro ? 'text-lavender-text' : 'text-lavender-text/80 font-mono tracking-widest'}`}>
                     {pick.ticker}
                   </h3>
-                  <div className="inline-flex items-center gap-1 bg-green-500/10 text-green-600 text-xs px-2 py-1 rounded mt-2 border border-green-500/20">
+                  <div className="inline-flex items-center gap-1 bg-up/10 text-up text-xs px-2 py-1 rounded mt-2 border border-up/20">
                     <CheckCircle2 className="w-3 h-3" />
                     AI Screened
                   </div>

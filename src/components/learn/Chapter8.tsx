@@ -10,14 +10,14 @@ export default function Chapter8() {
       nextChapter={{ path: '/learn/common-mistakes', title: '10 Common Mistakes' }}
     >
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
+        <div className="w-12 h-12 bg-up/15 rounded-2xl flex items-center justify-center text-lavender-text font-black text-xl shadow-lavender flex-shrink-0">
           8
         </div>
         <h2 className="text-3xl md:text-4xl font-black text-lavender-text">Dividend Investing</h2>
       </div>
       
       
-          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-8 mb-10">
+          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-8 mb-10">
             <p className="text-lavender-text/80 text-lg leading-relaxed mb-6">
               Dividend investing is a strategy of buying stocks that regularly pay dividends — a share of company profits distributed to shareholders. In India, many PSU companies and established private companies offer attractive dividend yields. Reinvesting dividends over time through compounding can significantly grow your wealth.
             </p>
@@ -34,9 +34,9 @@ export default function Chapter8() {
               { stock: "ONGC",      yield: "~4-6%",  type: "Energy" },
               { stock: "Power Grid", yield: "~4-5%", type: "Utility" },
             ].map(item => (
-              <div key={item.stock} className="bg-emerald-900/20 border border-emerald-500/30 rounded-2xl p-6 text-center hover:bg-emerald-900/40 transition cursor-default">
+              <div key={item.stock} className="bg-up/20 border border-up/30 rounded-2xl p-6 text-center hover:bg-up/40 transition cursor-default">
                 <p className="text-lavender-text font-bold text-lg mb-2">{item.stock}</p>
-                <p className="text-emerald-400 font-black text-3xl mb-2">{item.yield}</p>
+                <p className="text-up font-black text-3xl mb-2">{item.yield}</p>
                 <p className="text-lavender-text/60 text-sm">{item.type}</p>
               </div>
             ))}

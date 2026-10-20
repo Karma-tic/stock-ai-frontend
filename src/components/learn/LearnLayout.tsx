@@ -15,15 +15,15 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
     <div className="min-h-screen bg-lavender-surface text-lavender-text/80">
       
       {/* Top Breadcrumb Nav */}
-      <div className="bg-white border-b border-lavender-text/10 py-4 px-6 sticky top-[73px] z-30 shadow-lavender">
+      <div className="bg-surface border-b border-lavender-text/10 py-4 px-6 sticky top-[73px] z-30 shadow-lavender">
         <div className="max-w-4xl mx-auto flex items-center gap-2 text-sm">
           <Link to="/learn" className="text-lavender-text/70 hover:text-lavender-primary transition flex items-center gap-1">
             <ArrowLeft className="w-4 h-4" />
             Learn Hub
           </Link>
-          <ChevronRight className="w-4 h-4 text-gray-300" />
+          <ChevronRight className="w-4 h-4 text-muted" />
           <span className="text-lavender-text/60">Chapter {chapterNumber}</span>
-          <ChevronRight className="w-4 h-4 text-gray-300" />
+          <ChevronRight className="w-4 h-4 text-muted" />
           <span className="text-lavender-text font-semibold truncate">{title}</span>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
           {prevChapter ? (
             <Link 
               to={prevChapter.path}
-              className="flex items-center gap-3 bg-white hover:bg-lavender-base border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
+              className="flex items-center gap-3 bg-surface hover:bg-lavender-base border border-lavender-text/10 shadow-sm px-6 py-4 rounded-2xl transition w-full sm:w-auto"
             >
               <ArrowLeft className="w-5 h-5 text-lavender-text/70" />
               <div className="text-left">
@@ -55,10 +55,10 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
           {nextChapter ? (
             <Link 
               to={nextChapter.path}
-              className="flex items-center gap-3 bg-gradient-lavender hover:opacity-90 px-6 py-4 rounded-2xl transition shadow-lavender shadow-blue-500/20 w-full sm:w-auto justify-between sm:justify-start"
+              className="flex items-center gap-3 bg-gradient-lavender hover:opacity-90 px-6 py-4 rounded-2xl transition shadow-lavender w-full sm:w-auto justify-between sm:justify-start"
             >
               <div className="text-left sm:text-right">
-                <p className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-1">Next Chapter</p>
+                <p className="text-xs text-accent uppercase font-bold tracking-wider mb-1">Next Chapter</p>
                 <p className="text-lavender-text font-semibold text-sm">{nextChapter.title}</p>
               </div>
               <ChevronRight className="w-5 h-5 text-lavender-text" />
@@ -66,7 +66,7 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
           ) : (
             <Link 
               to="/learn"
-              className="flex items-center gap-3 bg-emerald-600 hover:bg-emerald-500 px-6 py-4 rounded-2xl transition shadow-lavender shadow-emerald-500/20 w-full sm:w-auto"
+              className="flex items-center gap-3 bg-up/15 hover:bg-up/15 px-6 py-4 rounded-2xl transition shadow-lavender w-full sm:w-auto"
             >
               <div className="text-center">
                 <p className="text-lavender-text font-bold">Return to Hub</p>

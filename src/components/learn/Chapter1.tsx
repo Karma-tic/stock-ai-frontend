@@ -17,7 +17,7 @@ export default function Chapter1() {
       </div>
       
       
-          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-8">
+          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mb-8">
             <p className="text-lavender-text/80 leading-relaxed mb-4">
               The stock market is a marketplace where buyers and sellers trade shares of publicly listed companies. In India, the two primary stock exchanges are the <strong className="text-lavender-text">National Stock Exchange (NSE)</strong> and the <strong className="text-lavender-text">Bombay Stock Exchange (BSE)</strong>. When you buy a share, you become a part-owner of that company and participate in its profits and growth.
             </p>
@@ -35,7 +35,7 @@ export default function Chapter1() {
               { term: "BSE", def: "Bombay Stock Exchange — Asia's oldest exchange, established 1875. Home to Sensex index and over 5,000 listed companies." },
               { term: "SEBI", def: "Securities and Exchange Board of India — the regulatory authority that governs all market participants and protects investor interests." },
             ].map(item => (
-              <div key={item.term} className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-4">
+              <div key={item.term} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4">
                 <p className="text-lavender-primary font-bold mb-2">{item.term}</p>
                 <p className="text-lavender-text/70 text-sm leading-relaxed">{item.def}</p>
               </div>

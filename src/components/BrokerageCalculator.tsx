@@ -82,7 +82,7 @@ export default function BrokerageCalculator() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <PieChart className="w-8 h-8 text-purple-400" />
+            <PieChart className="w-8 h-8 text-accent" />
             <h1 className="text-4xl font-bold text-lavender-text">Brokerage Calculator</h1>
           </div>
           <p className="text-lavender-text/70 text-lg">
@@ -91,7 +91,7 @@ export default function BrokerageCalculator() {
         </div>
 
         {/* Interactive Calculator Section */}
-        <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
+        <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 md:p-10 mb-16 shadow-lavender flex flex-col md:flex-row gap-10">
           
           {/* Controls */}
           <div className="flex-1 space-y-6">
@@ -100,13 +100,13 @@ export default function BrokerageCalculator() {
             <div className="flex p-1 bg-lavender-base border border-lavender-text/10 rounded-2xl mb-6">
               <button 
                 onClick={() => setTradeType('delivery')}
-                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'delivery' ? 'bg-indigo-600 text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'delivery' ? 'bg-cobalt text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
               >
                 Delivery (CNC)
               </button>
               <button 
                 onClick={() => setTradeType('intraday')}
-                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'intraday' ? 'bg-indigo-600 text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-2xl transition ${tradeType === 'intraday' ? 'bg-cobalt text-white shadow-lavender' : 'text-lavender-text/70 hover:text-lavender-text'}`}
               >
                 Intraday (MIS)
               </button>
@@ -119,7 +119,7 @@ export default function BrokerageCalculator() {
                 min="0"
                 value={buyPrice}
                 onChange={(e) => setBuyPrice(Number(e.target.value))}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
 
@@ -130,7 +130,7 @@ export default function BrokerageCalculator() {
                 min="0"
                 value={sellPrice}
                 onChange={(e) => setSellPrice(Number(e.target.value))}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
 
@@ -141,7 +141,7 @@ export default function BrokerageCalculator() {
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full bg-white border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
+                className="w-full bg-surface border border-lavender-text/10 shadow-sm rounded-2xl px-4 py-3 text-lavender-text focus:outline-none focus:border-white/50"
               />
             </div>
           </div>
@@ -181,14 +181,14 @@ export default function BrokerageCalculator() {
               </div>
               
               <div className="pt-3 border-t border-lavender-text/10 flex justify-between font-bold">
-                <span className="text-red-600">Total Charges</span>
-                <span className="text-red-600">{formatCurrency(totalCharges)}</span>
+                <span className="text-down">Total Charges</span>
+                <span className="text-down">{formatCurrency(totalCharges)}</span>
               </div>
             </div>
 
-            <div className={`mt-6 p-4 rounded-2xl text-center border ${netProfit >= 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+            <div className={`mt-6 p-4 rounded-2xl text-center border ${netProfit >= 0 ? 'bg-up/10 border-up/30' : 'bg-down/10 border-down/30'}`}>
               <p className="text-lavender-text/70 text-sm mb-1">Net P&L</p>
-              <p className={`text-2xl font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-red-600'}`}>
+              <p className={`text-2xl font-black ${netProfit >= 0 ? 'text-up' : 'text-down'}`}>
                 {netProfit >= 0 ? '+' : ''}{formatCurrency(netProfit)}
               </p>
             </div>
@@ -196,7 +196,7 @@ export default function BrokerageCalculator() {
         </div>
 
         {/* SEO Text Content for AdSense */}
-        <article className="prose prose-invert max-w-none prose-headings:text-lavender-text prose-a:text-purple-400">
+        <article className="prose prose-invert max-w-none prose-headings:text-lavender-text prose-a:text-accent">
           <h2 className="text-2xl font-bold mb-4 text-lavender-text">Why Do You Need a Brokerage Calculator?</h2>
           <p className="mb-6 leading-relaxed">
             When you buy or sell shares in the Indian stock market (NSE or BSE), the price you see on the screen is not the only amount you pay or receive. Every transaction attracts a series of fees, taxes, and statutory charges. A brokerage calculator helps you uncover these hidden costs so you can accurately determine your net profit or loss (Net P&L) before you even place the trade.
@@ -238,7 +238,7 @@ export default function BrokerageCalculator() {
             The break-even point is how much a stock price must move in your favor just to cover the taxes and charges. For example, if you buy ₹10 Lakhs worth of shares in delivery, your total charges could exceed ₹1,500. This means the stock needs to go up by at least ₹1,500 just for you to exit at a "no profit, no loss" scenario. Active traders must use a brokerage calculator to ensure their profit targets are far larger than their transaction costs.
           </p>
 
-          <div className="bg-white border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
+          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
             <h3 className="text-lavender-text font-bold mb-2">Important Notes</h3>
             <p className="text-sm text-lavender-text/70 leading-relaxed">
               The calculations provided are approximate and based on standard discount broker rates (e.g., Zerodha) as of 2024. Actual charges may vary depending on your specific broker, DP charges (for selling delivery shares), and regulatory updates. Always verify final contract notes provided by your broker.

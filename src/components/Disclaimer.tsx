@@ -8,9 +8,9 @@ export default function Disclaimer() {
       <h1 className="text-lavender-text text-3xl font-bold mb-2">Disclaimer</h1>
       <p className="text-lavender-text/70 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
 
-      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 mb-8">
-        <p className="text-yellow-400 font-semibold">⚠️ Important Notice</p>
-        <p className="text-yellow-300 text-sm mt-1">
+      <div className="bg-caution/10 border border-caution/30 rounded-2xl p-4 mb-8">
+        <p className="text-caution font-semibold">⚠️ Important Notice</p>
+        <p className="text-caution text-sm mt-1">
           Stock AI is an educational platform. It is NOT a SEBI-registered investment advisor.
           Nothing on this platform constitutes financial advice.
         </p>

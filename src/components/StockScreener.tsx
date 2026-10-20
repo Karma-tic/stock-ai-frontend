@@ -76,8 +76,8 @@ export default function StockScreener() {
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-500/10 border border-white/50 mb-4">
-            <Filter className="w-7 h-7 text-green-600" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-up/10 border border-white/50 mb-4">
+            <Filter className="w-7 h-7 text-up" />
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-lavender-text mb-3">Popular Stock Quick Filters</h1>
           <p className="text-lavender-text/70 max-w-2xl mx-auto">
@@ -110,7 +110,7 @@ export default function StockScreener() {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search symbol, company, sector"
-                className="w-full lg:w-72 bg-white border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
+                className="w-full lg:w-72 bg-surface border border-lavender-text/10 shadow-sm rounded-2xl pl-9 pr-4 py-2 text-sm text-lavender-text focus:outline-none focus:border-lavender-primary"
               />
             </div>
           </div>
@@ -118,16 +118,16 @@ export default function StockScreener() {
 
         <Link
           to="/stocks/dividends"
-          className="mb-6 flex flex-col gap-4 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-5 transition hover:border-emerald-500/45 sm:flex-row sm:items-center sm:justify-between"
+          className="mb-6 flex flex-col gap-4 rounded-2xl border border-up/25 bg-up/10 p-5 transition hover:border-up/45 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-start gap-3">
-            <span className="rounded-xl bg-emerald-500/15 p-2 text-emerald-600"><Coins className="h-5 w-5" /></span>
+            <span className="rounded-xl bg-up/15 p-2 text-up"><Coins className="h-5 w-5" /></span>
             <div>
               <h2 className="font-bold text-lavender-text">Dividend Tracker</h2>
               <p className="mt-1 text-sm text-lavender-text/65">Compare yield, cash paid and completed-year dividend consistency.</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-600">Explore dividend records <ArrowRight className="h-4 w-4" /></span>
+          <span className="inline-flex items-center gap-1 text-sm font-bold text-up">Explore dividend records <ArrowRight className="h-4 w-4" /></span>
         </Link>
 
         {loading ? (
@@ -149,13 +149,13 @@ export default function StockScreener() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(stock => (
-                <Link to={`/stock/${stock.display_ticker}`} key={stock.display_ticker} className="app-card group p-5 hover:border-green-500/25 hover:-translate-y-0.5 transition">
+                <Link to={`/stock/${stock.display_ticker}`} key={stock.display_ticker} className="app-card group p-5 hover:border-up/25 hover:-translate-y-0.5 transition">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h2 className="text-xl font-black text-lavender-text">{stock.display_ticker}</h2>
                       <p className="text-lavender-text/60 text-xs">{stock.company_name}</p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full font-bold ${(stock.price_change_pct || 0) >= 0 ? 'bg-green-500/10 text-green-600' : 'bg-red-500/10 text-red-600'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full font-bold ${(stock.price_change_pct || 0) >= 0 ? 'bg-up/10 text-up' : 'bg-down/10 text-down'}`}>
                       {(stock.price_change_pct || 0) >= 0 ? '+' : ''}{stock.price_change_pct || 0}%
                     </span>
                   </div>
@@ -168,7 +168,7 @@ export default function StockScreener() {
                     </div>
                     <div className="app-tile p-2">
                       <p className="text-lavender-text/60 text-xs">Div%</p>
-                      <p className="font-semibold text-green-600">{stock.dividend_yield_pct || 0}%</p>
+                      <p className="font-semibold text-up">{stock.dividend_yield_pct || 0}%</p>
                     </div>
                     <div className="app-tile p-2">
                       <p className="text-lavender-text/60 text-xs">52W</p>
@@ -184,7 +184,7 @@ export default function StockScreener() {
           </>
         )}
 
-        <div className="mt-8 rounded-2xl border border-lavender-text/10 bg-white p-4 text-sm leading-6 text-lavender-text/65">
+        <div className="mt-8 rounded-2xl border border-lavender-text/10 bg-surface p-4 text-sm leading-6 text-lavender-text/65">
           Use these filters only to create a research shortlist. Check company filings, results, risks and valuation before making a decision.
         </div>
       </div>

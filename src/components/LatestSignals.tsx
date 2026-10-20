@@ -33,7 +33,7 @@ export default function LatestSignals() {
   const tickerItems = [...signals, ...signals, ...signals, ...signals];
 
   return (
-    <div className="px-4 py-3 bg-white border-b border-lavender-text/10 overflow-hidden shadow-sm">
+    <div className="px-4 py-3 bg-surface border-b border-lavender-text/10 overflow-hidden shadow-sm">
       
       {/* Inline styles for the seamless ticker animation */}
       <style>{`
@@ -71,8 +71,8 @@ export default function LatestSignals() {
         <div className="relative overflow-hidden w-full flex justify-center">
           
           {/* Mobile fade edges - hidden on desktop (md:hidden) so it looks clean */}
-          <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
-          <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+          <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-surface2 to-transparent z-10 pointer-events-none"></div>
+          <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-surface2 to-transparent z-10 pointer-events-none"></div>
 
           {/* 
             The scrolling container:
@@ -85,14 +85,14 @@ export default function LatestSignals() {
               const isDuplicate = i >= signals.length;
               
               const colors: Record<string, string> = {
-                BUY:  'border-green-500 bg-green-500/10',
-                HOLD: 'border-yellow-500 bg-yellow-500/10',
-                SELL: 'border-red-500 bg-red-500/10'
+                BUY:  'border-up/40 bg-up/10',
+                HOLD: 'border-caution/40 bg-caution/10',
+                SELL: 'border-down/40 bg-down/10'
               };
               const textColors: Record<string, string> = {
-                BUY:  'text-green-600',
-                HOLD: 'text-yellow-400',
-                SELL: 'text-red-600'
+                BUY:  'text-up',
+                HOLD: 'text-caution',
+                SELL: 'text-down'
               };
               
               return (
