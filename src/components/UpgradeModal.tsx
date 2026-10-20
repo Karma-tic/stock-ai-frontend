@@ -1,9 +1,10 @@
 // src/components/UpgradeModal.tsx
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { supabase } from '../lib/supabase';
 import { loadRazorpay } from '../lib/loadRazorpay';
-import { Target, Unlock, RefreshCw, Check } from 'lucide-react';
+import { Check, Loader2, LockKeyhole, X } from 'lucide-react';
+import { buttonClass } from './ui/Button';
 
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -19,7 +20,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
   onSuccess: () => void;
 }) {
   const [loading, setLoading]     = useState(false);
-  const [selected, setSelected]   = useState<PlanType>(null);
+  const [selected, setSelected]   = useState<PlanType>('onetime');
   const [hasUsedTrial, setHasUsedTrial] = useState(false);
 
   // Start loading Razorpay Checkout as soon as the modal opens, so it is ready by the time a plan is chosen.
@@ -34,14 +35,30 @@ export default function UpgradeModal({ onClose, onSuccess }: {
       }
     });
   }, []);
-    const features = [
-    'Unlimited AI analysis',
-    'Search 500+ stocks',
-    'Unlimited watchlist',
-    'Portfolio tracker',
-    'Morning email digest',
-    'Hourly signals',
+  const features = [
+    'Unlimited Evidence Board analyses (free: 2 a day)',
+    'Search 500+ NSE stocks',
+    'Unlimited watchlist and portfolio',
+    'Morning email digest for your stocks',
+    'Hourly signal refresh',
   ];
+
+  // Dialog basics: Escape closes, focus moves in and back, the page behind does not scroll
+  const panelRef = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => { if (!loading) onClose(); }, [loading, onClose]);
+  useEffect(() => {
+    const back = document.activeElement as HTMLElement | null;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    panelRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener('keydown', onKey);
+      back?.focus?.();
+    };
+  }, [close]);
 const plans = [
   {
     id:       'trial' as PlanType,
@@ -72,12 +89,6 @@ const plans = [
   },
   // REMOVED subscription plan — UPI AutoPay not supported yet
 ];
-  const planIcons: Record<PlanType, React.ReactNode> = {
-  trial: <Target className="w-5 h-5 text-caution" />,
-  onetime: <Unlock className="w-5 h-5 text-lavender-primary" />,
-  subscription: <RefreshCw className="w-5 h-5 text-up" />
-};
-
   const handlePayment = async (plan: typeof plans[0]) => {
   setLoading(true);
   try {
@@ -106,7 +117,7 @@ const plans = [
       currency:    'INR',
       name:        'Stock AI',
       description: plan.title,
-      theme:       { color: '#3b82f6' },
+      theme:       { color: '#3451F5' },
       modal: {
         ondismiss: () => {
           console.log('Payment dismissed');
@@ -170,97 +181,86 @@ const plans = [
   }
 };
 
+  const visiblePlans = plans.filter((p) => !(p.id === 'trial' && hasUsedTrial));
+  const chosen = visiblePlans.find((p) => p.id === selected) || null;
+
   return (
-    <div className="fixed inset-0 bg-lavender-surface/70 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
-
-        {/* Header */}
-        <div className="p-6 text-center border-b border-white/50">
-          <div className="text-4xl mb-2">🚀</div>
-          <h2 className="text-lavender-text font-bold text-xl">Upgrade to Pro</h2>
-          <p className="text-lavender-text/70 text-sm mt-1">Choose a plan that works for you</p>
-        </div>
-
-        {/* Features */}
-
-
-       {features.map(f => (
-  <div key={f} className="flex items-center gap-2">
-    <Check className="w-4 h-4 text-up flex-shrink-0" />
-    <p className="text-lavender-text/80 text-xs">{f}</p>
-  </div>
-))}
-
-        {/* Plan Cards */}
-        <div className="p-4 space-y-3">
-          {plans.filter(p => !(p.id === 'trial' && hasUsedTrial)).map(plan => (
-            <div
-              key={plan.id}
-              onClick={() => setSelected(plan.id)}
-              className={`relative border-2 rounded-2xl p-4 cursor-pointer transition ${
- selected === plan.id
- ? plan.border + ' bg-lavender-surface'
- : 'border-white/50 hover:border-line'
- }`}
-            >
-              {/* Badge */}
-              <span className={`absolute -top-2.5 left-4 text-xs text-lavender-text px-2 py-0.5 rounded-full font-bold ${plan.badgeColor}`}>
-                {plan.badge}
-              </span>
-
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  {/* Radio */}
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    selected === plan.id ? plan.border : 'border-white/50'
-                  }`}>
-                    {selected === plan.id && (
-                      <div className="w-2.5 h-2.5 rounded-full bg-cobalt" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-lavender-text font-semibold flex items-center gap-2">
-  {planIcons[plan.id]}
-  {plan.title}
-</p>
-                    <p className="text-lavender-text/70 text-xs">{plan.desc}</p>
-                    <p className="text-lavender-text/60 text-xs">{plan.period}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="flex items-center gap-2">
-                    {'originalPrice' in plan && (
-                      <p className="text-lavender-text/60 text-sm line-through">{(plan as any).originalPrice}</p>
-                    )}
-                    <p className="text-lavender-text font-black text-xl">{plan.price}</p>
-                    {'originalPrice' in plan && (
-                      <span className="text-xs bg-up/15 text-up px-1.5 py-0.5 rounded font-bold">80% OFF</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div className="p-4 pt-0">
-          <button
-            onClick={() => {
-              const plan = plans.find(p => p.id === selected);
-              if (plan) handlePayment(plan);
-              else alert('Please select a plan');
-            }}
-            disabled={loading || !selected}
-            className="w-full bg-gradient-lavender hover:opacity-90 disabled:opacity-50 text-white font-bold py-4 rounded-2xl transition text-lg"
-          >
-           {loading ? '⏳ Processing...' : selected ? `Pay ${plans.find(p => p.id === selected)?.price} →` : 'Select a Plan'}
+    <div className="fixed inset-0 z-[90] flex items-end justify-center sm:items-center sm:p-4">
+      <div className="absolute inset-0 bg-[#0B0F14]/55 backdrop-blur-[2px]" onClick={close} aria-hidden="true" />
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="upgrade-title"
+        className="board-panel relative max-h-[92dvh] w-full overflow-y-auto rounded-t-card border border-line bg-surface outline-none shadow-lift sm:max-w-md sm:rounded-card"
+      >
+        <span className="mx-auto mt-2.5 block h-1 w-10 rounded-full bg-ink/15 sm:hidden" aria-hidden="true" />
+        <header className="flex items-start justify-between gap-3 px-6 pb-4 pt-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">Stock AI Pro</p>
+            <h2 id="upgrade-title" className="mt-1 text-2xl font-bold tracking-[-0.02em] text-ink">Research without the daily limit</h2>
+          </div>
+          <button type="button" onClick={close} aria-label="Close" className="-mr-2 grid h-11 w-11 shrink-0 place-items-center rounded-control text-muted hover:bg-ink/[0.06] hover:text-ink">
+            <X className="h-5 w-5" strokeWidth={1.75} />
           </button>
-          <button onClick={onClose} className="w-full text-lavender-text/60 text-sm mt-3 py-2">
+        </header>
+
+        <ul className="space-y-2 px-6">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-2.5 text-sm text-ink/90">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={2.25} />
+              {f}
+            </li>
+          ))}
+        </ul>
+
+        <fieldset className="mt-6 space-y-3 px-6">
+          <legend className="sr-only">Choose a plan</legend>
+          {visiblePlans.map((plan) => {
+            const active = selected === plan.id;
+            return (
+              <label
+                key={plan.id}
+                className={`relative flex cursor-pointer items-center gap-3 rounded-card border p-4 transition ${
+                  active ? 'border-accent bg-accent/[0.06] ring-1 ring-accent' : 'border-line hover:border-ink/25'
+                }`}
+              >
+                <input type="radio" name="plan" value={plan.id || ''} checked={active} onChange={() => setSelected(plan.id)} className="h-4 w-4 shrink-0 accent-cobalt" />
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2">
+                    <span className="font-semibold text-ink">{plan.title}</span>
+                    {plan.id === 'onetime' && <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent">Popular</span>}
+                  </span>
+                  <span className="mt-0.5 block text-xs text-muted">
+                    {plan.desc}, {plan.period}
+                  </span>
+                </span>
+                <span className="text-right">
+                  <span className="num block text-xl font-bold text-ink">{plan.price}</span>
+                  {'originalPrice' in plan && <span className="num block text-xs text-muted line-through">{(plan as any).originalPrice}</span>}
+                </span>
+              </label>
+            );
+          })}
+        </fieldset>
+
+        <div className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-5">
+          <button
+            type="button"
+            onClick={() => chosen && handlePayment(chosen)}
+            disabled={loading || !chosen}
+            className={buttonClass('primary', 'lg', 'w-full')}
+          >
+            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            {loading ? 'Opening payment…' : chosen ? `Pay ${chosen.price}` : 'Choose a plan'}
+          </button>
+          <button type="button" onClick={close} disabled={loading} className="mt-2 h-11 w-full rounded-control text-sm font-medium text-muted hover:text-ink">
             Maybe later
           </button>
-          <p className="text-muted text-xs text-center mt-2">
-            Secured by Razorpay • contact@karmatix.in
+          <p className="mt-2 text-center text-xs leading-relaxed text-muted">
+            <LockKeyhole className="mr-1 inline h-3 w-3 align-[-1px]" strokeWidth={2} />
+            Secure payment by Razorpay. No auto-renewal. Help: contact@karmatix.in
           </p>
         </div>
       </div>

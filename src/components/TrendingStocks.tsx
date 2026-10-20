@@ -1,146 +1,86 @@
 // src/components/TrendingStocks.tsx
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import StockCard from './StockCard';
 import AnalysisModal from './AnalysisModal';
+import StockRow, { StockRowSkeleton } from './app/StockRow';
+import Segmented from './ui/Segmented';
+import { Button } from './ui/Button';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+type Side = 'bought' | 'sold';
 
 export default function TrendingStocks() {
-  const [data, setData]       = useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [selected, setSelected] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'bought' | 'sold'>('bought');
+  const [side, setSide] = useState<Side>('bought');
 
-  useEffect(() => { loadTrending(); }, []);
+  useEffect(() => {
+    loadTrending();
+  }, []);
 
   const loadTrending = async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const res = await axios.get(`${BASE}/api/market/trending`);
       setData(res.data);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      setLoadError(true);
+    }
     setLoading(false);
   };
 
-  const stocks = activeTab === 'bought'
-    ? (data?.most_bought || [])
-    : (data?.most_sold   || []);
+  const stocks: any[] = side === 'bought' ? data?.most_bought || [] : data?.most_sold || [];
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-
-      {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-lavender-text font-bold text-xl mb-1">Today's Biggest Movers</h2>
-        <p className="text-lavender-text/70 text-sm">
-          Real-time gainers and losers across 150+ NSE stocks — refreshed every 30 min
-        </p>
+    <div>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-ink">Today's biggest movers</h2>
+          <p className="mt-0.5 text-xs text-muted">Largest moves across 150+ NSE stocks, refreshed every 30 minutes. What happened, not a forecast.</p>
+        </div>
+        <Segmented<Side>
+          label="Movers"
+          value={side}
+          onChange={setSide}
+          options={[
+            { value: 'bought', label: '▲ Gainers' },
+            { value: 'sold', label: '▼ Losers' },
+          ]}
+        />
       </div>
 
-      {/* Toggle tabs */}
-      <div className="flex bg-lavender-surface rounded-2xl p-1 mb-6 max-w-xs">
-        <button
-          onClick={() => setActiveTab('bought')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-2xl text-sm font-semibold transition ${
- activeTab === 'bought'
- ? 'bg-up/15 text-lavender-text'
- : 'text-lavender-text/70 hover:text-lavender-text'
- }`}
-        >
-          <TrendingUp className="w-4 h-4" />
-          Most Bought
-        </button>
-        <button
-          onClick={() => setActiveTab('sold')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-2xl text-sm font-semibold transition ${
- activeTab === 'sold'
- ? 'bg-down/15 text-lavender-text'
- : 'text-lavender-text/70 hover:text-lavender-text'
- }`}
-        >
-          <TrendingDown className="w-4 h-4" />
-          Most Sold
-        </button>
+      <div className="mt-2">
+        {loading ? (
+          <StockRowSkeleton rows={8} />
+        ) : loadError || stocks.length === 0 ? (
+          <div className="py-10 text-center">
+            <p className="text-base font-semibold text-ink">{loadError ? 'Movers could not be loaded' : 'No movers yet today'}</p>
+            <p className="mt-1 text-sm text-muted">{loadError ? 'Check your connection and try again.' : 'The list fills in once the market opens at 9:15 am IST.'}</p>
+            <Button variant="ghost" className="mt-4" onClick={loadTrending}>
+              Retry
+            </Button>
+          </div>
+        ) : (
+          <ol>
+            {stocks.map((stock: any, index: number) => (
+              <li key={stock.display_ticker} className="flex items-center gap-3">
+                <span className="num w-6 shrink-0 text-right text-xs text-muted" aria-label={`Rank ${index + 1}`}>
+                  {index + 1}
+                </span>
+                <ul className="min-w-0 flex-1">
+                  <StockRow stock={stock} onAnalyze={setSelected} />
+                </ul>
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
 
-      {/* Info banner */}
-      <div className={`rounded-2xl p-3 mb-4 border ${
- activeTab === 'bought'
- ? 'bg-up/10 border-up/30'
- : 'bg-down/10 border-down/30'
-}`}>
-  <p className={`text-sm font-medium ${
- activeTab === 'bought' ? 'text-up' : 'text-down'
- }`}>
-    {activeTab === 'bought'
-      ? 'Stocks gaining the most right now — not a prediction, this is happening live'
-      : 'Stocks losing the most right now — not a prediction, this is happening live'
-    }
-  </p>
-  <p className="text-lavender-text/60 text-xs mt-1">
-    Scanned across our full stock universe • Refreshed every 30 min
-  </p>
-</div>
-
-      {/* Loading */}
-      {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-4 animate-pulse">
-              <div className="h-5 w-24 bg-lavender-surface rounded mb-2" />
-              <div className="h-3 w-32 bg-lavender-surface rounded mb-3" />
-              <div className="h-8 w-28 bg-lavender-surface rounded mb-3" />
-              <div className="grid grid-cols-3 gap-2">
-                {[...Array(3)].map((_, j) => (
-                  <div key={j} className="h-12 bg-lavender-surface rounded-2xl" />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Rank + Stock Cards */}
-      {!loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stocks.map((stock: any, index: number) => (
-            <div key={stock.display_ticker} className="relative">
-              {/* Rank badge */}
-              <div className={`absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-lavender-text ${
- activeTab === 'bought' ? 'bg-up/15' : 'bg-down/15'
- }`}>
-                #{index + 1}
-              </div>
-              <StockCard
-                stock={stock}
-                onAnalyze={setSelected}
-                inWatchlist={false}
-                onWatchlistChange={() => {}}
-                canAddToWatchlist={true}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {!loading && stocks.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-lavender-text font-semibold">No data available</p>
-          <p className="text-lavender-text/70 text-sm mt-2">
-            Check back during market hours
-          </p>
-          <button onClick={loadTrending}
-            className="mt-4 bg-gradient-lavender text-white px-6 py-2 rounded-2xl text-sm font-semibold">
-            Retry
-          </button>
-        </div>
-      )}
-
-      {selected && (
-        <AnalysisModal stock={selected} onClose={() => setSelected(null)} />
-      )}
+      {selected && <AnalysisModal stock={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }
