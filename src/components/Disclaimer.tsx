@@ -4,13 +4,13 @@ import PageLayout from './PageLayout';
 export default function Disclaimer() {
   return (
     <PageLayout>
-    <div className="min-h-screen bg-lavender-surface p-8 max-w-3xl mx-auto">
-      <h1 className="text-lavender-text text-3xl font-bold mb-2">Disclaimer</h1>
-      <p className="text-lavender-text/70 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl mb-2">Disclaimer</h1>
+      <p className="text-muted text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
 
-      <div className="bg-caution/10 border border-caution/30 rounded-2xl p-4 mb-8">
-        <p className="text-caution font-semibold">⚠️ Important Notice</p>
-        <p className="text-caution text-sm mt-1">
+      <div className="bg-caution/10 border border-caution/30 rounded-card p-4 mb-8">
+        <p className="font-semibold text-caution">Important notice</p>
+        <p className="mt-1 text-sm text-ink/85">
           Stock AI is an educational platform. It is NOT a SEBI-registered investment advisor.
           Nothing on this platform constitutes financial advice.
         </p>
@@ -47,8 +47,8 @@ export default function Disclaimer() {
         },
       ].map(section => (
         <div key={section.title} className="mb-6">
-          <h2 className="text-lavender-text font-semibold text-lg mb-2">{section.title}</h2>
-          <p className="text-lavender-text/70 leading-relaxed">{section.content}</p>
+          <h2 className="text-ink font-semibold text-lg mb-2">{section.title}</h2>
+          <p className="text-muted leading-relaxed">{section.content}</p>
         </div>
       ))}
     </div>

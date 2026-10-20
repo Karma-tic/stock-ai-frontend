@@ -3,9 +3,9 @@ import PageLayout from './PageLayout';
 export default function TermsOfService() {
   return (
     <PageLayout>
-    <div className="min-h-screen bg-lavender-surface p-8 max-w-3xl mx-auto">
-      <h1 className="text-lavender-text text-3xl font-bold mb-2">Terms &amp; Conditions</h1>
-      <p className="text-lavender-text/70 text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl mb-2">Terms &amp; Conditions</h1>
+      <p className="text-muted text-sm mb-8">Last updated: May 2026 | BytePlay Technologies</p>
 
       {[
         {
@@ -46,8 +46,8 @@ export default function TermsOfService() {
         },
       ].map(section => (
         <div key={section.title} className="mb-6">
-          <h2 className="text-lavender-text font-semibold text-lg mb-2">{section.title}</h2>
-          <p className="text-lavender-text/70 leading-relaxed">{section.content}</p>
+          <h2 className="text-ink font-semibold text-lg mb-2">{section.title}</h2>
+          <p className="text-muted leading-relaxed">{section.content}</p>
         </div>
       ))}
     </div>

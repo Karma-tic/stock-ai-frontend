@@ -91,17 +91,17 @@ export default function BrokerageCalculator() {
 
         {/* SEO Text Content for AdSense */}
         <article className="calc-article mx-auto mt-16 max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Why Do You Need a Brokerage Calculator?</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">Why Do You Need a Brokerage Calculator?</h2>
           <p className="mb-6 leading-relaxed">
             When you buy or sell shares in the Indian stock market (NSE or BSE), the price you see on the screen is not the only amount you pay or receive. Every transaction attracts a series of fees, taxes, and statutory charges. A brokerage calculator helps you uncover these hidden costs so you can accurately determine your net profit or loss (Net P&L) before you even place the trade.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Understanding the Charges in Indian Stock Trading</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">Understanding the Charges in Indian Stock Trading</h2>
           <p className="mb-4 leading-relaxed">
             Whether you use a discount broker like Zerodha, Groww, or Upstox, or a full-service broker like HDFC Securities, the statutory charges remain largely the same. Here is a breakdown of what eats into your trading profits:
           </p>
           
-          <ul className="list-disc pl-6 mb-6 space-y-3 text-lavender-text/80">
+          <ul className="list-disc pl-6 mb-6 space-y-3 text-ink/85">
             <li>
               <strong>Brokerage:</strong> This is the fee charged by your stockbroker. Most discount brokers charge zero brokerage for equity delivery (holding shares for more than a day) and a flat fee (e.g., ₹20 or 0.03%, whichever is lower) for intraday trading.
             </li>
@@ -122,19 +122,19 @@ export default function BrokerageCalculator() {
             </li>
           </ul>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Intraday (MIS) vs. Delivery (CNC) Charges</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">Intraday (MIS) vs. Delivery (CNC) Charges</h2>
           <p className="mb-6 leading-relaxed">
             As you can see by toggling the options in the calculator, <strong>Intraday trading is significantly cheaper</strong> in terms of taxes. Because intraday traders execute hundreds of trades, the government keeps STT and Stamp Duty very low. However, you pay brokerage on intraday trades. Conversely, equity delivery usually has zero brokerage with discount brokers, but the STT is much higher because the government taxes long-term wealth creation differently.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">How This Impacts Break-Even Points</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">How This Impacts Break-Even Points</h2>
           <p className="mb-6 leading-relaxed">
             The break-even point is how much a stock price must move in your favor just to cover the taxes and charges. For example, if you buy ₹10 Lakhs worth of shares in delivery, your total charges could exceed ₹1,500. This means the stock needs to go up by at least ₹1,500 just for you to exit at a "no profit, no loss" scenario. Active traders must use a brokerage calculator to ensure their profit targets are far larger than their transaction costs.
           </p>
 
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
-            <h3 className="text-lavender-text font-bold mb-2">Important Notes</h3>
-            <p className="text-sm text-lavender-text/70 leading-relaxed">
+          <div className="rounded-card border border-line bg-surface p-6 mt-8">
+            <h3 className="text-ink font-bold mb-2">Important Notes</h3>
+            <p className="text-sm text-muted leading-relaxed">
               The calculations provided are approximate and based on standard discount broker rates (e.g., Zerodha) as of 2024. Actual charges may vary depending on your specific broker, DP charges (for selling delivery shares), and regulatory updates. Always verify final contract notes provided by your broker.
             </p>
           </div>

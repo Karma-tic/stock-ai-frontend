@@ -20,14 +20,6 @@ module.exports = {
         up: token('up'),
         down: token('down'),
         caution: token('caution'),
-        // Legacy names used across the app pages; they now resolve to the tokens above.
-        lavender: {
-          text: 'rgb(var(--color-lavender-text) / <alpha-value>)',
-          primary: 'rgb(var(--color-lavender-primary) / <alpha-value>)',
-          secondary: 'rgb(var(--color-lavender-secondary) / <alpha-value>)',
-          surface: 'rgb(var(--color-lavender-surface) / <alpha-value>)',
-          base: 'rgb(var(--color-lavender-base) / <alpha-value>)',
-        },
       },
       fontFamily: {
         sans: ['"Geist Variable"', 'Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -40,12 +32,7 @@ module.exports = {
         control: '10px',
       },
       boxShadow: {
-        lavender: '0 16px 40px -20px rgb(11 15 20 / 0.45)',
         lift: '0 16px 40px -20px rgb(11 15 20 / 0.45)',
-      },
-      backgroundImage: {
-        // Kept for existing pages: now a solid cobalt fill, no gradient.
-        'gradient-lavender': 'linear-gradient(rgb(var(--cobalt)), rgb(var(--cobalt)))',
       },
       transitionTimingFunction: {
         micro: 'cubic-bezier(.2,.8,.2,1)',

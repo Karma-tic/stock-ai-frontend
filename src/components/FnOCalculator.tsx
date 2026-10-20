@@ -112,16 +112,16 @@ export default function FnOCalculator() {
 
         {/* SEO Text Content for AdSense */}
         <article className="calc-article mx-auto mt-16 max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">What is Futures & Options (F&O) Trading?</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">What is Futures & Options (F&O) Trading?</h2>
           <p className="mb-6 leading-relaxed">
             Futures and Options (F&O) are derivative instruments traded on stock exchanges like the NSE and BSE in India. Unlike cash market trading where you actually own the underlying shares, F&O allows you to trade contracts that derive their value from an underlying asset (like Nifty 50, BankNifty, or individual stocks like Reliance and HDFC Bank). These instruments are primarily used for hedging against market risk, speculation, and arbitrage.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Understanding Options: Call and Put</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">Understanding Options: Call and Put</h2>
           <p className="mb-4 leading-relaxed">
             Options trading gives the buyer the right, but not the obligation, to buy or sell the underlying asset at a predetermined price (strike price) on or before a specific date (expiry).
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Call Option (CE):</strong> You buy a Call option when you are bullish and expect the market price to go up.</li>
             <li><strong>Put Option (PE):</strong> You buy a Put option when you are bearish and expect the market price to go down.</li>
           </ul>
@@ -129,11 +129,11 @@ export default function FnOCalculator() {
             In options buying, your risk is limited to the premium paid, while your potential reward is theoretically unlimited. However, most options expire worthless due to <em>Time Decay (Theta)</em>. Options selling (writing), on the other hand, requires a high margin and carries unlimited risk, but sellers benefit from time decay.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Hidden Costs of F&O Trading</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">The Hidden Costs of F&O Trading</h2>
           <p className="mb-4 leading-relaxed">
             Many retail traders focus only on Gross Profit and Loss, completely ignoring the massive impact of taxes and statutory charges. In India, F&O trading incurs several fees that eat into your margins:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Brokerage:</strong> Usually a flat fee (e.g., ₹20 per executed order) charged by brokers like Zerodha, Upstox, or Groww.</li>
             <li><strong>Securities Transaction Tax (STT):</strong> A direct tax levied by the government on the sell side. It is 0.1% on the premium for options, and 0.02% on the turnover for futures.</li>
             <li><strong>Exchange Transaction Charges:</strong> Levied by the NSE or BSE. For options, it is generally 0.05% of the premium turnover.</li>
@@ -141,11 +141,11 @@ export default function FnOCalculator() {
             <li><strong>Stamp Duty:</strong> Charged by the state government, applicable only on the buy side.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">How to Use the Stock AI F&O Calculator</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">How to Use the Stock AI F&O Calculator</h2>
           <p className="mb-4 leading-relaxed">
             Our F&O Brokerage and Tax calculator helps you find your exact Net P&L.
           </p>
-          <ol className="list-decimal pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ol className="list-decimal pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Select Trade Type:</strong> Toggle between Options or Futures, as the STT and Exchange charges differ significantly.</li>
             <li><strong>Enter Prices & Quantity:</strong> Enter your Buy Price, Sell Price, and the total quantity (Lot size × Number of lots). Lot sizes change from time to time, so check the current lot size for your contract on the NSE website.</li>
             <li><strong>Adjust Brokerage:</strong> Enter the brokerage your specific broker charges per executed order.</li>
@@ -154,9 +154,9 @@ export default function FnOCalculator() {
             The calculator will instantly break down every single charge, showing you exactly how much money will actually hit your ledger balance at the end of the day. This is crucial for scalpers who trade for small point movements.
           </p>
 
-          <div className="bg-caution/20 border border-caution/30 rounded-2xl p-6 mt-8">
+          <div className="bg-caution/20 border border-caution/30 rounded-card p-6 mt-8">
             <h3 className="text-caution font-bold mb-2">SEBI Warning & Disclaimer</h3>
-            <p className="text-sm text-lavender-text/70 leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed">
               9 out of 10 individual traders in equity Futures and Options Segment incur net losses. On average, loss makers register net trading loss close to ₹ 50,000. F&O trading carries high risk and is not suitable for everyone. This calculator provides estimates based on standard Indian F&O tax rates; actual amounts may vary slightly. Stock AI does not provide financial advice.
             </p>
           </div>

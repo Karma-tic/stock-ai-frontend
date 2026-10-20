@@ -40,15 +40,6 @@
     --caution: 245 181 68;
   }
 
-  /* Legacy names mapped onto the tokens. Declared on both selectors so a nested
-     .dark section (the landing page) resolves them against its own dark values. */
-  :root, .dark {
-    --color-lavender-text: var(--text);
-    --color-lavender-primary: var(--accent);
-    --color-lavender-secondary: var(--accent);
-    --color-lavender-surface: var(--bg);
-    --color-lavender-base: var(--surface);
-  }
 
   html {
     -webkit-text-size-adjust: 100%;
@@ -77,18 +68,6 @@
 }
 
 @layer components {
-  .app-card {
-    @apply rounded-card border border-line bg-surface;
-  }
-
-  .app-card-accent {
-    @apply rounded-card border border-line bg-surface;
-  }
-
-  .app-tile {
-    @apply rounded-card border border-line bg-surface;
-  }
-
   /* Prices, tickers and any number that updates: tabular so digits never jitter */
   .tnum { font-variant-numeric: tabular-nums; }
 

@@ -1,6 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, Newspaper } from 'lucide-react';
 import SEO from './SEO';
+import PageHeader from './ui/PageHeader';
 
 export default function Blog() {
   const articles = [
@@ -27,34 +28,27 @@ export default function Blog() {
   ];
 
   return (
-    <div className="min-h-screen bg-lavender-surface py-20">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Indian Stock Market Blog | Investing Guides | Stock AI"
         description="Read practical guides on PE ratio, NSE announcements, dividend yield, penny stocks, and Indian stock market basics."
         canonicalPath="/blog"
       />
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
         
         
 
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-black text-lavender-text mb-6">
-            Stock Market <span className="text-lavender-primary">Insights</span>
-          </h1>
-          <p className="text-lavender-text/70 text-lg max-w-2xl mx-auto">
-            Learn about investing in the Indian stock market with our comprehensive guides and articles.
-          </p>
-        </div>
+        <PageHeader eyebrow="Blog" icon={Newspaper} title="Guides for Indian investors" intro="Practical explainers on reading filings, valuation, dividends and the risks of low-priced shares." />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {articles.map(a => (
-            <div key={a.title} className="app-card p-8 hover:border-lavender-primary/25 hover:shadow-lavender transition">
-              <h3 className="text-lavender-text font-bold text-xl mb-4">{a.title}</h3>
-              <p className="text-lavender-text/70 leading-relaxed mb-6">{a.desc}</p>
-              <Link to={a.link} className="text-lavender-primary hover:text-accent font-semibold transition flex items-center gap-2">
-                Read full article
-              </Link>
-            </div>
+            <Link key={a.title} to={a.link} className="group flex flex-col rounded-card border border-line bg-surface p-5 transition hover:border-accent/40 sm:p-6">
+              <h2 className="text-lg font-semibold text-ink group-hover:text-accent">{a.title}</h2>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{a.desc}</p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent">
+                Read the article <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
           ))}
         </div>
       </div>

@@ -72,12 +72,12 @@ export default function SIPCalculator() {
 
         {/* SEO Text Content for AdSense */}
         <article className="calc-article mx-auto max-w-[70ch] text-[15px] leading-relaxed text-ink/85">
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">What is a Systematic Investment Plan (SIP)?</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">What is a Systematic Investment Plan (SIP)?</h2>
           <p className="mb-6 leading-relaxed">
             A Systematic Investment Plan, commonly known as an SIP, is an investment strategy offered by mutual funds to investors, allowing them to invest a fixed amount of money at regular intervals, usually monthly or quarterly. In the Indian context, SIPs have become the cornerstone of retail investing, helping millions build wealth over the long term without needing to time the volatile stock market.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">The Power of Compounding</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">The Power of Compounding</h2>
           <p className="mb-4 leading-relaxed">
             Albert Einstein is famously attributed with calling compound interest the "eighth wonder of the world." Compounding happens when the returns on your investments start generating their own returns. The longer you stay invested, the more pronounced this effect becomes.
           </p>
@@ -85,34 +85,34 @@ export default function SIPCalculator() {
             For example, using the SIP calculator above, if you invest ₹10,000 every month for 20 years at an expected return rate of 12% p.a., your total invested amount is ₹24 Lakhs. However, due to compounding, your estimated returns will be over ₹75 Lakhs, bringing your total wealth to nearly ₹1 Crore. The key variable here is <strong>time</strong>, delaying your investments by even 5 years can cost you tens of lakhs in future wealth.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">Rupee Cost Averaging</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">Rupee Cost Averaging</h2>
           <p className="mb-6 leading-relaxed">
             One of the biggest advantages of an SIP is <em>Rupee Cost Averaging</em>. When the stock market (like the Nifty 50 or Sensex) falls, your fixed monthly SIP amount buys more units of the mutual fund. When the market goes up, it buys fewer units. Over a long period, this averages out the cost of your purchases, protecting you from the risk of investing a large lumpsum amount at a market peak.
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">What is a Realistic Expected Return Rate?</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">What is a Realistic Expected Return Rate?</h2>
           <p className="mb-4 leading-relaxed">
             When using an SIP return calculator, setting a realistic expected rate of return is crucial:
           </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ul className="list-disc pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Large Cap Funds / Nifty 50 Index Funds:</strong> Historically, the Nifty 50 has delivered approximately 11% to 13% CAGR (Compound Annual Growth Rate) over 15+ year periods. Assuming 12% is generally considered a realistic expectation for equity investments in India.</li>
             <li><strong>Mid Cap and Small Cap Funds:</strong> These can deliver higher returns (often 14% to 18%) but come with significantly higher volatility and risk.</li>
             <li><strong>Debt Funds:</strong> For conservative investors, debt funds typically offer 6% to 8% returns, similar to Fixed Deposits (FDs) but with better tax efficiency in some cases.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mb-4 text-lavender-text">How to Use the Stock AI SIP Calculator</h2>
+          <h2 className="text-2xl font-bold mb-4 text-ink">How to Use the Stock AI SIP Calculator</h2>
           <p className="mb-4 leading-relaxed">
             Using our SIP calculator is straightforward and requires no financial expertise:
           </p>
-          <ol className="list-decimal pl-6 mb-6 space-y-2 text-lavender-text/80">
+          <ol className="list-decimal pl-6 mb-6 space-y-2 text-ink/85">
             <li><strong>Monthly Investment:</strong> Adjust the slider to reflect the amount you can comfortably invest every month. Start small if you need to; consistency matters more than the initial amount.</li>
             <li><strong>Expected Return Rate (p.a):</strong> Set this based on your asset allocation. Use 10-12% for equities and 6-8% for debt.</li>
             <li><strong>Time Period:</strong> Select the number of years you plan to keep investing without withdrawing. Notice how increasing the time period drastically increases the green "Growth" part of the chart!</li>
           </ol>
 
-          <div className="bg-surface border border-lavender-text/10 shadow-sm rounded-2xl p-6 mt-8 shadow-lavender">
-            <h3 className="text-lavender-text font-bold mb-2">Disclaimer</h3>
-            <p className="text-sm text-lavender-text/70 leading-relaxed">
+          <div className="rounded-card border border-line bg-surface p-6 mt-8">
+            <h3 className="text-ink font-bold mb-2">Disclaimer</h3>
+            <p className="text-sm text-muted leading-relaxed">
               Mutual Fund investments are subject to market risks, read all scheme related documents carefully. The SIP calculator is for illustration purposes only and does not guarantee any returns. Historical returns of the Indian stock market (NSE/BSE) are not indicative of future performance. Always consult with a SEBI-registered financial advisor before making investment decisions.
             </p>
           </div>
