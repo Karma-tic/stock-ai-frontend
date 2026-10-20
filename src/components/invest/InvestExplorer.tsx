@@ -34,18 +34,18 @@ const LS_ANSWERS = 'invest_profile_answers';
 function PulseItem({ label, value, sub, live }: { label: string; value: string; sub?: React.ReactNode; live?: boolean }) {
   return (
     <div className="min-w-0 px-4 py-3">
-      <p className="flex items-center gap-1.5 truncate text-[11px] font-medium text-lavender-text/60">
+      <p className="flex items-center gap-1.5 truncate text-[11px] font-medium text-muted">
         {live && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-up" aria-hidden />}
         {label}
       </p>
-      <p className="text-lg font-bold tabular-nums text-lavender-text">{value}</p>
-      {sub && <p className="text-[11px] tabular-nums">{sub}</p>}
+      <p className="num text-lg font-semibold text-ink">{value}</p>
+      {sub && <p className="text-[11px] num">{sub}</p>}
     </div>
   );
 }
 
 const pct = (v: number) => (
-  <span className={v >= 0 ? 'text-up dark:text-up' : 'text-down dark:text-down'}>{v >= 0 ? '+' : ''}{v.toFixed(2)}% today</span>
+  <span className={v >= 0 ? 'text-up' : 'text-down'}>{v >= 0 ? '+' : ''}{v.toFixed(2)}% today</span>
 );
 
 export default function InvestExplorer({ user }: { user: any }) {
@@ -147,7 +147,7 @@ export default function InvestExplorer({ user }: { user: any }) {
   const gold = live?.prices.GOLDBEES;
 
   return (
-    <div className="min-h-screen bg-lavender-surface">
+    <div className="min-h-[100dvh] bg-canvas">
       <SEO
         title="Invest Explorer: Every Investment Option in India | Stock AI"
         description="Compare FDs, PPF, SCSS, mutual funds, gold, REITs, bonds, NPS and global investing from India by return, risk, lock-in and tax, with current rates."
@@ -157,48 +157,48 @@ export default function InvestExplorer({ user }: { user: any }) {
         {/* Header */}
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl space-y-2">
-            <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-lavender-primary"><Compass className="h-4 w-4" /> Invest Explorer</p>
-            <h1 className="text-3xl sm:text-4xl font-bold text-lavender-text">Every way to invest from India, side by side</h1>
-            <p className="text-lavender-text/70">What each option typically returns, what can go wrong, how it is taxed, and today's best rates. Beyond stocks: FDs, government schemes, bonds, gold, REITs, retirement and global markets.</p>
+            <p className="flex items-center gap-2 text-sm font-semibold text-accent"><Compass className="h-4 w-4" /> Invest Explorer</p>
+            <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Every way to invest from India, side by side</h1>
+            <p className="text-muted">What each option typically returns, what can go wrong, how it is taxed, and today's best rates. Beyond stocks: FDs, government schemes, bonds, gold, REITs, retirement and global markets.</p>
           </div>
         </header>
 
         {/* Pulse strip */}
-        <section aria-label="Key rates and live prices" className="app-card grid grid-cols-2 divide-lavender-text/10 sm:grid-cols-3 lg:grid-cols-6 lg:divide-x">
+        <section aria-label="Key rates and live prices" className="rounded-card border border-line bg-surface grid grid-cols-2 divide-line sm:grid-cols-3 lg:grid-cols-6 lg:divide-x">
           <PulseItem label="RBI repo rate" value={repo ? `${repo.rate.toFixed(2)}%` : '—'} />
-          <PulseItem label="PPF" value={ppf ? `${ppf.rate.toFixed(2)}%` : '—'} sub={<span className="text-lavender-text/50">tax-free</span>} />
+          <PulseItem label="PPF" value={ppf ? `${ppf.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">tax-free</span>} />
           <PulseItem label="Senior Citizen Savings" value={scss ? `${scss.rate.toFixed(2)}%` : '—'} />
-          <PulseItem label="Top bank FD" value={topFd ? `${topFd.rate.toFixed(2)}%` : '—'} sub={<span className="text-lavender-text/50">{topFd?.label.replace(' Small Finance Bank', ' SFB')}</span>} />
-          <PulseItem live label="Nifty 50 ETF" value={nifty ? fmtPrice(nifty.price) : '—'} sub={nifty ? pct(nifty.change_pct) : <span className="text-lavender-text/50">loading</span>} />
-          <PulseItem live label="Gold ETF" value={gold ? fmtPrice(gold.price) : '—'} sub={gold ? pct(gold.change_pct) : <span className="text-lavender-text/50">loading</span>} />
+          <PulseItem label="Top bank FD" value={topFd ? `${topFd.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">{topFd?.label.replace(' Small Finance Bank', ' SFB')}</span>} />
+          <PulseItem live label="Nifty 50 ETF" value={nifty ? fmtPrice(nifty.price) : '—'} sub={nifty ? pct(nifty.change_pct) : <span className="text-muted">loading</span>} />
+          <PulseItem live label="Gold ETF" value={gold ? fmtPrice(gold.price) : '—'} sub={gold ? pct(gold.change_pct) : <span className="text-muted">loading</span>} />
         </section>
         {rates.status.small_savings?.stale && (
-          <p className="rounded-xl border border-caution/30 bg-caution/10 px-4 py-2.5 text-sm text-caution">{rates.status.small_savings.message}</p>
+          <p className="rounded-control border border-caution/30 bg-caution/10 px-4 py-2.5 text-sm text-caution">{rates.status.small_savings.message}</p>
         )}
 
         {/* Portfolio tie-in */}
         {holdings && (
-          <section className="app-card-accent flex flex-wrap items-center justify-between gap-4 p-5">
+          <section className="rounded-card border border-accent/30 bg-accent/[0.06] flex flex-wrap items-center justify-between gap-4 p-5">
             <div className="flex items-start gap-3">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-lavender-primary" />
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
               <div>
-                <p className="font-semibold text-lavender-text">Your Stock AI portfolio: {fmtPrice(holdings.value).replace(/\.\d+$/, '')} across {holdings.count} stock{holdings.count > 1 ? 's' : ''}, all Indian equity.</p>
-                <p className="text-sm text-lavender-text/70">Explore the safer options people pair with stocks to cushion a market fall.</p>
+                <p className="font-semibold text-ink">Your Stock AI portfolio: {fmtPrice(holdings.value).replace(/\.\d+$/, '')} across {holdings.count} stock{holdings.count > 1 ? 's' : ''}, all Indian equity.</p>
+                <p className="text-sm text-muted">Explore the safer options people pair with stocks to cushion a market fall.</p>
               </div>
             </div>
             <button type="button" onClick={() => { setFilters({ ...DEFAULT_FILTERS, needs: ['safe'] }); setTab('explore'); }}
-              className="rounded-xl bg-gradient-lavender px-4 py-2.5 text-sm font-semibold text-white shadow-lavender">
+              className="inline-flex min-h-[44px] items-center justify-center rounded-control bg-cobalt px-4 text-sm font-semibold text-white hover:brightness-110">
               See low-risk options
             </button>
           </section>
         )}
 
         {/* Tabs */}
-        <nav className="scrollbar-hide -mx-4 flex gap-1 overflow-x-auto border-b border-lavender-text/10 px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="Invest Explorer sections">
+        <nav className="scrollbar-hide -mx-4 flex gap-1 overflow-x-auto border-b border-line px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="Invest Explorer sections">
           {TABS.map(t => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
-              className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-semibold transition ${tab === t.id ? 'border-lavender-primary text-lavender-text' : 'border-transparent text-lavender-text/60 hover:text-lavender-text'}`}>
-              {t.label}{t.id === 'compare' && compare.length ? <span className="ml-1 tabular-nums text-lavender-primary">({compare.length})</span> : null}
+              className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-semibold transition ${tab === t.id ? 'border-accent text-ink' : 'border-transparent text-muted hover:text-ink'}`}>
+              {t.label}{t.id === 'compare' && compare.length ? <span className="ml-1 num text-accent">({compare.length})</span> : null}
             </button>
           ))}
         </nav>
@@ -218,7 +218,7 @@ export default function InvestExplorer({ user }: { user: any }) {
           {tab === 'global' && <GlobalTab live={live} />}
         </div>
 
-        <footer className="border-t border-lavender-text/10 pt-6 text-xs text-lavender-text/60 space-y-1 max-w-4xl">
+        <footer className="border-t border-line pt-6 text-xs text-muted space-y-1 max-w-4xl">
           <p><b>For education only.</b> Stock AI is not SEBI-registered and does not give personal investment advice. Returns are typical or historical ranges and are not guaranteed.</p>
           <p>Verify every rate with the issuer before investing. {offline && 'Showing the last saved rates while live data is unavailable. '}See our <Link to="/disclaimer" className="underline">disclaimer</Link>.</p>
         </footer>

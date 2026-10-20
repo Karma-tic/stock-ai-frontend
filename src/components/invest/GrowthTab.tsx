@@ -7,8 +7,9 @@ import { futureValue, inr } from './investShared';
 export interface Series { id: string; rate: number }
 interface Props { options: InvestOption[]; series: Series[]; setSeries: (s: Series[]) => void; defaultRate: (o: InvestOption) => number }
 
-const COLORS = ['text-up', 'text-caution', 'text-lavender-primary'];
-const SWATCH = ['bg-up', 'bg-caution', 'bg-lavender-primary'];
+// Series colours: cobalt, amber, ink. Green/red stay reserved for up/down.
+const COLORS = ['text-accent', 'text-caution', 'text-ink/70'];
+const SWATCH = ['bg-accent', 'bg-caution', 'bg-ink/70'];
 
 function niceMax(v: number) {
   const p = Math.pow(10, Math.floor(Math.log10(Math.max(v, 1))));
@@ -19,8 +20,8 @@ function niceMax(v: number) {
 function Slider({ id, label, value, display, min, max, step, onChange }: { id: string; label: string; value: number; display: string; min: number; max: number; step: number; onChange: (v: number) => void }) {
   return (
     <div className="space-y-1.5">
-      <label htmlFor={id} className="flex justify-between text-sm font-semibold text-lavender-text">
-        <span>{label}</span><span className="tabular-nums text-lavender-primary">{display}</span>
+      <label htmlFor={id} className="flex justify-between text-sm font-semibold text-ink">
+        <span>{label}</span><span className="num text-accent">{display}</span>
       </label>
       <input id={id} type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-cobalt" />
     </div>
@@ -53,30 +54,30 @@ export default function GrowthTab({ options, series, setSeries, defaultRate }: P
   return (
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <h2 className="text-2xl font-bold text-lavender-text">What could it grow to?</h2>
-        <p className="mt-1 text-lavender-text/70">
+        <h2 className="text-xl font-semibold tracking-[-0.015em] text-ink">What could it grow to?</h2>
+        <p className="mt-1 text-muted">
           Compare up to three options at their typical return, before and after inflation. Market-linked results swing year to year; the line is a smoothed average.
-          For a single SIP use the <Link to="/tools/sip-calculator" className="font-semibold text-lavender-primary underline underline-offset-2">SIP calculator</Link>.
+          For a single SIP use the <Link to="/tools/sip-calculator" className="font-semibold text-accent underline underline-offset-2">SIP calculator</Link>.
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr] items-start">
-        <div className="app-card p-5 space-y-5">
+        <div className="rounded-card border border-line bg-surface p-5 space-y-5">
           <Slider id="invest-lump" label="Lump sum today" value={lump} display={inr(lump)} min={0} max={2000000} step={10000} onChange={setLump} />
           <Slider id="invest-sip" label="Monthly SIP" value={sip} display={inr(sip)} min={0} max={100000} step={500} onChange={setSip} />
           <Slider id="invest-years" label="Years" value={years} display={`${years} yrs`} min={1} max={30} step={1} onChange={setYears} />
           <Slider id="invest-infl" label="Inflation assumption" value={infl} display={`${infl}%`} min={0} max={10} step={0.5} onChange={setInfl} />
           <div className="space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">Options (return % is editable)</p>
+            <p className="text-xs font-medium text-muted">Options (return % is editable)</p>
             {series.map((s, k) => (
               <div key={k} className="grid grid-cols-[10px_1fr_72px] items-center gap-2">
                 <span className={`h-2.5 w-2.5 rounded-sm ${SWATCH[k]}`} />
-                <select id={`invest-series-${k}`} aria-label={`Option ${k + 1}`} value={s.id} className="min-w-0 rounded-xl border border-lavender-text/15 bg-surface px-2 py-2 text-sm"
+                <select id={`invest-series-${k}`} aria-label={`Option ${k + 1}`} value={s.id} className="h-10 min-w-0 rounded-control border border-line bg-surface px-2 text-sm text-ink"
                   onChange={e => { const o = byId(e.target.value)!; const next = [...series]; next[k] = { id: o.id, rate: defaultRate(o) }; setSeries(next); }}>
                   {pickable.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
                 </select>
                 <input id={`invest-rate-${k}`} aria-label={`Return % for option ${k + 1}`} type="number" step={0.1} min={-20} max={40} value={s.rate}
-                  className="rounded-xl border border-lavender-text/15 bg-surface px-2 py-2 text-sm tabular-nums"
+                  className="num h-10 rounded-control border border-line bg-surface px-2 text-sm text-ink"
                   onChange={e => { const next = [...series]; next[k] = { ...s, rate: parseFloat(e.target.value) || 0 }; setSeries(next); }} />
               </div>
             ))}
@@ -84,22 +85,22 @@ export default function GrowthTab({ options, series, setSeries, defaultRate }: P
         </div>
 
         <div className="min-w-0 space-y-4">
-          <div className="app-card p-4 overflow-x-auto">
+          <div className="rounded-card border border-line bg-surface p-4 overflow-x-auto">
             <svg viewBox={`0 0 ${W} ${H}`} className="w-full min-w-[480px] h-auto" role="img" aria-label="Projected growth by year">
               {[0, 1, 2, 3, 4].map(t => {
                 const v = (top * t) / 4;
                 return (
-                  <g key={t} className="text-lavender-text">
+                  <g key={t} className="text-ink">
                     <line x1={L} x2={W - R} y1={yv(v)} y2={yv(v)} stroke="currentColor" strokeOpacity={0.1} />
-                    <text x={L - 8} y={yv(v) + 4} textAnchor="end" fontSize={11} fill="currentColor" fillOpacity={0.6} className="tabular-nums">{inr(v)}</text>
+                    <text x={L - 8} y={yv(v) + 4} textAnchor="end" fontSize={11} fill="currentColor" fillOpacity={0.6} className="num">{inr(v)}</text>
                   </g>
                 );
               })}
               {Array.from({ length: Math.floor(years / step) + 1 }, (_, i) => i * step).map(y => (
-                <text key={y} x={x(y)} y={H - 10} textAnchor="middle" fontSize={11} className="text-lavender-text" fill="currentColor" fillOpacity={0.6}>{y}y</text>
+                <text key={y} x={x(y)} y={H - 10} textAnchor="middle" fontSize={11} className="text-ink" fill="currentColor" fillOpacity={0.6}>{y}y</text>
               ))}
-              <path d={path(invested)} fill="none" className="text-lavender-text" stroke="currentColor" strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="4 4" />
-              <text x={W - R} y={yv(invested[years]) - 6} textAnchor="end" fontSize={11} className="text-lavender-text" fill="currentColor" fillOpacity={0.6}>invested</text>
+              <path d={path(invested)} fill="none" className="text-ink" stroke="currentColor" strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="4 4" />
+              <text x={W - R} y={yv(invested[years]) - 6} textAnchor="end" fontSize={11} className="text-ink" fill="currentColor" fillOpacity={0.6}>invested</text>
               {data.map((arr, k) => (
                 <g key={k} className={COLORS[k]}>
                   <path d={`${path(arr)} L${x(years)},${yv(0)} L${x(0)},${yv(0)} Z`} fill="currentColor" fillOpacity={0.07} />
@@ -113,17 +114,17 @@ export default function GrowthTab({ options, series, setSeries, defaultRate }: P
             {series.map((s, k) => {
               const v = data[k][years];
               return (
-                <div key={k} className="app-tile p-4">
-                  <p className="flex items-center gap-2 text-xs text-lavender-text/70"><span className={`h-2.5 w-2.5 rounded-sm ${SWATCH[k]}`} />{byId(s.id)?.name} @ {s.rate}%</p>
-                  <p className="mt-1 text-xl font-bold tabular-nums text-lavender-text">{inr(v)}</p>
-                  <p className="text-xs text-lavender-text/60">Gain {inr(v - totalIn)} · {inr(v / inflF)} in today's money</p>
+                <div key={k} className="rounded-control bg-ink/[0.04] p-4">
+                  <p className="flex items-center gap-2 text-xs text-muted"><span className={`h-2.5 w-2.5 rounded-sm ${SWATCH[k]}`} />{byId(s.id)?.name} @ {s.rate}%</p>
+                  <p className="mt-1 text-xl font-bold num text-ink">{inr(v)}</p>
+                  <p className="text-xs text-muted">Gain {inr(v - totalIn)} · {inr(v / inflF)} in today's money</p>
                 </div>
               );
             })}
-            <div className="app-tile p-4">
-              <p className="text-xs text-lavender-text/70">You put in</p>
-              <p className="mt-1 text-xl font-bold tabular-nums text-lavender-text">{inr(totalIn)}</p>
-              <p className="text-xs text-lavender-text/60">Before tax on gains</p>
+            <div className="rounded-control bg-ink/[0.04] p-4">
+              <p className="text-xs text-muted">You put in</p>
+              <p className="mt-1 text-xl font-bold num text-ink">{inr(totalIn)}</p>
+              <p className="text-xs text-muted">Before tax on gains</p>
             </div>
           </div>
         </div>

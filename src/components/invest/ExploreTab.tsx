@@ -23,9 +23,9 @@ interface Props {
 }
 
 const chip = (on: boolean) =>
-  `rounded-full border px-3 py-1 text-xs font-medium transition ${
- on ? 'border-lavender-primary bg-lavender-primary text-white' : 'border-lavender-text/15 bg-surface text-lavender-text/80 hover:border-lavender-primary/40'
- }`;
+  `min-h-[32px] rounded-full border px-3 text-xs font-medium transition ${
+    on ? 'border-cobalt bg-cobalt text-white' : 'border-line bg-surface text-ink/85 hover:border-ink/25'
+  }`;
 
 export default function ExploreTab(p: Props) {
   const { filters: f, setFilters } = p;
@@ -53,22 +53,22 @@ export default function ExploreTab(p: Props) {
   const activeCount = f.cats.length + f.needs.length + (f.maxRisk < 5 ? 1 : 0) + (f.horizon < 99 ? 1 : 0);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[280px_1fr] items-start">
+    <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
       {/* Filters */}
-      <aside className={`app-card p-5 space-y-5 lg:sticky lg:top-24 ${showFilters ? '' : 'hidden lg:block'}`} aria-label="Filters">
-        <div className="rounded-xl bg-lavender-surface px-3 py-2.5 text-sm flex items-center justify-between gap-2">
+      <aside className={`rounded-card border border-line bg-surface p-5 space-y-5 lg:sticky lg:top-24 ${showFilters ? '' : 'hidden lg:block'}`} aria-label="Filters">
+        <div className="rounded-control bg-ink/[0.05] px-3 py-2.5 text-sm flex items-center justify-between gap-2">
           {p.profile ? (
-            <span>Profile: <b className="text-lavender-primary">{p.profile.name}</b></span>
+            <span>Profile: <b className="text-accent">{p.profile.name}</b></span>
           ) : (
-            <span className="text-lavender-text/70">Rank results for you</span>
+            <span className="text-muted">Rank results for you</span>
           )}
-          <button type="button" onClick={p.onTakeQuiz} className="text-lavender-primary font-semibold underline underline-offset-2 text-xs">
+          <button type="button" onClick={p.onTakeQuiz} className="text-accent font-semibold underline underline-offset-2 text-xs">
             {p.profile ? 'Retake' : 'Take quiz'}
           </button>
         </div>
 
         <div className="space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">Category</p>
+          <p className="text-xs font-medium text-muted">Category</p>
           <div className="flex flex-wrap gap-1.5">
             {Object.entries(p.categories).map(([k, v]) => (
               <button key={k} type="button" aria-pressed={f.cats.includes(k)} className={chip(f.cats.includes(k))} onClick={() => setFilters({ ...f, cats: toggle(f.cats, k) })}>{v}</button>
@@ -77,15 +77,15 @@ export default function ExploreTab(p: Props) {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="invest-max-risk" className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60 flex justify-between">
-            <span>Max risk</span><span className="normal-case tracking-normal text-lavender-primary">{f.maxRisk} · {RISK_NAME[f.maxRisk]}</span>
+          <label htmlFor="invest-max-risk" className="text-xs font-medium text-muted flex justify-between">
+            <span>Max risk</span><span className="normal-case tracking-normal text-accent">{f.maxRisk} · {RISK_NAME[f.maxRisk]}</span>
           </label>
           <input id="invest-max-risk" type="range" min={1} max={5} value={f.maxRisk} onChange={e => setFilters({ ...f, maxRisk: Number(e.target.value) as RiskLevel })} className="w-full accent-cobalt" />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="invest-horizon" className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">I can stay invested for</label>
-          <select id="invest-horizon" value={f.horizon} onChange={e => setFilters({ ...f, horizon: Number(e.target.value) })} className="w-full rounded-xl border border-lavender-text/15 bg-surface px-3 py-2 text-sm">
+          <label htmlFor="invest-horizon" className="text-xs font-medium text-muted">I can stay invested for</label>
+          <select id="invest-horizon" value={f.horizon} onChange={e => setFilters({ ...f, horizon: Number(e.target.value) })} className="h-10 w-full rounded-control border border-line bg-surface px-3 text-sm text-ink">
             <option value={99}>Any period</option>
             <option value={1}>Under 1 year</option>
             <option value={3}>1–3 years</option>
@@ -95,7 +95,7 @@ export default function ExploreTab(p: Props) {
         </div>
 
         <div className="space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">Must have</p>
+          <p className="text-xs font-medium text-muted">Must have</p>
           <div className="flex flex-wrap gap-1.5">
             {Object.entries(NEEDS).map(([k, v]) => (
               <button key={k} type="button" aria-pressed={f.needs.includes(k)} className={chip(f.needs.includes(k))} onClick={() => setFilters({ ...f, needs: toggle(f.needs, k) })}>{v}</button>
@@ -104,7 +104,7 @@ export default function ExploreTab(p: Props) {
         </div>
 
         {activeCount > 0 && (
-          <button type="button" onClick={() => setFilters({ ...DEFAULT_FILTERS, sort: f.sort })} className="text-sm font-semibold text-lavender-primary underline underline-offset-2">Clear filters</button>
+          <button type="button" onClick={() => setFilters({ ...DEFAULT_FILTERS, sort: f.sort })} className="text-sm font-semibold text-accent underline underline-offset-2">Clear filters</button>
         )}
       </aside>
 
@@ -112,58 +112,58 @@ export default function ExploreTab(p: Props) {
       <div className="min-w-0 space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-lavender-text/50" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
             <input type="search" id="invest-search" value={f.q} onChange={e => setFilters({ ...f, q: e.target.value })} placeholder="Search: tax saving, gold, monthly income…" aria-label="Search options"
-              className="w-full rounded-xl border border-lavender-text/15 bg-surface py-2.5 pl-9 pr-3 text-sm" />
+              className="h-10 w-full rounded-control border border-line bg-surface pl-9 pr-3 text-sm text-ink outline-none placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25" />
           </div>
-          <select id="invest-sort" aria-label="Sort by" value={f.sort} onChange={e => setFilters({ ...f, sort: e.target.value as Sort })} className="rounded-xl border border-lavender-text/15 bg-surface px-3 py-2.5 text-sm">
+          <select id="invest-sort" aria-label="Sort by" value={f.sort} onChange={e => setFilters({ ...f, sort: e.target.value as Sort })} className="h-10 rounded-control border border-line bg-surface px-3 text-sm text-ink">
             <option value="fit">{p.profile ? 'Best match for my profile' : 'Recommended order'}</option>
             <option value="retHi">Highest typical return</option>
             <option value="riskLo">Lowest risk</option>
           </select>
-          <button type="button" onClick={() => setShowFilters(s => !s)} className="lg:hidden inline-flex items-center gap-2 rounded-xl border border-lavender-text/15 bg-surface px-3 py-2.5 text-sm font-medium">
+          <button type="button" onClick={() => setShowFilters(s => !s)} className="lg:hidden inline-flex h-10 items-center gap-2 rounded-control border border-line bg-surface px-3 text-sm font-medium text-ink">
             <SlidersHorizontal className="h-4 w-4" /> Filters{activeCount ? ` (${activeCount})` : ''}
           </button>
         </div>
 
-        <p className="text-sm text-lavender-text/70">
-          <b className="text-lavender-text tabular-nums">{list.length}</b> options match. Returns are typical yearly ranges, not promises.
+        <p className="text-sm text-muted">
+          <b className="text-ink num">{list.length}</b> options match. Returns are typical yearly ranges, not promises.
         </p>
 
         {list.length === 0 ? (
-          <div className="app-card p-10 text-center text-lavender-text/70">Nothing matches all these filters. Raise the risk limit or remove a “Must have”.</div>
+          <div className="rounded-card border border-line bg-surface p-10 text-center text-muted">Nothing matches all these filters. Raise the risk limit or remove a “Must have”.</div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 2xl:grid-cols-3">
             {list.map(o => {
               const fit = matchesProfile(o, p.profile);
               const inCmp = p.compare.includes(o.id);
               return (
-                <article key={o.id} className={`app-card p-5 flex flex-col gap-3 transition hover:shadow-lavender ${fit ? 'ring-2 ring-lavender-primary/40' : ''}`}>
+                <article key={o.id} className={`rounded-card border border-line bg-surface p-5 flex flex-col gap-3 transition ${fit ? 'border-accent/50' : ''}`}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold uppercase tracking-widest text-lavender-text/60">{p.categories[o.category]}</p>
-                      <h3 className="text-lg font-bold leading-snug text-lavender-text">{o.name}</h3>
+                      <p className="text-xs font-medium text-muted">{p.categories[o.category]}</p>
+                      <h3 className="text-base font-semibold leading-snug text-ink">{o.name}</h3>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-lg font-bold tabular-nums text-lavender-text whitespace-nowrap">{fmtReturn(o)}</p>
-                      <p className="text-[11px] text-lavender-text/60">typical / yr</p>
+                      <p className="num text-lg font-semibold text-ink whitespace-nowrap">{fmtReturn(o)}</p>
+                      <p className="text-[11px] text-muted">typical / yr</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     <RiskMeter risk={o.risk} />
-                    {fit && <span className="rounded-full bg-lavender-primary/10 px-2 py-0.5 text-[11px] font-bold text-lavender-primary">Matches your profile</span>}
-                    {o.tags.includes('warning') && <span className="rounded-full bg-caution/15 px-2 py-0.5 text-[11px] font-bold text-caution dark:text-caution">Caution</span>}
+                    {fit && <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-bold text-accent">Matches your profile</span>}
+                    {o.tags.includes('warning') && <span className="rounded-full bg-caution/15 px-2 py-0.5 text-[11px] font-bold text-caution">Caution</span>}
                   </div>
-                  <p className="text-sm text-lavender-text/75">{o.best_for}</p>
+                  <p className="text-sm text-ink/85">{o.best_for}</p>
                   {o.live_symbol && <LiveTag symbol={o.live_symbol} quote={p.live?.prices[o.live_symbol]} />}
                   <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                    <div><dt className="text-[11px] text-lavender-text/60">Lock-in</dt><dd className="font-semibold text-lavender-text">{o.lock_in}</dd></div>
-                    <div><dt className="text-[11px] text-lavender-text/60">Minimum</dt><dd className="font-semibold text-lavender-text">{o.minimum}</dd></div>
+                    <div><dt className="text-[11px] text-muted">Lock-in</dt><dd className="font-semibold text-ink">{o.lock_in}</dd></div>
+                    <div><dt className="text-[11px] text-muted">Minimum</dt><dd className="font-semibold text-ink">{o.minimum}</dd></div>
                   </dl>
-                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-lavender-text/10 pt-3">
-                    <button type="button" onClick={() => p.onOpen(o)} className="text-sm font-semibold text-lavender-primary hover:underline underline-offset-2">Risks & details →</button>
+                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-line pt-3">
+                    <button type="button" onClick={() => p.onOpen(o)} className="text-sm font-semibold text-accent hover:underline underline-offset-2">Risks & details →</button>
                     <button type="button" onClick={() => p.onToggleCompare(o.id)} aria-pressed={inCmp}
-                      className={`inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${inCmp ? 'border-lavender-primary bg-lavender-primary/10 text-lavender-primary' : 'border-lavender-text/15 text-lavender-text/80 hover:border-lavender-primary/40'}`}>
+                      className={`inline-flex items-center gap-1 rounded-control border px-3 py-1.5 text-xs font-semibold transition ${inCmp ? 'border-accent bg-accent/10 text-accent' : 'border-line text-ink/85 hover:border-accent/40'}`}>
                       {inCmp ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />} {inCmp ? 'Comparing' : 'Compare'}
                     </button>
                   </div>
