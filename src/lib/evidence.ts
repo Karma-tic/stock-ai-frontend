@@ -53,3 +53,26 @@ export function relDay(input?: string): string {
 }
 
 export const cleanTicker = (t: string) => (t || '').toUpperCase().replace('.NS', '').replace('.BO', '').trim();
+
+export type PointSource = { name: string; url: string; title?: string };
+export type EvidencePoint = { text: string; sources: PointSource[] };
+
+const safeUrl = (u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u);
+
+// New analyses carry `analysis.evidence` with source links attached by the backend
+// (the model only cites numbered headlines). Older saved analyses fall back to the plain text.
+export function evidencePoints(analysis: any, side: 'bull' | 'bear'): EvidencePoint[] {
+  const list = Array.isArray(analysis?.evidence) ? analysis.evidence : null;
+  if (list && list.length) {
+    const pts = list
+      .filter((e: any) => e && e.side === side && typeof e.point === 'string' && e.point.trim())
+      .map((e: any) => ({
+        text: e.point.trim(),
+        sources: (Array.isArray(e.sources) ? e.sources : [])
+          .filter((s: any) => s && safeUrl(s.url))
+          .map((s: any) => ({ name: String(s.name || 'Source'), url: s.url, title: s.title ? String(s.title) : undefined })),
+      }));
+    if (pts.length) return pts;
+  }
+  return splitIntoPoints(side === 'bull' ? analysis?.bull_case : analysis?.bear_case).map((text) => ({ text, sources: [] }));
+}

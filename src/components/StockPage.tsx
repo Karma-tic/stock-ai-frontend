@@ -60,7 +60,7 @@ export default function StockPage({ user }: { user?: any }) {
   const change = quote?.price_change_pct ?? story?.price_context?.day_change_pct;
 
   const cards = [
-    <PriceToday key="p" quote={quote} story={story} />,
+    <PriceToday key="p" ticker={profile.symbol} quote={quote} story={story} />,
     <WhatHappened key="h" story={story} loading={storyLoading} />,
     <KeyNumbers key="n" quote={quote} story={story} />,
     <SupportConcern key="e" story={story} loading={storyLoading} />,

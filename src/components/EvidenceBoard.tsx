@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ArrowUpRight, Eye, ExternalLink, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
-import { cleanTicker, evidenceBalance, factor, relDay, splitIntoPoints } from '../lib/evidence';
+import { EvidencePoint, cleanTicker, evidenceBalance, evidencePoints, factor, relDay } from '../lib/evidence';
 import UpgradeModal from './UpgradeModal';
 import ShareableSignal from './ShareableSignal';
 import Price, { Change } from './ui/Price';
@@ -83,7 +83,7 @@ function BalanceScale({ support, concern }: { support: number; concern: number }
   );
 }
 
-function PointList({ points, kind }: { points: string[]; kind: 'support' | 'concern' }) {
+function PointList({ points, kind }: { points: EvidencePoint[]; kind: 'support' | 'concern' }) {
   if (!points.length) return <p className="text-sm text-muted">None stated in this analysis.</p>;
   return (
     <ul className="space-y-2">
@@ -94,7 +94,31 @@ function PointList({ points, kind }: { points: string[]; kind: 'support' | 'conc
           ) : (
             <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
           )}
-          <span>{p}</span>
+          <div className="min-w-0">
+            <p>{p.text}</p>
+            {p.sources.length > 0 && (
+              <p className="mt-1.5 flex flex-wrap gap-1.5">
+                {p.sources.map((src) => {
+                  const filing = /nse|bse|exchange/i.test(src.name);
+                  const Icon = filing ? FileText : Newspaper;
+                  return (
+                    <a
+                      key={src.url}
+                      href={src.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={src.title || src.name}
+                      className="inline-flex min-h-[24px] max-w-full items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent hover:bg-accent/15"
+                    >
+                      <Icon className="h-3 w-3 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+                      <span className="truncate">{src.name}</span>
+                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
+                    </a>
+                  );
+                })}
+              </p>
+            )}
+          </div>
         </li>
       ))}
     </ul>
@@ -199,9 +223,15 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
   const sig = result?.signal || {};
   const analysis = sig.analysis || {};
   const ratings = sig.ratings || {};
-  const support = splitIntoPoints(analysis.bull_case);
+  const support = evidencePoints(analysis, 'bull');
   const flags: any[] = result?.news?.red_flags || [];
-  const concern = [...splitIntoPoints(analysis.bear_case), ...flags.map((f) => `Official disclosure: ${f.title}`)];
+  const concern: EvidencePoint[] = [
+    ...evidencePoints(analysis, 'bear'),
+    ...flags.map((f) => ({
+      text: `Official disclosure: ${f.title}`,
+      sources: typeof f.link === 'string' && /^https?:/i.test(f.link) ? [{ name: f.source || 'NSE India', url: f.link, title: f.title }] : [],
+    })),
+  ];
   const watch: string[] = [
     ...(Array.isArray(analysis.invalidation_triggers) ? analysis.invalidation_triggers.map(String) : []),
     ...(analysis.what_to_watch ? [String(analysis.what_to_watch)] : []),
@@ -415,7 +445,7 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
 
               {/* 8. Share */}
               <Section title="Share">
-                <ShareableSignal signal={sig} stock={result.stock || stock} support={support} concern={concern} />
+                <ShareableSignal signal={sig} stock={result.stock || stock} support={support.map((p) => p.text)} concern={concern.map((p) => p.text)} />
               </Section>
 
               <section className="border-t border-line px-5 py-5">
