@@ -148,7 +148,7 @@ export default function Studies() {
 
   const byId = new Map((studies || []).map((s) => [s.id, s]));
   const updated = studies?.length ? studies.map((s) => s.computed_at).sort().slice(-1)[0] : null;
-  const sources = Array.from(new Map((studies || []).flatMap((s) => s.sources).map((x) => [x.url, x])).values());
+  const sources = Array.from(new Map((studies || []).flatMap((s) => s.sources || []).map((x) => [x.url, x])).values());
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">

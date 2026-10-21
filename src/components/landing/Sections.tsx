@@ -26,7 +26,7 @@ const FAQ_GROUPS = [
       },
       {
         q: 'How accurate is the AI analysis?',
-        a: 'The AI works from price data, valuation numbers, filings and recent news, and like any tool it is sometimes wrong. We publish how past analyses turned out on the Track Record page, misses included. Use it as one input among many.',
+        a: 'The AI works from price data, valuation numbers, filings and recent news, and like any tool it is sometimes wrong. We also publish studies of how stocks did after promoter trades and big stake changes, including when a signal did not help. Use it as one input among many.',
       },
     ],
   },

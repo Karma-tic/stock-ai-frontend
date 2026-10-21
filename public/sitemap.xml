@@ -67,12 +67,6 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://byteplay.org/track-record</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://byteplay.org/blog</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
