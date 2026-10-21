@@ -20,7 +20,7 @@ const MORE = [
   { to: '/market-wrap', label: 'Market Wrap' },
   { to: '/stocks/dividends', label: 'Dividends' },
   { to: '/tools', label: 'Tools' },
-  { to: '/track-record', label: 'Track Record' },
+  { to: '/studies', label: 'Studies' },
   { to: '/blog', label: 'Blog' },
 ];
 

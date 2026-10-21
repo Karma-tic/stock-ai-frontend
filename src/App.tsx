@@ -35,6 +35,7 @@ const RefundPolicy = lazyPage(() => import('./components/RefundPolicy'));
 const Disclaimer = lazyPage(() => import('./components/Disclaimer'));
 const Contact = lazyPage(() => import('./components/Contact'));
 const About = lazyPage(() => import('./components/About'));
+const Studies = lazyPage(() => import('./components/studies/Studies'));
 const Blog = lazyPage(() => import('./components/Blog'));
 const BlogPost = lazyPage(() => import('./components/BlogPost'));
 const Learn = lazyPage(() => import('./components/Learn'));
@@ -209,6 +210,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/contact"    element={<Contact />} />
           <Route path="/about"      element={<About />} />
+          <Route path="/studies"    element={<Studies />} />
           <Route path="/beta"       element={<BetaApplication />} />
           <Route path="/blog"       element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
