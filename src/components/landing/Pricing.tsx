@@ -6,15 +6,13 @@ import { Button } from '../ui/Button';
 type Group = { name: string; items: string[] };
 
 const FREE: Group[] = [
-  { name: 'Research', items: ['2 AI analyses a day', 'Top 10 stocks', 'Every free tool and calculator'] },
-  { name: 'Alerts', items: ['Daily market wrap'] },
-  { name: 'Limits', items: ['5 stocks in your watchlist'] },
+  { name: 'Research', items: ['2 Evidence Boards a day', 'Big investors: last year of ownership, 90 days of deals', 'Every tool and calculator'] },
+  { name: 'Your stocks', items: ['Today feed and email digests', '5 stocks in your watchlist, 3 in your portfolio', 'Portfolio health checks'] },
 ];
 
 const PRO: Group[] = [
-  { name: 'Research', items: ['Unlimited AI analyses', '500+ stocks', 'Portfolio tracker'] },
-  { name: 'Alerts', items: ['Morning email digest at 8:30 AM'] },
-  { name: 'Limits', items: ['No daily cap on analyses'] },
+  { name: 'Research', items: ['Unlimited Evidence Boards', 'Big investors: 3 years of ownership, deals and insider trades'] },
+  { name: 'Your stocks', items: ['Alerts when promoters, insiders or big funds move in your stocks', 'Full health check: sector and size split, big-investor moves', 'Unlimited watchlist and portfolio, with CSV export'] },
 ];
 
 function Features({ groups, pro }: { groups: Group[]; pro?: boolean }) {

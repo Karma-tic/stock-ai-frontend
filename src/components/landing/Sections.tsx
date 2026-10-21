@@ -9,7 +9,7 @@ const FAQ_GROUPS = [
     items: [
       {
         q: 'Is Stock AI free to use?',
-        a: 'Yes. The free plan includes 2 AI analyses a day, a 5-stock watchlist and every free tool on the site. Pro is ₹99 for 30 days (a limited offer; the regular price is ₹499) and removes the limits. It does not renew automatically.',
+        a: 'Yes. The free plan includes 2 Evidence Boards a day, the last year of big-investor data, a 5-stock watchlist, portfolio health checks and every tool on the site. Pro is ₹99 for 30 days (a limited offer; the regular price is ₹499): it removes the limits and adds 3 years of big-investor history, alerts when promoters or big funds move in your stocks, and CSV export. It does not renew automatically.',
       },
       {
         q: 'Can I track my own portfolio?',

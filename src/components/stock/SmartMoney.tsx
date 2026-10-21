@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { Download, ExternalLink, Lock } from 'lucide-react';
 import { getSmartMoney } from '../../lib/api';
 import Skeleton from '../ui/Skeleton';
+import { usePlan } from '../../lib/usePlan';
+import { downloadCsv, today } from '../../lib/csv';
+import UpgradeModal from '../UpgradeModal';
 
 type Holding = { quarter: string; quarter_end: string; promoters: number | null; fiis: number | null; diis: number | null; government: number | null; public: number | null; shareholders: number | null };
 type Summary = Record<'promoters' | 'fiis' | 'diis' | 'public', { latest: number | null; change_1q: number | null; change_4q: number | null }>;
@@ -11,7 +14,7 @@ type Insider = {
   holding_before_pct: number | null; holding_after_pct: number | null; trade_from: string | null; filed_at: string; source_url: string;
 };
 type Source = { name: string; url: string };
-type Data = { holdings: Holding[]; holdings_summary: Partial<Summary>; deals: Deal[]; insider_trades: Insider[]; sources: Record<'holdings' | 'deals' | 'insider_trades', Source>; coverage_note: string };
+type Data = { holdings: Holding[]; holdings_summary: Partial<Summary>; deals: Deal[]; insider_trades: Insider[]; sources: Record<'holdings' | 'deals' | 'insider_trades', Source>; coverage_note: string; limited?: boolean; hidden?: { quarters: number; deals: number; insider_trades: number } };
 
 const GROUPS = [
   { key: 'promoters', label: 'Promoters', short: 'Promoters', shade: 'bg-cobalt' },
@@ -82,9 +85,26 @@ function oneYearRead(sum: Partial<Summary>) {
   return `Over the last year, ${s}.`;
 }
 
+function depthNote(d: Data) {
+  if (!d.limited) return `Full history: ${d.holdings.length} quarters of ownership, with deals and insider trades for up to 3 years.`;
+  const h = d.hidden || { quarters: 0, deals: 0, insider_trades: 0 };
+  const more = [h.quarters ? `${h.quarters} more ${h.quarters === 1 ? 'quarter' : 'quarters'} of ownership` : '', h.deals ? `${h.deals} older ${h.deals === 1 ? 'deal' : 'deals'}` : '', h.insider_trades ? `${h.insider_trades} older insider ${h.insider_trades === 1 ? 'trade' : 'trades'}` : ''].filter(Boolean);
+  return `Showing the last year of ownership and 90 days of trades. ${more.length ? `Pro adds ${more.join(', ')}, ` : 'Pro shows up to 3 years, '}plus alerts when these investors move.`;
+}
+
+function exportCsv(ticker: string, d: Data) {
+  downloadCsv(`${ticker}-big-investors-${today()}.csv`, [
+    { title: `Shareholding pattern (%) · ${ticker} · ${d.sources.holdings?.name || ''}`, header: ['Quarter', 'Promoters', 'FIIs', 'DIIs', 'Government', 'Public', 'Shareholders'], rows: d.holdings.map((h) => [h.quarter, h.promoters, h.fiis, h.diis, h.government, h.public, h.shareholders]) },
+    { title: 'Insider and promoter trades', header: ['Filed', 'Trade date', 'Person', 'Category', 'Type', 'Mode', 'Quantity', 'Value (INR)', 'Holding before %', 'Holding after %', 'Filing'], rows: d.insider_trades.map((t) => [t.filed_at?.slice(0, 10), t.trade_from, t.person_name, t.person_category, t.transaction_type, t.mode, t.quantity, t.value_inr, t.holding_before_pct, t.holding_after_pct, t.source_url]) },
+    { title: 'Bulk and block deals', header: ['Date', 'Kind', 'Client', 'Side', 'Quantity', 'Price', 'Value (Cr)'], rows: d.deals.map((x) => [x.deal_date, x.kind, x.client_name, x.side, x.quantity, x.price, x.value_cr]) },
+  ]);
+}
+
 export default function SmartMoney({ ticker }: { ticker: string }) {
   const [data, setData] = useState<Data | null>(null);
   const [failed, setFailed] = useState(false);
+  const { isPro } = usePlan();
+  const [upgrade, setUpgrade] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -96,7 +116,7 @@ export default function SmartMoney({ ticker }: { ticker: string }) {
     return () => {
       alive = false;
     };
-  }, [ticker]);
+  }, [ticker, isPro]);
 
   if (failed) return <p className="text-sm text-muted">Ownership and deal data could not be loaded right now.</p>;
   if (!data)
@@ -171,7 +191,7 @@ export default function SmartMoney({ ticker }: { ticker: string }) {
       {/* Insider and promoter trades */}
       <div className="mt-7 border-t border-line pt-5">
         <h3 className="text-sm font-semibold text-ink">Insider and promoter trades</h3>
-        <p className="mt-0.5 text-xs text-muted">Filed under SEBI's insider trading rules, last 12 months.</p>
+        <p className="mt-0.5 text-xs text-muted">Filed under SEBI's insider trading rules, {data.limited ? 'last 90 days' : 'last 3 years'}.</p>
         {data.insider_trades.length ? (
           <ul className="mt-3 divide-y divide-line">
             {data.insider_trades.slice(0, 8).map((t, i) => {
@@ -217,7 +237,7 @@ export default function SmartMoney({ ticker }: { ticker: string }) {
       {/* Bulk and block deals */}
       <div className="mt-7 border-t border-line pt-5">
         <h3 className="text-sm font-semibold text-ink">Bulk and block deals</h3>
-        <p className="mt-0.5 text-xs text-muted">Single trades of 0.5% of the company or more, or ₹10 Cr+ on the block window.</p>
+        <p className="mt-0.5 text-xs text-muted">Single trades of 0.5% of the company or more, or ₹10 Cr+ on the block window. {data.limited ? 'Last 90 days.' : 'Last 3 years.'}</p>
         {data.deals.length ? (
           <ul className="mt-3 divide-y divide-line">
             {data.deals.slice(0, 8).map((d, i) => (
@@ -246,7 +266,21 @@ export default function SmartMoney({ ticker }: { ticker: string }) {
         </div>
       </div>
 
-      <p className="mt-6 text-xs leading-relaxed text-muted">
+      {/* Depth: Pro history and export */}
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-control bg-accent/[0.06] px-3 py-2.5">
+        <p className="text-xs leading-relaxed text-ink/85">{depthNote(data)}</p>
+        <button
+          type="button"
+          onClick={() => (isPro ? exportCsv(ticker, data) : setUpgrade(true))}
+          className="inline-flex min-h-[36px] items-center gap-1.5 rounded-control px-2 text-xs font-semibold text-accent hover:bg-accent/10"
+        >
+          {isPro ? <Download className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
+          {isPro ? 'Download CSV' : data.limited ? 'See 3 years with Pro' : 'CSV export with Pro'}
+        </button>
+      </div>
+      {upgrade && <UpgradeModal onClose={() => setUpgrade(false)} onSuccess={() => window.location.reload()} />}
+
+      <p className="mt-4 text-xs leading-relaxed text-muted">
         What big investors did, from public filings. It is not a forecast: they can be wrong, and their filings arrive after they trade. {data.coverage_note}
       </p>
     </div>
