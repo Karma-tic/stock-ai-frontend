@@ -6,6 +6,7 @@ import SEO from './SEO';
 import { ButtonLink } from './ui/Button';
 import Price, { Change } from './ui/Price';
 import StockStories from './stock/StockStories';
+import SmartMoney from './stock/SmartMoney';
 import { useStockData } from './stock/storyData';
 import { KeyNumbers, PriceToday, STORY_PARTS, Sources, SupportConcern, WatchFor, WhatHappened } from './stock/StorySections';
 
@@ -63,6 +64,7 @@ export default function StockPage({ user }: { user?: any }) {
     <PriceToday key="p" ticker={profile.symbol} quote={quote} story={story} />,
     <WhatHappened key="h" story={story} loading={storyLoading} />,
     <KeyNumbers key="n" quote={quote} story={story} />,
+    <SmartMoney key="m" ticker={profile.symbol} />,
     <SupportConcern key="e" story={story} loading={storyLoading} />,
     <WatchFor key="w" story={story} loading={storyLoading} />,
     <Sources key="s" story={story} loading={storyLoading} />,
