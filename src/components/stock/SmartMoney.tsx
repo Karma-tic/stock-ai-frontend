@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Download, ExternalLink, Lock } from 'lucide-react';
 import { getSmartMoney } from '../../lib/api';
 import Skeleton from '../ui/Skeleton';
@@ -281,7 +282,10 @@ export default function SmartMoney({ ticker }: { ticker: string }) {
       {upgrade && <UpgradeModal onClose={() => setUpgrade(false)} onSuccess={() => window.location.reload()} />}
 
       <p className="mt-4 text-xs leading-relaxed text-muted">
-        What big investors did, from public filings. It is not a forecast: they can be wrong, and their filings arrive after they trade. {data.coverage_note}
+        What big investors did, from public filings. It is not a forecast: they can be wrong, and their filings arrive after they trade. {data.coverage_note}{' '}
+        <Link to="/studies" className="font-medium text-accent hover:underline">
+          What happened after past promoter buys and stake changes
+        </Link>
       </p>
     </div>
   );

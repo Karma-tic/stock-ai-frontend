@@ -44,6 +44,7 @@ export const submitBetaApplication = (data: BetaApplicationPayload) => api.post(
 export const getStock = (ticker: string) => api.get(`/api/stock/${ticker}`);
 export const getStockStory = (ticker: string) => api.get(`/api/stock/${ticker}/story`);
 export const getMarketFlows = () => api.get('/api/market/flows');
+export const getStudies = () => api.get('/api/studies');
 export const getSmartMoney = (ticker: string) => api.get(`/api/stock/${ticker}/smart-money`);
 export const getStockHistory = (ticker: string, range: string) => api.get(`/api/stock/${ticker}/history`, { params: { range } });
 export const getDividendTracker = () => api.get('/api/market/dividends');
