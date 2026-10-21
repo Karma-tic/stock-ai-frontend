@@ -1,7 +1,8 @@
 // Portfolio health check: how the money is spread, in plain language. Describes; never advises.
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Eye } from 'lucide-react';
+import { ArrowRight, Check, Eye, Lock } from 'lucide-react';
+import UpgradeModal from '../UpgradeModal';
 import { getPortfolioHealth } from '../../lib/api';
 import { safeStorage, scoreProfile } from '../invest/investShared';
 
@@ -9,7 +10,7 @@ type HealthCheck = { id: string; status: 'ok' | 'watch'; title: string; value: s
 type Sector = { sector: string; weight_pct: number; tickers: string[] };
 type Size = { size: 'large' | 'mid' | 'small' | 'unknown'; weight_pct: number };
 type Move = { ticker: string; title: string; published_at?: string; source_url?: string; severity?: string };
-type Health = { checks: HealthCheck[]; sectors: Sector[]; sizes: Size[]; big_investor_moves: Move[]; unclassified?: string[]; note?: string };
+type Health = { checks: HealthCheck[]; sectors: Sector[]; sizes: Size[]; big_investor_moves: Move[]; unclassified?: string[]; note?: string; locked?: boolean; locked_counts?: { sectors: number; big_investor_moves: number } };
 
 const SHADES = ['bg-cobalt', 'bg-cobalt/75', 'bg-cobalt/55', 'bg-cobalt/40', 'bg-cobalt/25', 'bg-cobalt/15'];
 const SIZE_LABEL: Record<Size['size'], string> = { large: 'Large', mid: 'Mid-sized', small: 'Small', unknown: 'Not known' };
@@ -19,6 +20,7 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
   const [data, setData] = useState<Health | null>(null);
   const [failed, setFailed] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
+  const [upgrade, setUpgrade] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -91,6 +93,25 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
         })}
       </ul>
 
+      {data.locked ? (
+        <div className="mt-4 border-t border-line pt-4">
+          <div className="flex items-start gap-3 rounded-control border border-dashed border-line p-3">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-accent/10 text-accent" aria-hidden="true">
+              <Lock className="h-4 w-4" strokeWidth={1.75} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-ink">Sector and size split, and big-investor moves in your stocks</p>
+              <p className="mt-0.5 text-[13px] leading-relaxed text-muted">
+                {lockedLine(data)} Included in Pro, with email alerts when promoters or big funds move in a stock you hold.
+              </p>
+              <button type="button" onClick={() => setUpgrade(true)} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline">
+                See it with Pro <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
       {/* Sector mix */}
       {sectors.length > 0 && (
         <div className="mt-4 border-t border-line pt-4">
@@ -145,6 +166,9 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
         )}
       </div>
 
+        </>
+      )}
+
       {/* Risk profile link-up */}
       <div className="mt-4 rounded-control bg-accent/[0.06] p-3 text-sm">
         {profile ? (
@@ -160,6 +184,13 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
       </div>
 
       <p className="mt-3 text-[11px] leading-relaxed text-muted">{data.note} A description of your holdings, not advice on what to buy or sell.</p>
+      {upgrade && <UpgradeModal onClose={() => setUpgrade(false)} onSuccess={() => window.location.reload()} />}
     </section>
   );
+}
+
+function lockedLine(d: Health) {
+  const c = d.locked_counts || { sectors: 0, big_investor_moves: 0 };
+  const parts = [c.sectors ? `Your stocks span ${c.sectors} ${c.sectors === 1 ? 'sector' : 'sectors'}` : '', c.big_investor_moves ? `${c.big_investor_moves} big-investor ${c.big_investor_moves === 1 ? 'move' : 'moves'} this month` : ''].filter(Boolean);
+  return parts.length ? `${parts.join(', and there ' + (c.big_investor_moves === 1 ? 'was ' : 'were '))}.` : '';
 }

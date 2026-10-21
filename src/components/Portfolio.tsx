@@ -1,7 +1,8 @@
 // src/components/Portfolio.tsx
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Trash2, X } from 'lucide-react';
+import { Download, Plus, Trash2, X } from 'lucide-react';
+import { downloadCsv, today } from '../lib/csv';
 import { getPortfolio, addToPortfolio, removeFromPortfolio } from '../lib/api';
 import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
@@ -106,6 +107,14 @@ export default function Portfolio() {
     }
   };
 
+  const exportPortfolio = () =>
+    downloadCsv(`portfolio-${today()}.csv`, [
+      {
+        header: ['Symbol', 'Company', 'Quantity', 'Avg buy price', 'Current price', 'Invested', 'Current value', 'Profit or loss', 'P&L %', 'Weight %'],
+        rows: portfolio.map((h) => [h.ticker, h.company_name, h.quantity, h.avg_buy_price, h.current_price, h.invested_value, h.current_value, h.pnl, h.pnl_pct, totalValue ? (((h.current_value || 0) / totalValue) * 100).toFixed(2) : '']),
+      },
+    ]);
+
   const totalValue = portfolio.reduce((s, h) => s + (h.current_value || 0), 0);
   const allocation = [...portfolio].sort((a, b) => (b.current_value || 0) - (a.current_value || 0));
 
@@ -192,6 +201,16 @@ export default function Portfolio() {
             <span className="num text-xs text-muted">
               {portfolio.length}/{FREE_LIMIT} on the free plan
             </span>
+          )}
+          {portfolio.length > 0 && (
+            <button
+              type="button"
+              onClick={() => (isPro ? exportPortfolio() : setShowUpgrade(true))}
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-control px-2 text-xs font-medium text-muted hover:bg-ink/[0.06] hover:text-ink"
+              aria-label={isPro ? 'Download portfolio as CSV' : 'CSV export is a Pro feature'}
+            >
+              <Download className="h-3.5 w-3.5" /> CSV{!isPro && <span className="rounded bg-accent/10 px-1 text-[10px] font-semibold text-accent">Pro</span>}
+            </button>
           )}
           {!showAdd && portfolio.length > 0 && (
             <Button size="sm" onClick={openAdd}>

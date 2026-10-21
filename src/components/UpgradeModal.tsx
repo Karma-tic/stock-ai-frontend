@@ -36,11 +36,11 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     });
   }, []);
   const features = [
-    'Unlimited Evidence Board analyses (free: 2 a day)',
-    'Search 500+ NSE stocks',
-    'Unlimited watchlist and portfolio',
-    'Morning email digest for your stocks',
-    'Hourly research refresh for your watchlist',
+    'Unlimited Evidence Boards (free: 2 a day)',
+    'Big investors: 3 years of ownership, deals and insider trades (free: last year and 90 days)',
+    'Email alerts when promoters, insiders or big funds move in your stocks',
+    'Full portfolio health check: sector and size split, big-investor moves',
+    'Unlimited watchlist and portfolio, with CSV export',
   ];
 
   // Dialog basics: Escape closes, focus moves in and back, the page behind does not scroll
