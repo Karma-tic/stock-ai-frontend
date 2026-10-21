@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, CalendarDays, Check, ChevronRight, ExternalLink, FileText, Info, Mail, Plus, RefreshCw, Save, Search, ShieldCheck, Target, Trash2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import MarketFlows from './market/MarketFlows';
 import { deleteThesis, getEarningsComparison, getEventCalendar, getEventRadar, getNotificationPreferences, getTheses, saveNotificationPreferences, saveThesis } from '../lib/api';
 import { Change } from './ui/Price';
 
@@ -9,7 +10,7 @@ type RadarEvent = {
   severity: 'low' | 'medium' | 'high' | 'critical'; title: string;
   summary: string; why_matters: string; source_name: string; source_url: string;
   published_at?: string; verified?: boolean;
-  extracted_facts?: string[]; event_date?: string;
+  extracted_facts?: string[]; event_date?: string; kind?: string;
 };
 
 type Thesis = {
@@ -40,17 +41,19 @@ function SeverityTag({ level }: { level: string }) {
 }
 
 // ── Filters ──
-type Kind = 'all' | 'results' | 'dividends' | 'filings' | 'news';
+type Kind = 'all' | 'results' | 'dividends' | 'filings' | 'money' | 'news';
 const KINDS: { id: Kind; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'results', label: 'Results' },
   { id: 'dividends', label: 'Dividends' },
   { id: 'filings', label: 'Filings' },
+  { id: 'money', label: 'Big investors' },
   { id: 'news', label: 'News' },
 ];
 const isFiling = (e: RadarEvent) => /nse|bse|exchange/i.test(e.source_name || '');
 function kindOf(e: RadarEvent): Exclude<Kind, 'all'> {
   const c = (e.category || '').toLowerCase();
+  if (e.kind === 'smart_money') return 'money';
   if (/earning|result/.test(c)) return 'results';
   if (/dividend|split|bonus|record|corporate_action/.test(c)) return 'dividends';
   return isFiling(e) ? 'filings' : 'news';
@@ -318,6 +321,8 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
           <span className="hidden sm:inline">Refresh</span>
         </button>
       </header>
+
+      <MarketFlows />
 
       {error && (
         <div className="mb-5 flex items-center justify-between gap-3 rounded-card border border-down/25 bg-down/10 p-4 text-sm text-ink">

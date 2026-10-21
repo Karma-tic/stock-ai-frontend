@@ -16,6 +16,7 @@ import TrendingStocks from './TrendingStocks';
 import TodayRadar from './TodayRadar';
 import StockRow, { StockRowSkeleton } from './app/StockRow';
 import NextUp from './app/NextUp';
+import MarketFlows from './market/MarketFlows';
 import Segmented from './ui/Segmented';
 
 type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'ipos' | 'radar';
@@ -347,7 +348,8 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
 
         {/* Right rail: market status and what is next for your stocks (wide screens) */}
         <aside className={tab === 'radar' ? 'hidden' : 'hidden xl:block'}>
-          <div className="sticky top-[calc(var(--nav-h,64px)+72px)]">
+          <div className="sticky top-[calc(var(--nav-h,64px)+72px)] space-y-4">
+            <MarketFlows compact />
             <NextUp />
           </div>
         </aside>

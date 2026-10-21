@@ -255,6 +255,7 @@ export const STORY_PARTS = [
   { id: 'price', title: 'Price today' },
   { id: 'happened', title: 'What happened' },
   { id: 'numbers', title: 'Numbers that matter' },
+  { id: 'money', title: 'Big investors' },
   { id: 'evidence', title: 'Supporting vs concerning' },
   { id: 'watch', title: 'Watch for' },
   { id: 'sources', title: 'Sources' },
