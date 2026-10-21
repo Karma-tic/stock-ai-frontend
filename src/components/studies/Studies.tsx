@@ -6,12 +6,12 @@ import SEO from '../SEO';
 import PageHeader from '../ui/PageHeader';
 import { getStudies } from '../../lib/api';
 
-type Row = { horizon: string; label: string; n: number; median_return?: number; median_benchmark?: number; median_excess?: number; mean_excess?: number; beat_share?: number; up_share?: number; p10?: number; p90?: number };
-type Example = { symbol: string; date: string; entry: string; value_inr?: number; change_pts?: number; quarter?: string; '6m'?: number; '6m_bench'?: number; source_url?: string };
+type Row = { horizon: string; label: string; n: number; median_return?: number; median_benchmark?: number; median_excess?: number; mean_excess?: number; beat_share?: number; up_share?: number; p10?: number; p90?: number; median_peers?: number; median_vs_peers?: number; beat_peers_share?: number };
+type Example = { symbol: string; date: string; entry: string; value_inr?: number; change_pts?: number; quarter?: string; '6m'?: number; '6m_bench'?: number; '6m_peers'?: number; source_url?: string };
 type Study = {
   id: string; title: string; definition: string; benchmark: string; events_found: number; events_priced: number;
   period_from?: string; period_to?: string; summary: Row[]; headline: string; examples: Example[];
-  sources: { name: string; url: string }[]; computed_at: string; universe?: string;
+  sources: { name: string; url: string }[]; computed_at: string; universe?: string; peer_universe?: string;
 };
 
 const GROUPS: { title: string; intro: string; ids: string[] }[] = [
@@ -48,33 +48,40 @@ function StudyCard({ s }: { s: Study }) {
       {rows.length > 0 ? (
         <div className="mt-4">
           <table className="w-full text-sm">
-            <caption className="sr-only">{s.title}: returns after the event compared with the {s.benchmark}</caption>
+            <caption className="sr-only">{s.title}: returns after the event compared with similar stocks over the same days, and with the {s.benchmark}</caption>
             <thead className="text-xs text-muted">
               <tr>
                 <th scope="col" className="pb-2 text-left font-medium">After</th>
                 <th scope="col" className="hidden pb-2 text-right font-medium sm:table-cell">Events</th>
-                <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">Typical</span><span className="hidden sm:inline">Typical stock</span></th>
-                <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">Index</span><span className="hidden sm:inline">{s.benchmark}</span></th>
-                <th scope="col" className="pb-2 pl-3 text-right font-medium sm:pl-4 sm:text-left"><span className="sm:hidden">Gap</span><span className="hidden sm:inline">Difference</span></th>
-                <th scope="col" className="pb-2 text-right font-medium">Beat it</th>
+                <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">These</span><span className="hidden sm:inline">These stocks</span></th>
+                <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">Similar</span><span className="hidden sm:inline">Similar stocks</span></th>
+                <th scope="col" className="pb-2 pl-3 text-right font-medium sm:pl-4 sm:text-left">Gap</th>
+                <th scope="col" className="pb-2 text-right font-medium">Ahead</th>
+                <th scope="col" className="hidden pb-2 pl-3 text-right font-medium md:table-cell">{s.benchmark}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
-              {rows.map((r) => (
-                <tr key={r.horizon}>
-                  <th scope="row" className="py-2.5 text-left font-normal text-ink">{r.label}</th>
-                  <td className="num hidden py-2.5 text-right text-muted sm:table-cell">{r.n.toLocaleString('en-IN')}</td>
-                  <td className={`num py-2.5 text-right font-medium ${tone(r.median_return)}`}>{pts(r.median_return)}</td>
-                  <td className={`num py-2.5 text-right ${tone(r.median_benchmark)}`}>{pts(r.median_benchmark)}</td>
-                  <td className="py-2.5 pl-3 text-right sm:pl-4 sm:text-left">
-                    <span className="inline-flex items-center gap-2">
-                      <span className="hidden w-20 sm:block"><ExcessBar v={r.median_excess} /></span>
-                      <span className={`num text-xs ${tone(r.median_excess)}`}>{pts(r.median_excess)}</span>
-                    </span>
-                  </td>
-                  <td className="num py-2.5 text-right text-ink">{r.beat_share?.toFixed(0)}%</td>
-                </tr>
-              ))}
+              {rows.map((r) => {
+                const peers = r.median_vs_peers != null;
+                const gap = peers ? r.median_vs_peers : r.median_excess;
+                const ahead = peers ? r.beat_peers_share : r.beat_share;
+                return (
+                  <tr key={r.horizon}>
+                    <th scope="row" className="py-2.5 text-left font-normal text-ink">{r.label}</th>
+                    <td className="num hidden py-2.5 text-right text-muted sm:table-cell">{r.n.toLocaleString('en-IN')}</td>
+                    <td className={`num py-2.5 text-right font-medium ${tone(r.median_return)}`}>{pts(r.median_return)}</td>
+                    <td className={`num py-2.5 text-right ${tone(r.median_peers)}`}>{pts(r.median_peers)}</td>
+                    <td className="py-2.5 pl-3 text-right sm:pl-4 sm:text-left">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="hidden w-20 sm:block"><ExcessBar v={gap} /></span>
+                        <span className={`num text-xs ${tone(gap)}`}>{pts(gap)}</span>
+                      </span>
+                    </td>
+                    <td className="num py-2.5 text-right text-ink">{ahead?.toFixed(0)}%</td>
+                    <td className={`num hidden py-2.5 pl-3 text-right text-xs md:table-cell ${tone(r.median_benchmark)}`}>{pts(r.median_benchmark)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -84,7 +91,7 @@ function StudyCard({ s }: { s: Study }) {
 
       {rows.find((r) => r.horizon === '6m')?.p10 != null && (
         <p className="mt-3 text-xs leading-relaxed text-muted">
-          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. "Typical" is the median.
+          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. Figures are medians. "Similar stocks" is the typical return of {s.peer_universe || 'the other stocks in this study'}, over exactly the same days; "Ahead" is the share of cases that beat it.
         </p>
       )}
 
@@ -114,7 +121,7 @@ function StudyCard({ s }: { s: Study }) {
               </span>
               <span className="num shrink-0 text-xs">
                 <span className={tone(e['6m'])}>{pts(e['6m'])}</span>
-                <span className="text-muted"> vs {pts(e['6m_bench'])}</span>
+                <span className="text-muted"> vs {pts(e['6m_peers'] ?? e['6m_bench'])}</span>
               </span>
             </li>
           ))}
@@ -154,7 +161,7 @@ export default function Studies() {
 
       <section className="mb-10 grid gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-3">
         {[
-          ['Compared with the market', 'Each stock is measured against the Nifty 500 over the same days, so a rising market does not flatter the result.'],
+          ['Compared with similar stocks', 'Each case is measured against the typical similar stock over exactly the same days, so a rising or falling market does not flatter the result. The Nifty 500 is shown too.'],
           ['Only what was public', 'Every case starts the trading day after the filing, when anyone could have acted.'],
           ['The typical case', 'We show the median and how many beat the market, so a few huge winners cannot carry the result.'],
         ].map(([t, d]) => (
