@@ -70,6 +70,7 @@ export const removeFromWatchlist = async (ticker: string) => {
   return response;
 };
 export const getPortfolio = () => api.get('/api/portfolio');
+export const getPortfolioHealth = () => api.get('/api/portfolio/health');
 export const addToPortfolio = async (data: any) => {
   const response = await api.post('/api/portfolio', data);
   notifyTrackedStocksChanged();

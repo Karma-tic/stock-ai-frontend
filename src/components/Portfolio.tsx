@@ -7,6 +7,7 @@ import { usePlan } from '../lib/usePlan';
 import UpgradeModal from './UpgradeModal';
 import Price, { Change } from './ui/Price';
 import { Button } from './ui/Button';
+import PortfolioHealth from './portfolio/PortfolioHealth';
 
 const FREE_LIMIT = 3;
 const money = (v: number) => `₹${(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -177,6 +178,9 @@ export default function Portfolio() {
           </ul>
         </div>
       )}
+
+      {/* Health check */}
+      {portfolio.length > 0 && <PortfolioHealth refreshKey={portfolio.map((h) => `${h.ticker}:${h.quantity}`).join(',')} />}
 
       {/* Header + add */}
       <div className={`flex items-center justify-between gap-3 ${portfolio.length ? 'mt-7' : ''}`}>
