@@ -55,7 +55,12 @@ function StudyCard({ s }: { s: Study }) {
                 <th scope="col" className="hidden pb-2 text-right font-medium sm:table-cell">Events</th>
                 <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">These</span><span className="hidden sm:inline">These stocks</span></th>
                 <th scope="col" className="pb-2 text-right font-medium"><span className="sm:hidden">Similar</span><span className="hidden sm:inline">Similar stocks</span></th>
-                <th scope="col" className="pb-2 pl-3 text-right font-medium sm:pl-4 sm:text-left">Gap</th>
+                <th scope="col" className="pb-2 pl-3 text-right font-medium sm:pl-4 sm:text-left">
+                  <abbr title="For each case we take its return minus what similar stocks did over the same days, then show the middle value of those gaps. It is not the two columns to its left subtracted." className="cursor-help no-underline decoration-dotted underline-offset-2 sm:underline">
+                    <span className="sm:hidden">Gap*</span>
+                    <span className="hidden sm:inline">Typical gap per case*</span>
+                  </abbr>
+                </th>
                 <th scope="col" className="pb-2 text-right font-medium">Ahead</th>
                 <th scope="col" className="hidden pb-2 pl-3 text-right font-medium md:table-cell">{s.benchmark}</th>
               </tr>
@@ -91,7 +96,7 @@ function StudyCard({ s }: { s: Study }) {
 
       {rows.find((r) => r.horizon === '6m')?.p10 != null && (
         <p className="mt-3 text-xs leading-relaxed text-muted">
-          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. Figures are medians. "Similar stocks" is the typical return of {s.peer_universe || 'the other stocks in this study'}, over exactly the same days; "Ahead" is the share of cases that beat it.
+          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. Figures are medians. "Similar stocks" is the typical return of {s.peer_universe || 'the other stocks in this study'}, over exactly the same days. *The gap is worked out case by case (each stock against similar stocks on its own dates), then the middle value is shown, so it will not equal the two columns subtracted. "Ahead" is the share of cases with a positive gap.
         </p>
       )}
 
