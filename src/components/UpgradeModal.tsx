@@ -40,7 +40,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
     'Search 500+ NSE stocks',
     'Unlimited watchlist and portfolio',
     'Morning email digest for your stocks',
-    'Hourly signal refresh',
+    'Hourly research refresh for your watchlist',
   ];
 
   // Dialog basics: Escape closes, focus moves in and back, the page behind does not scroll

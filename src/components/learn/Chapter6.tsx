@@ -40,7 +40,7 @@ export default function Chapter6() {
                   "Removing emotional bias from analysis",
                   "Generating structured, consistent outputs",
                   "Running analysis on hundreds of stocks in minutes",
-                  "Combining multiple data sources into one signal",
+                  "Combining multiple data sources into one view",
                 ],
                 icon: "✓",
                 itemColor: "text-up",
@@ -80,7 +80,7 @@ export default function Chapter6() {
           <div className="border border-accent/30 bg-accent/[0.06] rounded-card p-8 text-center">
             <h4 className="text-accent text-xl font-bold mb-4">How Stock AI Uses LLM Technology</h4>
             <p className="text-ink/85 text-lg leading-relaxed max-w-3xl mx-auto">
-              Stock AI uses advanced models (like Llama 3.3) to analyze each stock. For every request, the AI receives: live price data from NSE, PE ratio, 52-week position, volume data, and the latest news from 4 sources. It generates a structured output with a BUY/HOLD/SELL signal, confidence score, and specific targets in just 8 seconds.
+              Stock AI uses advanced models (like Llama 3.3) to analyze each stock. For every request, the AI receives: live price data from NSE, PE ratio, 52-week position, volume data, and the latest news from 4 sources. It turns these into an Evidence Board: the points that support the stock and the points that worry, each linked to its source, in a few seconds. It does not give buy or sell calls.
             </p>
           </div>
 

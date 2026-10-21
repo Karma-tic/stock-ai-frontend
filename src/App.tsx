@@ -58,7 +58,6 @@ const Chapter7 = lazyPage(() => import('./components/learn/Chapter7'));
 const Chapter8 = lazyPage(() => import('./components/learn/Chapter8'));
 const Chapter9 = lazyPage(() => import('./components/learn/Chapter9'));
 const MarketWrap = lazyPage(() => import('./components/MarketWrap'));
-const ProPicks = lazyPage(() => import('./components/ProPicks'));
 const IPOsPage = lazyPage(() => import('./components/IPOsPage'));
 const IpoDetailPage = lazyPage(() => import('./components/IpoDetailPage'));
 const BetaApplication = lazyPage(() => import('./components/BetaApplication'));
@@ -229,7 +228,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/stocks/dividends" element={<DividendTracker />} />
           <Route path="/stock/:symbol" element={<StockPage user={user} />} />
 
-          <Route path="/pro-picks" element={<ProPicks />} />
+          <Route path="/pro-picks" element={<Navigate to="/" replace />} />
           <Route path="/ipos" element={<IPOsPage />} />
           <Route path="/ipos/:id" element={<IpoDetailPage />} />
           <Route path="/today" element={user ? <Dashboard initialTab="radar" /> : <Navigate to="/login?next=%2Ftoday" replace />} />

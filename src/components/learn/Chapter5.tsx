@@ -55,7 +55,7 @@ export default function Chapter5() {
               },
               {
                 risk:   "Emotional Risk",
-                desc:   "Fear and greed are the biggest risks. Panic selling at lows and buying at highs destroys wealth. Following AI-based signals removes emotional bias from decisions.",
+                desc:   "Fear and greed are the biggest risks. Panic selling at lows and buying at highs destroys wealth. Writing down your reasons before you buy, and checking them against the evidence, removes emotional bias from decisions.",
                 level:  "HIGH",
               },
             ].map(item => (

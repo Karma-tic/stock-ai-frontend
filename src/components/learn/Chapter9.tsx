@@ -20,9 +20,9 @@ export default function Chapter9() {
           <div className="grid grid-cols-1 gap-4">
             {[
               { mistake: "Investing without research",    fix: "Use Stock AI to analyze any stock in 8 seconds before buying." },
-              { mistake: "Trading without a stop loss",   fix: "Always set a stop loss. Stock AI calculates it for every signal automatically." },
+              { mistake: "Trading without a stop loss",   fix: "Decide your exit level before you buy, and stick to it." },
               { mistake: "Panic selling at market lows",  fix: "Pre-define exit points. Don't make emotional decisions during extreme market volatility." },
-              { mistake: "Buying tips from WhatsApp/Telegram", fix: "Verify every tip with fundamental data. Use byteplay.org for quick, unbiased analysis." },
+              { mistake: "Buying tips from WhatsApp/Telegram", fix: "Ignore tips. Check the filings and the evidence yourself; byteplay.org links every point to its source." },
               { mistake: "Over-concentration in one stock", fix: "Diversify across at least 5-8 different sectors so one bad stock doesn't ruin your portfolio." },
               { mistake: "Ignoring basic valuations",     fix: "Always check the PE ratio before buying. Never buy severely overvalued stocks without a catalyst." },
               { mistake: "Trading with borrowed money",   fix: "Only invest surplus money you can afford to lose completely. Debt multiplies losses." },

@@ -313,16 +313,9 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
                 <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{analysis.short_summary || 'No summary was returned for this analysis.'}</p>
               </section>
 
-              {/* 3. Evidence balance (replaces the verdict as the headline) */}
+              {/* 3. Evidence balance: how the sourced points weigh up. No verdict, no targets. */}
               <section className="border-t border-line px-5 py-5">
                 <BalanceScale support={support.length} concern={concern.length} />
-                {/* The AI verdict, shown small and labelled for what it is */}
-                {sig.signal && (
-                  <p className="mt-4 rounded-control bg-surface2/70 px-3 py-2.5 text-xs leading-relaxed text-muted">
-                    AI verdict: <span className="font-semibold text-ink">{sig.signal}</span>
-                    {typeof sig.confidence === 'number' && <span className="num"> · {sig.confidence}% confidence</span>}. A model's read of the evidence above, not a recommendation.
-                  </p>
-                )}
               </section>
 
               {/* 4. Supporting and concerning: stacked on larger screens, tabs on phones */}

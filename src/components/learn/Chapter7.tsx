@@ -29,11 +29,11 @@ export default function Chapter7() {
               },
               {
                 step:  "Use Stock AI for Analysis",
-                desc:  "Before buying any stock, run an AI analysis on byteplay.org. The platform reads official NSE announcements, latest news and valuation metrics to give you a structured BUY/HOLD/SELL signal with specific entry price, targets and stop loss. Use this as one input — always do your own research as well.",
+                desc:  "Before buying any stock, run an AI analysis on byteplay.org. The platform reads official NSE announcements, latest news and valuation metrics and lays out what supports and what worries, each point linked to its source. Use it as one input, and always do your own research as well.",
               },
               {
                 step:  "Always Set a Stop Loss",
-                desc:  "A stop loss is a price level at which you exit a losing trade to prevent further loss. For example, if you buy a stock at ₹100, set a stop loss at ₹90. If it falls below ₹90, sell immediately. This protects you from catastrophic losses. Stock AI calculates an appropriate stop loss for every recommendation.",
+                desc:  "A stop loss is a price level at which you exit a losing trade to prevent further loss. For example, if you buy a stock at ₹100, set a stop loss at ₹90. If it falls below ₹90, sell immediately. This protects you from catastrophic losses.",
               },
               {
                 step:  "Diversify Your Portfolio",
