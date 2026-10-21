@@ -12,15 +12,14 @@ import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
 import UpcomingIpos from './UpcomingIpos';
 import UpgradeModal from './UpgradeModal';
-import PennyStocks from './PennyStocks';
 import TrendingStocks from './TrendingStocks';
 import TodayRadar from './TodayRadar';
 import StockRow, { StockRowSkeleton } from './app/StockRow';
 import NextUp from './app/NextUp';
 import Segmented from './ui/Segmented';
 
-type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'penny' | 'ipos' | 'radar';
-const TABS: DashboardTab[] = ['market', 'watchlist', 'radar', 'trending', 'ipos', 'portfolio', 'penny'];
+type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'ipos' | 'radar';
+const TABS: DashboardTab[] = ['market', 'watchlist', 'radar', 'trending', 'ipos', 'portfolio'];
 const POPULAR = ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK', 'SBIN'];
 
 export default function Dashboard({ initialTab = 'market' }: { initialTab?: DashboardTab }) {
@@ -216,7 +215,6 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
               { value: 'trending', label: 'Trending' },
               { value: 'ipos', label: 'IPOs' },
               { value: 'portfolio', label: 'Portfolio' },
-              { value: 'penny', label: 'Penny' },
             ]}
           />
         </div>
@@ -311,10 +309,6 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
                 {tab === 'trending' ? (
                   <div className="py-4">
                     <TrendingStocks />
-                  </div>
-                ) : tab === 'penny' ? (
-                  <div className="py-4">
-                    <PennyStocks />
                   </div>
                 ) : tab === 'ipos' ? (
                   <div className="py-4">

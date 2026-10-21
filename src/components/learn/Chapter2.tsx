@@ -80,7 +80,7 @@ export default function Chapter2() {
           <div className="bg-accent/10 border border-accent/20 rounded-card p-6">
             <p className="text-accent text-sm font-semibold mb-2">Stock AI Recommendation</p>
             <p className="text-ink/85 leading-relaxed">
-              For most retail investors, a combination of positional trading and long-term investing works best. Stock AI at <strong>byteplay.org</strong> generates BUY/HOLD/SELL signals with 1-3 month and 6-12 month targets — perfectly suited for both positional and long-term approaches.
+              For most retail investors, a combination of positional trading and long-term investing works best. Stock AI at <strong>byteplay.org</strong> helps with both: the Evidence Board lays out what supports and what worries for any stock, each point linked to its source, so you can judge it on your own timeframe.
             </p>
           </div>
 

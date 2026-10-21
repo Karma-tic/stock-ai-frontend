@@ -19,7 +19,7 @@ export default function Disclaimer() {
       {[
         {
           title: "Not Financial Advice",
-          content: "All content on Stock AI — including AI-generated BUY/HOLD/SELL signals, price targets, stop-loss levels, quantity recommendations, news summaries, and analysis — is provided for educational and informational purposes only. It does not constitute financial, investment, tax, or legal advice."
+          content: "All content on Stock AI, including AI-generated research summaries, evidence points, market data, ownership and deal data, news summaries and alerts, is provided for educational and informational purposes only. It does not constitute financial, investment, tax, or legal advice."
         },
         {
           title: "No SEBI Registration",

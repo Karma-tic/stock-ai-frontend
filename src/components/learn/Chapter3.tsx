@@ -26,7 +26,7 @@ export default function Chapter3() {
               { term: "Dividend", def: "A portion of company profits distributed to shareholders. Companies like ITC, Coal India and PSUs are known for high dividend yields in India." },
               { term: "52-Week High/Low", def: "The highest and lowest price at which a stock has traded in the past year. Stocks near 52-week lows may present buying opportunities." },
               { term: "Volume", def: "Number of shares traded in a given period. High volume with price increase confirms strong buying interest. Low volume moves are less reliable." },
-              { term: "Stop Loss", def: "A predetermined price at which you exit a trade to limit losses. Essential risk management tool. Stock AI calculates stop loss for every recommendation." },
+              { term: "Stop Loss", def: "A predetermined price at which you exit a trade to limit losses. Essential risk management tool. Decide yours before you buy, based on how much you can afford to lose." },
               { term: "FII/FPI", def: "Foreign Institutional Investors. Their buying or selling significantly impacts Indian markets. Heavy FII selling often causes market corrections." },
               { term: "DII", def: "Domestic Institutional Investors — mutual funds, insurance companies, pension funds. They often buy during FII selling, providing market support." },
               { term: "Circuit Breaker", def: "Automatic trading halt when a stock moves beyond a limit (typically ±5%, ±10%, ±20%). Prevents panic buying or selling." },

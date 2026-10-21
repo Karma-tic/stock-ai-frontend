@@ -17,7 +17,6 @@ const PRIMARY = [
   { to: '/learn', label: 'Learn' },
 ];
 const MORE = [
-  { to: '/pro-picks', label: 'Pro Picks' },
   { to: '/market-wrap', label: 'Market Wrap' },
   { to: '/stocks/dividends', label: 'Dividends' },
   { to: '/tools', label: 'Tools' },
