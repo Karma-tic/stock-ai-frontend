@@ -141,21 +141,6 @@ export interface MarketWrap {
   summary?: string;
   content?: string;
 }
-export interface TrackOutcome {
-  id: string;
-  ticker: string;
-  signal: string;
-  signal_date: string;
-  check_date?: string;
-  pct_change?: number | null;
-  was_correct?: boolean | null;
-}
-export interface TrackRecordData {
-  total_signals: number;
-  overall_accuracy?: number;
-  signals: TrackOutcome[];
-  last_updated?: string;
-}
 export interface Ipo {
   id: string;
   company_name: string;

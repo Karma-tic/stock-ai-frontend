@@ -39,7 +39,6 @@ const Studies = lazyPage(() => import('./components/studies/Studies'));
 const Blog = lazyPage(() => import('./components/Blog'));
 const BlogPost = lazyPage(() => import('./components/BlogPost'));
 const Learn = lazyPage(() => import('./components/Learn'));
-const TrackRecord = lazyPage(() => import('./components/TrackRecord'));
 const ToolsHub = lazyPage(() => import('./components/ToolsHub'));
 const SIPCalculator = lazyPage(() => import('./components/SIPCalculator'));
 const LumpsumCalculator = lazyPage(() => import('./components/LumpsumCalculator'));
@@ -215,7 +214,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/blog"       element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/learn"      element={<Learn />} />
-          <Route path="/track-record" element={<TrackRecord />} />
+          <Route path="/track-record" element={<Navigate to="/studies" replace />} />
           <Route path="/market-wrap" element={<MarketWrap />} />
           <Route path="/invest"     element={<InvestExplorer user={user} />} />
           <Route path="/tools"      element={<ToolsHub />} />

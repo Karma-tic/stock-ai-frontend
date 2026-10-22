@@ -3,7 +3,7 @@ import SEO from './SEO';
 import Hero from './landing/Hero';
 import ProofStrip from './landing/ProofStrip';
 import ToolsBento from './landing/ToolsBento';
-import Receipts from './landing/Receipts';
+import StudiesTeaser from './landing/StudiesTeaser';
 import Pricing from './landing/Pricing';
 import { Faq, TryIt } from './landing/Sections';
 import './landing/landing.css';
@@ -31,7 +31,7 @@ export default function LandingPage({ onGetStarted }: Props) {
         <FilingUnfolds />
       </Suspense>
       <ToolsBento />
-      <Receipts />
+      <StudiesTeaser />
       <Pricing onGetStarted={onGetStarted} />
       <Faq />
       <TryIt onGetStarted={onGetStarted} />
