@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { blankToNull, fmtDay, fmtRange } from '../lib/format';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { AlertTriangle, ArrowLeft, Building2, CalendarDays, Check, ExternalLink, FileCheck2, FileText, Landmark, PieChart, ShieldCheck, TrendingUp, Users } from 'lucide-react';
@@ -20,14 +21,17 @@ type Evidence = {
 };
 type Detail = IPO & { source_url?: string; issue_size?: string; subscription?: string; pe_ratio?: string; allotment_date?: string; anchor_available?: boolean; gmp_low?: number; gmp_high?: number; activity_score?: number; evidence_snapshot?: Evidence };
 
-const Fact = ({ label, value, accent = false }: { label: string; value?: string | number | null; accent?: boolean }) => (
-  <div className="bg-surface p-4">
-    <dt className="text-xs text-muted">{label}</dt>
-    <dd className={`num mt-1 text-[15px] font-semibold ${value == null || value === '' ? 'font-sans text-sm font-normal text-muted' : accent ? 'text-accent' : 'text-ink'}`}>{value ?? 'Not disclosed'}</dd>
-  </div>
-);
+const Fact = ({ label, value: raw, accent = false }: { label: string; value?: string | number | null; accent?: boolean }) => {
+  const value = blankToNull(raw);
+  return (
+    <div className="bg-surface p-4">
+      <dt className="text-xs text-muted">{label}</dt>
+      <dd className={`num mt-1 text-[15px] font-semibold ${value == null ? 'font-sans text-sm font-normal text-muted' : accent ? 'text-accent' : 'text-ink'}`}>{value ?? 'Not disclosed'}</dd>
+    </div>
+  );
+};
 const FactGrid = ({ children, cols = 'grid-cols-2 lg:grid-cols-4' }: { children: React.ReactNode; cols?: string }) => (
-  <dl className={`grid gap-px overflow-hidden rounded-card border border-line bg-line ${cols}`}>{children}</dl>
+  <dl className={`grid gap-px overflow-hidden rounded-card border border-line bg-line max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 ${cols}`}>{children}</dl>
 );
 const EmptyEvidence = ({ children }: { children: string }) => <p className="rounded-card border border-dashed border-line p-4 text-sm leading-relaxed text-muted">{children}</p>;
 const SectionTitle = ({ icon: Icon, children }: { icon: typeof Building2; children: string }) => (
@@ -114,14 +118,14 @@ export default function IpoDetailPage() {
           <section>
             <SectionTitle icon={CalendarDays}>Price and key dates</SectionTitle>
             <FactGrid>
-              <Fact label="Price band" value={ipo.price_band} />
+              <Fact label="Price band" value={fmtRange(ipo.price_band)} />
               <Fact label="Lot size" value={ipo.lot_size} />
               <Fact label="Estimated listing" value={ipo.est_listing_price} />
               <Fact label="Grey-market activity" value={`${ipo.activity_score || 1} of 5`} />
-              <Fact label="Opens" value={ipo.open_date} />
-              <Fact label="Closes" value={ipo.close_date} />
-              <Fact label="Allotment" value={ipo.allotment_date} />
-              <Fact label="Listing" value={ipo.listing_date} />
+              <Fact label="Opens" value={fmtDay(ipo.open_date, true)} />
+              <Fact label="Closes" value={fmtDay(ipo.close_date, true)} />
+              <Fact label="Allotment" value={fmtDay(ipo.allotment_date, true)} />
+              <Fact label="Listing" value={fmtDay(ipo.listing_date, true)} />
             </FactGrid>
           </section>
 

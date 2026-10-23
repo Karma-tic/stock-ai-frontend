@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { blankToNull, fmtDay, fmtDayRange, fmtRange } from '../lib/format';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Info, Search } from 'lucide-react';
@@ -135,7 +136,7 @@ export default function UpcomingIpos({ compact = false }: { compact?: boolean })
             <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4">
               <div>
                 <dt className="text-xs text-muted">Price band</dt>
-                <dd className="num text-sm font-medium text-ink">{ipo.price_band}</dd>
+                <dd className="num text-sm font-medium text-ink">{fmtRange(ipo.price_band)}</dd>
               </div>
               <div>
                 <dt className="text-xs text-muted">Grey-market premium</dt>
@@ -185,21 +186,21 @@ export default function UpcomingIpos({ compact = false }: { compact?: boolean })
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-ink">{ipo.company_name}</p>
                       <p className="text-xs text-muted">
-                        {ipo.category || 'IPO'} · {ipo.open_date} to {ipo.close_date}
+                        {ipo.category || 'IPO'} · {fmtDayRange(ipo.open_date, ipo.close_date)}
                       </p>
                     </div>
                     {badge(ipo.status)}
                   </div>
                   <div className="num mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
                     <span className="text-muted">
-                      Price <span className="text-ink">{ipo.price_band}</span>
+                      Price <span className="text-ink">{fmtRange(ipo.price_band)}</span>
                     </span>
                     <span className="text-muted">
                       GMP <span className={gmpTone(ipo.gmp)}>{ipo.gmp || 'n/a'}</span>
                     </span>
-                    {ipo.subscription && (
+                    {blankToNull(ipo.subscription) && (
                       <span className="text-muted">
-                        Sub <span className="text-ink">{ipo.subscription}</span>
+                        Subscribed <span className="text-ink">{ipo.subscription}</span>
                       </span>
                     )}
                     <Score value={ipo.activity_score} />
@@ -238,11 +239,11 @@ export default function UpcomingIpos({ compact = false }: { compact?: boolean })
                       <Score value={ipo.activity_score} />
                     </td>
                     <td className="num px-3 py-3 text-ink/85">{ipo.subscription || '–'}</td>
-                    <td className="num whitespace-nowrap px-3 py-3 text-ink/85">{ipo.price_band}</td>
+                    <td className="num whitespace-nowrap px-3 py-3 text-ink/85">{fmtRange(ipo.price_band)}</td>
                     <td className="num whitespace-nowrap px-3 py-3 text-ink/85">{ipo.issue_size || '–'}</td>
                     <td className="num px-3 py-3 text-ink/85">{ipo.lot_size || '–'}</td>
-                    <td className="whitespace-nowrap px-3 py-3 text-ink/85">{ipo.open_date}</td>
-                    <td className="whitespace-nowrap px-3 py-3 text-ink/85">{ipo.close_date}</td>
+                    <td className="whitespace-nowrap px-3 py-3 text-ink/85">{fmtDay(ipo.open_date)}</td>
+                    <td className="whitespace-nowrap px-3 py-3 text-ink/85">{fmtDay(ipo.close_date)}</td>
                     <td className="whitespace-nowrap px-3 py-3 text-ink/85">{(ipo as any).allotment_date || '–'}</td>
                     <td className="whitespace-nowrap px-3 py-3 text-ink/85">{ipo.listing_date || '–'}</td>
                     <td className="whitespace-nowrap px-3 py-3 text-xs text-muted">{ipo.source_updated_at || '–'}</td>

@@ -193,15 +193,17 @@ export default function Portfolio() {
 
       {/* Header + add */}
       <div className={`flex items-center justify-between gap-3 ${portfolio.length ? 'mt-7' : ''}`}>
-        <h2 className="text-sm font-semibold text-ink">
-          Holdings{portfolio.length > 0 && <span className="num font-normal text-muted"> · {portfolio.length}</span>}
-        </h2>
-        <div className="flex items-center gap-3">
+        <div className="min-w-0">
+          <h2 className="whitespace-nowrap text-sm font-semibold text-ink">
+            Holdings{portfolio.length > 0 && <span className="num font-normal text-muted"> · {portfolio.length}</span>}
+          </h2>
           {!isPro && (
-            <span className="num text-xs text-muted">
+            <p className="num mt-0.5 whitespace-nowrap text-xs text-muted">
               {portfolio.length}/{FREE_LIMIT} on the free plan
-            </span>
+            </p>
           )}
+        </div>
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           {portfolio.length > 0 && (
             <button
               type="button"
@@ -209,7 +211,7 @@ export default function Portfolio() {
               className="inline-flex min-h-[36px] items-center gap-1.5 rounded-control px-2 text-xs font-medium text-muted hover:bg-ink/[0.06] hover:text-ink"
               aria-label={isPro ? 'Download portfolio as CSV' : 'CSV export is a Pro feature'}
             >
-              <Download className="h-3.5 w-3.5" /> CSV{!isPro && <span className="rounded bg-accent/10 px-1 text-[10px] font-semibold text-accent">Pro</span>}
+              <Download className="h-3.5 w-3.5" /> CSV{!isPro && <span className="rounded bg-accent/10 px-1 text-[11px] font-semibold text-accent">Pro</span>}
             </button>
           )}
           {!showAdd && portfolio.length > 0 && (

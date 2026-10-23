@@ -83,6 +83,12 @@
   .text-pretty { text-wrap: pretty; }
 }
 
+/* Fade the trailing edge of a sideways-scrolling row, so it reads as "more this way". */
+.fade-x-end {
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

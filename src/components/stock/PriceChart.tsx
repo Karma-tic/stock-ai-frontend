@@ -145,7 +145,7 @@ export default function PriceChart({ ticker }: { ticker: string }) {
         <div className="num mt-2 flex items-center justify-between text-[11px] text-muted">
           <span>{fmtDate(chart.pts[0].d, range === '1m' ? 'day' : 'month')}</span>
           {data && data !== 'error' && data.source_url ? (
-            <a href={data.source_url} target="_blank" rel="noopener noreferrer" className="font-sans hover:text-ink hover:underline">
+            <a href={data.source_url} target="_blank" rel="noopener noreferrer" className="-my-2 inline-flex min-h-[36px] items-center font-sans hover:text-ink hover:underline">
               Closing prices · {data.source_name || 'Source'}
             </a>
           ) : null}

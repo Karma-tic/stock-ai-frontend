@@ -21,7 +21,7 @@ export default function LearnLayout({ children, chapterNumber, title, nextChapte
           <Link to="/learn" className="inline-flex shrink-0 items-center gap-1 font-medium text-muted hover:text-ink">
             <ArrowLeft className="h-4 w-4" /> Learn
           </Link>
-          <span className="text-line" aria-hidden="true">/</span>
+          <span className="text-ink/30" aria-hidden="true">/</span>
           <span className="min-w-0 truncate font-medium text-ink">{title}</span>
           <span className="num ml-auto shrink-0 text-xs text-muted">
             {chapterNumber} of {TOTAL}

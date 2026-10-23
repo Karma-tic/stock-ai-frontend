@@ -39,7 +39,7 @@ export default function CompareTab({ items, onRemove, onBrowse }: Props) {
                   <th key={o.id} scope="col" className="p-4 text-left align-top">
                     <div className="flex items-start justify-between gap-2">
                       <span className="text-base font-bold text-ink">{o.name}</span>
-                      <button type="button" onClick={() => onRemove(o.id)} aria-label={`Remove ${o.name}`} className="text-muted hover:text-ink"><X className="h-4 w-4" /></button>
+                      <button type="button" onClick={() => onRemove(o.id)} aria-label={`Remove ${o.name}`} className="-m-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted hover:bg-ink/[0.06] hover:text-ink"><X className="h-4 w-4" /></button>
                     </div>
                   </th>
                 ))}

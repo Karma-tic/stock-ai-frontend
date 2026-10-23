@@ -13,7 +13,7 @@ export default function Chapter3() {
         <div className="num grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/10 text-base font-semibold text-accent">
           3
         </div>
-        <h2 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Essential Stock Market Terms</h2>
+        <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Essential Stock Market Terms</h1>
       </div>
       
       

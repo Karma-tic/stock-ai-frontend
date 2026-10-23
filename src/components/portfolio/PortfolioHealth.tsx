@@ -104,7 +104,7 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
               <p className="mt-0.5 text-[13px] leading-relaxed text-muted">
                 {lockedLine(data)} Included in Pro, with email alerts when promoters or big funds move in a stock you hold.
               </p>
-              <button type="button" onClick={() => setUpgrade(true)} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline">
+              <button type="button" onClick={() => setUpgrade(true)} className="mt-1 inline-flex min-h-[40px] items-center gap-1 text-sm font-semibold text-accent hover:underline">
                 See it with Pro <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -178,7 +178,7 @@ export default function PortfolioHealth({ refreshKey }: { refreshKey: string }) 
         ) : (
           <p className="text-ink/85">This check sees only your stocks. Five questions tell you how much of all your savings might sit in shares for someone like you.</p>
         )}
-        <Link to={profile ? '/invest' : '/invest?tab=profile'} className="mt-2 inline-flex items-center gap-1 font-medium text-accent hover:underline">
+        <Link to={profile ? '/invest' : '/invest?tab=profile'} className="mt-1 inline-flex min-h-[40px] items-center gap-1 font-medium text-accent hover:underline">
           {profile ? 'Compare in the Invest Explorer' : 'Find your risk profile'} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>

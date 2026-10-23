@@ -20,7 +20,7 @@ const GROUPS: { title: string; intro: string; ids: string[] }[] = [
 ];
 
 const pts = (v?: number) => (v == null ? '–' : `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toFixed(1)}%`);
-const tone = (v?: number) => (v == null ? 'text-muted' : v > 0 ? 'text-up' : v < 0 ? 'text-down' : 'text-ink');
+const tone = (v?: number) => (v == null ? 'text-muted' : Math.abs(v) < 0.5 ? 'text-ink' : v > 0 ? 'text-up' : 'text-down');
 const month = (iso?: string) => (iso ? new Date(`${iso.slice(0, 10)}T00:00:00`).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }) : '');
 const day = (iso?: string) => (iso ? new Date(`${iso.slice(0, 10)}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '');
 
@@ -96,7 +96,7 @@ function StudyCard({ s }: { s: Study }) {
 
       {rows.find((r) => r.horizon === '6m')?.p10 != null && (
         <p className="mt-3 text-xs leading-relaxed text-muted">
-          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. Figures are medians. "Similar stocks" is the typical return of {s.peer_universe || 'the other stocks in this study'}, over exactly the same days. *The gap is worked out case by case (each stock against similar stocks on its own dates), then the middle value is shown, so it will not equal the two columns subtracted. "Ahead" is the share of cases with a positive gap.
+          Range after 6 months: one in ten stocks did worse than {pts(rows.find((r) => r.horizon === '6m')?.p10)}, one in ten better than {pts(rows.find((r) => r.horizon === '6m')?.p90)}. Similar stocks: {s.peer_universe || 'the other stocks in this study'}.
         </p>
       )}
 
@@ -106,7 +106,7 @@ function StudyCard({ s }: { s: Study }) {
           {s.universe ? ` · ${s.universe}` : ''}
         </span>
         {s.examples?.length > 0 && (
-          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="font-semibold text-accent hover:underline">
+          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="-my-2 inline-flex min-h-[40px] items-center font-semibold text-accent hover:underline">
             {open ? 'Hide recent cases' : 'Show recent cases'}
           </button>
         )}
@@ -168,7 +168,7 @@ export default function Studies() {
         {[
           ['Compared with similar stocks', 'Each case is measured against the typical similar stock over exactly the same days, so a rising or falling market does not flatter the result. The Nifty 500 is shown too.'],
           ['Only what was public', 'Every case starts the trading day after the filing, when anyone could have acted.'],
-          ['The typical case', 'We show the median and how many beat the market, so a few huge winners cannot carry the result.'],
+          ['The typical case', 'We show the median and how many cases came out ahead, so a few huge winners cannot carry the result.'],
         ].map(([t, d]) => (
           <div key={t} className="bg-surface p-4">
             <p className="text-sm font-semibold text-ink">{t}</p>
@@ -176,6 +176,19 @@ export default function Studies() {
           </div>
         ))}
       </section>
+
+      <details className="group mb-10 rounded-card border border-line bg-surface px-4 py-1 sm:px-5">
+        <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-ink">
+          How to read the tables
+          <span className="text-lg leading-none text-muted transition group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <dl className="space-y-3 pb-4 text-sm leading-relaxed text-ink/85">
+          <div><dt className="inline font-semibold text-ink">These stocks · </dt><dd className="inline">the median return of the stocks in the study, from the day after the filing.</dd></div>
+          <div><dt className="inline font-semibold text-ink">Similar stocks · </dt><dd className="inline">the median return of the other stocks in the study&apos;s universe over exactly the same days, the &ldquo;no signal&rdquo; baseline.</dd></div>
+          <div><dt className="inline font-semibold text-ink">Gap* · </dt><dd className="inline">worked out case by case (each stock against similar stocks on its own dates), then the middle value is shown. So it is not the two columns subtracted.</dd></div>
+          <div><dt className="inline font-semibold text-ink">Ahead · </dt><dd className="inline">the share of cases that beat similar stocks.</dd></div>
+        </dl>
+      </details>
 
       {failed && <p className="text-sm text-muted">The studies could not be loaded right now.</p>}
       {!studies && !failed && (
@@ -219,7 +232,7 @@ export default function Studies() {
             {sources.map((x, i) => (
               <span key={x.url}>
                 {i > 0 && ' · '}
-                <a href={x.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 hover:text-ink hover:underline">
+                <a href={x.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[32px] items-center gap-0.5 hover:text-ink hover:underline">
                   {x.name} <ExternalLink className="h-3 w-3" />
                 </a>
               </span>

@@ -111,7 +111,7 @@ export default function About() {
         </div>
         <div className="bg-surface p-5">
           <p className="text-xs text-muted">Contact</p>
-          <a href="mailto:contact@karmatix.in" className="mt-1 block font-semibold text-accent hover:underline">contact@karmatix.in</a>
+          <a href="mailto:contact@karmatix.in" className="mt-1 inline-flex min-h-[40px] items-center font-semibold text-accent hover:underline">contact@karmatix.in</a>
           <p className="mt-1 text-sm text-muted">Monday to Friday, 9 am to 6 pm IST.</p>
         </div>
         <div className="bg-surface p-5">

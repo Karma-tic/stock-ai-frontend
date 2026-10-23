@@ -144,8 +144,8 @@ const DATA_SOURCES = [
 
 function Footer() {
   return (
-    <footer className="border-t border-line bg-canvas py-12">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
+    <footer className="border-t border-line bg-canvas py-10 sm:py-12">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
         <div>
           <Logo />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
@@ -153,13 +153,13 @@ function Footer() {
           </p>
           <p className="mt-4 text-xs text-muted">© 2026 BytePlay Technologies. All rights reserved.</p>
         </div>
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           <div>
             <p className="text-xs font-medium text-muted">Company</p>
-            <ul className="mt-3 space-y-1">
+            <ul className="mt-2">
               {FOOTER_LINKS.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="inline-flex min-h-[36px] items-center text-sm text-ink/80 hover:text-ink">
+                  <Link to={l.to} className="inline-flex min-h-[40px] items-center text-sm text-ink/80 hover:text-ink">
                     {l.label}
                   </Link>
                 </li>
@@ -168,10 +168,10 @@ function Footer() {
           </div>
           <div>
             <p className="text-xs font-medium text-muted">Data sources</p>
-            <ul className="mt-3 space-y-1">
+            <ul className="mt-2">
               {DATA_SOURCES.map((link) => (
                 <li key={link.label}>
-                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[36px] items-center text-sm text-ink/80 hover:text-ink">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[40px] items-center text-sm text-ink/80 hover:text-ink">
                     {link.label}
                   </a>
                 </li>

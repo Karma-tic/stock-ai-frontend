@@ -197,7 +197,7 @@ export default function InvestExplorer({ user }: { user: any }) {
         <nav className="scrollbar-hide -mx-4 flex gap-1 overflow-x-auto border-b border-line px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="Invest Explorer sections">
           {TABS.map(t => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
-              className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-semibold transition ${tab === t.id ? 'border-accent text-ink' : 'border-transparent text-muted hover:text-ink'}`}>
+              className={`whitespace-nowrap border-b-2 px-3 py-3 sm:px-4 text-sm font-semibold transition ${tab === t.id ? 'border-accent text-ink' : 'border-transparent text-muted hover:text-ink'}`}>
               {t.label}{t.id === 'compare' && compare.length ? <span className="ml-1 num text-accent">({compare.length})</span> : null}
             </button>
           ))}
@@ -229,7 +229,7 @@ export default function InvestExplorer({ user }: { user: any }) {
         <div className={`fixed inset-x-0 z-40 border-t border-line bg-canvas/90 backdrop-blur-[16px] ${user ? 'bottom-[calc(57px+env(safe-area-inset-bottom))] lg:bottom-0' : 'bottom-0 pb-[env(safe-area-inset-bottom)]'}`}>
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
             <p className="hidden shrink-0 text-xs font-medium text-muted sm:block">Comparing</p>
-            <ul className="flex min-w-0 flex-1 gap-2 overflow-x-auto scrollbar-hide" aria-label="Options to compare">
+            <ul className="fade-x-end flex min-w-0 flex-1 gap-2 overflow-x-auto pr-6 scrollbar-hide" aria-label="Options to compare">
               {compareItems.map(o => (
                 <li key={o.id} className="flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface py-1 pl-3 pr-1 text-xs font-medium text-ink">
                   <span className="max-w-[10rem] truncate">{o.name}</span>
