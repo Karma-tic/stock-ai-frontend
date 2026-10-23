@@ -73,6 +73,7 @@ export default function LiveMarketCard() {
         <Row label="US dollar" sub="USD/INR" value={live.data?.usd_inr?.price} change={live.data?.usd_inr?.change_pct} />
       </div>
 
+      {rates.status !== 'error' && (
       <div className="mt-4 rounded-control bg-surface2/70 p-4">
         <p className="text-xs font-medium text-muted">Best guaranteed rates</p>
         <div className="mt-3 grid grid-cols-3 gap-3 text-center">
@@ -89,6 +90,7 @@ export default function LiveMarketCard() {
         </div>
         {ratesStale && <p className="mt-3 text-[11px] text-caution">New quarterly rates are being confirmed.</p>}
       </div>
+      )}
 
       <div className="mt-4 flex items-center justify-between gap-3">
         <p className="text-[11px] leading-snug text-muted">Last traded prices. Not a recommendation.</p>

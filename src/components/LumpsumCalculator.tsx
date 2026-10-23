@@ -41,7 +41,7 @@ export default function LumpsumCalculator() {
           </div>
 
           <div className="flex flex-col">
-            <dl className="grid grid-cols-3 gap-3">
+            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <div>
                 <dt className="text-xs text-muted">Invested</dt>
                 <dd className="mt-1 text-base font-semibold text-ink sm:text-lg"><RollingNumber value={invested} /></dd>
@@ -50,7 +50,7 @@ export default function LumpsumCalculator() {
                 <dt className="text-xs text-muted">Est. growth</dt>
                 <dd className="mt-1 text-base font-semibold text-up sm:text-lg"><RollingNumber value={gains} /></dd>
               </div>
-              <div>
+              <div className="order-first col-span-2 sm:order-none sm:col-span-1">
                 <dt className="text-xs text-muted">Total value</dt>
                 <dd className="mt-1 text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl"><RollingNumber value={total} /></dd>
               </div>

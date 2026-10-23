@@ -145,8 +145,12 @@ export default function ExploreTab(p: Props) {
                       <h3 className="text-base font-semibold leading-snug text-ink">{o.name}</h3>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="num text-lg font-semibold text-ink whitespace-nowrap">{fmtReturn(o)}</p>
-                      <p className="text-[11px] text-muted">typical / yr</p>
+                      {o.return_label ? (
+                        <p className="max-w-[8.5rem] text-sm font-semibold leading-snug text-ink">{o.return_label}</p>
+                      ) : (
+                        <p className="num whitespace-nowrap text-lg font-semibold text-ink">{fmtReturn(o)}</p>
+                      )}
+                      {!o.return_label && <p className="text-[11px] text-muted">typical / yr</p>}
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">

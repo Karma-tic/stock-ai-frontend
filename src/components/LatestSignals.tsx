@@ -27,7 +27,7 @@ export default function LatestSignals() {
 
   return (
     <section aria-label="Researched this morning" className="rounded-card border border-line bg-surface px-4 py-3 sm:px-5">
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <h2 className="text-sm font-semibold text-ink">Researched this morning</h2>
         <span className="text-xs text-muted">Tap one for its Evidence Board</span>
       </div>

@@ -19,7 +19,7 @@ function Cell({ to, className = '', children, label }: { to: string; className?:
       to={to}
       aria-label={label}
       onPointerMove={onSpot}
-      className={`bento-cell group relative flex min-h-[168px] flex-col overflow-hidden rounded-card border border-line bg-surface p-5 transition duration-ui ease-ui hover:-translate-y-0.5 hover:border-accent/40 motion-reduce:hover:translate-y-0 sm:p-6 ${className}`}
+      className={`bento-cell group relative flex min-h-[148px] flex-col sm:min-h-[168px] overflow-hidden rounded-card border border-line bg-surface p-5 transition duration-ui ease-ui hover:-translate-y-0.5 hover:border-accent/40 motion-reduce:hover:translate-y-0 sm:p-6 ${className}`}
     >
       {children}
     </Link>
@@ -143,8 +143,8 @@ export default function ToolsBento() {
             <CellHead icon={CalendarDays} title="IPO tracker" />
             <div className="mt-auto pt-5">
               {ipos.data ? (
-                <p className="tnum text-lg font-semibold text-ink">
-                  {open.length} open · {upcoming.length} upcoming
+                <p className="tnum text-base font-semibold leading-snug text-ink sm:text-lg">
+                  {open.length} open <span className="text-muted">·</span> <span className="whitespace-nowrap">{upcoming.length} upcoming</span>
                 </p>
               ) : ipos.status === 'error' ? (
                 <p className="text-sm text-muted">Mainboard and SME IPOs</p>

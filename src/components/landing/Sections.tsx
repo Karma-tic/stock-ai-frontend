@@ -86,7 +86,7 @@ export function TryIt({ onGetStarted }: { onGetStarted: () => void }) {
   return (
     <section ref={ref} aria-labelledby="tryit-heading" className={`tryit relative isolate overflow-hidden border-t border-line bg-canvas py-24 sm:py-32 ${seen ? 'is-on' : ''}`}>
       {/* The hero line returns, faint, and draws itself once. Why: the page ends where it began. */}
-      <svg className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[70%] w-full" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+      <svg className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 hidden h-[70%] w-full sm:block" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
         <path
           className="tryit-line"
           pathLength={1}

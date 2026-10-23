@@ -145,7 +145,7 @@ export function GrowthChart({ points }: { points: YearPoint[] }) {
   const [table, setTable] = useState(false);
   const W = 640;
   const H = 220;
-  const pad = { l: 8, r: 8, t: 12, b: 24 };
+  const pad = { l: 8, r: 8, t: 12, b: 4 };
   const max = Math.max(1, ...points.map((p) => p.value));
   const x = (i: number) => pad.l + (i / Math.max(1, points.length - 1)) * (W - pad.l - pad.r);
   const y = (v: number) => pad.t + (1 - v / max) * (H - pad.t - pad.b);
@@ -196,16 +196,25 @@ export function GrowthChart({ points }: { points: YearPoint[] }) {
           </table>
         </div>
       ) : (
-        <svg viewBox={`0 0 ${W} ${H}`} className="mt-3 h-auto w-full" role="img" aria-label={`Value grows to ${inr(points[points.length - 1]?.value || 0)} over ${points.length - 1} years`}>
+        <div className="mt-3">
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Value grows to ${inr(points[points.length - 1]?.value || 0)} over ${points.length - 1} years`}>
           <path d={investedArea} className="fill-cobalt/45" />
           <path d={valueArea} className="fill-up/35" />
           <path d={line('value')} fill="none" className="stroke-up" strokeWidth="2" />
-          {ticks.map((p) => (
-            <text key={p.year} x={x(points.indexOf(p))} y={H - 6} textAnchor="middle" className="fill-muted text-[11px]">
-              {p.year}y
-            </text>
-          ))}
         </svg>
+        {/* Year labels as HTML, so they stay readable however small the chart is drawn */}
+        <div className="relative mt-1 h-4 text-[11px] text-muted" aria-hidden="true">
+          {ticks.map((p, i) => {
+            const pct = (x(points.indexOf(p)) / W) * 100;
+            const edge = i === 0 ? 'translate-x-0' : i === ticks.length - 1 ? '-translate-x-full' : '-translate-x-1/2';
+            return (
+              <span key={p.year} className={`num absolute top-0 ${edge}`} style={{ left: `${pct}%` }}>
+                {p.year}y
+              </span>
+            );
+          })}
+        </div>
+        </div>
       )}
     </div>
   );

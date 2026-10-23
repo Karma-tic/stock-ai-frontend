@@ -32,7 +32,8 @@ function getImportantPoints(html: string) {
     .map(match => trimPoint(stripHtml(match[1])))
     .filter(Boolean);
 
-  const fallback = stripHtml(html)
+  // Headings ("Indian Market Wrap-Up: October 22") are titles, not points.
+  const fallback = stripHtml(html.replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, ' ').replace(/<li[^>]*>[\s\S]*?<\/li>/gi, ' '))
     .split(/(?<=[.!?])\s+/)
     .map(trimPoint)
     .filter(sentence => sentence.length > 35);

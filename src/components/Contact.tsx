@@ -23,7 +23,7 @@ export default function Contact() {
       <p className="text-ink font-semibold">{title}</p>
       <a
         href={`mailto:${value}`}
-        className="text-accent hover:text-accent text-sm transition"
+        className="inline-flex min-h-[40px] items-center break-all text-sm text-accent transition hover:underline"
       >
         {value}
       </a>

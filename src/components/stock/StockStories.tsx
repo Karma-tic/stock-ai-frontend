@@ -87,7 +87,7 @@ export default function StockStories({
       className={`flex flex-col bg-canvas md:hidden ${user ? 'h-[calc(100dvh-var(--nav-h,64px)-57px-env(safe-area-inset-bottom))]' : 'h-[calc(100dvh-var(--nav-h,64px))]'}`}
     >
       {/* Progress: six segments, tappable */}
-      <div className="flex gap-1 px-4 pt-3">
+      <div className="flex gap-1 px-4 pt-2">
         {STORY_PARTS.map((p, i) => (
           <button
             key={p.id}
@@ -95,7 +95,7 @@ export default function StockStories({
             onClick={() => go(i)}
             aria-label={`Show ${p.title}`}
             aria-current={active === i ? 'step' : undefined}
-            className="flex h-6 flex-1 items-center"
+            className="flex h-8 flex-1 items-center"
           >
             <span className={`block h-1 w-full rounded-full transition-colors duration-ui ${i <= active ? 'bg-accent' : 'bg-ink/15'}`} />
           </button>

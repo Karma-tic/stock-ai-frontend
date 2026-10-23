@@ -66,7 +66,7 @@ function Spark({ values }: { values: (number | null)[] }) {
 function SourceLink({ s }: { s?: Source }) {
   if (!s) return null;
   return (
-    <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-ink hover:underline">
+    <a href={s.url} target="_blank" rel="noopener noreferrer" className="-my-2 inline-flex min-h-[36px] items-center gap-1 text-[11px] text-muted hover:text-ink hover:underline">
       {s.name} <ExternalLink className="h-3 w-3" />
     </a>
   );

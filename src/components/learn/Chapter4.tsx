@@ -13,7 +13,7 @@ export default function Chapter4() {
         <div className="num grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/10 text-base font-semibold text-accent">
           4
         </div>
-        <h2 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Fundamental vs Technical Analysis</h2>
+        <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Fundamental vs Technical Analysis</h1>
       </div>
       
       
