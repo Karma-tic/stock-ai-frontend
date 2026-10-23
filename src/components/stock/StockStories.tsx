@@ -132,6 +132,8 @@ export default function StockStories({
           >
             <h2 className="text-xl font-bold tracking-[-0.02em] text-ink">{STORY_PARTS[i].title}</h2>
             <div className="mt-4">{card}</div>
+            {/* Fades the last line while there is more below, so the card reads as scrollable */}
+            <div className="pointer-events-none sticky bottom-[-24px] -mx-4 -mb-6 h-10 bg-gradient-to-t from-canvas to-transparent" aria-hidden="true" />
           </article>
         ))}
       </div>

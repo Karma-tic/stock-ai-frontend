@@ -10,6 +10,7 @@ import EvidenceBoard from './EvidenceBoard';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
+
 import UpcomingIpos from './UpcomingIpos';
 import UpgradeModal from './UpgradeModal';
 import TrendingStocks from './TrendingStocks';
@@ -18,6 +19,9 @@ import StockRow, { StockRowSkeleton } from './app/StockRow';
 import NextUp from './app/NextUp';
 import MarketFlows from './market/MarketFlows';
 import Segmented from './ui/Segmented';
+
+// The in-feed ad (and its reserved space) only appears when an ad slot is configured.
+const IN_FEED_AD_SLOT = (process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '').includes('YOUR_') ? '' : process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '';
 
 type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'ipos' | 'radar';
 const TABS: DashboardTab[] = ['market', 'watchlist', 'radar', 'trending', 'ipos', 'portfolio'];
@@ -186,11 +190,11 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
         {list.map((stock: any, index: number) => (
           <Fragment key={stock.display_ticker || stock.ticker}>
             <StockRow {...rowProps(stock)} />
-            {index === 5 && (
+            {index === 5 && IN_FEED_AD_SLOT && (
               <li className="list-none border-b border-line py-3">
                 {/* Reserved height so the ad never shifts the list */}
                 <div className="min-h-[100px]">
-                  <AdBanner slot={process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || ''} />
+                  <AdBanner slot={IN_FEED_AD_SLOT} />
                 </div>
               </li>
             )}

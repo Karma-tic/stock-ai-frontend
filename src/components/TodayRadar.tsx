@@ -307,6 +307,10 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
           <p className="mt-1 text-sm text-muted">
             {loading
               ? 'Checking your watchlist…'
+              : error && !events.length
+              ? 'Your updates could not be loaded.'
+              : trackedCount === 0 && !events.length
+              ? 'Follow a few companies and their filings and news appear here.'
               : `${important || events.length} important ${(important || events.length) === 1 ? 'change' : 'changes'} across ${trackedCount || 'the'} stocks you follow${readingMinutes ? ` · ${readingMinutes} min read` : ''}`}
           </p>
         </div>
@@ -342,7 +346,7 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
           </div>
           <span className="skeleton hidden h-72 w-full lg:block" />
         </div>
-      ) : !events.length && trackedCount === 0 ? (
+      ) : error && !events.length ? null : !events.length && trackedCount === 0 ? (
         <section className="rounded-card border border-line bg-surface p-7 text-center sm:p-10">
           <Search className="mx-auto h-8 w-8 text-accent" strokeWidth={1.75} />
           <h2 className="mt-4 text-xl font-semibold text-ink">Choose what your radar should watch</h2>

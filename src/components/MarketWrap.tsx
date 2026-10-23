@@ -46,6 +46,7 @@ function getImportantPoints(html: string) {
 const MarketWrap: React.FC = () => {
   const [wraps, setWraps] = useState<MarketWrapItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const currentWrap = wraps[currentIndex];
@@ -84,11 +85,13 @@ const MarketWrap: React.FC = () => {
     const fetchWraps = async () => {
       try {
         const response = await fetch(`${BASE}/api/market-wraps`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         // Limit to current day + previous 3 days (max 4 wraps)
         setWraps(data.wraps ? data.wraps.slice(0, 4) : []);
       } catch (error) {
         console.error("Error fetching market wraps:", error);
+        setFailed(true);
       } finally {
         setLoading(false);
       }
@@ -119,6 +122,13 @@ const MarketWrap: React.FC = () => {
           <div aria-hidden="true">
             <span className="skeleton block h-11 w-80 max-w-full" />
             <span className="skeleton mt-4 block h-64" />
+          </div>
+        ) : failed ? (
+          <div className="rounded-card border border-dashed border-line p-10 text-center text-sm text-muted">
+            The market wrap could not be loaded right now.
+            <button type="button" onClick={() => window.location.reload()} className="mt-3 block w-full font-semibold text-accent hover:underline">
+              Try again
+            </button>
           </div>
         ) : wraps.length === 0 ? (
           <p className="rounded-card border border-dashed border-line p-10 text-center text-sm text-muted">No wrap yet. The first one appears after the market closes at 3:30 pm IST.</p>

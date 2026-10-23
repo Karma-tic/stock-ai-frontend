@@ -100,7 +100,7 @@ export default function DividendTracker() {
         </div>
 
         <div className="mb-3 mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
-          <span>{loading ? 'Loading dividend records…' : `${filtered.length} companies`}</span>
+          <span>{loading ? 'Loading dividend records…' : error ? '' : `${filtered.length} ${filtered.length === 1 ? 'company' : 'companies'}`}</span>
           {generatedAt && (
             <span className="inline-flex items-center gap-1.5">
               <Clock3 className="h-3.5 w-3.5" /> Updated {new Date(generatedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}

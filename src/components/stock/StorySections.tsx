@@ -36,6 +36,16 @@ function EvidenceItem({ e }: { e: Evidence }) {
   );
 }
 
+// Shown when the data could not be fetched. "Unavailable", never "nothing happened".
+export const Unavailable = ({ what }: { what: string }) => (
+  <div className="rounded-control border border-dashed border-line p-4 text-sm text-muted">
+    {what} could not be loaded right now.{' '}
+    <button type="button" onClick={() => window.location.reload()} className="inline-flex min-h-[36px] items-center font-semibold text-accent hover:underline">
+      Try again
+    </button>
+  </div>
+);
+
 const Loading = () => (
   <div className="space-y-2">
     <Skeleton className="h-16 w-full" />
@@ -45,7 +55,7 @@ const Loading = () => (
 );
 
 // 1. Price today
-export function PriceToday({ ticker, quote, story }: { ticker: string; quote: Quote | null; story: Story | null }) {
+export function PriceToday({ ticker, quote, story, failed }: { ticker: string; quote: Quote | null; story: Story | null; failed?: boolean }) {
   const p = story?.price_context;
   const price = quote?.current_price ?? p?.current_price;
   const change = quote?.price_change_pct ?? p?.day_change_pct;
@@ -55,7 +65,7 @@ export function PriceToday({ ticker, quote, story }: { ticker: string; quote: Qu
   const returns = Object.entries(story?.trend?.returns_pct || {}).filter(([, v]) => v != null) as [string, number][];
   const maxAbs = Math.max(5, ...returns.map(([, v]) => Math.abs(v)));
 
-  if (price == null && !story) return <Loading />;
+  if (price == null && !story) return failed ? <Unavailable what="The price" /> : <Loading />;
   return (
     <div>
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -116,6 +126,7 @@ export function PriceToday({ ticker, quote, story }: { ticker: string; quote: Qu
 // 2. What happened
 export function WhatHappened({ story, loading }: { story: Story | null; loading: boolean }) {
   if (loading) return <Loading />;
+  if (!story) return <Unavailable what="Filings and news" />;
   const items = latestEvents(story, 3);
   if (!items.length) return <p className="text-sm text-muted">No new filings or news were found in the latest scan.</p>;
   return (
@@ -128,8 +139,8 @@ export function WhatHappened({ story, loading }: { story: Story | null; loading:
 }
 
 // 3. Numbers that matter
-export function KeyNumbers({ quote, story }: { quote: Quote | null; story: Story | null }) {
-  if (!quote && !story) return <Loading />;
+export function KeyNumbers({ quote, story, failed }: { quote: Quote | null; story: Story | null; failed?: boolean }) {
+  if (!quote && !story) return failed ? <Unavailable what="Key numbers" /> : <Loading />;
   const tiles: [string, string][] = [
     ['P/E ratio', quote?.pe_ratio != null ? String(quote.pe_ratio) : 'n/a'],
     ['Dividend yield', quote?.dividend_yield_pct != null ? `${quote.dividend_yield_pct}%` : 'n/a'],
@@ -171,6 +182,7 @@ export function KeyNumbers({ quote, story }: { quote: Quote | null; story: Story
 // 4. Supporting vs concerning
 export function SupportConcern({ story, loading }: { story: Story | null; loading: boolean }) {
   if (loading) return <Loading />;
+  if (!story) return <Unavailable what="The evidence" />;
   const sup = story?.evidence.support || [];
   const con = story?.evidence.challenge || [];
   const Block = ({ title, items, up }: { title: string; items: Evidence[]; up: boolean }) => (
@@ -201,6 +213,7 @@ export function SupportConcern({ story, loading }: { story: Story | null; loadin
 // 5. Watch for
 export function WatchFor({ story, loading }: { story: Story | null; loading: boolean }) {
   if (loading) return <Loading />;
+  if (!story) return <Unavailable what="This section" />;
   const next = story?.watch_next || [];
   if (!next.length) return <p className="text-sm text-muted">Nothing scheduled in the latest scan.</p>;
   return (
@@ -218,6 +231,7 @@ export function WatchFor({ story, loading }: { story: Story | null; loading: boo
 // 6. Sources
 export function Sources({ story, loading }: { story: Story | null; loading: boolean }) {
   if (loading) return <Loading />;
+  if (!story) return <Unavailable what="The source list" />;
   const items = allSources(story);
   return (
     <div>
