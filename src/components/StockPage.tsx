@@ -39,21 +39,32 @@ export default function StockPage({ user }: { user?: any }) {
     return () => io.disconnect();
   }, []);
 
-  // Section index highlights the section being read
+  // Section index highlights the section being read: the last one whose top has passed
+  // 35% of the screen. Back at the top of the page, that is the first section again.
   useEffect(() => {
     const ids = [...STORY_PARTS.map((p) => p.id), ...ABOUT.map((a) => a.id)];
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActiveSection(visible[0].target.id);
-      },
-      { rootMargin: '-30% 0px -60% 0px' },
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.35;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= line) current = id;
+      }
+      setActiveSection(current);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [profile.symbol]);
 
   const analyzeTo = user ? `/?analyze=${profile.symbol}` : `/login?next=${encodeURIComponent(`/?analyze=${profile.symbol}`)}`;
@@ -61,9 +72,9 @@ export default function StockPage({ user }: { user?: any }) {
   const change = quote?.price_change_pct ?? story?.price_context?.day_change_pct;
 
   const cards = [
-    <PriceToday key="p" ticker={profile.symbol} quote={quote} story={story} />,
+    <PriceToday key="p" ticker={profile.symbol} quote={quote} story={story} failed={status.quote === 'error' && status.story === 'error'} />,
     <WhatHappened key="h" story={story} loading={storyLoading} />,
-    <KeyNumbers key="n" quote={quote} story={story} />,
+    <KeyNumbers key="n" quote={quote} story={story} failed={status.quote === 'error' && status.story === 'error'} />,
     <SmartMoney key="m" ticker={profile.symbol} />,
     <SupportConcern key="e" story={story} loading={storyLoading} />,
     <WatchFor key="w" story={story} loading={storyLoading} />,
@@ -166,6 +177,14 @@ export default function StockPage({ user }: { user?: any }) {
       <article className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-10">
         <div className="hidden lg:block" />
         <div className="space-y-10 border-t border-line pt-10 text-[15px] leading-relaxed text-ink/85">
+          <p className="rounded-control border border-line bg-surface2/60 px-4 py-3 text-xs leading-relaxed text-muted">
+            <span className="font-semibold text-ink">Background notes.</span> Written by our team to explain the business, not taken from a filing and not live data, so
+            figures here can be out of date. The numbers and events above are live and linked to their sources. For the company&apos;s own account, read its{' '}
+            <a href={`https://www.screener.in/company/${profile.symbol}/consolidated/#documents`} target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:underline">
+              annual reports and filings
+            </a>
+            .
+          </p>
           <section id="overview" className="scroll-mt-[calc(var(--nav-h,64px)+72px)]">
             <h2 className="text-xl font-semibold text-ink">About {name}</h2>
             <p className="mt-3 max-w-[65ch]">{profile.overview}</p>
@@ -177,11 +196,11 @@ export default function StockPage({ user }: { user?: any }) {
           <div className="grid gap-6 md:grid-cols-2">
             <section id="fundamentals" className="scroll-mt-[calc(var(--nav-h,64px)+72px)] rounded-card border border-line bg-surface p-6">
               <h2 className="text-lg font-semibold text-ink">Reading the fundamentals</h2>
-              <p className="mt-3 text-sm">{profile.fundamentalAnalysis}</p>
+              <p className="mt-3">{profile.fundamentalAnalysis}</p>
             </section>
             <section id="risks" className="scroll-mt-[calc(var(--nav-h,64px)+72px)] rounded-card border border-line bg-surface p-6">
               <h2 className="text-lg font-semibold text-ink">Risks and opportunities</h2>
-              <p className="mt-3 text-sm">{profile.risksAndOpportunities}</p>
+              <p className="mt-3">{profile.risksAndOpportunities}</p>
             </section>
           </div>
           <section className="rounded-card border border-line bg-surface p-6 sm:p-8">

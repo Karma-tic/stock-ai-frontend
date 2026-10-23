@@ -45,7 +45,7 @@ export default function LiveMarketCard() {
 
   if (live.status === 'error' && rates.status === 'error') {
     return (
-      <div className="min-h-[200px] rounded-card border border-line bg-surface/80 p-6 text-sm text-muted backdrop-blur">
+      <div className="rounded-card border border-line bg-surface/80 p-5 text-sm text-muted backdrop-blur">
         Live prices are unavailable right now.{' '}
         <Link to="/invest" className="font-semibold text-ink underline underline-offset-4">
           Compare investments
