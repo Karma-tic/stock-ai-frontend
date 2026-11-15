@@ -4,6 +4,7 @@ import { ArrowLeft, Check, FileText, Loader2, LockKeyhole, Mail, Moon, Radar, Sc
 import Logo from './ui/Logo';
 import { buttonClass } from './ui/Button';
 import { supabase } from '../lib/supabase';
+import { rememberBriefChoice } from '../lib/emailOptIn';
 
 interface Props {
   onLogin: (token: string, user: any) => void;
@@ -20,6 +21,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
   const [step, setStep] = useState<'input' | 'verify'>('input');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [wantsBrief, setWantsBrief] = useState(true);
   const requestedPath = new URLSearchParams(location.search).get('next');
   const safeNext = requestedPath?.startsWith('/') && !requestedPath.startsWith('//') ? requestedPath : '/';
 
@@ -27,6 +29,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
     setLoading(true);
     setError('');
     sessionStorage.setItem('stock_ai_post_auth_redirect', safeNext);
+    rememberBriefChoice(wantsBrief);
     const callback = new URL('/login', window.location.origin);
     callback.searchParams.set('next', safeNext);
     const { error: oauthError } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: callback.toString() } });
@@ -57,6 +60,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
     }
     const token = data.session?.access_token || '';
     localStorage.setItem('sb_token', token);
+    rememberBriefChoice(wantsBrief);
     onLogin(token, data.user);
     setLoading(false);
   };
@@ -67,6 +71,21 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
     setError('');
     setOtp('');
   };
+
+  const briefChoice = (
+    <label className="flex cursor-pointer items-start gap-3 rounded-control border border-line bg-surface px-3 py-3 text-sm">
+      <input
+        type="checkbox"
+        checked={wantsBrief}
+        onChange={(e) => setWantsBrief(e.target.checked)}
+        className="mt-0.5 h-4 w-4 shrink-0 accent-cobalt"
+      />
+      <span>
+        <b className="block font-semibold text-ink">Email me a short brief before the market opens</b>
+        <span className="text-muted">New filings and news for the stocks you follow, weekdays at 8:30 AM. Unsubscribe in one click.</span>
+      </span>
+    </label>
+  );
 
   const field =
     'h-12 w-full rounded-control border border-line bg-surface px-4 text-[15px] text-ink outline-none transition placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25';
@@ -164,6 +183,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
                   <Mail className="h-5 w-5 text-muted" strokeWidth={1.75} />
                   Continue with email
                 </button>
+                {briefChoice}
               </div>
             ) : step === 'input' ? (
               <div className="mt-8 space-y-4">
@@ -187,6 +207,7 @@ export default function LoginPage({ onLogin, onBack, isDarkMode, onToggleTheme }
                 <p className="flex items-center gap-2 text-xs text-muted">
                   <LockKeyhole className="h-3.5 w-3.5" strokeWidth={1.75} /> No password. We'll email you a six-digit code.
                 </p>
+                {briefChoice}
                 <button type="button" onClick={() => resetMode('google')} className="text-sm font-medium text-accent hover:underline">
                   Use Google instead
                 </button>
