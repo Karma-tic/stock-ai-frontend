@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
+import { applyPendingBriefChoice } from './lib/emailOptIn';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import Logo, { LogoMark } from './components/ui/Logo';
@@ -317,6 +318,7 @@ export default function App() {
       if (data.session) {
         localStorage.setItem('sb_token', data.session.access_token);
         setUser(data.session.user);
+        void applyPendingBriefChoice(data.session.access_token);
         finishPendingRedirect();
       }
     }).catch((error) => {
@@ -329,7 +331,10 @@ export default function App() {
       if (session) {
         localStorage.setItem('sb_token', session.access_token);
         setUser(session.user);
-        if (event === 'SIGNED_IN') finishPendingRedirect();
+        if (event === 'SIGNED_IN') {
+          void applyPendingBriefChoice(session.access_token);
+          finishPendingRedirect();
+        }
       } else {
         setUser(null);
         localStorage.removeItem('sb_token');
