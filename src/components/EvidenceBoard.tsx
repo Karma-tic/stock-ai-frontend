@@ -178,7 +178,7 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
         const detail = e?.response?.data?.detail;
         if (detail === 'DAILY_LIMIT_REACHED') {
           setLimitHit(true);
-          setError('You have used your 2 free analyses for today.');
+          setError('You have used your free analyses for today. They reset at midnight.');
         } else {
           setError(typeof detail === 'string' ? detail : 'The analysis could not be completed. Please try again.');
         }
@@ -307,6 +307,20 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
 
           {!loading && result && (
             <>
+              {/* Free plan: how many analyses are left today, with the way to unlimited */}
+              {result?.plan && !result.plan.is_pro && typeof result.plan.free_left_today === 'number' && (
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-accent/[0.05] px-5 py-2.5 text-sm">
+                  <span className="text-ink">
+                    {result.plan.free_left_today > 0
+                      ? `${result.plan.free_left_today} free ${result.plan.free_left_today === 1 ? 'analysis' : 'analyses'} left today`
+                      : 'That was your last free analysis today'}
+                  </span>
+                  <button type="button" onClick={() => setShowUpgrade(true)} className="font-semibold text-accent hover:underline">
+                    Go unlimited
+                  </button>
+                </div>
+              )}
+
               {/* 2. In one line */}
               <section className="px-5 py-5">
                 <p className="text-xs font-medium text-muted">In one line</p>
