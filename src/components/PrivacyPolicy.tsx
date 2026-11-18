@@ -22,7 +22,7 @@ export default function PrivacyPolicy() {
         },
         {
           title: "4. Cookies, Google AdSense & Analytics",
-          content: "We use cookies and local storage to maintain your login session. We also use third-party vendors, including Google, which use cookies to serve ads based on a user's prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet. Users may opt out of personalized advertising by visiting Google Ads Settings (https://www.google.com/settings/ads). We also use Google Analytics to understand how users interact with our platform."
+          content: "We use cookies and local storage to maintain your login session. We also use third-party vendors, including Google, which use cookies to serve ads based on a user's prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet. Users may opt out of personalized advertising by visiting Google Ads Settings (https://www.google.com/settings/ads). We also use Google Analytics to understand how users interact with our platform. To see how many visitors sign up, run analyses and upgrade, we store a random visitor identifier in your browser's local storage and record those steps, with the page path and referring site, on our own servers; this is not shared with third parties."
         },
         {
           title: "5. Third Party Services",

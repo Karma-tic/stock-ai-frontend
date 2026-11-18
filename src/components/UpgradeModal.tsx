@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { loadRazorpay } from '../lib/loadRazorpay';
 import { Check, Loader2, LockKeyhole, X } from 'lucide-react';
 import { buttonClass } from './ui/Button';
+import { track } from '../lib/track';
 
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -30,6 +31,7 @@ export default function UpgradeModal({ onClose, onSuccess }: {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      track('upgrade_view', session?.access_token);
       if (session?.user?.user_metadata?.has_used_trial) {
         setHasUsedTrial(true);
       }
