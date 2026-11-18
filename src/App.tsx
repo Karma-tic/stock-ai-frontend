@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { applyPendingBriefChoice } from './lib/emailOptIn';
+import { trackSignupOnce, trackVisitOnce } from './lib/track';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import Logo, { LogoMark } from './components/ui/Logo';
@@ -310,6 +311,7 @@ export default function App() {
       }
     };
 
+    trackVisitOnce();
     supabase.auth.getSession().then(({ data, error }) => {
       if (error) {
         console.error('Session restoration failed:', error.message);
@@ -319,6 +321,7 @@ export default function App() {
         localStorage.setItem('sb_token', data.session.access_token);
         setUser(data.session.user);
         void applyPendingBriefChoice(data.session.access_token);
+        trackSignupOnce(data.session.user.id, data.session.access_token);
         finishPendingRedirect();
       }
     }).catch((error) => {
@@ -333,6 +336,7 @@ export default function App() {
         setUser(session.user);
         if (event === 'SIGNED_IN') {
           void applyPendingBriefChoice(session.access_token);
+          trackSignupOnce(session.user.id, session.access_token);
           finishPendingRedirect();
         }
       } else {
