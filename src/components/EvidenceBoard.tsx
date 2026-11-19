@@ -2,8 +2,12 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { Drawer } from 'vaul';
-import { AlertTriangle, ArrowUpRight, BarChart3, CalendarDays, ExternalLink, Eye, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
-import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist, getStockEvents } from '../lib/api';
+import { AlertTriangle, ArrowUpRight, BarChart3, Bell, BellRing, CalendarDays, Lock, ExternalLink, Eye, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
+import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist, getStockEvents, getNotificationPreferences, saveNotificationPreferences } from '../lib/api';
+import { trackEvent } from '../lib/analytics';
+import { noteBoardSeen, noteNotNow } from '../lib/paywall';
+import { refreshAllowance, refreshPlan } from '../lib/plan';
+import { toast } from '../lib/toast';
 import { EvidencePoint, PointSource, SourceKind, cleanTicker, evidenceBalance, evidencePoints, factor, relDay, sourceKind } from '../lib/evidence';
 import { usePhone } from '../lib/useMedia';
 import { hasVerdictWords, shortHeadline } from '../lib/researchLanguage';
@@ -282,6 +286,88 @@ function FactorTile({ label, word, steps, note }: { label: string; word: string;
   );
 }
 
+// "Remind me": turns on email alerts for this stock (watchlist + filing alerts), for everyone.
+// A full free watchlist is the one paywall here.
+function RemindMe({ ticker, companyName, onWatchlistFull }: { ticker: string; companyName: string; onWatchlistFull: () => void }) {
+  const [state, setState] = useState<'idle' | 'busy' | 'on'>('idle');
+  const turnOn = async () => {
+    if (state !== 'idle') return;
+    setState('busy');
+    try {
+      const wl = await getWatchlist();
+      const has = (wl.data?.watchlist || []).some((w: any) => cleanTicker(w.ticker) === ticker);
+      if (!has) await addToWatchlist(ticker, companyName);
+      const prefs = (await getNotificationPreferences()).data?.preferences || {};
+      if (!prefs.high_priority_alerts) {
+        await saveNotificationPreferences({
+          email_digest: !!prefs.email_digest,
+          high_priority_alerts: true,
+          minimum_severity: prefs.minimum_severity || 'high',
+        });
+      }
+      setState('on');
+      trackEvent('alert_create', { ticker, source: 'watch_for' });
+      toast.success(`Alerts on. We'll email you when ${ticker} files something important.`);
+    } catch (e: any) {
+      setState('idle');
+      if (e?.response?.data?.detail === 'FREE_LIMIT_REACHED') onWatchlistFull();
+      else toast.error('Could not turn on alerts. Please try again.');
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={turnOn}
+      aria-pressed={state === 'on'}
+      className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 text-xs font-semibold transition ${
+        state === 'on' ? 'border-accent/50 bg-accent/10 text-accent' : 'border-line text-ink hover:border-accent/50'
+      }`}
+    >
+      {state === 'on' ? <BellRing className="h-3.5 w-3.5" /> : <Bell className="h-3.5 w-3.5" />}
+      {state === 'on' ? 'Alerts on' : state === 'busy' ? 'Turning on…' : 'Remind me'}
+    </button>
+  );
+}
+
+// Free allowance used up: the rest of the board sits behind a soft blur with one offer card.
+// The hidden points never reach the browser; the blur covers placeholder lines.
+function LockedRest({ total, onUnlock }: { total: number; onUnlock: () => void }) {
+  const [hidden, setHidden] = useState(false);
+  return (
+    <section className="relative border-t border-line px-5 py-5">
+      <p className="sr-only">Locked with Pro: {total} more points and every source.</p>
+      <div className="select-none space-y-2 blur-[8px]" aria-hidden="true">
+        {Array.from({ length: Math.min(6, Math.max(3, total)) }, (_, i) => (
+          <div key={i} className="rounded-control border border-line px-3 py-3">
+            <span className="block h-3 w-11/12 rounded bg-ink/20" />
+            <span className="mt-2 block h-3 w-2/3 rounded bg-ink/15" />
+          </div>
+        ))}
+      </div>
+      {!hidden && (
+        <div className="absolute inset-x-5 top-8 rounded-card border border-line bg-surface p-5 text-center shadow-lift">
+          <Lock className="mx-auto h-5 w-5 text-accent" strokeWidth={1.75} aria-hidden="true" />
+          <p className="mt-2 text-base font-semibold text-ink">See all {total} points and every source.</p>
+          <p className="mt-1 text-sm text-muted">Pro, ₹99 for 30 days. No auto-renewal.</p>
+          <div className="mt-4 flex justify-center gap-2">
+            <Button onClick={onUnlock}>Unlock</Button>
+            <button
+              type="button"
+              onClick={() => {
+                noteNotNow();
+                setHidden(true);
+              }}
+              className="h-11 rounded-control px-4 text-sm font-medium text-muted hover:text-ink"
+            >
+              Not now
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 // Loading: the board's own shape, with a thread drawing across as the progress line.
 function BoardSkeleton({ ticker }: { ticker: string }) {
   return (
@@ -425,20 +511,33 @@ function BoardBody({
   const [asOf, setAsOf] = useState<Date | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [events, setEvents] = useState<StockEvent[]>([]);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [upgradeContext, setUpgradeContext] = useState<{ text: string; moment: string } | null>(null);
 
   useEffect(() => {
     let alive = true;
     setLoading(true);
+    setError('');
     analyzeStock(stock.display_ticker || stock.ticker)
       .then((res) => {
         if (!alive) return;
         setResult(res.data);
         setAsOf(new Date());
+        const planName = res.data?.plan?.is_pro ? 'pro' : 'free';
+        if (res.data?.locked) {
+          trackEvent('analysis_locked_view', { ticker, plan: planName });
+        } else {
+          trackEvent('analysis_open', { ticker, plan: planName });
+          noteBoardSeen();
+        }
+        refreshAllowance();
       })
       .catch((e: any) => {
         if (!alive) return;
         const detail = e?.response?.data?.detail;
         if (detail === 'DAILY_LIMIT_REACHED') {
+          trackEvent('analysis_locked_view', { ticker, plan: 'free', source: 'not_researched_today' });
+          refreshAllowance();
           setLimitHit(true);
           setError('You have used your free analyses for today. They reset at midnight.');
         } else {
@@ -452,7 +551,7 @@ function BoardBody({
     return () => {
       alive = false;
     };
-  }, [stock, ticker]);
+  }, [stock, ticker, reloadKey]);
 
   const sig = result?.signal || {};
   const analysis = sig.analysis || {};
@@ -513,10 +612,15 @@ function BoardBody({
   };
   const listProps = { ticker, active, setActive, sourceInfo };
   // On phones the sheet opens fully first, so the upgrade sheet inside it is fully on screen.
-  const openUpgrade = () => {
+  const openUpgrade = (text?: string, moment = 'evidence_board') => {
     onWantMore?.();
+    setUpgradeContext({ text: text || (limitHit || locked ? `Unlock the full Evidence Board for ${ticker}` : 'Unlimited Evidence Boards'), moment });
     setShowUpgrade(true);
   };
+  const locked = !!result?.locked;
+  const lockedCounts = result?.counts || { support: support.length, concern: concern.length };
+  const meterSupport = locked ? lockedCounts.support : support.length;
+  const meterConcern = locked ? lockedCounts.concern : concern.length;
 
   const technical = factor('technical', ratings.technical_score);
   const valuation = factor('valuation', ratings.value_score);
@@ -556,7 +660,7 @@ function BoardBody({
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {limitHit ? (
-                <Button onClick={openUpgrade}>Go Pro for unlimited analyses</Button>
+                <Button onClick={() => openUpgrade()}>Go Pro for unlimited analyses</Button>
               ) : (
                 <Button onClick={() => window.location.reload()}>Try again</Button>
               )}
@@ -577,7 +681,7 @@ function BoardBody({
                     ? `${result.plan.free_left_today} free ${result.plan.free_left_today === 1 ? 'analysis' : 'analyses'} left today`
                     : 'That was your last free analysis today'}
                 </span>
-                <button type="button" onClick={openUpgrade} className="font-semibold text-accent hover:underline">
+                <button type="button" onClick={() => openUpgrade()} className="font-semibold text-accent hover:underline">
                   Go unlimited
                 </button>
               </div>
@@ -608,10 +712,40 @@ function BoardBody({
 
             {/* 3. Evidence balance: how the sourced points weigh up. No verdict, no targets. */}
             <section className="border-t border-line px-5 py-5">
-              <BalanceMeter support={support.length} concern={concern.length} active={active} onTick={jumpTo} />
+              <BalanceMeter
+                support={meterSupport}
+                concern={meterConcern}
+                active={active}
+                onTick={(sd, i) => (locked && i > 0 ? openUpgrade(undefined, 'locked_board') : jumpTo(sd, i))}
+              />
             </section>
 
-            {/* 4. Supporting and concerning: stacked on larger screens, tabs on phones */}
+            {locked ? (
+              <>
+                <section className="border-t border-line px-5 py-5">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-sm font-semibold text-ink">Supporting ({lockedCounts.support})</h3>
+                      <div className="mt-3">
+                        <PointList points={support.slice(0, 1)} kind="support" {...listProps} />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-ink">Concerning ({lockedCounts.concern})</h3>
+                      <div className="mt-3">
+                        <PointList points={concern.slice(0, 1)} kind="concern" {...listProps} />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <LockedRest
+                  total={lockedCounts.support + lockedCounts.concern}
+                  onUnlock={() => openUpgrade(`Unlock the full Evidence Board for ${ticker}`, 'locked_board')}
+                />
+              </>
+            ) : (
+              <>
+                {/* 4. Supporting and concerning: stacked on larger screens, tabs on phones */}
             <section className="border-t border-line px-5 py-5">
               <div className="sm:hidden">
                 <Segmented<Side>
@@ -643,7 +777,7 @@ function BoardBody({
               </div>
             </section>
 
-            {/* 5. Factor checks: small instruments, word first */}
+                {/* 5. Factor checks: small instruments, word first */}
             <Section title="Factor checks">
               <dl className="grid grid-cols-2 gap-2.5">
                 <FactorTile label="Technical" word={technical.word} steps={technical.dots} note={notes.technical} />
@@ -670,8 +804,8 @@ function BoardBody({
               </dl>
             </Section>
 
-            {/* 6. Watch for: dated events first, then the ongoing thing to keep an eye on */}
-            {(events.length > 0 || watchNote) && (
+                {/* 6. Watch for: dated events first, then the ongoing thing to keep an eye on */}
+                {(events.length > 0 || watchNote) && (
               <Section title="Watch for" icon={<Eye className="h-4 w-4 text-accent" strokeWidth={1.75} />} note="Dates and developments that could change this picture.">
                 <ol className="relative ml-1.5 border-l border-line">
                   {events.map((ev, i) => (
@@ -680,11 +814,18 @@ function BoardBody({
                       <p className="num text-xs font-semibold text-accent">{ev.event_date ? fmtDay(ev.event_date) : 'Soon'}</p>
                       <p className="mt-0.5 text-sm font-medium text-ink">{ev.label}</p>
                       {ev.short_title && ev.short_title !== ev.label && <p className="text-xs leading-relaxed text-muted">{ev.short_title}</p>}
+                      <div className="mt-1 flex flex-wrap items-center gap-2">
+                        <RemindMe
+                          ticker={ticker}
+                          companyName={stock.company_name || ''}
+                          onWatchlistFull={() => openUpgrade('Free watchlists hold 5. Pro has no limit.', 'watchlist_limit')}
+                        />
                       {ev.source_url && (
                         <a href={ev.source_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex min-h-[28px] items-center gap-1 text-xs font-semibold text-accent hover:underline">
                           {ev.source_name || 'Source'} <ArrowUpRight className="h-3 w-3" />
                         </a>
                       )}
+                      </div>
                     </li>
                   ))}
                   {watchNote && (
@@ -701,8 +842,8 @@ function BoardBody({
               </Section>
             )}
 
-            {/* 7. Sources: the filings and news this analysis read */}
-            {sources.length > 0 && (
+                {/* 7. Sources: the filings and news this analysis read */}
+                {sources.length > 0 && (
               <Section title="Sources this analysis read" note="Open any item to check it yourself.">
                 <ul className="space-y-2">
                   {sources.map((src, i) => {
@@ -735,10 +876,13 @@ function BoardBody({
               </Section>
             )}
 
-            {/* 8. Share */}
-            <Section title="Share">
-              <ShareableSignal signal={sig} stock={result.stock || stock} support={support.map((p) => p.text)} concern={concern.map((p) => p.text)} />
-            </Section>
+                {/* 8. Share */}
+                <Section title="Share">
+                  <ShareableSignal signal={sig} stock={result.stock || stock} support={support.map((p) => p.text)} concern={concern.map((p) => p.text)} />
+                </Section>
+
+              </>
+            )}
 
             <section className="border-t border-line px-5 py-5">
               <p className="text-xs leading-relaxed text-muted">{sig.disclaimer || 'Research, not advice. Stock AI is not SEBI-registered and this is not a personal recommendation.'}</p>
@@ -752,9 +896,15 @@ function BoardBody({
 
       {showUpgrade && (
         <UpgradeModal
-          context={limitHit ? `Keep researching ${ticker} today` : 'Unlimited Evidence Boards'}
+          context={upgradeContext?.text || (limitHit ? `Keep researching ${ticker} today` : 'Unlimited Evidence Boards')}
+          moment={upgradeContext?.moment || (limitHit ? 'daily_limit' : 'evidence_board')}
           onClose={() => setShowUpgrade(false)}
-          onSuccess={() => window.location.reload()}
+          onSuccess={() => {
+            // The locked content opens in place behind the success sheet.
+            refreshPlan();
+            setLimitHit(false);
+            setReloadKey((k) => k + 1);
+          }}
         />
       )}
     </>

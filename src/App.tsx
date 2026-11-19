@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { Toaster } from 'sonner';
+import { captureRef, claimStoredRef } from './lib/referral';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { applyPendingBriefChoice } from './lib/emailOptIn';
@@ -42,6 +43,8 @@ const Studies = lazyPage(() => import('./components/studies/Studies'));
 const Blog = lazyPage(() => import('./components/Blog'));
 const BlogPost = lazyPage(() => import('./components/BlogPost'));
 const Learn = lazyPage(() => import('./components/Learn'));
+const AlertsPage = lazyPage(() => import('./components/AlertsPage'));
+const InvitePage = lazyPage(() => import('./components/InvitePage'));
 const ToolsHub = lazyPage(() => import('./components/ToolsHub'));
 const SIPCalculator = lazyPage(() => import('./components/SIPCalculator'));
 const LumpsumCalculator = lazyPage(() => import('./components/LumpsumCalculator'));
@@ -245,6 +248,8 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           <Route path="/pro-picks" element={<Navigate to="/" replace />} />
           <Route path="/ipos" element={<IPOsPage />} />
           <Route path="/ipos/:id" element={<IpoDetailPage />} />
+          <Route path="/alerts" element={user ? <AlertsPage /> : <Navigate to="/login?next=%2Falerts" replace />} />
+          <Route path="/invite" element={user ? <InvitePage /> : <Navigate to="/login?next=%2Finvite" replace />} />
           <Route path="/today" element={user ? <Dashboard initialTab="radar" /> : <Navigate to="/login?next=%2Ftoday" replace />} />
           
           {/* Learn Wiki Routes */}
@@ -341,14 +346,15 @@ export default function App() {
       localStorage.removeItem('sb_token');
     }).finally(() => setLoading(false));
 
+    captureRef();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth event:', event, session?.user?.email);
       if (session) {
         localStorage.setItem('sb_token', session.access_token);
         setUser(session.user);
         if (event === 'SIGNED_IN') {
           void applyPendingBriefChoice(session.access_token);
           trackSignupOnce(session.user.id, session.access_token);
+          void claimStoredRef();
           finishPendingRedirect();
         }
       } else {

@@ -4,7 +4,7 @@ import { supabase } from './supabase';
 
 export const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-const api = axios.create({ baseURL: BASE });
+export const api = axios.create({ baseURL: BASE });
 
 // Get fresh token every request
 api.interceptors.request.use(async (config) => {
@@ -85,3 +85,5 @@ export const removeFromPortfolio = async (ticker: string) => {
   notifyTrackedStocksChanged();
   return response;
 };
+export const getReferral = () => api.get('/api/referral');
+export const claimReferral = (code: string) => api.post('/api/referral/claim', { code });

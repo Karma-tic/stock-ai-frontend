@@ -1,12 +1,19 @@
 // src/components/ShareableSignal.tsx
 // A vertical share card (exported at 1080×1920): the evidence balance, the top
 // supporting and concerning points, and the disclaimer. No price targets.
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { Check, Copy, Download, Link2, Share2 } from 'lucide-react';
 import { toast } from '../lib/toast';
+import { getReferral } from '../lib/api';
+import { trackEvent } from '../lib/analytics';
+import { withRef } from '../lib/referral';
 import { evidenceBalance, splitIntoPoints } from '../lib/evidence';
 import { Button } from './ui/Button';
+
+// The person's referral code, fetched once per page load.
+let refCode: Promise<string | null> | null = null;
+const myRefCode = () => (refCode ??= getReferral().then((r) => r.data?.code || null).catch(() => null));
 
 interface Props {
   signal: any;
@@ -45,7 +52,16 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
     return html2canvas(cardRef.current, { backgroundColor: INK, scale: 4, useCORS: true, logging: false });
   };
 
-  const link = `https://www.byteplay.org/stock/${encodeURIComponent(ticker)}`;
+  const [code, setCode] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    myRefCode().then((c) => alive && setCode(c));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  // Every shared link carries the sharer's code: a friend who joins gives them 7 days of Pro.
+  const link = withRef(`https://www.byteplay.org/stock/${encodeURIComponent(ticker)}`, code);
   const caption = `${ticker}: ${balance.label}. Every point with its source:`;
   // Phones get the system share sheet; desktops get copy buttons.
   const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share && window.matchMedia('(pointer: coarse)').matches;
@@ -63,6 +79,7 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
   };
 
   const share = async () => {
+    trackEvent('share_card', { ticker, source: 'native' });
     setBusy(true);
     try {
       const blob = await toBlob();
@@ -79,6 +96,7 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
   };
 
   const copyImage = async () => {
+    trackEvent('share_card', { ticker, source: 'image' });
     setBusy(true);
     try {
       const blob = await toBlob();
@@ -97,6 +115,7 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
   };
 
   const copyLink = async () => {
+    trackEvent('share_card', { ticker, source: 'link' });
     try {
       await navigator.clipboard.writeText(`${caption} ${link}`);
       flash('link');
@@ -107,6 +126,7 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
   };
 
   const download = async () => {
+    trackEvent('share_card', { ticker, source: 'download' });
     setBusy(true);
     try {
       const canvas = await render();
