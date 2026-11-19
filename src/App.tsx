@@ -153,7 +153,15 @@ function Footer() {
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
             Research, not advice. Not SEBI-registered. AI analysis is for education only; invest at your own risk.
           </p>
-          <p className="mt-4 text-xs text-muted">© 2026 BytePlay Technologies. All rights reserved.</p>
+          <a
+            href="https://t.me/byteplaystock"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex min-h-[40px] items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+          >
+            Follow the daily market wrap on Telegram
+          </a>
+          <p className="mt-2 text-xs text-muted">© 2026 BytePlay Technologies. All rights reserved.</p>
         </div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           <div>

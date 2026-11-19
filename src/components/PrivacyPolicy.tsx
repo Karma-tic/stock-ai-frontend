@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
       {[
         {
           title: "1. Information We Collect",
-          content: "We collect your phone number or email address for authentication. If you voluntarily apply to our product-research beta, we also collect the name or alias, investor type, watchlist size, research problem, and consent record that you submit. We store your watchlist, portfolio holdings, and usage data to provide our services. We do not collect brokerage passwords or other sensitive financial credentials."
+          content: "We collect your phone number or email address for authentication. If you sign up for the free morning brief without an account, we store only your email address, when you confirmed it and where you signed up; every email has an unsubscribe link, and unsubscribing stops all emails to that address. If you voluntarily apply to our product-research beta, we also collect the name or alias, investor type, watchlist size, research problem, and consent record that you submit. We store your watchlist, portfolio holdings, and usage data to provide our services. We do not collect brokerage passwords or other sensitive financial credentials."
         },
         {
           title: "2. How We Use Your Information",

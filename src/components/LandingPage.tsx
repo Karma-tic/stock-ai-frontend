@@ -6,6 +6,7 @@ import ToolsBento from './landing/ToolsBento';
 import StudiesTeaser from './landing/StudiesTeaser';
 import Pricing from './landing/Pricing';
 import { Faq, TryIt } from './landing/Sections';
+import MorningBriefSignup from './MorningBriefSignup';
 import './landing/landing.css';
 
 // The scroll chapter carries GSAP and Lenis, so it loads as its own chunk after the hero.
@@ -33,6 +34,11 @@ export default function LandingPage({ onGetStarted }: Props) {
       <ToolsBento />
       <StudiesTeaser />
       <Pricing onGetStarted={onGetStarted} />
+      <section aria-label="Free morning brief" className="border-t border-line bg-canvas py-16 sm:py-20">
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+          <MorningBriefSignup source="home" />
+        </div>
+      </section>
       <Faq />
       <TryIt onGetStarted={onGetStarted} />
     </div>
