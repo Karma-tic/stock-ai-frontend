@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Newspaper } from 'lucide-react';
 import SEO from './SEO';
 import PageHeader from './ui/PageHeader';
+import MorningBriefSignup from './MorningBriefSignup';
 
 interface MarketWrapItem {
   id: string;
@@ -27,6 +28,13 @@ function trimPoint(value: string) {
   return value.length > 135 ? `${value.slice(0, 132).trim()}...` : value;
 }
 
+// The wrap ends with a "Sources: ..." note; it is shown on its own, not as a point.
+function splitSources(html: string): { body: string; sources: string } {
+  const match = html.match(/<p[^>]*>\s*Sources:([\s\S]*?)<\/p>/i);
+  if (!match) return { body: html, sources: '' };
+  return { body: html.replace(match[0], ' '), sources: stripHtml(`Sources:${match[1]}`) };
+}
+
 function getImportantPoints(html: string) {
   const bulletPoints = Array.from(html.matchAll(/<li[^>]*>(.*?)<\/li>/gi))
     .map(match => trimPoint(stripHtml(match[1])))
@@ -50,10 +58,8 @@ const MarketWrap: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const currentWrap = wraps[currentIndex];
-  const highlights = useMemo(
-    () => currentWrap ? getImportantPoints(currentWrap.content_html) : [],
-    [currentWrap]
-  );
+  const parts = useMemo(() => (currentWrap ? splitSources(currentWrap.content_html) : { body: '', sources: '' }), [currentWrap]);
+  const highlights = useMemo(() => (parts.body ? getImportantPoints(parts.body) : []), [parts]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -101,7 +107,7 @@ const MarketWrap: React.FC = () => {
 
   const dayLabel = (iso: string, long = false) =>
     new Date(iso).toLocaleDateString('en-IN', long ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' } : { weekday: 'short', day: 'numeric', month: 'short' });
-  const fullText = currentWrap ? stripHtml(currentWrap.content_html) : '';
+  const fullText = parts.body ? stripHtml(parts.body) : '';
 
   return (
     <div className="min-h-[100dvh] bg-canvas">
@@ -199,7 +205,14 @@ const MarketWrap: React.FC = () => {
                 </button>
               </div>
             </article>
-            <p className="mt-4 text-xs text-muted">AI-written summary of the day's market data and headlines. Not investment advice.</p>
+            {parts.sources ? (
+              <p className="mt-4 text-xs leading-relaxed text-muted">{parts.sources}</p>
+            ) : (
+              <p className="mt-4 text-xs text-muted">AI-written summary of the day's market data and headlines. Not investment advice.</p>
+            )}
+            <div className="mt-8">
+              <MorningBriefSignup source="market-wrap" compact />
+            </div>
           </>
         )}
       </div>
