@@ -39,32 +39,21 @@ export default function StockPage({ user }: { user?: any }) {
     return () => io.disconnect();
   }, []);
 
-  // Section index highlights the section being read: the last one whose top has passed
-  // 35% of the screen. Back at the top of the page, that is the first section again.
+  // Section index highlights the section being read. IntersectionObserver watches a thin band
+  // 35% down the screen; whichever section crosses it is current. No scroll listener.
   useEffect(() => {
     const ids = [...STORY_PARTS.map((p) => p.id), ...ABOUT.map((a) => a.id)];
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const line = window.innerHeight * 0.35;
-      let current = ids[0];
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= line) current = id;
-      }
-      setActiveSection(current);
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
+    const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el && el.offsetParent !== null);
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (hit) setActiveSection(hit.target.id);
+      },
+      { rootMargin: '-35% 0px -64% 0px' },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, [profile.symbol]);
 
   const analyzeTo = user ? `/?analyze=${profile.symbol}` : `/login?next=${encodeURIComponent(`/?analyze=${profile.symbol}`)}`;
@@ -116,7 +105,7 @@ export default function StockPage({ user }: { user?: any }) {
             {price != null && <Price value={price} className="text-sm font-medium text-ink" />}
             {change != null && <Change value={change} className="text-xs" />}
             <ButtonLink to={analyzeTo} size="sm" className="ml-auto" tabIndex={showMini ? 0 : -1}>
-              Analyze
+              Analyze {profile.symbol}
             </ButtonLink>
           </div>
         </div>

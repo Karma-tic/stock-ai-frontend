@@ -8,10 +8,13 @@
 @layer base {
   :root {
     color-scheme: light;
-    --bg: 243 245 248;
+    /* Light is designed, not inverted: off-white canvas, white cards, near-black ink */
+    --bg: 246 247 249;
     --surface: 255 255 255;
-    --surface-2: 233 237 242;
-    --text: 15 23 32;
+    --surface-2: 236 239 243;
+    --text: 14 17 22;
+    --shadow: 30 41 59;
+    --shadow-a: .14;
     --muted: 74 85 101;
     --line: 220 226 234;
     --accent: 52 81 245;
@@ -38,6 +41,9 @@
     --up: 74 222 128;
     --down: 248 113 113;
     --caution: 245 181 68;
+    /* Shadows take the canvas hue, never a black glow */
+    --shadow: 3 6 10;
+    --shadow-a: .55;
   }
 
 
@@ -110,22 +116,56 @@
 .flash-down { animation: price-flash-down 600ms var(--ease-ui); }
 
 /* Skeleton shimmer, off under reduced motion */
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+/* A soft band sweeps across every 1.2 s (transform only). Utilities such as
+   `absolute` still win over the `relative` set here, both keep the band inside. */
+@layer components {
+  .skeleton { position: relative; overflow: hidden; }
 }
 .skeleton {
   background-color: rgb(var(--text) / 0.08);
   border-radius: 6px;
-  animation: skeleton-pulse 1.6s ease-in-out infinite;
 }
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(var(--text) / 0.06), transparent);
+  animation: skeleton-shimmer 1.2s cubic-bezier(.22, 1, .36, 1) infinite;
+}
+@keyframes skeleton-shimmer { to { transform: translateX(100%); } }
+
+/* Press feedback on everything tappable: a 3% squeeze for 100 ms.
+   Uses the separate `scale` property so it composes with any transform a control already has. */
+:where(button:not(:disabled), [role="button"], a.press) {
+  transition-property: scale, color, background-color, border-color, opacity, box-shadow;
+  transition-duration: 100ms;
+  transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+}
+:where(button:not(:disabled):not(.press-none), [role="button"], a.press):active { scale: .97; }
+
 @media (prefers-reduced-motion: reduce) {
-  .skeleton { animation: none; }
+  .skeleton::after { animation: none; display: none; }
+  :where(button, [role="button"], a.press):active { scale: none; }
   .flash-up, .flash-down { animation: none; }
 }
 
 /* Evidence Board: slide in from the right (bottom on phones); a thread runs across while it loads */
 @keyframes board-in-right { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+/* Page change: fade plus an 8 px rise */
+@keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.page-in { animation: page-in 200ms cubic-bezier(.22, 1, .36, 1); }
+/* Pull to refresh: the filled ring turns while refreshing */
+@keyframes ptr-spin { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
+.ptr-spin { animation: ptr-spin 700ms linear infinite; }
+/* Chart range change: one crossfade, no redraw flash */
+@keyframes chart-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes chart-out { from { opacity: 1; } to { opacity: 0; } }
+.chart-in { animation: chart-in 220ms var(--ease-ui); }
+.chart-out { animation: chart-out 220ms var(--ease-ui) forwards; }
+/* The Evidence Board panel slides fully in from the right on larger screens */
+@keyframes board-slide { from { transform: translateX(100%); } to { transform: none; } }
+.board-slide { animation: board-slide 320ms var(--ease-ui); }
 @keyframes board-in-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes board-thread { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
 .board-panel { animation: board-in-up 260ms var(--ease-ui); }
@@ -147,7 +187,9 @@
   .price-flash.is-up, .price-flash.is-down { background-color: transparent; }
   .market-dot.is-open { animation: none; }
   .upgrade-done { animation: none; }
-  .board-panel { animation: none; }
+  .board-panel, .board-slide, .chart-in { animation: none; }
+  .chart-out { display: none; }
+  .ptr-spin, .page-in { animation: none; }
   .board-thread { animation: none; width: 100%; opacity: .5; }
 }
 

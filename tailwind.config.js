@@ -31,7 +31,7 @@ module.exports = {
         control: '10px',
       },
       boxShadow: {
-        lift: '0 16px 40px -20px rgb(11 15 20 / 0.45)',
+        lift: '0 16px 40px -20px rgb(var(--shadow) / var(--shadow-a))',
       },
       transitionTimingFunction: {
         micro: 'cubic-bezier(.2,.8,.2,1)',
