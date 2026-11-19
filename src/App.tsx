@@ -212,6 +212,8 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
       
       {/* The main content area expands to push the footer down */}
       <main className="flex-grow">
+        {/* Each page fades in with an 8 px rise (200 ms); reduced motion shows it at once. */}
+        <div key={location.pathname} className="page-in">
         <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/privacy"    element={<PrivacyPolicy />} />
@@ -285,6 +287,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
           />
         </Routes>
         </Suspense>
+        </div>
       </main>
 
       {/* Footer stays pinned to the bottom (Hidden on Login Page) */}

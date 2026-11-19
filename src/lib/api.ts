@@ -33,6 +33,7 @@ api.interceptors.response.use(
 export const getTopStocks = () => api.get('/api/market/top');
 export const getMarketIndices = () => api.get('/api/market/indices');
 export const getLatestResearched = () => api.get('/api/signals/latest');
+export const getStockEvents = (ticker: string) => api.get(`/api/stock/${encodeURIComponent(ticker)}/events`);
 export type BetaApplicationPayload = {
   email: string;
   name: string;

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getStockHistory } from '../../lib/api';
+import { getStockEvents, getStockHistory } from '../../lib/api';
 import Segmented from '../ui/Segmented';
 import Skeleton from '../ui/Skeleton';
 
 type Point = { d: string; c: number };
 type History = { points: Point[]; source_name?: string; source_url?: string; interval?: string };
+type ChartEvent = { label: string; short_title: string; published_at?: string; source_url?: string; source_name?: string };
+type Built = { range: Range; pts: Point[]; x: (i: number) => number; y: (v: number) => number; line: string; area: string; min: number; max: number; change: number; up: boolean };
 const RANGES = ['1m', '6m', '1y', '5y'] as const;
 type Range = (typeof RANGES)[number];
 
@@ -24,10 +26,23 @@ export default function PriceChart({ ticker }: { ticker: string }) {
   const [range, setRange] = useState<Range>('1y');
   const [cache, setCache] = useState<Partial<Record<Range, History | 'error'>>>({});
   const [hover, setHover] = useState<number | null>(null);
+  const [events, setEvents] = useState<ChartEvent[]>([]);
+  // The previous range's line stays on screen and fades out while the new one fades in.
+  const [prev, setPrev] = useState<Built | null>(null);
+  const lastChart = useRef<Built | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     setCache({});
+    setPrev(null);
+    lastChart.current = null;
+    let alive = true;
+    getStockEvents(ticker)
+      .then((r) => alive && setEvents((r.data?.past as ChartEvent[]) || []))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
   }, [ticker]);
 
   const data = cache[range];
@@ -42,7 +57,7 @@ export default function PriceChart({ ticker }: { ticker: string }) {
     };
   }, [ticker, range, data]);
 
-  const chart = useMemo(() => {
+  const chart = useMemo<Built | null>(() => {
     if (!data || data === 'error') return null;
     const pts = data.points;
     const prices = pts.map((p) => p.c);
@@ -54,8 +69,39 @@ export default function PriceChart({ ticker }: { ticker: string }) {
     const line = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.c).toFixed(1)}`).join('');
     const first = pts[0].c;
     const last = pts[pts.length - 1].c;
-    return { pts, x, y, line, area: `${line}L${W},${H}L0,${H}Z`, min, max, change: ((last - first) / first) * 100, up: last >= first };
+    return { range, pts, x, y, line, area: `${line}L${W},${H}L0,${H}Z`, min, max, change: ((last - first) / first) * 100, up: last >= first };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    if (!chart) return;
+    const before = lastChart.current;
+    lastChart.current = chart;
+    if (!before || before.range === chart.range) return;
+    setPrev(before);
+    const t = window.setTimeout(() => setPrev(null), 260);
+    return () => window.clearTimeout(t);
+  }, [chart]);
+
+  // Results dates and notable filings in this range, placed on the nearest trading day.
+  const markers = useMemo(() => {
+    if (!chart) return [];
+    const firstDay = chart.pts[0].d;
+    const lastDay = chart.pts[chart.pts.length - 1].d;
+    const seen = new Set<number>();
+    return events
+      .map((ev) => {
+        const day = (ev.published_at || '').slice(0, 10);
+        if (!day || day < firstDay || day > lastDay) return null;
+        let idx = chart.pts.findIndex((p) => p.d >= day);
+        if (idx < 0) idx = chart.pts.length - 1;
+        if (seen.has(idx)) return null;
+        seen.add(idx);
+        return { ...ev, idx, day };
+      })
+      .filter(Boolean)
+      .slice(0, 12) as (ChartEvent & { idx: number; day: string })[];
+  }, [chart, events]);
 
   // Every range failed (e.g. backend not deployed yet): show nothing rather than a broken box.
   if (data === 'error' && range === '1y') return null;
@@ -102,14 +148,26 @@ export default function PriceChart({ ticker }: { ticker: string }) {
       </div>
 
       <div className="relative mt-3">
-        {!data && <Skeleton className="h-40 w-full" />}
+        {!data && !lastChart.current && <Skeleton className="h-40 w-full" />}
+        {!data && lastChart.current && (
+          // Loading another range: keep the last line, dimmed, so nothing flashes.
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="h-40 w-full opacity-40 transition-opacity duration-200" aria-hidden="true">
+            <path d={lastChart.current.line} fill="none" stroke="rgb(var(--muted))" strokeWidth="1.75" vectorEffect="non-scaling-stroke" />
+          </svg>
+        )}
+        {prev && chart && (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="chart-out pointer-events-none absolute inset-x-0 top-0 h-40 w-full" aria-hidden="true">
+            <path d={prev.line} fill="none" stroke={`rgb(var(--${prev.up ? 'up' : 'down'}))`} strokeWidth="1.75" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+          </svg>
+        )}
         {data === 'error' && <p className="flex h-40 items-center justify-center text-sm text-muted">No price history for this range.</p>}
         {chart && (
           <svg
             ref={svgRef}
             viewBox={`0 0 ${W} ${H}`}
             preserveAspectRatio="none"
-            className="h-40 w-full touch-pan-y"
+            key={chart.range}
+            className={`h-40 w-full touch-pan-y ${prev ? 'chart-in' : ''}`}
             role="img"
             aria-label={`${ticker} closing price over ${range}: from ${fmtPrice(chart.pts[0].c)} to ${fmtPrice(chart.pts[chart.pts.length - 1].c)}`}
             onPointerMove={onMove}
@@ -139,7 +197,53 @@ export default function PriceChart({ ticker }: { ticker: string }) {
             style={{ left: `${(chart.x(hover) / W) * 100}%`, top: `${(chart.y(active.c) / H) * 100}%` }}
           />
         )}
+        {chart && active && hover != null && (
+          // Floating price and date, kept inside the card at both ends.
+          <span
+            aria-hidden="true"
+            className={`pointer-events-none absolute z-10 -translate-x-1/2 whitespace-nowrap ${chart.y(active.c) / H < 0.4 ? 'bottom-1' : 'top-1'} rounded-control border border-line bg-surface2 px-2 py-1 text-center shadow-lift`}
+            style={{ left: `${Math.min(88, Math.max(12, (chart.x(hover) / W) * 100))}%` }}
+          >
+            <span className="num block text-xs font-semibold text-ink">{fmtPrice(active.c)}</span>
+            <span className="block text-[10px] text-muted">{fmtDate(active.d, 'long')}</span>
+          </span>
+        )}
       </div>
+
+      {chart && markers.length > 0 && (
+        <div className="relative mt-1 h-6" aria-label="Results and filings on this chart">
+          {markers.map((m) => {
+            const left = `${(chart.x(m.idx) / W) * 100}%`;
+            const label = `${m.label}, ${fmtDate(m.day, 'long')}: ${m.short_title}`;
+            const dot = <span className="block h-2.5 w-2.5 rounded-full border-2 border-surface bg-accent transition group-hover:scale-125" />;
+            return m.source_url ? (
+              <a
+                key={m.idx}
+                href={m.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={label}
+                aria-label={`${label}. Opens the source.`}
+                className="group absolute top-0 grid h-6 w-6 -translate-x-1/2 place-items-center"
+                style={{ left }}
+              >
+                {dot}
+              </a>
+            ) : (
+              <span key={m.idx} title={label} className="group absolute top-0 grid h-6 w-6 -translate-x-1/2 place-items-center" style={{ left }}>
+                {dot}
+              </span>
+            );
+          })}
+        </div>
+      )}
+
+      {chart && markers.length > 0 && (
+        <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted">
+          <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+          Results and notable filings. Tap a dot to open it.
+        </p>
+      )}
 
       {chart && (
         <div className="num mt-2 flex items-center justify-between text-[11px] text-muted">

@@ -8,6 +8,7 @@ import { usePlan } from '../lib/usePlan';
 import { cleanTicker } from '../lib/evidence';
 
 import EvidenceBoard from './EvidenceBoard';
+import PullToRefresh from './ui/PullToRefresh';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
 import AdBanner from './AdBanner';
@@ -93,6 +94,22 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
       console.error(e);
     }
     setWatchLoaded(true);
+  };
+
+  // Pull to refresh (phones): reload the home's lists; Today reloads through its own event.
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refreshHome = async () => {
+    if (tab === 'radar') {
+      window.dispatchEvent(new Event('stock-ai:tracked-stocks-changed'));
+      await new Promise((r) => setTimeout(r, 900));
+      return;
+    }
+    setRefreshKey((k) => k + 1);
+    await Promise.allSettled([
+      loadTopStocks(),
+      loadWatchlist(),
+      getLatestResearched().then((r) => setResearched((r.data?.signals || []).slice(0, 10))),
+    ]);
   };
 
   useEffect(() => {
@@ -335,15 +352,17 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
 
         {/* Centre: the current tab */}
         <main className="min-w-0">
+          {(tab === 'market' || tab === 'radar') && <PullToRefresh onRefresh={refreshHome} />}
           {tab === 'radar' ? (
             <TodayRadar onBrowseStocks={() => setTab('market')} />
           ) : (
             <>
               {tab === 'market' && (
                 <>
-                  <HomeHeader firstName={me?.firstName} newCount={newCount} />
+                  <HomeHeader key={`hh-${refreshKey}`} firstName={me?.firstName} newCount={newCount} />
                   {me && (
                     <WhatChanged
+                      key={`wc-${refreshKey}`}
                       uid={me.id}
                       watchCount={watchlist.length}
                       watchLoaded={watchLoaded}

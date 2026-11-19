@@ -3,7 +3,8 @@
 // supporting and concerning points, and the disclaimer. No price targets.
 import { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { Download, Share2 } from 'lucide-react';
+import { Check, Copy, Download, Link2, Share2 } from 'lucide-react';
+import { toast } from '../lib/toast';
 import { evidenceBalance, splitIntoPoints } from '../lib/evidence';
 import { Button } from './ui/Button';
 
@@ -44,26 +45,65 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
     return html2canvas(cardRef.current, { backgroundColor: INK, scale: 4, useCORS: true, logging: false });
   };
 
+  const link = `https://www.byteplay.org/stock/${encodeURIComponent(ticker)}`;
+  const caption = `${ticker}: ${balance.label}. Every point with its source:`;
+  // Phones get the system share sheet; desktops get copy buttons.
+  const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share && window.matchMedia('(pointer: coarse)').matches;
+  const [copied, setCopied] = useState<'' | 'image' | 'link'>('');
+
+  const toBlob = async () => {
+    const canvas = await render();
+    if (!canvas) return null;
+    return new Promise<Blob | null>((resolve) => canvas.toBlob((b) => resolve(b), 'image/png'));
+  };
+
+  const flash = (what: 'image' | 'link') => {
+    setCopied(what);
+    window.setTimeout(() => setCopied(''), 1800);
+  };
+
   const share = async () => {
     setBusy(true);
     try {
-      const canvas = await render();
-      if (!canvas) return;
-      const data = canvas.toDataURL('image/png');
-      const blob = await (await fetch(data)).blob();
-      const file = new File([blob], `${ticker}-evidence.png`, { type: 'image/png' });
-      if (navigator.share && (navigator as any).canShare?.({ files: [file] })) {
-        await navigator.share({ title: `${ticker} evidence | Stock AI`, text: `${ticker}: ${balance.label}. See the sources on byteplay.org`, files: [file] });
+      const blob = await toBlob();
+      const file = blob ? new File([blob], `${ticker}-evidence.png`, { type: 'image/png' }) : null;
+      if (file && (navigator as any).canShare?.({ files: [file] })) {
+        await navigator.share({ title: `${ticker} evidence | Stock AI`, text: `${caption} ${link}`, files: [file] });
       } else {
-        const a = document.createElement('a');
-        a.download = `${ticker}-evidence.png`;
-        a.href = data;
-        a.click();
+        await navigator.share({ title: `${ticker} evidence | Stock AI`, text: caption, url: link });
       }
-    } catch (e) {
-      console.error('Share error:', e);
+    } catch (e: any) {
+      if (e?.name !== 'AbortError') console.error('Share error:', e);
     }
     setBusy(false);
+  };
+
+  const copyImage = async () => {
+    setBusy(true);
+    try {
+      const blob = await toBlob();
+      if (blob && (window as any).ClipboardItem && navigator.clipboard?.write) {
+        await navigator.clipboard.write([new (window as any).ClipboardItem({ 'image/png': blob })]);
+        flash('image');
+        toast.success('Image copied. Paste it into any chat.');
+      } else {
+        await download();
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not copy the image here. Use Download instead.');
+    }
+    setBusy(false);
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${caption} ${link}`);
+      flash('link');
+      toast.success('Link copied');
+    } catch {
+      toast.error('Could not copy the link');
+    }
   };
 
   const download = async () => {
@@ -134,15 +174,33 @@ export default function ShareableSignal({ signal, stock, support, concern }: Pro
         </p>
       </div>
 
-      <div className="mt-4 flex gap-2">
-        <Button className="flex-1" onClick={share} disabled={busy}>
-          <Share2 className="h-4 w-4" strokeWidth={1.75} />
-          {busy ? 'Preparing…' : 'Share'}
-        </Button>
-        <Button variant="ghost" onClick={download} disabled={busy} aria-label="Download image">
-          <Download className="h-4 w-4" strokeWidth={1.75} />
-        </Button>
-      </div>
+      <p className="mt-3 text-center text-xs text-muted">This is exactly what people will see.</p>
+      {canNativeShare ? (
+        <div className="mt-3 flex gap-2">
+          <Button className="flex-1" onClick={share} disabled={busy}>
+            <Share2 className="h-4 w-4" strokeWidth={1.75} />
+            {busy ? 'Preparing…' : 'Share'}
+          </Button>
+          <Button variant="ghost" onClick={copyLink} aria-label="Copy link">
+            {copied === 'link' ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" strokeWidth={1.75} />}
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          <Button onClick={copyImage} disabled={busy}>
+            {copied === 'image' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" strokeWidth={1.75} />}
+            {busy ? 'Preparing…' : 'Copy image'}
+          </Button>
+          <Button variant="ghost" onClick={copyLink}>
+            {copied === 'link' ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" strokeWidth={1.75} />}
+            Copy link
+          </Button>
+          <Button variant="ghost" onClick={download} disabled={busy}>
+            <Download className="h-4 w-4" strokeWidth={1.75} />
+            Download
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, ArrowUpRight, BarChart3, Eye, ExternalLink, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
-import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
-import { EvidencePoint, SourceKind, cleanTicker, evidenceBalance, evidencePoints, factor, relDay, sourceKind } from '../lib/evidence';
+import { motion, useReducedMotion } from 'motion/react';
+import { Drawer } from 'vaul';
+import { AlertTriangle, ArrowUpRight, BarChart3, CalendarDays, ExternalLink, Eye, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
+import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist, getStockEvents } from '../lib/api';
+import { EvidencePoint, PointSource, SourceKind, cleanTicker, evidenceBalance, evidencePoints, factor, relDay, sourceKind } from '../lib/evidence';
+import { usePhone } from '../lib/useMedia';
 import { hasVerdictWords, shortHeadline } from '../lib/researchLanguage';
 import UpgradeModal from './UpgradeModal';
 import ShareableSignal from './ShareableSignal';
 import Price, { Change } from './ui/Price';
-import DotScale from './ui/DotScale';
 import Segmented from './ui/Segmented';
 import Skeleton from './ui/Skeleton';
 import { Button } from './ui/Button';
@@ -56,7 +58,9 @@ function WatchlistButton({ ticker, companyName }: { ticker: string; companyName:
   );
 }
 
-function Section({ title, icon, children, note }: { title: string; icon?: React.ReactNode; children: React.ReactNode; note?: string }) {
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function Section({ title, icon, children, note }: { title: string; icon?: ReactNode; children: ReactNode; note?: string }) {
   return (
     <section className="border-t border-line px-5 py-5">
       <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
@@ -69,22 +73,72 @@ function Section({ title, icon, children, note }: { title: string; icon?: React.
   );
 }
 
-// "More concerns ←→ More support", stated in words as well as position.
-function BalanceScale({ support, concern }: { support: number; concern: number }) {
+type Side = 'support' | 'concern';
+const itemId = (ticker: string, side: Side, i: number) => `ev-${ticker}-${side}-${i}`;
+
+// Each point gets a tick on its own side of the track, nearest the centre first.
+const tickPos = (side: Side, i: number, n: number) => (side === 'support' ? 50 + ((i + 1) * 46) / (n + 1) : 50 - ((i + 1) * 46) / (n + 1));
+
+// The balance meter: the dot starts at the centre and springs to where the evidence leans.
+// Every point has a tick; hovering a point lights its tick, tapping a tick jumps to the point.
+function BalanceMeter({
+  support,
+  concern,
+  active,
+  onTick,
+}: {
+  support: number;
+  concern: number;
+  active: string | null;
+  onTick: (side: Side, i: number) => void;
+}) {
+  const reduce = useReducedMotion();
   const b = evidenceBalance(support, concern);
-  const pos = 50 + b.lean * 46; // keep the marker inside the track
+  const pos = 50 + b.lean * 46;
+  const ticks: { side: Side; i: number; at: number }[] = [
+    ...Array.from({ length: concern }, (_, i) => ({ side: 'concern' as Side, i, at: tickPos('concern', i, concern) })),
+    ...Array.from({ length: support }, (_, i) => ({ side: 'support' as Side, i, at: tickPos('support', i, support) })),
+  ];
   return (
     <div>
       <p className="text-base font-semibold text-ink">{b.label}</p>
-      <div className="relative mt-3 h-2 rounded-full bg-ink/10" role="img" aria-label={`Evidence balance: ${b.label}`}>
+      <div className="relative mt-4 h-2 rounded-full bg-ink/10" role="img" aria-label={`Evidence balance: ${b.label}`}>
         <span className="absolute inset-y-0 left-1/2 w-px bg-ink/25" aria-hidden="true" />
-        <span
-          className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-canvas bg-accent shadow transition-[left] duration-500 ease-ui"
-          style={{ left: `${pos}%` }}
+        <motion.div
+          className="pointer-events-none absolute inset-0"
+          initial={reduce ? false : { x: '0%' }}
+          animate={{ x: `${pos - 50}%` }}
+          transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 22, delay: 0.15 }}
           aria-hidden="true"
-        />
+        >
+          <span className="absolute left-1/2 top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-canvas bg-accent shadow" />
+        </motion.div>
       </div>
-      <div className="mt-2 flex justify-between text-xs text-muted">
+      {ticks.length > 0 && (
+        <div className="relative h-7" aria-label="Jump to a point">
+          {ticks.map((t) => {
+            const key = `${t.side}-${t.i}`;
+            const on = active === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => onTick(t.side, t.i)}
+                aria-label={`${t.side === 'support' ? 'Supporting' : 'Concerning'} point ${t.i + 1}`}
+                className="group absolute top-0 grid h-7 w-6 -translate-x-1/2 place-items-start justify-center"
+                style={{ left: `${t.at}%` }}
+              >
+                <span
+                  className={`mt-1 block h-2.5 w-0.5 rounded-full transition duration-150 group-hover:scale-y-150 group-hover:bg-ink ${
+                    on ? 'scale-y-150 bg-accent' : t.side === 'support' ? 'bg-up/70' : 'bg-down/70'
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
+      <div className="flex justify-between text-xs text-muted">
         <span>More concerns</span>
         <span>More support</span>
       </div>
@@ -92,44 +146,139 @@ function BalanceScale({ support, concern }: { support: number; concern: number }
   );
 }
 
-function PointList({ points, kind }: { points: EvidencePoint[]; kind: 'support' | 'concern' }) {
+type SourceInfo = { when?: string; outlet?: string };
+
+// A source chip. Hover or focus shows what the source is and the point it backs up.
+function SourceChip({ src, point, info }: { src: PointSource; point: string; info?: SourceInfo }) {
+  const kind = src.kind || sourceKind(undefined, src.name);
+  const Icon = KIND_ICON[kind];
+  const ref = useRef<HTMLSpanElement>(null);
+  const [alignRight, setAlignRight] = useState(false);
+  const measure = () => {
+    const r = ref.current?.getBoundingClientRect();
+    const box = ref.current?.closest('[data-board-scroll]')?.getBoundingClientRect();
+    if (r && box) setAlignRight(r.left + 272 > box.right - 8);
+  };
+  return (
+    <span ref={ref} className="group/chip relative inline-flex max-w-full" onMouseEnter={measure} onFocus={measure}>
+      <a
+        href={src.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-[24px] max-w-full items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent transition active:scale-[0.97] hover:bg-accent/15"
+      >
+        <Icon className="h-3 w-3 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+        <span className="truncate">{src.name}</span>
+        <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
+      </a>
+      <span
+        role="tooltip"
+        className={`pointer-events-none absolute bottom-full z-30 mb-2 hidden w-64 rounded-card border border-line bg-surface p-3 text-left shadow-lift sm:group-hover/chip:block sm:group-focus-within/chip:block ${
+          alignRight ? 'right-0' : 'left-0'
+        }`}
+      >
+        <span className="block text-[13px] font-semibold leading-snug text-ink">{src.shortTitle || src.title || src.name}</span>
+        <span className="mt-1 flex flex-wrap gap-x-1.5 text-[11px] text-muted">
+          <span className="font-semibold text-ink/75">{KIND_LABEL[kind]}</span>
+          <span>{info?.outlet || src.name}</span>
+          {info?.when ? <span>· {relDay(info.when)}</span> : null}
+        </span>
+        <span className="mt-2 block border-l-2 border-accent/40 pl-2 text-[12px] leading-snug text-ink/80 line-clamp-2">{point}</span>
+      </span>
+    </span>
+  );
+}
+
+function PointList({
+  points,
+  kind,
+  ticker,
+  active,
+  setActive,
+  sourceInfo,
+}: {
+  points: EvidencePoint[];
+  kind: Side;
+  ticker: string;
+  active: string | null;
+  setActive: (k: string | null) => void;
+  sourceInfo: Record<string, SourceInfo>;
+}) {
+  const reduce = useReducedMotion();
   if (!points.length) return <p className="text-sm text-muted">None stated in this analysis.</p>;
   return (
     <ul className="space-y-2">
-      {points.map((p, i) => (
-        <li key={i} className="flex items-start gap-2.5 rounded-control border border-line px-3 py-2.5 text-sm leading-relaxed text-ink/90">
-          {kind === 'support' ? (
-            <TrendingUp className="mt-0.5 h-4 w-4 shrink-0 text-up" strokeWidth={2} aria-label="Supporting" />
-          ) : (
-            <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
-          )}
-          <div className="min-w-0">
-            <p>{p.text}</p>
-            {p.sources.length > 0 && (
-              <p className="mt-1.5 flex flex-wrap gap-1.5">
-                {p.sources.map((src) => {
-                  const Icon = KIND_ICON[src.kind || sourceKind(undefined, src.name)];
-                  return (
-                    <a
-                      key={src.url}
-                      href={src.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={src.shortTitle || src.title || src.name}
-                      className="inline-flex min-h-[24px] max-w-full items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent hover:bg-accent/15"
-                    >
-                      <Icon className="h-3 w-3 shrink-0" strokeWidth={1.75} aria-hidden="true" />
-                      <span className="truncate">{src.name}</span>
-                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
-                    </a>
-                  );
-                })}
-              </p>
+      {points.map((p, i) => {
+        const key = `${kind}-${i}`;
+        return (
+          <motion.li
+            key={i}
+            id={itemId(ticker, kind, i)}
+            tabIndex={0}
+            onMouseEnter={() => setActive(key)}
+            onMouseLeave={() => setActive(null)}
+            onFocus={() => setActive(key)}
+            onBlur={() => setActive(null)}
+            // Supporting points arrive from the right, concerns from the left, after the meter settles.
+            initial={reduce ? false : { opacity: 0, x: kind === 'support' ? 16 : -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={reduce ? { duration: 0 } : { delay: 0.35 + i * 0.05, duration: 0.24, ease: EASE }}
+            className={`flex scroll-mt-24 items-start gap-2.5 rounded-control border px-3 py-2.5 text-sm leading-relaxed text-ink/90 outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-accent ${
+              active === key ? 'border-accent/50 bg-accent/[0.04]' : 'border-line'
+            }`}
+          >
+            {kind === 'support' ? (
+              <TrendingUp className="mt-0.5 h-4 w-4 shrink-0 text-up" strokeWidth={2} aria-label="Supporting" />
+            ) : (
+              <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
             )}
-          </div>
-        </li>
-      ))}
+            <div className="min-w-0">
+              <p>{p.text}</p>
+              {p.sources.length > 0 && (
+                <p className="mt-1.5 flex flex-wrap gap-1.5">
+                  {p.sources.map((src) => (
+                    <SourceChip key={src.url} src={src} point={p.text} info={sourceInfo[src.url]} />
+                  ))}
+                </p>
+              )}
+            </div>
+          </motion.li>
+        );
+      })}
     </ul>
+  );
+}
+
+// A factor as a small instrument: the word first, a 5-step meter second, and why on tap.
+function FactorTile({ label, word, steps, note }: { label: string; word: string; steps?: number; note?: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-control border border-line bg-surface/60 p-3">
+      <dt className="text-xs text-muted">{label}</dt>
+      <dd className="mt-1">
+        <span className="block text-sm font-semibold capitalize text-ink">{word}</span>
+        {typeof steps === 'number' && (
+          <span className="mt-2 flex gap-1" role="img" aria-label={`${label}: ${steps} of 5`}>
+            {Array.from({ length: 5 }, (_, i) => (
+              <span key={i} className={`h-1.5 flex-1 rounded-full ${i < steps ? 'bg-accent' : 'bg-ink/15'}`} />
+            ))}
+          </span>
+        )}
+        {note && (
+          <>
+            <button
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              className="mt-2 inline-flex min-h-[28px] items-center text-xs font-semibold text-accent hover:underline"
+            >
+              {open ? 'Hide why' : 'Why?'}
+            </button>
+            {open && <span className="mt-0.5 block text-xs leading-relaxed text-ink/80">{note}</span>}
+          </>
+        )}
+      </dd>
+    </div>
   );
 }
 
@@ -159,49 +308,54 @@ const NEWS_TONE: Record<string, { word: string; cls: string; Icon: typeof Trendi
   NEUTRAL: { word: 'Neutral', cls: 'text-muted', Icon: Minus },
 };
 
-// The Evidence Board: what supports a stock, what concerns it, and where that came from.
-// A right-side drawer on larger screens, a full-screen sheet on phones.
 const KIND_ICON: Record<SourceKind, typeof FileText> = { filing: FileText, news: Newspaper, data: BarChart3 };
 const KIND_LABEL: Record<SourceKind, string> = { filing: 'Filing', news: 'News', data: 'Data' };
 
+type StockEvent = { label: string; short_title: string; event_date?: string; source_url?: string; source_name?: string };
+
+const fmtDay = (d: string) => {
+  const t = new Date(d);
+  return Number.isNaN(t.getTime()) ? d : t.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' });
+};
+
+// The Evidence Board: what supports a stock, what concerns it, and where that came from.
+// A draggable bottom sheet on phones (55% and 95%), a right-side panel on larger screens.
 export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose: () => void }) {
-  const [result, setResult] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [limitHit, setLimitHit] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
-  const [side, setSide] = useState<'support' | 'concern'>('support');
-  const [asOf, setAsOf] = useState<Date | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const phone = usePhone();
   const ticker = cleanTicker(stock.display_ticker || stock.ticker);
-
-  useEffect(() => {
-    let alive = true;
-    setLoading(true);
-    analyzeStock(stock.display_ticker || stock.ticker)
-      .then((res) => {
-        if (!alive) return;
-        setResult(res.data);
-        setAsOf(new Date());
-      })
-      .catch((e: any) => {
-        if (!alive) return;
-        const detail = e?.response?.data?.detail;
-        if (detail === 'DAILY_LIMIT_REACHED') {
-          setLimitHit(true);
-          setError('You have used your free analyses for today. They reset at midnight.');
-        } else {
-          setError(typeof detail === 'string' ? detail : 'The analysis could not be completed. Please try again.');
-        }
-      })
-      .finally(() => alive && setLoading(false));
-    return () => {
-      alive = false;
-    };
-  }, [stock]);
-
-  // Esc closes; focus stays inside; page behind does not scroll.
   const close = useCallback(() => onClose(), [onClose]);
+  const [snap, setSnap] = useState<number | string | null>(0.55);
+
+  if (phone) {
+    return (
+      <Drawer.Root
+        open
+        onOpenChange={(o) => !o && close()}
+        snapPoints={[0.55, 0.95]}
+        activeSnapPoint={snap}
+        setActiveSnapPoint={setSnap}
+        fadeFromIndex={0}
+      >
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 z-[80] bg-[#0B0F14]/55" />
+          <Drawer.Content
+            aria-describedby={undefined}
+            className="fixed inset-x-0 bottom-0 z-[81] flex h-[95dvh] flex-col rounded-t-card border border-b-0 border-line bg-canvas outline-none"
+          >
+            <Drawer.Title className="sr-only">Evidence board for {ticker}</Drawer.Title>
+            <span className="mx-auto mt-2.5 block h-1 w-10 shrink-0 rounded-full bg-ink/20" aria-hidden="true" />
+            <BoardBody stock={stock} ticker={ticker} close={close} scrollable={snap === 0.95} onWantMore={() => setSnap(0.95)} />
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
+  return <DesktopShell ticker={ticker} close={close}>{<BoardBody stock={stock} ticker={ticker} close={close} scrollable />}</DesktopShell>;
+}
+
+function DesktopShell({ ticker, close, children }: { ticker: string; close: () => void; children: ReactNode }) {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  // Esc closes; focus stays inside; page behind does not scroll.
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -231,11 +385,81 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
     };
   }, [close]);
 
+  return (
+    <div className="fixed inset-0 z-[80]">
+      <div className="absolute inset-0 bg-[#0B0F14]/55 backdrop-blur-[2px]" onClick={close} aria-hidden="true" />
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Evidence board for ${ticker}`}
+        className="board-slide absolute inset-y-0 right-0 flex w-[560px] max-w-full flex-col border-l border-line bg-canvas shadow-lift outline-none"
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function BoardBody({
+  stock,
+  ticker,
+  close,
+  scrollable,
+  onWantMore,
+}: {
+  stock: any;
+  ticker: string;
+  close: () => void;
+  scrollable: boolean;
+  onWantMore?: () => void;
+}) {
+  const reduce = useReducedMotion();
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [limitHit, setLimitHit] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const [side, setSide] = useState<Side>('support');
+  const [asOf, setAsOf] = useState<Date | null>(null);
+  const [active, setActive] = useState<string | null>(null);
+  const [events, setEvents] = useState<StockEvent[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    analyzeStock(stock.display_ticker || stock.ticker)
+      .then((res) => {
+        if (!alive) return;
+        setResult(res.data);
+        setAsOf(new Date());
+      })
+      .catch((e: any) => {
+        if (!alive) return;
+        const detail = e?.response?.data?.detail;
+        if (detail === 'DAILY_LIMIT_REACHED') {
+          setLimitHit(true);
+          setError('You have used your free analyses for today. They reset at midnight.');
+        } else {
+          setError(typeof detail === 'string' ? detail : 'The analysis could not be completed. Please try again.');
+        }
+      })
+      .finally(() => alive && setLoading(false));
+    getStockEvents(ticker)
+      .then((res) => alive && setEvents(res.data?.upcoming || []))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [stock, ticker]);
+
   const sig = result?.signal || {};
   const analysis = sig.analysis || {};
   const ratings = sig.ratings || {};
+  const notes: Record<string, string> = analysis.factor_notes || {};
   const support = evidencePoints(analysis, 'bull');
-  const flags: any[] = result?.news?.red_flags || [];
+  const flags: any[] = useMemo(() => result?.news?.red_flags || [], [result]);
   const concern: EvidencePoint[] = [
     ...evidencePoints(analysis, 'bear'),
     ...flags.map((f) => ({
@@ -246,10 +470,7 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
           : [],
     })),
   ];
-  const watch: string[] = [
-    ...(Array.isArray(analysis.invalidation_triggers) ? analysis.invalidation_triggers.map(String) : []),
-    ...(analysis.what_to_watch ? [String(analysis.what_to_watch)] : []),
-  ];
+  const watchNote = analysis.what_to_watch ? String(analysis.what_to_watch) : '';
   const sources: { title: string; original: string; link: string; source: string; when: string; kind: SourceKind }[] = [
     ...flags.map((f) => ({
       title: f.short_title || f.category || shortHeadline(f.title || ''),
@@ -268,6 +489,11 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
       kind: sourceKind(n.kind, n.source || ''),
     })),
   ];
+  // Dates and outlets for source previews, matched by link.
+  const sourceInfo: Record<string, SourceInfo> = {};
+  for (const n of [...((result?.news?.news as any[]) || []), ...flags]) {
+    if (n?.link) sourceInfo[n.link] = { when: n.published || n.date, outlet: n.source };
+  }
   // The one-liner never reads as a call; if it would, show the first point on each side instead.
   const oneLiner = analysis.short_summary && !hasVerdictWords(analysis.short_summary) ? String(analysis.short_summary) : '';
   const oneLinerFallback = [support[0]?.text, concern[0]?.text].filter(Boolean) as string[];
@@ -275,239 +501,253 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
   const price = result?.stock?.current_price ?? stock.current_price;
   const pct = result?.stock?.price_change_pct ?? stock.price_change_pct;
 
+  const jumpTo = (s: Side, i: number) => {
+    setSide(s);
+    onWantMore?.();
+    setActive(`${s}-${i}`);
+    window.setTimeout(() => {
+      const el = document.getElementById(itemId(ticker, s, i));
+      el?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      el?.focus({ preventScroll: true });
+    }, 60);
+  };
+  const listProps = { ticker, active, setActive, sourceInfo };
+  // On phones the sheet opens fully first, so the upgrade sheet inside it is fully on screen.
+  const openUpgrade = () => {
+    onWantMore?.();
+    setShowUpgrade(true);
+  };
+
+  const technical = factor('technical', ratings.technical_score);
+  const valuation = factor('valuation', ratings.value_score);
+  const momentum = factor('momentum', ratings.momentum_score);
+
   return (
-    <div className="fixed inset-0 z-[80]">
-      <div className="absolute inset-0 bg-[#0B0F14]/55 backdrop-blur-[2px]" onClick={close} aria-hidden="true" />
-      <div
-        ref={panelRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Evidence board for ${ticker}`}
-        className="board-panel absolute inset-0 flex flex-col bg-canvas outline-none sm:inset-y-0 sm:left-auto sm:right-0 sm:w-[560px] sm:border-l sm:border-line sm:shadow-lift"
-      >
-        {/* 1. Header */}
-        <header className="flex items-start justify-between gap-3 border-b border-line px-5 pb-4 pt-[max(1rem,env(safe-area-inset-top))]">
-          <div className="min-w-0">
-            <span className="mx-auto mb-3 block h-1 w-10 rounded-full bg-ink/15 sm:hidden" aria-hidden="true" />
-            <p className="num text-lg font-semibold text-ink">{ticker}</p>
-            <p className="truncate text-sm text-muted">{stock.company_name || result?.stock?.company_name}</p>
-            {typeof price === 'number' && (
-              <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <Price value={price} className="text-xl font-semibold text-ink" />
-                {typeof pct === 'number' && <Change value={pct} className="text-sm font-medium" />}
-                {asOf && <span className="text-xs text-muted">researched {relativeTime(asOf)}</span>}
-              </p>
-            )}
-          </div>
-          <div className="flex shrink-0 items-center gap-1">
-            <WatchlistButton ticker={ticker} companyName={stock.company_name || ''} />
-            <button type="button" onClick={close} aria-label="Close" className="flex h-11 w-11 items-center justify-center rounded-control text-muted hover:bg-ink/[0.06] hover:text-ink">
-              <X className="h-5 w-5" strokeWidth={1.75} />
-            </button>
-          </div>
-        </header>
-
-        <div className="flex-1 overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)]">
-          {loading && <BoardSkeleton ticker={ticker} />}
-
-          {!loading && error && (
-            <div className="px-5 py-8">
-              <p className="flex items-start gap-2 text-sm text-ink">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-caution" strokeWidth={2} />
-                {error}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {limitHit ? (
-                  <Button onClick={() => setShowUpgrade(true)}>Go Pro for unlimited analyses</Button>
-                ) : (
-                  <Button onClick={() => window.location.reload()}>Try again</Button>
-                )}
-                <Link to={`/stock/${ticker}`} className="inline-flex h-11 items-center px-3 text-sm font-semibold text-accent" onClick={close}>
-                  Read the free stock page
-                </Link>
-              </div>
-            </div>
+    <>
+      {/* 1. Header */}
+      <header className="flex items-start justify-between gap-3 border-b border-line px-5 pb-4 pt-3 sm:pt-[max(1rem,env(safe-area-inset-top))]">
+        <div className="min-w-0">
+          <p className="num text-lg font-semibold text-ink">{ticker}</p>
+          <p className="truncate text-sm text-muted">{stock.company_name || result?.stock?.company_name}</p>
+          {typeof price === 'number' && (
+            <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <Price value={price} className="text-xl font-semibold text-ink" />
+              {typeof pct === 'number' && <Change value={pct} className="text-sm font-medium" />}
+              {asOf && <span className="text-xs text-muted">researched {relativeTime(asOf)}</span>}
+            </p>
           )}
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          <WatchlistButton ticker={ticker} companyName={stock.company_name || ''} />
+          <button type="button" onClick={close} aria-label="Close" className="flex h-11 w-11 items-center justify-center rounded-control text-muted transition active:scale-[0.94] hover:bg-ink/[0.06] hover:text-ink">
+            <X className="h-5 w-5" strokeWidth={1.75} />
+          </button>
+        </div>
+      </header>
 
-          {!loading && result && (
-            <>
-              {/* Free plan: how many analyses are left today, with the way to unlimited */}
-              {result?.plan && !result.plan.is_pro && typeof result.plan.free_left_today === 'number' && (
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-accent/[0.05] px-5 py-2.5 text-sm">
-                  <span className="text-ink">
-                    {result.plan.free_left_today > 0
-                      ? `${result.plan.free_left_today} free ${result.plan.free_left_today === 1 ? 'analysis' : 'analyses'} left today`
-                      : 'That was your last free analysis today'}
-                  </span>
-                  <button type="button" onClick={() => setShowUpgrade(true)} className="font-semibold text-accent hover:underline">
-                    Go unlimited
-                  </button>
-                </div>
+      <div data-board-scroll className={`flex-1 overscroll-contain pb-[env(safe-area-inset-bottom)] ${scrollable ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+        {loading && <BoardSkeleton ticker={ticker} />}
+
+        {!loading && error && (
+          <div className="px-5 py-8">
+            <p className="flex items-start gap-2 text-sm text-ink">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-caution" strokeWidth={2} />
+              {error}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {limitHit ? (
+                <Button onClick={openUpgrade}>Go Pro for unlimited analyses</Button>
+              ) : (
+                <Button onClick={() => window.location.reload()}>Try again</Button>
               )}
+              <Link to={`/stock/${ticker}`} className="inline-flex h-11 items-center px-3 text-sm font-semibold text-accent" onClick={close}>
+                Read the free stock page
+              </Link>
+            </div>
+          </div>
+        )}
 
-              {/* 2. In one line */}
-              <section className="px-5 py-5">
-                <p className="text-xs font-medium text-muted">In one line</p>
-                {oneLiner ? (
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{oneLiner}</p>
-                ) : oneLinerFallback.length ? (
-                  <ul className="mt-1.5 space-y-1.5 text-[15px] leading-relaxed text-ink">
-                    {oneLinerFallback.map((t, i) => (
-                      <li key={i} className="flex gap-2">
-                        {i === 0 && support[0] ? (
-                          <TrendingUp className="mt-1 h-4 w-4 shrink-0 text-up" strokeWidth={2} aria-label="Supporting" />
-                        ) : (
-                          <TrendingDown className="mt-1 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
-                        )}
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted">No summary was returned for this analysis.</p>
-                )}
-              </section>
+        {!loading && result && (
+          <>
+            {/* Free plan: how many analyses are left today, with the way to unlimited */}
+            {result?.plan && !result.plan.is_pro && typeof result.plan.free_left_today === 'number' && (
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-accent/[0.05] px-5 py-2.5 text-sm">
+                <span className="text-ink">
+                  {result.plan.free_left_today > 0
+                    ? `${result.plan.free_left_today} free ${result.plan.free_left_today === 1 ? 'analysis' : 'analyses'} left today`
+                    : 'That was your last free analysis today'}
+                </span>
+                <button type="button" onClick={openUpgrade} className="font-semibold text-accent hover:underline">
+                  Go unlimited
+                </button>
+              </div>
+            )}
 
-              {/* 3. Evidence balance: how the sourced points weigh up. No verdict, no targets. */}
-              <section className="border-t border-line px-5 py-5">
-                <BalanceScale support={support.length} concern={concern.length} />
-              </section>
-
-              {/* 4. Supporting and concerning: stacked on larger screens, tabs on phones */}
-              <section className="border-t border-line px-5 py-5">
-                <div className="sm:hidden">
-                  <Segmented<'support' | 'concern'>
-                    label="Evidence"
-                    value={side}
-                    onChange={setSide}
-                    options={[
-                      { value: 'support', label: `Supporting (${support.length})` },
-                      { value: 'concern', label: `Concerning (${concern.length})` },
-                    ]}
-                  />
-                  <div className="mt-4">
-                    <PointList points={side === 'support' ? support : concern} kind={side} />
-                  </div>
-                </div>
-                <div className="hidden space-y-6 sm:block">
-                  <div>
-                    <h3 className="text-sm font-semibold text-ink">Supporting ({support.length})</h3>
-                    <div className="mt-3">
-                      <PointList points={support} kind="support" />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-ink">Concerning ({concern.length})</h3>
-                    <div className="mt-3">
-                      <PointList points={concern} kind="concern" />
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 5. Factor checks */}
-              <Section title="Factor checks">
-                <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-                  {(
-                    [
-                      ['Technical', factor('technical', ratings.technical_score)],
-                      ['Valuation', factor('valuation', ratings.value_score)],
-                      ['Momentum', factor('momentum', ratings.momentum_score)],
-                    ] as const
-                  ).map(([label, f]) => (
-                    <div key={label} className="flex items-center justify-between gap-3">
-                      <dt className="text-sm text-ink/85">{label}</dt>
-                      <dd className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-ink">{f.word}</span>
-                        <DotScale value={f.dots} label={`${label} ${f.word}`} />
-                      </dd>
-                    </div>
+            {/* 2. In one line */}
+            <section className="px-5 py-5">
+              <p className="text-xs font-medium text-muted">In one line</p>
+              {oneLiner ? (
+                <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{oneLiner}</p>
+              ) : oneLinerFallback.length ? (
+                <ul className="mt-1.5 space-y-1.5 text-[15px] leading-relaxed text-ink">
+                  {oneLinerFallback.map((t, i) => (
+                    <li key={i} className="flex gap-2">
+                      {i === 0 && support[0] ? (
+                        <TrendingUp className="mt-1 h-4 w-4 shrink-0 text-up" strokeWidth={2} aria-label="Supporting" />
+                      ) : (
+                        <TrendingDown className="mt-1 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
+                      )}
+                      <span>{t}</span>
+                    </li>
                   ))}
-                  <div className="flex items-center justify-between gap-3">
-                    <dt className="text-sm text-ink/85">News tone</dt>
-                    <dd className={`inline-flex items-center gap-1.5 text-sm font-medium ${tone.cls}`}>
-                      <tone.Icon className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-                      {tone.word}
-                    </dd>
+                </ul>
+              ) : (
+                <p className="mt-1.5 text-[15px] leading-relaxed text-muted">No summary was returned for this analysis.</p>
+              )}
+            </section>
+
+            {/* 3. Evidence balance: how the sourced points weigh up. No verdict, no targets. */}
+            <section className="border-t border-line px-5 py-5">
+              <BalanceMeter support={support.length} concern={concern.length} active={active} onTick={jumpTo} />
+            </section>
+
+            {/* 4. Supporting and concerning: stacked on larger screens, tabs on phones */}
+            <section className="border-t border-line px-5 py-5">
+              <div className="sm:hidden">
+                <Segmented<Side>
+                  label="Evidence"
+                  value={side}
+                  onChange={setSide}
+                  options={[
+                    { value: 'support', label: `Supporting (${support.length})` },
+                    { value: 'concern', label: `Concerning (${concern.length})` },
+                  ]}
+                />
+                <div className="mt-4">
+                  <PointList key={side} points={side === 'support' ? support : concern} kind={side} {...listProps} />
+                </div>
+              </div>
+              <div className="hidden space-y-6 sm:block">
+                <div>
+                  <h3 className="text-sm font-semibold text-ink">Supporting ({support.length})</h3>
+                  <div className="mt-3">
+                    <PointList points={support} kind="support" {...listProps} />
                   </div>
-                  {[
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-ink">Concerning ({concern.length})</h3>
+                  <div className="mt-3">
+                    <PointList points={concern} kind="concern" {...listProps} />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 5. Factor checks: small instruments, word first */}
+            <Section title="Factor checks">
+              <dl className="grid grid-cols-2 gap-2.5">
+                <FactorTile label="Technical" word={technical.word} steps={technical.dots} note={notes.technical} />
+                <FactorTile label="Valuation" word={valuation.word} steps={valuation.dots} note={notes.valuation} />
+                <FactorTile label="Momentum" word={momentum.word} steps={momentum.dots} note={notes.momentum} />
+                <div className="rounded-control border border-line bg-surface/60 p-3">
+                  <dt className="text-xs text-muted">News tone</dt>
+                  <dd className={`mt-1 inline-flex items-center gap-1.5 text-sm font-semibold ${tone.cls}`}>
+                    <tone.Icon className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+                    {tone.word}
+                  </dd>
+                </div>
+                {(
+                  [
                     ['Dividend potential', ratings.dividend_potential],
                     ['Growth potential', ratings.growth_potential],
                     ['Risk level', ratings.risk_level],
-                  ]
-                    .filter(([, v]) => v)
-                    .map(([label, v]) => (
-                      <div key={label} className="flex items-center justify-between gap-3">
-                        <dt className="text-sm text-ink/85">{label}</dt>
-                        <dd className="text-sm font-medium capitalize text-ink">{String(v).toLowerCase()}</dd>
-                      </div>
-                    ))}
-                </dl>
+                  ] as const
+                )
+                  .filter(([, v]) => v)
+                  .map(([label, v]) => (
+                    <FactorTile key={label} label={label} word={String(v).toLowerCase()} />
+                  ))}
+              </dl>
+            </Section>
+
+            {/* 6. Watch for: dated events first, then the ongoing thing to keep an eye on */}
+            {(events.length > 0 || watchNote) && (
+              <Section title="Watch for" icon={<Eye className="h-4 w-4 text-accent" strokeWidth={1.75} />} note="Dates and developments that could change this picture.">
+                <ol className="relative ml-1.5 border-l border-line">
+                  {events.map((ev, i) => (
+                    <li key={i} className="relative pb-4 pl-5 last:pb-1">
+                      <span className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-canvas bg-accent" aria-hidden="true" />
+                      <p className="num text-xs font-semibold text-accent">{ev.event_date ? fmtDay(ev.event_date) : 'Soon'}</p>
+                      <p className="mt-0.5 text-sm font-medium text-ink">{ev.label}</p>
+                      {ev.short_title && ev.short_title !== ev.label && <p className="text-xs leading-relaxed text-muted">{ev.short_title}</p>}
+                      {ev.source_url && (
+                        <a href={ev.source_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex min-h-[28px] items-center gap-1 text-xs font-semibold text-accent hover:underline">
+                          {ev.source_name || 'Source'} <ArrowUpRight className="h-3 w-3" />
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                  {watchNote && (
+                    <li className="relative pl-5">
+                      <span className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-canvas bg-caution" aria-hidden="true" />
+                      <p className="text-xs font-semibold text-caution">
+                        <CalendarDays className="mr-1 inline h-3 w-3 align-[-1px]" aria-hidden="true" />
+                        Ongoing
+                      </p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-ink/90">{watchNote}</p>
+                    </li>
+                  )}
+                </ol>
               </Section>
+            )}
 
-              {/* 6. Watch for */}
-              {watch.length > 0 && (
-                <Section title="Watch for" icon={<Eye className="h-4 w-4 text-accent" strokeWidth={1.75} />} note="What would change this picture.">
-                  <ul className="space-y-2">
-                    {watch.map((w, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-ink/90">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-caution" aria-hidden="true" />
-                        {w}
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-              )}
-
-              {/* 7. Sources: the filings and news this analysis read */}
-              {sources.length > 0 && (
-                <Section title="Sources this analysis read" note="Open any item to check it yourself.">
-                  <ul className="space-y-2">
-                    {sources.map((src, i) => {
-                      const Icon = KIND_ICON[src.kind];
-                      const showOriginal = src.original && src.original.trim() !== src.title.trim();
-                      return (
-                        <li key={i} className="rounded-control border border-line px-3 py-2.5 transition hover:border-accent/40">
-                          <a href={src.link} target="_blank" rel="noreferrer" className="group flex items-start gap-3">
-                            <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${src.kind === 'filing' ? 'text-accent' : 'text-muted'}`} strokeWidth={1.75} aria-hidden="true" />
-                            <span className="min-w-0 flex-1">
-                              <span className="block text-sm font-medium text-ink/90 group-hover:text-ink">{src.title}</span>
-                              <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
-                                <span className="rounded-full bg-ink/[0.06] px-1.5 py-0.5 font-semibold text-ink/75">{KIND_LABEL[src.kind]}</span>
-                                <span>{src.source}</span>
-                                {src.when ? <span>· {relDay(src.when)}</span> : null}
-                              </span>
+            {/* 7. Sources: the filings and news this analysis read */}
+            {sources.length > 0 && (
+              <Section title="Sources this analysis read" note="Open any item to check it yourself.">
+                <ul className="space-y-2">
+                  {sources.map((src, i) => {
+                    const Icon = KIND_ICON[src.kind];
+                    const showOriginal = src.original && src.original.trim() !== src.title.trim();
+                    return (
+                      <li key={i} className="rounded-control border border-line px-3 py-2.5 transition hover:border-accent/40">
+                        <a href={src.link} target="_blank" rel="noreferrer" className="group flex items-start gap-3">
+                          <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${src.kind === 'filing' ? 'text-accent' : 'text-muted'}`} strokeWidth={1.75} aria-hidden="true" />
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm font-medium text-ink/90 group-hover:text-ink">{src.title}</span>
+                            <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+                              <span className="rounded-full bg-ink/[0.06] px-1.5 py-0.5 font-semibold text-ink/75">{KIND_LABEL[src.kind]}</span>
+                              <span>{src.source}</span>
+                              {src.when ? <span>· {relDay(src.when)}</span> : null}
                             </span>
-                            <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted/60 group-hover:text-accent" strokeWidth={1.75} aria-label="Opens in a new tab" />
-                          </a>
-                          {showOriginal && (
-                            <details className="mt-2 pl-7">
-                              <summary className="cursor-pointer text-xs font-semibold text-accent hover:underline">Show original</summary>
-                              <p className="mt-1.5 text-xs leading-relaxed text-muted">{src.original}</p>
-                            </details>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </Section>
-              )}
-
-              {/* 8. Share */}
-              <Section title="Share">
-                <ShareableSignal signal={sig} stock={result.stock || stock} support={support.map((p) => p.text)} concern={concern.map((p) => p.text)} />
+                          </span>
+                          <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted/60 group-hover:text-accent" strokeWidth={1.75} aria-label="Opens in a new tab" />
+                        </a>
+                        {showOriginal && (
+                          <details className="mt-2 pl-7">
+                            <summary className="cursor-pointer text-xs font-semibold text-accent hover:underline">Show original</summary>
+                            <p className="mt-1.5 text-xs leading-relaxed text-muted">{src.original}</p>
+                          </details>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
               </Section>
+            )}
 
-              <section className="border-t border-line px-5 py-5">
-                <p className="text-xs leading-relaxed text-muted">{sig.disclaimer || 'Research, not advice. Stock AI is not SEBI-registered and this is not a personal recommendation.'}</p>
-                <Link to={`/stock/${ticker}`} onClick={close} className="mt-3 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-accent">
-                  Open the full stock page <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </section>
-            </>
-          )}
-        </div>
+            {/* 8. Share */}
+            <Section title="Share">
+              <ShareableSignal signal={sig} stock={result.stock || stock} support={support.map((p) => p.text)} concern={concern.map((p) => p.text)} />
+            </Section>
+
+            <section className="border-t border-line px-5 py-5">
+              <p className="text-xs leading-relaxed text-muted">{sig.disclaimer || 'Research, not advice. Stock AI is not SEBI-registered and this is not a personal recommendation.'}</p>
+              <Link to={`/stock/${ticker}`} onClick={close} className="mt-3 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-accent">
+                Open the full stock page <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </section>
+          </>
+        )}
       </div>
 
       {showUpgrade && (
@@ -517,6 +757,6 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
           onSuccess={() => window.location.reload()}
         />
       )}
-    </div>
+    </>
   );
 }
