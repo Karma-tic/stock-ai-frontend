@@ -59,8 +59,12 @@ export default function HomeHeader({ firstName, newCount }: { firstName?: string
   const parts: string[] = [];
   if (clock.phase === 'closed') {
     parts.push(nifty ? `Market closed. Nifty ended ${nifty.pct_change >= 0 ? '+' : ''}${nifty.pct_change.toFixed(2)}%.` : 'Market closed.');
-  } else {
-    parts.push(`Market ${clock.untilWhat} in ${durationWords(clock.until)}.`);
+  } else if (nifty && clock.phase === 'open') {
+    // The chip already shows the countdown, so the sentence says how the day is going.
+    const pct = Math.abs(nifty.pct_change).toFixed(2);
+    parts.push(nifty.pct_change === 0 ? 'Nifty is flat so far today.' : `Nifty is ${nifty.pct_change > 0 ? 'up' : 'down'} ${pct}% so far today.`);
+  } else if (clock.phase === 'pre-open') {
+    parts.push('Pre-open bids are coming in.');
   }
   if (typeof newCount === 'number' && newCount > 0) {
     parts.push(`${newCount} of your stocks ${newCount === 1 ? 'has' : 'have'} something new.`);
