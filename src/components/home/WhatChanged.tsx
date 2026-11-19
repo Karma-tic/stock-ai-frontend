@@ -4,7 +4,7 @@
 // to snooze until tomorrow. With no watchlist, "Pick 3" fills it in seconds.
 // Read and snooze state live in this browser only (no account data changes).
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion, PanInfo, useReducedMotion } from 'motion/react';
+import { AnimatePresence, m, PanInfo, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, Check, Clock, FileText, Newspaper, Plus } from 'lucide-react';
 import { addToWatchlist, getEventRadar } from '../../lib/api';
 import { evidenceBalance } from '../../lib/evidence';
@@ -118,7 +118,7 @@ function ChangeCard({
   };
 
   return (
-    <motion.li
+    <m.li
       layout={!reduce}
       initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0, x: 0 }}
@@ -126,7 +126,7 @@ function ChangeCard({
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       className="list-none"
     >
-      <motion.div
+      <m.div
         data-card={card.ticker}
         drag={reduce ? false : 'x'}
         dragConstraints={{ left: 0, right: 0 }}
@@ -173,8 +173,8 @@ function ChangeCard({
             </button>
           </span>
         </div>
-      </motion.div>
-    </motion.li>
+      </m.div>
+    </m.li>
   );
 }
 

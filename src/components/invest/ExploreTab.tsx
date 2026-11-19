@@ -113,7 +113,9 @@ export default function ExploreTab(p: Props) {
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-            <input type="search" id="invest-search" value={f.q} onChange={e => setFilters({ ...f, q: e.target.value })} placeholder="Search: tax saving, gold, monthly income…" aria-label="Search options"
+            <input type="search"
+          inputMode="search"
+          enterKeyHint="search" id="invest-search" value={f.q} onChange={e => setFilters({ ...f, q: e.target.value })} placeholder="Search: tax saving, gold, monthly income…" aria-label="Search options"
               className="h-10 w-full rounded-control border border-line bg-surface pl-9 pr-3 text-sm text-ink outline-none placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25" />
           </div>
           <select id="invest-sort" aria-label="Sort by" value={f.sort} onChange={e => setFilters({ ...f, sort: e.target.value as Sort })} className="h-10 rounded-control border border-line bg-surface px-3 text-sm text-ink">

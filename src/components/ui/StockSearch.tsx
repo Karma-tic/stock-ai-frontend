@@ -137,6 +137,7 @@ export default function StockSearch({
           ref={inputRef}
           id={`${id}-input`}
           type="search"
+          enterKeyHint="search"
           inputMode="search"
           autoComplete="off"
           spellCheck={false}

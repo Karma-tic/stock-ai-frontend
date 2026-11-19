@@ -76,7 +76,7 @@ export default function GrowthTab({ options, series, setSeries, defaultRate }: P
                   onChange={e => { const o = byId(e.target.value)!; const next = [...series]; next[k] = { id: o.id, rate: defaultRate(o) }; setSeries(next); }}>
                   {pickable.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
                 </select>
-                <input id={`invest-rate-${k}`} aria-label={`Return % for option ${k + 1}`} type="number" step={0.1} min={-20} max={40} value={s.rate}
+                <input id={`invest-rate-${k}`} aria-label={`Return % for option ${k + 1}`} type="number" inputMode="decimal" step={0.1} min={-20} max={40} value={s.rate}
                   className="num h-10 rounded-control border border-line bg-surface px-2 text-sm text-ink"
                   onChange={e => { const next = [...series]; next[k] = { ...s, rate: parseFloat(e.target.value) || 0 }; setSeries(next); }} />
               </div>

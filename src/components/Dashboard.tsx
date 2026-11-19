@@ -389,6 +389,8 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
                     <input
                       id="dash-search"
                       type="search"
+          inputMode="search"
+          enterKeyHint="search"
                       autoComplete="off"
                       value={search}
                       onChange={(e) => handleSearch(e.target.value)}

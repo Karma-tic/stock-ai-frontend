@@ -168,6 +168,8 @@ export default function UpcomingIpos({ compact = false }: { compact?: boolean })
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search IPOs"
+            inputMode="search"
+            enterKeyHint="search"
             className="h-10 w-full rounded-control border border-line bg-canvas pl-9 pr-3 text-sm text-ink outline-none placeholder:text-muted/70 focus:border-accent focus:ring-2 focus:ring-accent/25"
           />
         </label>
