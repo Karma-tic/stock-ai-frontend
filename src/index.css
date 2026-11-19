@@ -131,7 +131,11 @@
 .board-panel { animation: board-in-up 260ms var(--ease-ui); }
 @media (min-width: 640px) { .board-panel { animation-name: board-in-right; } }
 .board-thread { animation: board-thread 1.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+/* Upgrade success: the check settles in once */
+@keyframes upgrade-done { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.upgrade-done { animation: upgrade-done 320ms var(--ease-ui); }
 @media (prefers-reduced-motion: reduce) {
+  .upgrade-done { animation: none; }
   .board-panel { animation: none; }
   .board-thread { animation: none; width: 100%; opacity: .5; }
 }

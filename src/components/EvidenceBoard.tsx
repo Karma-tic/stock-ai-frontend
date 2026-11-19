@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, ArrowUpRight, Eye, ExternalLink, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
+import { AlertTriangle, ArrowUpRight, BarChart3, Eye, ExternalLink, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist } from '../lib/api';
-import { EvidencePoint, cleanTicker, evidenceBalance, evidencePoints, factor, relDay } from '../lib/evidence';
+import { EvidencePoint, SourceKind, cleanTicker, evidenceBalance, evidencePoints, factor, relDay, sourceKind } from '../lib/evidence';
+import { hasVerdictWords, shortHeadline } from '../lib/researchLanguage';
 import UpgradeModal from './UpgradeModal';
 import ShareableSignal from './ShareableSignal';
 import Price, { Change } from './ui/Price';
@@ -99,15 +100,14 @@ function PointList({ points, kind }: { points: EvidencePoint[]; kind: 'support' 
             {p.sources.length > 0 && (
               <p className="mt-1.5 flex flex-wrap gap-1.5">
                 {p.sources.map((src) => {
-                  const filing = /nse|bse|exchange/i.test(src.name);
-                  const Icon = filing ? FileText : Newspaper;
+                  const Icon = KIND_ICON[src.kind || sourceKind(undefined, src.name)];
                   return (
                     <a
                       key={src.url}
                       href={src.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      title={src.title || src.name}
+                      title={src.shortTitle || src.title || src.name}
                       className="inline-flex min-h-[24px] max-w-full items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent hover:bg-accent/15"
                     >
                       <Icon className="h-3 w-3 shrink-0" strokeWidth={1.75} aria-hidden="true" />
@@ -153,6 +153,9 @@ const NEWS_TONE: Record<string, { word: string; cls: string; Icon: typeof Trendi
 
 // The Evidence Board: what supports a stock, what concerns it, and where that came from.
 // A right-side drawer on larger screens, a full-screen sheet on phones.
+const KIND_ICON: Record<SourceKind, typeof FileText> = { filing: FileText, news: Newspaper, data: BarChart3 };
+const KIND_LABEL: Record<SourceKind, string> = { filing: 'Filing', news: 'News', data: 'Data' };
+
 export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose: () => void }) {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -228,24 +231,38 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
   const concern: EvidencePoint[] = [
     ...evidencePoints(analysis, 'bear'),
     ...flags.map((f) => ({
-      text: `Official disclosure: ${f.title}`,
-      sources: typeof f.link === 'string' && /^https?:/i.test(f.link) ? [{ name: f.source || 'NSE India', url: f.link, title: f.title }] : [],
+      text: `Official disclosure: ${f.short_title || f.category || shortHeadline(f.title || '')}`,
+      sources:
+        typeof f.link === 'string' && /^https?:/i.test(f.link)
+          ? [{ name: f.source || 'NSE India', url: f.link, title: f.title, shortTitle: f.short_title, kind: 'filing' as SourceKind }]
+          : [],
     })),
   ];
   const watch: string[] = [
     ...(Array.isArray(analysis.invalidation_triggers) ? analysis.invalidation_triggers.map(String) : []),
     ...(analysis.what_to_watch ? [String(analysis.what_to_watch)] : []),
   ];
-  const sources: { title: string; link: string; source: string; when: string; filing: boolean }[] = [
-    ...flags.map((f) => ({ title: f.title, link: f.link, source: f.source || 'NSE India', when: f.date || '', filing: true })),
+  const sources: { title: string; original: string; link: string; source: string; when: string; kind: SourceKind }[] = [
+    ...flags.map((f) => ({
+      title: f.short_title || f.category || shortHeadline(f.title || ''),
+      original: f.title || '',
+      link: f.link,
+      source: f.source || 'NSE India',
+      when: f.date || '',
+      kind: 'filing' as SourceKind,
+    })),
     ...((result?.news?.news as any[]) || []).slice(0, 6).map((n) => ({
-      title: n.title,
+      title: n.short_title || shortHeadline(n.title || ''),
+      original: n.title || '',
       link: n.link,
       source: n.source || 'News',
       when: n.published || '',
-      filing: /nse|bse/i.test(n.source || ''),
+      kind: sourceKind(n.kind, n.source || ''),
     })),
   ];
+  // The one-liner never reads as a call; if it would, show the first point on each side instead.
+  const oneLiner = analysis.short_summary && !hasVerdictWords(analysis.short_summary) ? String(analysis.short_summary) : '';
+  const oneLinerFallback = [support[0]?.text, concern[0]?.text].filter(Boolean) as string[];
   const tone = NEWS_TONE[ratings.news_sentiment] || NEWS_TONE.NEUTRAL;
   const price = result?.stock?.current_price ?? stock.current_price;
   const pct = result?.stock?.price_change_pct ?? stock.price_change_pct;
@@ -324,7 +341,24 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
               {/* 2. In one line */}
               <section className="px-5 py-5">
                 <p className="text-xs font-medium text-muted">In one line</p>
-                <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{analysis.short_summary || 'No summary was returned for this analysis.'}</p>
+                {oneLiner ? (
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{oneLiner}</p>
+                ) : oneLinerFallback.length ? (
+                  <ul className="mt-1.5 space-y-1.5 text-[15px] leading-relaxed text-ink">
+                    {oneLinerFallback.map((t, i) => (
+                      <li key={i} className="flex gap-2">
+                        {i === 0 && support[0] ? (
+                          <TrendingUp className="mt-1 h-4 w-4 shrink-0 text-up" strokeWidth={2} aria-label="Supporting" />
+                        ) : (
+                          <TrendingDown className="mt-1 h-4 w-4 shrink-0 text-down" strokeWidth={2} aria-label="Concerning" />
+                        )}
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted">No summary was returned for this analysis.</p>
+                )}
               </section>
 
               {/* 3. Evidence balance: how the sourced points weigh up. No verdict, no targets. */}
@@ -422,30 +456,32 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
               {sources.length > 0 && (
                 <Section title="Sources this analysis read" note="Open any item to check it yourself.">
                   <ul className="space-y-2">
-                    {sources.map((s, i) => (
-                      <li key={i}>
-                        <a
-                          href={s.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="group flex items-start gap-3 rounded-control border border-line px-3 py-2.5 transition hover:border-accent/40"
-                        >
-                          {s.filing ? (
-                            <FileText className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={1.75} aria-hidden="true" />
-                          ) : (
-                            <Newspaper className="mt-0.5 h-4 w-4 shrink-0 text-muted" strokeWidth={1.75} aria-hidden="true" />
-                          )}
-                          <span className="min-w-0 flex-1">
-                            <span className="line-clamp-2 text-sm text-ink/90 group-hover:text-ink">{s.title}</span>
-                            <span className="mt-1 block text-xs text-muted">
-                              {s.filing ? 'Filing' : 'News'} · {s.source}
-                              {s.when ? ` · ${relDay(s.when)}` : ''}
+                    {sources.map((src, i) => {
+                      const Icon = KIND_ICON[src.kind];
+                      const showOriginal = src.original && src.original.trim() !== src.title.trim();
+                      return (
+                        <li key={i} className="rounded-control border border-line px-3 py-2.5 transition hover:border-accent/40">
+                          <a href={src.link} target="_blank" rel="noreferrer" className="group flex items-start gap-3">
+                            <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${src.kind === 'filing' ? 'text-accent' : 'text-muted'}`} strokeWidth={1.75} aria-hidden="true" />
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm font-medium text-ink/90 group-hover:text-ink">{src.title}</span>
+                              <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+                                <span className="rounded-full bg-ink/[0.06] px-1.5 py-0.5 font-semibold text-ink/75">{KIND_LABEL[src.kind]}</span>
+                                <span>{src.source}</span>
+                                {src.when ? <span>· {relDay(src.when)}</span> : null}
+                              </span>
                             </span>
-                          </span>
-                          <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted/60 group-hover:text-accent" strokeWidth={1.75} aria-hidden="true" />
-                        </a>
-                      </li>
-                    ))}
+                            <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-muted/60 group-hover:text-accent" strokeWidth={1.75} aria-label="Opens in a new tab" />
+                          </a>
+                          {showOriginal && (
+                            <details className="mt-2 pl-7">
+                              <summary className="cursor-pointer text-xs font-semibold text-accent hover:underline">Show original</summary>
+                              <p className="mt-1.5 text-xs leading-relaxed text-muted">{src.original}</p>
+                            </details>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </Section>
               )}
@@ -466,7 +502,13 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
         </div>
       </div>
 
-      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => window.location.reload()} />}
+      {showUpgrade && (
+        <UpgradeModal
+          context={limitHit ? `Keep researching ${ticker} today` : 'Unlimited Evidence Boards'}
+          onClose={() => setShowUpgrade(false)}
+          onSuccess={() => window.location.reload()}
+        />
+      )}
     </div>
   );
 }

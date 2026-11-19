@@ -25,7 +25,6 @@ module.exports = {
         sans: ['"Geist Variable"', 'Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         display: ['"Geist Variable"', 'Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"Geist Mono Variable"', '"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-        outfit: ['"Geist Variable"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         card: '12px',
