@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 
 // One segmented control in the accent colour. On narrow screens it scrolls sideways:
 // the edges fade where more tabs are hidden, and the selected tab is always scrolled into view.
@@ -16,6 +17,8 @@ export default function Segmented<T extends string>({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const pillId = useId();
+  const reduce = useReducedMotion();
   const [edges, setEdges] = useState({ left: false, right: false });
 
   const measure = useCallback(() => {
@@ -66,11 +69,20 @@ export default function Segmented<T extends string>({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(o.value)}
-            className={`min-h-[36px] shrink-0 whitespace-nowrap rounded-full px-3.5 text-sm font-medium transition duration-ui ease-ui ${
-              active ? 'bg-cobalt text-white' : 'text-muted hover:text-ink'
+            className={`relative min-h-[36px] shrink-0 whitespace-nowrap rounded-full px-3.5 text-sm font-medium transition-colors duration-ui ease-ui active:scale-[0.97] ${
+              active ? 'text-white' : 'text-muted hover:text-ink'
             }`}
           >
-            {o.label}
+            {active && (
+              // The selected pill slides between options (shared layout); no movement under reduced motion.
+              <motion.span
+                layoutId={`seg-pill-${pillId}`}
+                transition={reduce ? { duration: 0 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 rounded-full bg-cobalt"
+                aria-hidden="true"
+              />
+            )}
+            <span className="relative">{o.label}</span>
           </button>
         );
       })}

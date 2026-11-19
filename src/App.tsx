@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
+import { Toaster } from 'sonner';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { applyPendingBriefChoice } from './lib/emailOptIn';
@@ -365,6 +366,14 @@ export default function App() {
         user={user}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(prev => !prev)}
+      />
+      {/* Toasts sit above the phone tab bar and follow the app theme. */}
+      <Toaster
+        theme={isDarkMode ? 'dark' : 'light'}
+        position="bottom-center"
+        offset={{ bottom: 24 }}
+        mobileOffset={{ bottom: 'calc(76px + env(safe-area-inset-bottom))' }}
+        toastOptions={{ className: 'font-sans text-sm', duration: 3000 }}
       />
     </BrowserRouter>
   );

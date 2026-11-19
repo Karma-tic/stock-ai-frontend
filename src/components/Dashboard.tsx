@@ -1,8 +1,9 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Newspaper, Search, X } from 'lucide-react';
 
-import { getTopStocks, getWatchlist, searchStocks, getStock } from '../lib/api';
+import { getLatestResearched, getTopStocks, getWatchlist, searchStocks, getStock } from '../lib/api';
+import { supabase } from '../lib/supabase';
 import { usePlan } from '../lib/usePlan';
 import { cleanTicker } from '../lib/evidence';
 
@@ -19,6 +20,8 @@ import StockRow, { StockRowSkeleton } from './app/StockRow';
 import NextUp from './app/NextUp';
 import MarketFlows from './market/MarketFlows';
 import Segmented from './ui/Segmented';
+import HomeHeader from './home/HomeHeader';
+import WhatChanged, { Balance } from './home/WhatChanged';
 
 // The in-feed ad (and its reserved space) only appears when an ad slot is configured.
 const IN_FEED_AD_SLOT = (process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '').includes('YOUR_') ? '' : process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '';
@@ -41,6 +44,11 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [tab, setTabState] = useState<DashboardTab>(urlTab && TABS.includes(urlTab) ? urlTab : initialTab);
+  const navigate = useNavigate();
+  const [me, setMe] = useState<{ id: string; firstName?: string } | null>(null);
+  const [researched, setResearched] = useState<any[] | null>(null);
+  const [newCount, setNewCount] = useState<number | null>(null);
+  const pushedBoard = useRef(false);
 
   // Search (signed-in search covers the whole NSE list and opens the Evidence Board)
   const [search, setSearch] = useState('');
@@ -90,7 +98,32 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
   useEffect(() => {
     loadTopStocks();
     loadWatchlist();
+    supabase.auth.getSession().then(({ data }) => {
+      const u = data.session?.user;
+      if (!u) return;
+      const meta: any = u.user_metadata || {};
+      const full = String(meta.full_name || meta.name || meta.first_name || '').trim();
+      setMe({ id: u.id, firstName: full ? full.split(/\s+/)[0] : undefined });
+    });
+    getLatestResearched()
+      .then((r) => setResearched((r.data?.signals || []).slice(0, 10)))
+      .catch(() => setResearched([]));
   }, []);
+
+  const prices = useMemo(() => {
+    const out: Record<string, number> = {};
+    [...stocks, ...watchlistStocks].forEach((s: any) => {
+      const pct = Number(s.price_change_pct);
+      if (Number.isFinite(pct)) out[cleanTicker(s.display_ticker || s.ticker)] = pct;
+    });
+    return out;
+  }, [stocks, watchlistStocks]);
+
+  const balances = useMemo(() => {
+    const out: Record<string, Balance> = {};
+    (researched || []).forEach((r: any) => r.balance && (out[cleanTicker(r.ticker)] = r.balance));
+    return out;
+  }, [researched]);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -119,33 +152,59 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
     }, 350);
   };
 
-  const openAnalysis = async (symbol: string) => {
-    setSearch('');
-    setSearchResults([]);
-    try {
-      const res = await getStock(symbol);
-      setSelected(res.data);
-    } catch (e) {
-      console.error(e);
-      setSelected({ display_ticker: symbol, company_name: '' });
-    }
+  const analyzeParam = cleanTicker(searchParams.get('analyze') || '');
+
+  // The Evidence Board lives in the URL (?analyze=TICKER): opening it adds a
+  // history entry, so the back button closes it, and links can open it directly.
+  const openBoard = (stock: any) => {
+    const t = cleanTicker(stock.display_ticker || stock.ticker || stock.symbol || '');
+    if (!t) return;
+    setSelected(stock);
+    const next = new URLSearchParams(searchParams);
+    next.set('analyze', t);
+    pushedBoard.current = true;
+    setSearchParams(next);
   };
 
-  // Deep link: /?analyze=TICKER opens the Evidence Board
+  const openAnalysis = (symbol: string) => {
+    setSearch('');
+    setSearchResults([]);
+    openBoard({ display_ticker: cleanTicker(symbol), company_name: '' });
+  };
+
+  const closeBoard = () => {
+    setSelected(null);
+    if (pushedBoard.current) {
+      pushedBoard.current = false;
+      navigate(-1);
+      return;
+    }
+    const next = new URLSearchParams(searchParams);
+    next.delete('analyze');
+    setSearchParams(next, { replace: true });
+  };
+
   useEffect(() => {
-    const symbol = searchParams.get('analyze');
-    if (!symbol) return;
-    openAnalysis(symbol).finally(() => {
-      const next = new URLSearchParams(searchParams);
-      next.delete('analyze');
-      setSearchParams(next, { replace: true });
-    });
+    if (!analyzeParam) {
+      setSelected(null);
+      return;
+    }
+    const current = selected ? cleanTicker(selected.display_ticker || selected.ticker || '') : '';
+    if (current === analyzeParam && selected?.company_name) return;
+    let alive = true;
+    if (current !== analyzeParam) setSelected({ display_ticker: analyzeParam, company_name: '' });
+    getStock(analyzeParam)
+      .then((res) => alive && setSelected(res.data))
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [analyzeParam]);
 
   const rowProps = (stock: any) => ({
     stock,
-    onAnalyze: setSelected,
+    onAnalyze: openBoard,
     inWatchlist: watchlist.includes(cleanTicker(stock.display_ticker || stock.ticker)),
     canAddToWatchlist: isPro || watchlist.length < 5,
     onWatchlistChange: loadWatchlist,
@@ -280,6 +339,24 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
             <TodayRadar onBrowseStocks={() => setTab('market')} />
           ) : (
             <>
+              {tab === 'market' && (
+                <>
+                  <HomeHeader firstName={me?.firstName} newCount={newCount} />
+                  {me && (
+                    <WhatChanged
+                      uid={me.id}
+                      watchCount={watchlist.length}
+                      watchLoaded={watchLoaded}
+                      prices={prices}
+                      balances={balances}
+                      freeLimit={isPro ? 3 : Math.max(0, 5 - watchlist.length)}
+                      onOpen={(t) => openAnalysis(t)}
+                      onWatchlistChange={loadWatchlist}
+                      onNewCount={setNewCount}
+                    />
+                  )}
+                </>
+              )}
               {(tab === 'market' || tab === 'watchlist') && (
                 <div ref={searchRef} className="relative mb-4">
                   <label htmlFor="dash-search" className="sr-only">
@@ -329,7 +406,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
                 </div>
               )}
 
-              {tab === 'market' && <LatestSignals />}
+              {tab === 'market' && <LatestSignals signals={researched} />}
 
               <section className="rounded-card border border-line bg-surface px-4 sm:px-5">
                 {tab === 'trending' ? (
@@ -380,7 +457,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
         </aside>
       </div>
 
-      {selected && <EvidenceBoard stock={selected} onClose={() => setSelected(null)} />}
+      {selected && <EvidenceBoard stock={selected} onClose={closeBoard} />}
       {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => window.location.reload()} />}
     </div>
   );

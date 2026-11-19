@@ -1,4 +1,6 @@
+import type React from 'react';
 import { useEffect, useState } from 'react';
+import Term from '../ui/Term';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import { getMarketFlows } from '../../lib/api';
@@ -13,7 +15,7 @@ const crore = (v: number) => `₹${Math.abs(v).toLocaleString('en-IN', { maximum
 const signed = (v: number) => `${v >= 0 ? '+' : '−'}${crore(v)}`;
 const shortDay = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 
-function NetFigure({ label, who, value }: { label: string; who: string; value: number | null | undefined }) {
+function NetFigure({ label, who, value }: { label: React.ReactNode; who: string; value: number | null | undefined }) {
   const ok = typeof value === 'number';
   const up = ok && value! >= 0;
   return (
@@ -103,12 +105,12 @@ export default function MarketFlows({ compact = false }: { compact?: boolean }) 
           </Link>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <NetFigure label="Foreign (FII)" who="FIIs" value={fii?.net_cr} />
-          <NetFigure label="Domestic (DII)" who="DIIs" value={dii?.net_cr} />
+          <NetFigure label={<>Foreign (<Term k="fii">FII</Term>)</>} who="FIIs" value={fii?.net_cr} />
+          <NetFigure label={<>Domestic (<Term k="dii">DII</Term>)</>} who="DIIs" value={dii?.net_cr} />
         </div>
         {vix?.last != null && (
           <p className="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-muted">
-            India VIX (fear gauge) <span className="num text-ink">{vix.last.toFixed(2)} {vix.change_pct != null && <Change value={vix.change_pct} className="text-[11px]" />}</span>
+            <span><Term k="vix">India VIX</Term> (fear gauge)</span> <span className="num text-ink">{vix.last.toFixed(2)} {vix.change_pct != null && <Change value={vix.change_pct} className="text-[11px]" />}</span>
           </p>
         )}
       </section>
@@ -124,15 +126,15 @@ export default function MarketFlows({ compact = false }: { compact?: boolean }) 
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
-        <NetFigure label="Foreign investors (FII)" who="FIIs" value={fii?.net_cr} />
-        <NetFigure label="Domestic institutions (DII)" who="DIIs" value={dii?.net_cr} />
+        <NetFigure label={<>Foreign investors (<Term k="fii">FII</Term>)</>} who="FIIs" value={fii?.net_cr} />
+        <NetFigure label={<>Domestic institutions (<Term k="dii">DII</Term>)</>} who="DIIs" value={dii?.net_cr} />
         <div>
           <p className="text-xs text-muted">Nifty 50</p>
           <p className="num mt-0.5 text-lg font-semibold text-ink">{nifty?.last != null ? nifty.last.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : 'n/a'}</p>
           {nifty?.change_pct != null && <Change value={nifty.change_pct} className="text-xs" />}
         </div>
         <div>
-          <p className="text-xs text-muted">India VIX</p>
+          <p className="text-xs text-muted"><Term k="vix">India VIX</Term></p>
           <p className="num mt-0.5 text-lg font-semibold text-ink">{vix?.last != null ? vix.last.toFixed(2) : 'n/a'}</p>
           <p className="text-[11px] text-muted">
             Expected swings; higher = more fear{vix?.change_pct != null && <> · <Change value={vix.change_pct} className="text-[11px]" /></>}
