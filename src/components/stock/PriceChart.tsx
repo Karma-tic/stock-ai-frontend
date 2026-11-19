@@ -100,7 +100,10 @@ export default function PriceChart({ ticker }: { ticker: string }) {
         return { ...ev, idx, day };
       })
       .filter(Boolean)
-      .slice(0, 12) as (ChartEvent & { idx: number; day: string })[];
+      .sort((a: any, b: any) => a.idx - b.idx)
+      // Keep dots at least ~3% of the width apart so a busy month stays tappable.
+      .filter((m: any, i: number, arr: any[]) => i === 0 || (m.idx - arr[i - 1].idx) / chart.pts.length >= 0.03)
+      .slice(-12) as (ChartEvent & { idx: number; day: string })[];
   }, [chart, events]);
 
   // Every range failed (e.g. backend not deployed yet): show nothing rather than a broken box.
