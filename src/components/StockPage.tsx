@@ -9,6 +9,7 @@ import StockStories from './stock/StockStories';
 import SmartMoney from './stock/SmartMoney';
 import { useStockData } from './stock/storyData';
 import { KeyNumbers, PriceToday, STORY_PARTS, Sources, SupportConcern, WatchFor, WhatHappened } from './stock/StorySections';
+import MorningBriefSignup from './MorningBriefSignup';
 
 const ABOUT = [
   { id: 'overview', title: 'Company overview' },
@@ -90,6 +91,12 @@ export default function StockPage({ user }: { user?: any }) {
 
       {/* Phones: Stock Stories */}
       <StockStories ticker={profile.symbol} name={name} user={user} cards={cards} />
+      {!user && (
+        // Phones: the free morning email, after the story
+        <div className="px-4 pb-24 pt-6 md:hidden">
+          <MorningBriefSignup source={`stock-${profile.symbol}`} compact />
+        </div>
+      )}
 
       {/* Larger screens: the same story as a page */}
       <div className="hidden md:block">
@@ -205,6 +212,7 @@ export default function StockPage({ user }: { user?: any }) {
               </Link>
             </div>
           </section>
+          {!user && <MorningBriefSignup source={`stock-${profile.symbol}`} />}
         </div>
       </article>
     </div>

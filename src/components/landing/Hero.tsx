@@ -3,6 +3,7 @@ import { ButtonLink, Button } from '../ui/Button';
 import useMagnetic from '../../lib/motion/useMagnetic';
 import HeroBackdrop, { lineX, lineY } from './HeroBackdrop';
 import LiveMarketCard from './LiveMarketCard';
+import FiledThisWeek from './FiledThisWeek';
 
 type ThreadPath = { d: string; len: number };
 
@@ -92,7 +93,7 @@ export default function Hero({ onGetStarted }: { onGetStarted: () => void }) {
         <div className="min-w-0">
           <p className="hero-rise inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-ink/75" style={{ animationDelay: '0ms' }}>
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-            AI research for Indian investors
+            Free for Indian investors
           </p>
           <h1
             id="hero-heading"
@@ -100,14 +101,14 @@ export default function Hero({ onGetStarted }: { onGetStarted: () => void }) {
           >
             {/* Each line rises out of its own mask. Why: the promise is read first, one beat at a time. */}
             <span className="hero-line block overflow-hidden pb-[0.06em]">
-              <span className="block" style={{ animationDelay: '80ms' }}>Research any NSE stock.</span>
+              <span className="block" style={{ animationDelay: '80ms' }}>Know what changed in your stocks.</span>
             </span>
             <span className="hero-line block overflow-hidden pb-[0.06em]">
-              <span className="block text-accent" style={{ animationDelay: '140ms' }}>Sources attached.</span>
+              <span className="block text-accent" style={{ animationDelay: '140ms' }}>Every point sourced.</span>
             </span>
           </h1>
           <p className="hero-rise mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style={{ animationDelay: '320ms' }}>
-            Stock AI reads filings, results and trusted news, then shows what matters. Every point links to its source.
+            Results, tax demands, big orders, rating changes. Stock AI reads every NSE filing and the news for the companies you follow, and tells you in plain words.
           </p>
           <div className="hero-rise mt-8 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: '420ms' }}>
             <Button ref={ctaRef} size="lg" onClick={onGetStarted} className="w-full sm:w-auto">
@@ -117,6 +118,7 @@ export default function Hero({ onGetStarted }: { onGetStarted: () => void }) {
               Explore investments
             </ButtonLink>
           </div>
+          <FiledThisWeek />
         </div>
         <div className="hero-rise w-full max-w-xl lg:max-w-none" style={{ animationDelay: '260ms' }}>
           <LiveMarketCard />
