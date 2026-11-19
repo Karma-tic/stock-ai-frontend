@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 
 // One segmented control in the accent colour. On narrow screens it scrolls sideways:
 // the edges fade where more tabs are hidden, and the selected tab is always scrolled into view.
@@ -75,7 +75,7 @@ export default function Segmented<T extends string>({
           >
             {active && (
               // The selected pill slides between options (shared layout); no movement under reduced motion.
-              <motion.span
+              <m.span
                 layoutId={`seg-pill-${pillId}`}
                 transition={reduce ? { duration: 0 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0 rounded-full bg-cobalt"

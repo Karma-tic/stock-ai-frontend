@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { Toaster } from 'sonner';
+import { LazyMotion } from 'motion/react';
 import { captureRef, claimStoredRef } from './lib/referral';
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -10,6 +11,8 @@ import LandingPage from './components/LandingPage';
 import Logo, { LogoMark } from './components/ui/Logo';
 import Skeleton from './components/ui/Skeleton';
 import BottomTabs from './components/app/BottomTabs';
+
+const loadMotion = () => import('./lib/motionFeatures').then((r) => r.default);
 
 // Every page except the landing page loads on demand, so first-time visitors
 // only download the code for the page they open.
@@ -126,6 +129,10 @@ function BootSkeleton() {
           ))}
         </div>
       </div>
+      {mightHaveSession && (
+        // The bottom tab bar's footprint, so nothing jumps when it arrives.
+        <div className="fixed inset-x-0 bottom-0 h-[calc(58px+env(safe-area-inset-bottom))] border-t border-line bg-canvas lg:hidden" aria-hidden="true" />
+      )}
     </div>
   );
 }
@@ -369,6 +376,8 @@ export default function App() {
   if (loading) return <BootSkeleton />;
 
   return (
+    // Motion's animation features load after first paint, so the first bundle stays small.
+    <LazyMotion features={loadMotion} strict>
     <BrowserRouter>
       {/* AppLayout contains everything and manages the global Navbar/Footer */}
       <AppLayout
@@ -385,5 +394,6 @@ export default function App() {
         toastOptions={{ className: 'font-sans text-sm', duration: 3000 }}
       />
     </BrowserRouter>
+    </LazyMotion>
   );
 }

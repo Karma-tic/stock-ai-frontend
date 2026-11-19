@@ -12,6 +12,7 @@ import { track } from '../lib/track';
 import { trackEvent } from '../lib/analytics';
 import { noteNotNow } from '../lib/paywall';
 import { refreshAllowance, refreshPlan } from '../lib/plan';
+import { useSwipeDown } from '../lib/useSwipeDown';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -99,6 +100,9 @@ export default function UpgradeModal({
       back?.focus?.();
     };
   }, [close]);
+
+  // Swipe down to dismiss on phones (not while a payment is starting).
+  useSwipeDown(panelRef, close, !loading);
 
   const visiblePlans = PLANS.filter((p) => !(p.id === 'trial' && hasUsedTrial));
   const chosen = visiblePlans.find((p) => p.id === selected) || visiblePlans[visiblePlans.length - 1];

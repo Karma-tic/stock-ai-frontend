@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 import { Drawer } from 'vaul';
 import { AlertTriangle, ArrowUpRight, BarChart3, Bell, BellRing, CalendarDays, Lock, ExternalLink, Eye, FileText, Minus, Newspaper, Star, TrendingDown, TrendingUp, X } from 'lucide-react';
 import { analyzeStock, addToWatchlist, removeFromWatchlist, getWatchlist, getStockEvents, getNotificationPreferences, saveNotificationPreferences } from '../lib/api';
@@ -108,7 +108,7 @@ function BalanceMeter({
       <p className="text-base font-semibold text-ink">{b.label}</p>
       <div className="relative mt-4 h-2 rounded-full bg-ink/10" role="img" aria-label={`Evidence balance: ${b.label}`}>
         <span className="absolute inset-y-0 left-1/2 w-px bg-ink/25" aria-hidden="true" />
-        <motion.div
+        <m.div
           className="pointer-events-none absolute inset-0"
           initial={reduce ? false : { x: '0%' }}
           animate={{ x: `${pos - 50}%` }}
@@ -116,7 +116,7 @@ function BalanceMeter({
           aria-hidden="true"
         >
           <span className="absolute left-1/2 top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-canvas bg-accent shadow" />
-        </motion.div>
+        </m.div>
       </div>
       {ticks.length > 0 && (
         <div className="relative h-7" aria-label="Jump to a point">
@@ -215,7 +215,7 @@ function PointList({
       {points.map((p, i) => {
         const key = `${kind}-${i}`;
         return (
-          <motion.li
+          <m.li
             key={i}
             id={itemId(ticker, kind, i)}
             tabIndex={0}
@@ -246,7 +246,7 @@ function PointList({
                 </p>
               )}
             </div>
-          </motion.li>
+          </m.li>
         );
       })}
     </ul>
