@@ -54,7 +54,13 @@ export function relDay(input?: string): string {
 
 export const cleanTicker = (t: string) => (t || '').toUpperCase().replace('.NS', '').replace('.BO', '').trim();
 
-export type PointSource = { name: string; url: string; title?: string };
+export type SourceKind = 'filing' | 'news' | 'data';
+export type PointSource = { name: string; url: string; title?: string; shortTitle?: string; kind?: SourceKind };
+
+export function sourceKind(kind: unknown, name: string): SourceKind {
+  if (kind === 'filing' || kind === 'news' || kind === 'data') return kind;
+  return /nse|bse|exchange/i.test(name) ? 'filing' : 'news';
+}
 export type EvidencePoint = { text: string; sources: PointSource[] };
 
 const safeUrl = (u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u);
@@ -70,7 +76,13 @@ export function evidencePoints(analysis: any, side: 'bull' | 'bear'): EvidencePo
         text: e.point.trim(),
         sources: (Array.isArray(e.sources) ? e.sources : [])
           .filter((s: any) => s && safeUrl(s.url))
-          .map((s: any) => ({ name: String(s.name || 'Source'), url: s.url, title: s.title ? String(s.title) : undefined })),
+          .map((s: any) => ({
+            name: String(s.name || 'Source'),
+            url: s.url,
+            title: s.title ? String(s.title) : undefined,
+            shortTitle: s.short_title ? String(s.short_title) : undefined,
+            kind: sourceKind(s.kind, String(s.name || '')),
+          })),
       }));
     if (pts.length) return pts;
   }

@@ -206,22 +206,43 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
 
   return (
     <div className="min-h-[100dvh] bg-canvas pb-24 lg:pb-12">
-      {/* Tabs: one segmented control, sticky under the top bar */}
-      <div className="sticky top-[var(--nav-h,64px)] z-30 border-b border-line bg-canvas/90 backdrop-blur-[16px]">
+      {/* Tabs. Desktop: one row with every view. Phones and tablets have the bottom
+          bar for Home, Watchlist and Today, so this row only holds the Home views
+          (Market, Trending, IPOs, Portfolio) and is hidden on Watchlist and Today. */}
+      <div
+        className={`sticky top-[var(--nav-h,64px)] z-30 border-b border-line bg-canvas/90 backdrop-blur-[16px] ${
+          tab === 'watchlist' || tab === 'radar' ? 'hidden lg:block' : ''
+        }`}
+      >
         <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6">
-          <Segmented<DashboardTab>
-            label="Dashboard"
-            value={tab}
-            onChange={setTab}
-            options={[
-              { value: 'market', label: 'Market' },
-              { value: 'watchlist', label: `Watchlist (${watchlist.length})` },
-              { value: 'radar', label: 'Today' },
-              { value: 'trending', label: 'Trending' },
-              { value: 'ipos', label: 'IPOs' },
-              { value: 'portfolio', label: 'Portfolio' },
-            ]}
-          />
+          <div className="lg:hidden">
+            <Segmented<DashboardTab>
+              label="Home"
+              value={tab}
+              onChange={setTab}
+              options={[
+                { value: 'market', label: 'Market' },
+                { value: 'trending', label: 'Trending' },
+                { value: 'ipos', label: 'IPOs' },
+                { value: 'portfolio', label: 'Portfolio' },
+              ]}
+            />
+          </div>
+          <div className="hidden lg:block">
+            <Segmented<DashboardTab>
+              label="Dashboard"
+              value={tab}
+              onChange={setTab}
+              options={[
+                { value: 'market', label: 'Market' },
+                { value: 'watchlist', label: `Watchlist (${watchlist.length})` },
+                { value: 'radar', label: 'Today' },
+                { value: 'trending', label: 'Trending' },
+                { value: 'ipos', label: 'IPOs' },
+                { value: 'portfolio', label: 'Portfolio' },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
