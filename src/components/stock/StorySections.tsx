@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react';
 import { AlertTriangle, ExternalLink, Eye, FileText, Newspaper, TrendingDown, TrendingUp } from 'lucide-react';
+import Term from '../ui/Term';
 import { Change } from '../ui/Price';
 import Skeleton from '../ui/Skeleton';
 import PriceChart from './PriceChart';
@@ -78,7 +80,7 @@ export function PriceToday({ ticker, quote, story, failed }: { ticker: string; q
 
       {pos != null && (
         <div className="mt-6">
-          <p className="text-xs font-medium text-muted">52-week range</p>
+          <p className="text-xs font-medium text-muted"><Term k="week52">52-week range</Term></p>
           <div className="relative mt-3 h-2 rounded-full bg-ink/10" role="img" aria-label={`Price is at ${Math.round(pos * 100)}% of its 52-week range`}>
             <span className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-canvas bg-accent" style={{ left: `${pos * 100}%` }} />
           </div>
@@ -141,22 +143,30 @@ export function WhatHappened({ story, loading }: { story: Story | null; loading:
 // 3. Numbers that matter
 export function KeyNumbers({ quote, story, failed }: { quote: Quote | null; story: Story | null; failed?: boolean }) {
   if (!quote && !story) return failed ? <Unavailable what="Key numbers" /> : <Loading />;
-  const tiles: [string, string][] = [
-    ['P/E ratio', quote?.pe_ratio != null ? String(quote.pe_ratio) : 'n/a'],
-    ['Dividend yield', quote?.dividend_yield_pct != null ? `${quote.dividend_yield_pct}%` : 'n/a'],
-    ['Market cap', fmtCr(quote?.market_cap_cr)],
-    ['P/B ratio', quote?.pb_ratio != null ? String(quote.pb_ratio) : 'n/a'],
-    ['52W high', quote?.week52_high != null ? `₹${quote.week52_high.toLocaleString('en-IN')}` : 'n/a'],
-    ['52W low', quote?.week52_low != null ? `₹${quote.week52_low.toLocaleString('en-IN')}` : 'n/a'],
+  const yieldPct = quote?.dividend_yield_pct;
+  const tiles: [string, ReactNode, string, ReactNode?][] = [
+    ['pe', <Term k="pe">P/E ratio</Term>, quote?.pe_ratio != null ? String(quote.pe_ratio) : 'n/a'],
+    [
+      'yield',
+      <Term k="dividendYield">Dividend yield</Term>,
+      yieldPct != null ? `${yieldPct}%` : 'n/a',
+      // What the yield means in rupees: per ₹1,000 invested, for a year.
+      yieldPct != null && yieldPct > 0 ? `₹${(yieldPct * 10).toLocaleString('en-IN', { maximumFractionDigits: 2 })} a year per ₹1,000 invested` : undefined,
+    ],
+    ['mcap', <Term k="marketCap">Market cap</Term>, fmtCr(quote?.market_cap_cr)],
+    ['pb', <Term k="pb">P/B ratio</Term>, quote?.pb_ratio != null ? String(quote.pb_ratio) : 'n/a'],
+    ['hi', <Term k="week52">52W high</Term>, quote?.week52_high != null ? `₹${quote.week52_high.toLocaleString('en-IN')}` : 'n/a'],
+    ['lo', <Term k="week52">52W low</Term>, quote?.week52_low != null ? `₹${quote.week52_low.toLocaleString('en-IN')}` : 'n/a'],
   ];
   const metrics = story?.earnings?.metrics || [];
   return (
     <div>
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {tiles.map(([label, value]) => (
-          <div key={label} className="rounded-control border border-line p-3">
+        {tiles.map(([key, label, value, note]) => (
+          <div key={key} className="rounded-control border border-line p-3">
             <dt className="text-xs text-muted">{label}</dt>
             <dd className="num mt-1 text-base font-semibold text-ink">{value}</dd>
+            {note ? <dd className="mt-0.5 text-[11px] leading-snug text-muted">{note}</dd> : null}
           </div>
         ))}
       </dl>

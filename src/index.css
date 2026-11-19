@@ -131,10 +131,21 @@
 .board-panel { animation: board-in-up 260ms var(--ease-ui); }
 @media (min-width: 640px) { .board-panel { animation-name: board-in-right; } }
 .board-thread { animation: board-thread 1.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+/* Market status dot: a slow, soft pulse only while the market is open */
+@keyframes market-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgb(var(--up) / .45); } 50% { box-shadow: 0 0 0 5px rgb(var(--up) / 0); } }
+.market-dot.is-open { animation: market-pulse 2.4s ease-in-out infinite; }
+
+/* Price flash on refresh: a 12% tint that fades out over 600 ms */
+.price-flash { transition: background-color 600ms ease-out; }
+.price-flash.is-up { background-color: rgb(var(--up) / .12); transition: none; }
+.price-flash.is-down { background-color: rgb(var(--down) / .12); transition: none; }
+
 /* Upgrade success: the check settles in once */
 @keyframes upgrade-done { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
 .upgrade-done { animation: upgrade-done 320ms var(--ease-ui); }
 @media (prefers-reduced-motion: reduce) {
+  .price-flash.is-up, .price-flash.is-down { background-color: transparent; }
+  .market-dot.is-open { animation: none; }
   .upgrade-done { animation: none; }
   .board-panel { animation: none; }
   .board-thread { animation: none; width: 100%; opacity: .5; }

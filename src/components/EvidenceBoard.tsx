@@ -11,6 +11,8 @@ import DotScale from './ui/DotScale';
 import Segmented from './ui/Segmented';
 import Skeleton from './ui/Skeleton';
 import { Button } from './ui/Button';
+import { haptic, toastAdded, toastRemoved } from '../lib/toast';
+import { relativeTime } from '../lib/relativeTime';
 
 // ── Watchlist toggle ──
 function WatchlistButton({ ticker, companyName }: { ticker: string; companyName: string }) {
@@ -24,20 +26,26 @@ function WatchlistButton({ ticker, companyName }: { ticker: string; companyName:
       .catch(() => {});
   }, [clean]);
 
-  const toggle = async () => {
+  const setWatch = async (on: boolean, quiet = false) => {
     setBusy(true);
     try {
-      if (inWatchlist) {
+      if (!on) {
         await removeFromWatchlist(clean);
         setInWatchlist(false);
+        if (!quiet) toastRemoved(clean, () => setWatch(true, true));
       } else {
         await addToWatchlist(clean, companyName);
         setInWatchlist(true);
+        if (!quiet) toastAdded(clean);
       }
     } catch (e) {
       console.error('Watchlist update failed', e);
     }
     setBusy(false);
+  };
+  const toggle = () => {
+    haptic();
+    setWatch(!inWatchlist);
   };
 
   return (
@@ -288,7 +296,7 @@ export default function EvidenceBoard({ stock, onClose }: { stock: any; onClose:
               <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <Price value={price} className="text-xl font-semibold text-ink" />
                 {typeof pct === 'number' && <Change value={pct} className="text-sm font-medium" />}
-                {asOf && <span className="text-xs text-muted">as of {asOf.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}</span>}
+                {asOf && <span className="text-xs text-muted">researched {relativeTime(asOf)}</span>}
               </p>
             )}
           </div>
