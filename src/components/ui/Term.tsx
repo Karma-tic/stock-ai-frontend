@@ -55,6 +55,7 @@ export default function Term({ k, children }: { k: keyof typeof GLOSSARY; childr
   const entry = GLOSSARY[k];
   const phone = useIsPhone();
   const [open, setOpen] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
   const id = useId();
   const wrap = useRef<HTMLSpanElement>(null);
 
@@ -74,7 +75,12 @@ export default function Term({ k, children }: { k: keyof typeof GLOSSARY; childr
   const trigger = (
     <button
       type="button"
-      onClick={() => setOpen((o) => !o)}
+      onClick={() => {
+        // Keep the popover on screen: open leftwards when the term sits near the right edge.
+        const r = wrap.current?.getBoundingClientRect();
+        setAlignRight(!!r && r.left + 288 > window.innerWidth - 16);
+        setOpen((o) => !o);
+      }}
       aria-expanded={open}
       aria-controls={phone ? undefined : id}
       className="cursor-help underline decoration-muted/60 decoration-dotted underline-offset-[3px] hover:decoration-accent"
@@ -108,7 +114,7 @@ export default function Term({ k, children }: { k: keyof typeof GLOSSARY; childr
           id={id}
           role="dialog"
           aria-label={entry.title}
-          className="absolute left-0 top-full z-50 mt-2 block w-72 rounded-card border border-line bg-surface p-3.5 text-left shadow-lift"
+          className={`absolute ${alignRight ? 'right-0' : 'left-0'} top-full z-50 mt-2 block w-72 rounded-card border border-line bg-surface p-3.5 text-left shadow-lift`}
         >
           <span className="flex items-start justify-between gap-2">
             <span className="text-sm font-semibold text-ink">{entry.title}</span>
