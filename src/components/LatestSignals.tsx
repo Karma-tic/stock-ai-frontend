@@ -1,6 +1,6 @@
 // src/components/LatestSignals.tsx
 // "Researched this morning": stocks the AI researched today, as a snap carousel.
-// Each chip carries a balance dot (supporting vs concerning points: a count, never
+// Four chips a row on wider screens. Each chip carries a balance dot (supporting vs concerning points: a count, never
 // a verdict). Phones swipe with the next chip peeking; desktop gets arrow buttons.
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -35,7 +35,7 @@ export default function LatestSignals({ signals }: { signals: Row[] | null }) {
           const price = Number(s.current_price);
           const d = dot(s.balance);
           return (
-            <li key={s.ticker} className="w-[42%] shrink-0 snap-start sm:w-[calc((100%-2rem)/5)]">
+            <li key={s.ticker} className="w-[42%] shrink-0 snap-start sm:w-[calc((100%-1.5rem)/4)]">
               <Link
                 to={`/?analyze=${encodeURIComponent(s.ticker)}`}
                 className="flex min-h-[64px] flex-col justify-center rounded-control border border-line px-3 py-2 transition duration-150 hover:border-accent/50 active:scale-[0.97]"
@@ -54,7 +54,7 @@ export default function LatestSignals({ signals }: { signals: Row[] | null }) {
           );
         })}
       </ul>
-      {signals.length > 5 && (
+      {signals.length > 4 && (
         <>
           <button
             type="button"
