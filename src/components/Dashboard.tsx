@@ -11,7 +11,6 @@ import EvidenceBoard from './EvidenceBoard';
 import PullToRefresh from './ui/PullToRefresh';
 import LatestSignals from './LatestSignals';
 import Portfolio from './Portfolio';
-import AdBanner from './AdBanner';
 
 import UpcomingIpos from './UpcomingIpos';
 import UpgradeModal from './UpgradeModal';
@@ -23,9 +22,10 @@ import MarketFlows from './market/MarketFlows';
 import Segmented from './ui/Segmented';
 import HomeHeader from './home/HomeHeader';
 import WhatChanged, { Balance } from './home/WhatChanged';
+import ProNudge from './home/ProNudge';
+import AllowanceMeter from './ui/AllowanceMeter';
+import { trackEvent } from '../lib/analytics';
 
-// The in-feed ad (and its reserved space) only appears when an ad slot is configured.
-const IN_FEED_AD_SLOT = (process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '').includes('YOUR_') ? '' : process.env.REACT_APP_ADSENSE_IN_FEED_SLOT || '';
 
 type DashboardTab = 'market' | 'watchlist' | 'portfolio' | 'trending' | 'ipos' | 'radar';
 const TABS: DashboardTab[] = ['market', 'watchlist', 'radar', 'trending', 'ipos', 'portfolio'];
@@ -37,6 +37,16 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
   const urlTab = searchParams.get('tab') as DashboardTab | null;
 
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [upgradeAsk, setUpgradeAsk] = useState<{ context?: string; moment: string }>({ moment: 'home' });
+  const askUpgrade = (context: string | undefined, moment: string) => {
+    setUpgradeAsk({ context, moment });
+    trackEvent('upgrade_click', { source: moment, plan: 'free' });
+    setShowUpgrade(true);
+  };
+  useEffect(() => {
+    trackEvent('home_view', { plan: isPro ? 'pro' : 'free' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [stocks, setStocks] = useState<any[]>([]);
   const [watchlist, setWatchlist] = useState<string[]>([]);
   const [watchlistStocks, setWatchlistStocks] = useState<any[]>([]);
@@ -225,7 +235,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
     inWatchlist: watchlist.includes(cleanTicker(stock.display_ticker || stock.ticker)),
     canAddToWatchlist: isPro || watchlist.length < 5,
     onWatchlistChange: loadWatchlist,
-    onUpgradeNeeded: () => setShowUpgrade(true),
+    onUpgradeNeeded: () => askUpgrade('Free watchlists hold 5. Pro has no limit.', 'watchlist_limit'),
   });
 
   const list = tab === 'market' ? stocks : watchlistStocks;
@@ -263,17 +273,9 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
       );
     return (
       <ul>
-        {list.map((stock: any, index: number) => (
+        {list.map((stock: any) => (
           <Fragment key={stock.display_ticker || stock.ticker}>
             <StockRow {...rowProps(stock)} />
-            {index === 5 && IN_FEED_AD_SLOT && (
-              <li className="list-none border-b border-line py-3">
-                {/* Reserved height so the ad never shifts the list */}
-                <div className="min-h-[100px]">
-                  <AdBanner slot={IN_FEED_AD_SLOT} />
-                </div>
-              </li>
-            )}
           </Fragment>
         ))}
       </ul>
@@ -360,6 +362,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
               {tab === 'market' && (
                 <>
                   <HomeHeader key={`hh-${refreshKey}`} firstName={me?.firstName} newCount={newCount} />
+                  <ProNudge onUpgrade={(c, m) => askUpgrade(c, m)} />
                   {me && (
                     <WhatChanged
                       key={`wc-${refreshKey}`}
@@ -422,6 +425,7 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
                       )}
                     </div>
                   )}
+                  <AllowanceMeter onUpgrade={() => askUpgrade('Research without the daily limit', 'allowance_meter')} />
                 </div>
               )}
 
@@ -477,7 +481,14 @@ export default function Dashboard({ initialTab = 'market' }: { initialTab?: Dash
       </div>
 
       {selected && <EvidenceBoard stock={selected} onClose={closeBoard} />}
-      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => window.location.reload()} />}
+      {showUpgrade && (
+        <UpgradeModal
+          context={upgradeAsk.context}
+          moment={upgradeAsk.moment}
+          onClose={() => setShowUpgrade(false)}
+          onSuccess={() => window.location.reload()}
+        />
+      )}
     </div>
   );
 }

@@ -4,6 +4,33 @@ import { Link } from 'react-router-dom';
 import MarketFlows from './market/MarketFlows';
 import { deleteThesis, getEarningsComparison, getEventCalendar, getEventRadar, getNotificationPreferences, getTheses, saveNotificationPreferences, saveThesis } from '../lib/api';
 import { Change } from './ui/Price';
+import { trackEvent } from '../lib/analytics';
+import { istDay } from '../lib/paywall';
+
+// Mornings in a row the Today page was opened. Reading, not trading: no rewards attached.
+function readingStreak(): number {
+  const KEY = 'bp_read_days';
+  let days: string[] = [];
+  try {
+    days = JSON.parse(localStorage.getItem(KEY) || '[]') || [];
+  } catch {
+    days = [];
+  }
+  const today = istDay();
+  if (!days.includes(today)) days.push(today);
+  days = days.sort().slice(-60);
+  try {
+    localStorage.setItem(KEY, JSON.stringify(days));
+  } catch {
+    /* ignore */
+  }
+  let n = 0;
+  for (let d = new Date(); ; d = new Date(d.getTime() - 86400e3)) {
+    if (days.includes(istDay(d))) n += 1;
+    else break;
+  }
+  return n;
+}
 
 type RadarEvent = {
   id: string; ticker: string; company_name: string; category: string;
@@ -169,6 +196,11 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [earnings, setEarnings] = useState<{ period?: string; metrics: EarningsMetric[] } | null>(null);
   const [preferences, setPreferences] = useState({ email_digest: false, high_priority_alerts: false, minimum_severity: 'high' });
+  const [streak] = useState(() => readingStreak());
+  const [fromEmail] = useState(() => new URLSearchParams(window.location.search).get('from') === 'email');
+  useEffect(() => {
+    if (fromEmail) trackEvent('brief_open', { source: 'email' });
+  }, [fromEmail]);
   const [savingPreferences, setSavingPreferences] = useState(false);
   const [preferencesSaved, setPreferencesSaved] = useState(false);
   const [trackedCount, setTrackedCount] = useState(0);
@@ -303,6 +335,12 @@ export default function TodayRadar({ onBrowseStocks }: { onBrowseStocks?: () => 
     <div className="pb-10">
       <header id="today" className="mb-5 flex scroll-mt-24 items-start justify-between gap-4">
         <div>
+          {(fromEmail || streak >= 2) && (
+            <p className="mb-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold">
+              {fromEmail && <span className="text-accent">Here's your 2-minute brief</span>}
+              {streak >= 2 && <span className="text-muted">{streak} days in a row</span>}
+            </p>
+          )}
           <h1 className="text-2xl font-semibold tracking-[-0.02em] text-ink sm:text-3xl">What changed for your stocks</h1>
           <p className="mt-1 text-sm text-muted">
             {loading

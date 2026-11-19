@@ -152,6 +152,17 @@
 
 /* Evidence Board: slide in from the right (bottom on phones); a thread runs across while it loads */
 @keyframes board-in-right { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+/* Payment success: 12 particles fly out once */
+.burst { position: absolute; inset: 0; pointer-events: none; }
+.burst > span {
+  position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px;
+  border-radius: 9999px; background: rgb(var(--accent)); opacity: 0;
+  animation: burst 600ms cubic-bezier(.22, 1, .36, 1) 120ms;
+}
+@keyframes burst {
+  0% { opacity: 1; transform: rotate(var(--a)) translateY(0) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateY(-44px) scale(.4); }
+}
 /* Page change: fade plus an 8 px rise */
 @keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .page-in { animation: page-in 200ms cubic-bezier(.22, 1, .36, 1); }
@@ -190,6 +201,7 @@
   .board-panel, .board-slide, .chart-in { animation: none; }
   .chart-out { display: none; }
   .ptr-spin, .page-in { animation: none; }
+  .burst { display: none; }
   .board-thread { animation: none; width: 100%; opacity: .5; }
 }
 

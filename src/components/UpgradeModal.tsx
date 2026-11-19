@@ -9,6 +9,9 @@ import { supabase } from '../lib/supabase';
 import { loadRazorpay } from '../lib/loadRazorpay';
 import { buttonClass } from './ui/Button';
 import { track } from '../lib/track';
+import { trackEvent } from '../lib/analytics';
+import { noteNotNow } from '../lib/paywall';
+import { refreshAllowance, refreshPlan } from '../lib/plan';
 
 const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -42,11 +45,14 @@ export default function UpgradeModal({
   onClose,
   onSuccess,
   context,
+  moment,
 }: {
   onClose: () => void;
   onSuccess: () => void;
   /** What the person was trying to do, e.g. "Unlock unlimited Evidence Boards". */
   context?: string;
+  /** Where it opened from, for the funnel (locked_board, watchlist_limit, header…). */
+  moment?: string;
 }) {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<PlanId>('onetime');
@@ -62,8 +68,11 @@ export default function UpgradeModal({
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       track('upgrade_view', session?.access_token);
+      trackEvent('paywall_view', { moment: moment || 'unknown', plan: 'free' });
       if (session?.user?.user_metadata?.has_used_trial) setHasUsedTrial(true);
     });
+    // Once per opening; the moment does not change while the sheet is open.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Dialog basics: Escape closes, focus moves in and back, the page behind does not scroll.
@@ -73,8 +82,10 @@ export default function UpgradeModal({
     onClose();
   }, [done, onClose, onSuccess]);
   const close = useCallback(() => {
-    if (!loading) finish();
-  }, [loading, finish]);
+    if (loading) return;
+    if (!done) noteNotNow();
+    finish();
+  }, [loading, finish, done]);
   useEffect(() => {
     const back = document.activeElement as HTMLElement | null;
     const prev = document.body.style.overflow;
@@ -93,6 +104,7 @@ export default function UpgradeModal({
   const chosen = visiblePlans.find((p) => p.id === selected) || visiblePlans[visiblePlans.length - 1];
 
   const handlePayment = async (plan: Plan) => {
+    trackEvent('upgrade_click', { plan: plan.id, source: moment || 'sheet' });
     setError('');
     setLoading(true);
     try {
@@ -144,6 +156,9 @@ export default function UpgradeModal({
               { headers: { Authorization: `Bearer ${token}` } },
             );
             if ('vibrate' in navigator) navigator.vibrate?.(8);
+            trackEvent('payment_success', { plan: plan.id, source: moment || 'unknown', value: plan.amount / 100 });
+            refreshPlan();
+            refreshAllowance();
             setDone({ days: plan.days });
           } catch (e: any) {
             const detail = e?.response?.data?.detail || e.message;
@@ -181,8 +196,16 @@ export default function UpgradeModal({
 
         {done ? (
           <div className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-8 text-center" role="status">
-            <span className="upgrade-done mx-auto grid h-14 w-14 place-items-center rounded-full bg-accent/15 text-accent">
-              <CircleCheck className="h-8 w-8" strokeWidth={1.75} aria-hidden="true" />
+            <span className="relative mx-auto grid h-14 w-14 place-items-center">
+              {/* One soft burst of 12 cobalt particles; none under reduced motion */}
+              <span className="burst" aria-hidden="true">
+                {Array.from({ length: 12 }, (_, i) => (
+                  <span key={i} style={{ ['--a' as any]: `${i * 30}deg` }} />
+                ))}
+              </span>
+              <span className="upgrade-done grid h-14 w-14 place-items-center rounded-full bg-accent/15 text-accent">
+                <CircleCheck className="h-8 w-8" strokeWidth={1.75} aria-hidden="true" />
+              </span>
             </span>
             <h2 id="upgrade-title" className="mt-4 text-2xl font-bold tracking-[-0.02em] text-ink">
               You're on Pro until {proUntil(done.days)}

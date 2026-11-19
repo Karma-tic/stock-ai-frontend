@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { ChevronDown, LogOut, Menu, Moon, Search, Star, Sun, X } from 'lucide-react';
 import UpgradeModal from './UpgradeModal';
 import SearchDialog from './SearchDialog';
 import Logo from './ui/Logo';
 import { Button, ButtonLink } from './ui/Button';
-
-const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+import AllowanceMeter from './ui/AllowanceMeter';
+import { refreshAllowance, refreshPlan, usePlanState } from '../lib/plan';
+import { trackEvent } from '../lib/analytics';
 
 const PRIMARY = [
   { to: '/today', label: 'Today' },
@@ -22,6 +22,8 @@ const MORE = [
   { to: '/tools', label: 'Tools' },
   { to: '/studies', label: 'Studies' },
   { to: '/blog', label: 'Blog' },
+  { to: '/alerts', label: 'Alerts' },
+  { to: '/invite', label: 'Invite friends' },
 ];
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
@@ -55,7 +57,17 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
   const [account, setAccount] = useState(false);
   const [search, setSearch] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const [isPro, setIsPro] = useState(false);
+  const planState = usePlanState();
+  const isPro = planState.isPro;
+  const daysLeft = planState.daysLeft;
+  const renewSoon = isPro && daysLeft != null && daysLeft <= 5;
+  const [badgeOpen, setBadgeOpen] = useState(false);
+  const [upgradeFrom, setUpgradeFrom] = useState('header');
+  const openUpgrade = (from: string) => {
+    setUpgradeFrom(from);
+    trackEvent('upgrade_click', { source: from, plan: isPro ? 'pro' : 'free' });
+    setShowUpgrade(true);
+  };
   const moreRef = useRef<HTMLDivElement | null>(null);
   const accountRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,15 +76,6 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
   const closeSearch = useCallback(() => setSearch(false), []);
   useDismiss(more, closeMore, [moreRef]);
   useDismiss(account, closeAccount, [accountRef]);
-
-  useEffect(() => {
-    const token = localStorage.getItem('sb_token');
-    if (!token) return;
-    axios
-      .get(`${BASE}/api/payment/status`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => setIsPro(res.data.plan === 'pro'))
-      .catch(() => {});
-  }, []);
 
   // Close menus on navigation
   useEffect(() => {
@@ -219,13 +222,34 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
             {user ? (
               <>
                 {isPro ? (
-                  <span className="hidden items-center gap-1 rounded-full border border-accent/40 px-2.5 py-1 text-xs font-semibold text-accent sm:inline-flex">
-                    <Star className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> Pro
+                  // Pro badge: days left on hover or tap; from 5 days left it offers a renewal.
+                  <span className="relative hidden sm:inline-flex" onMouseEnter={() => setBadgeOpen(true)} onMouseLeave={() => setBadgeOpen(false)}>
+                    <button
+                      type="button"
+                      onClick={() => (renewSoon ? openUpgrade('renew') : setBadgeOpen((o) => !o))}
+                      aria-label={daysLeft != null ? `Pro, ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left` : 'Pro'}
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                        renewSoon ? 'border-caution/60 text-caution' : 'border-accent/40 text-accent'
+                      }`}
+                    >
+                      <Star className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+                      {renewSoon ? `Renew · ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left` : 'Pro'}
+                    </button>
+                    {badgeOpen && !renewSoon && daysLeft != null && (
+                      <span role="tooltip" className="absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-control border border-line bg-surface px-3 py-2 text-xs text-ink shadow-lift">
+                        Pro · {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left
+                      </span>
+                    )}
                   </span>
                 ) : (
-                  <Button size="sm" onClick={() => setShowUpgrade(true)} className="hidden sm:inline-flex">
-                    Go Pro
-                  </Button>
+                  <>
+                    <span className="hidden xl:block">
+                      <AllowanceMeter compact />
+                    </span>
+                    <Button size="sm" onClick={() => openUpgrade('header')} className="hidden sm:inline-flex">
+                      Go Pro
+                    </Button>
+                  </>
                 )}
                 <div ref={accountRef} className="relative hidden lg:block">
                   <button
@@ -317,10 +341,22 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
               {user ? (
                 <>
                   {isPro ? (
-                    <p className="text-center text-sm font-semibold text-accent">You are on Pro</p>
+                    <p className={`text-center text-sm font-semibold ${renewSoon ? 'text-caution' : 'text-accent'}`}>
+                      {daysLeft != null ? `Pro · ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left` : 'You are on Pro'}
+                    </p>
                   ) : (
-                    <Button size="lg" className="w-full" onClick={() => setShowUpgrade(true)}>
-                      Go Pro
+                    <>
+                      <div className="flex justify-center pb-1">
+                        <AllowanceMeter compact />
+                      </div>
+                      <Button size="lg" className="w-full" onClick={() => openUpgrade('menu')}>
+                        Go Pro
+                      </Button>
+                    </>
+                  )}
+                  {renewSoon && (
+                    <Button size="lg" className="w-full" onClick={() => openUpgrade('renew')}>
+                      Renew Pro
                     </Button>
                   )}
                   <Button variant="ghost" size="lg" className="w-full" onClick={logout}>
@@ -343,7 +379,17 @@ export default function Navbar({ user, isDarkMode, onToggleTheme }: { user: any;
       )}
 
       <SearchDialog open={search} onClose={closeSearch} />
-      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} onSuccess={() => setIsPro(true)} />}
+      {showUpgrade && (
+        <UpgradeModal
+          context={upgradeFrom === 'renew' ? `Keep Pro going past ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}` : undefined}
+          moment={upgradeFrom}
+          onClose={() => setShowUpgrade(false)}
+          onSuccess={() => {
+            refreshPlan();
+            refreshAllowance();
+          }}
+        />
+      )}
     </>
   );
 }
