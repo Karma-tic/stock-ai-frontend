@@ -1,0 +1,129 @@
+/* "Source ledger" footer: a printed research receipt.
+   The paper keeps one look in both themes (it's an object, like a real receipt);
+   only its shadow follows the theme. */
+.receipt {
+  --paper: #f3f1ea;
+  --paper-ink: #1a1d26;
+  --paper-muted: #5b6072;
+  --paper-dots: #b9bcc6;
+  --paper-link: #2c3bd1;
+  --paper-ok: #178a59;
+  --stamp: #c0303c;
+  position: relative;
+  max-width: 560px;
+  margin-inline: auto;
+  padding: 26px 24px 100px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 4px 4px 0 0;
+  font-family: 'Geist Mono Variable', 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 18px 40px -12px rgb(var(--shadow) / var(--shadow-a)), 0 0 0 1px rgb(var(--line) / .6);
+  transform: rotate(-0.6deg);
+}
+/* Torn bottom edge */
+.receipt::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -11px;
+  height: 12px;
+  background:
+    linear-gradient(-45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x,
+    linear-gradient(45deg, transparent 8px, var(--paper) 0) 0 0 / 16px 12px repeat-x;
+}
+.receipt-title {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+.receipt-sub {
+  margin: 2px 0 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--paper-muted);
+}
+.receipt-rule {
+  margin: 12px 0;
+  border: 0;
+  border-top: 1px dashed #a4a7b3;
+}
+.receipt-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 34px;
+  padding: 5px 0;
+  color: inherit;
+  text-decoration: none;
+}
+.receipt-label { white-space: nowrap; }
+.receipt-dots {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 2px dotted var(--paper-dots);
+  transform: translateY(-4px);
+}
+.receipt-value {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--paper-link);
+}
+.receipt-check { color: var(--paper-ok); }
+a.receipt-row:hover .receipt-label { text-decoration: underline; text-underline-offset: 3px; }
+a.receipt-row:focus-visible { outline: 2px solid var(--paper-link); outline-offset: 2px; border-radius: 4px; }
+.receipt-total { font-weight: 700; }
+.receipt-stamp {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 3px solid var(--stamp);
+  border-radius: 6px;
+  background: rgb(243 241 234 / .6);
+  color: var(--stamp);
+  font-family: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: .04em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-9deg);
+  opacity: .9;
+}
+.receipt-stamp small {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+/* Print animation: lines feed out one by one, then the stamp thunks down. */
+.receipt[data-print="pending"] .receipt-line,
+.receipt[data-print="pending"] .receipt-stamp { opacity: 0; }
+.receipt[data-print="play"] .receipt-line { animation: receipt-feed 450ms cubic-bezier(.16, 1, .3, 1) both; }
+.receipt[data-print="play"] .receipt-stamp { animation: receipt-thunk 450ms cubic-bezier(.2, 1.4, .4, 1) 760ms both; }
+@keyframes receipt-feed {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes receipt-thunk {
+  from { opacity: 0; transform: rotate(-9deg) scale(2.4); }
+  to { opacity: .9; transform: rotate(-9deg) scale(1); }
+}
+
+@media (max-width: 420px) {
+  .receipt { padding: 22px 16px 28px; font-size: 13px; transform: none; }
+  .receipt-stamp { position: static; display: inline-block; margin-top: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt .receipt-line, .receipt .receipt-stamp { animation: none !important; opacity: 1; }
+  .receipt .receipt-stamp { opacity: .9; }
+}
