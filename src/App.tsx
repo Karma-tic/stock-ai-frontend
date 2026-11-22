@@ -2,13 +2,14 @@ import { useState, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { Toaster } from 'sonner';
 import { LazyMotion } from 'motion/react';
 import { captureRef, claimStoredRef } from './lib/referral';
-import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { applyPendingBriefChoice } from './lib/emailOptIn';
 import { trackSignupOnce, trackVisitOnce } from './lib/track';
 import Navbar from './components/Navbar';
+import SiteFooter from './components/SiteFooter';
 import LandingPage from './components/LandingPage';
-import Logo, { LogoMark } from './components/ui/Logo';
+import { LogoMark } from './components/ui/Logo';
 import Skeleton from './components/ui/Skeleton';
 import BottomTabs from './components/app/BottomTabs';
 
@@ -138,72 +139,6 @@ function BootSkeleton() {
 }
 
 
-const FOOTER_LINKS = [
-  { to: '/about', label: 'About' },
-  { to: '/privacy', label: 'Privacy' },
-  { to: '/terms', label: 'Terms' },
-  { to: '/refund', label: 'Refund' },
-  { to: '/disclaimer', label: 'Disclaimer' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/beta', label: 'Join the research beta' },
-];
-const DATA_SOURCES = [
-  { label: 'NSE India', url: 'https://www.nseindia.com' },
-  { label: 'BSE India', url: 'https://www.bseindia.com' },
-  { label: 'Economic Times Markets', url: 'https://economictimes.indiatimes.com/markets' },
-  { label: 'SEBI', url: 'https://www.sebi.gov.in' },
-  { label: 'Moneycontrol', url: 'https://www.moneycontrol.com' },
-];
-
-function Footer() {
-  return (
-    <footer className="border-t border-line bg-canvas py-10 sm:py-12">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
-        <div>
-          <Logo />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
-            Research, not advice. Not SEBI-registered. AI analysis is for education only; invest at your own risk.
-          </p>
-          <a
-            href="https://t.me/byteplaystock"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex min-h-[40px] items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
-          >
-            Follow the daily market wrap on Telegram
-          </a>
-          <p className="mt-2 text-xs text-muted">© 2026 BytePlay Technologies. All rights reserved.</p>
-        </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-          <div>
-            <p className="text-xs font-medium text-muted">Company</p>
-            <ul className="mt-2">
-              {FOOTER_LINKS.map((l) => (
-                <li key={l.to}>
-                  <Link to={l.to} className="inline-flex min-h-[40px] items-center text-sm text-ink/80 hover:text-ink">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-medium text-muted">Data sources</p>
-            <ul className="mt-2">
-              {DATA_SOURCES.map((link) => (
-                <li key={link.label}>
-                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[40px] items-center text-sm text-ink/80 hover:text-ink">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
 // NEW: Global Layout Component
 function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode: boolean; onToggleTheme: () => void }) {
   const location = useLocation();
@@ -303,7 +238,7 @@ function AppLayout({ user, isDarkMode, onToggleTheme }: { user: any; isDarkMode:
       </main>
 
       {/* Footer stays pinned to the bottom (Hidden on Login Page) */}
-      {!isLoginPage && <Footer />}
+      {!isLoginPage && <SiteFooter />}
       {user && !isLoginPage && <BottomTabs />}
     </div>
   );
