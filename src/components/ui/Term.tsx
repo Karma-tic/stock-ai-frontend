@@ -6,6 +6,18 @@ import { Drawer } from 'vaul';
 import { X } from 'lucide-react';
 
 export const GLOSSARY: Record<string, { title: string; text: string }> = {
+  gmp: {
+    title: 'Grey-market premium (GMP)',
+    text: 'The extra price unofficial dealers quote for IPO shares before they list. It is unregulated, can change quickly, and is not a listing price guarantee.',
+  },
+  sme: {
+    title: 'SME IPO',
+    text: 'An issue on the NSE Emerge or BSE SME platform for smaller companies. Lots are large (often over ₹1 lakh) and the shares can be hard to sell after listing.',
+  },
+  subscription: {
+    title: 'Subscription',
+    text: 'How many times the shares on offer have been bid for. 10× means bids for ten times the shares available, so most applicants get fewer shares or none.',
+  },
   pe: {
     title: 'P/E ratio',
     text: 'Price to earnings: the share price divided by one year of profit per share. A P/E of 20 means buyers pay ₹20 for every ₹1 the company earns in a year; compare it with similar companies, not across sectors.',
