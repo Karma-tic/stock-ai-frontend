@@ -18,21 +18,27 @@ export default function TrendingStocks() {
 
   useEffect(() => {
     loadTrending();
+    // The server recomputes every 5 minutes; follow it while the tab is visible.
+    const t = window.setInterval(() => { if (document.visibilityState === 'visible') loadTrending(true); }, 5 * 60 * 1000);
+    return () => window.clearInterval(t);
   }, []);
 
-  const loadTrending = async () => {
-    setLoading(true);
+  const loadTrending = async (quiet = false) => {
+    if (!quiet) setLoading(true);
     setLoadError(false);
     try {
       const res = await axios.get(`${BASE}/api/market/trending`);
       setData(res.data);
     } catch (e) {
       console.error(e);
-      setLoadError(true);
+      if (!quiet) setLoadError(true);
     }
     setLoading(false);
   };
 
+  const asOf = data?.as_of
+    ? new Date(data.as_of).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', day: data?.market_open ? undefined : 'numeric', month: data?.market_open ? undefined : 'short' })
+    : null;
   const stocks: any[] = side === 'bought' ? data?.most_bought || [] : data?.most_sold || [];
 
   return (
@@ -40,7 +46,10 @@ export default function TrendingStocks() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-ink">Today's biggest movers</h2>
-          <p className="mt-0.5 text-xs text-muted">Largest moves across 150+ NSE stocks, refreshed every 30 minutes. What happened, not a forecast.</p>
+          <p className="mt-0.5 text-xs text-muted">
+            {data?.scope ? `${data.scope}` : 'NSE stocks'}
+            {asOf ? `, ${data?.market_open ? 'as of' : 'at the last close,'} ${asOf} IST` : ''}. Stocks under ₹10 or with less than ₹1 crore traded are left out. What happened, not a forecast.
+          </p>
         </div>
         <Segmented<Side>
           label="Movers"
@@ -60,7 +69,7 @@ export default function TrendingStocks() {
           <div className="py-10 text-center">
             <p className="text-base font-semibold text-ink">{loadError ? 'Movers could not be loaded' : 'No movers yet today'}</p>
             <p className="mt-1 text-sm text-muted">{loadError ? 'Check your connection and try again.' : 'The list fills in once the market opens at 9:15 am IST.'}</p>
-            <Button variant="ghost" className="mt-4" onClick={loadTrending}>
+            <Button variant="ghost" className="mt-4" onClick={() => loadTrending()}>
               Retry
             </Button>
           </div>
