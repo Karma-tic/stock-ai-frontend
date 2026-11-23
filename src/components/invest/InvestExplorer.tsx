@@ -2,7 +2,7 @@
 // Every way to invest from India: typical returns, risks, tax, live prices, current rates and global routes.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Compass, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Compass, ShieldCheck } from 'lucide-react';
 import SEO from '../SEO';
 import { getPortfolio } from '../../lib/api';
 import {
@@ -11,6 +11,8 @@ import {
 import { InvestOption, LivePayload, RatesPayload } from '../../data/investCatalog';
 import ExploreTab, { DEFAULT_FILTERS, ExploreFilters } from './ExploreTab';
 import OptionDrawer from './OptionDrawer';
+import GoalsTab from './GoalsTab';
+import { Goal } from './goals';
 import RiskProfileTab from './RiskProfileTab';
 import CompareTab from './CompareTab';
 import GrowthTab, { Series } from './GrowthTab';
@@ -18,15 +20,16 @@ import RatesTab from './RatesTab';
 import GlobalTab from './GlobalTab';
 import { fmtPrice, midReturn, safeStorage, saveStorage, scoreProfile } from './investShared';
 
+// Four tabs in the bar; the tools (quiz, projector, abroad) open from links and keep their URLs.
 const TABS = [
-  { id: 'explore', label: 'Explore options' },
-  { id: 'profile', label: 'My risk profile' },
+  { id: 'goals', label: 'Start with a goal' },
+  { id: 'all', label: 'All options' },
   { id: 'compare', label: 'Compare' },
-  { id: 'growth', label: 'Growth projector' },
-  { id: 'rates', label: 'Rates & offers' },
-  { id: 'global', label: 'Invest globally' },
+  { id: 'rates', label: 'Today\'s rates' },
 ] as const;
-type TabId = (typeof TABS)[number]['id'];
+const TOOLS = { profile: 'Risk profile', growth: 'Growth projector', global: 'Investing abroad' } as const;
+type TabId = (typeof TABS)[number]['id'] | keyof typeof TOOLS;
+const ALL_TABS: string[] = [...TABS.map(t => t.id), ...Object.keys(TOOLS)];
 
 const LS_COMPARE = 'invest_compare';
 const LS_ANSWERS = 'invest_profile_answers';
@@ -50,12 +53,15 @@ const pct = (v: number) => (
 
 export default function InvestExplorer({ user }: { user: any }) {
   const [params, setParams] = useSearchParams();
-  const tabParam = params.get('tab') as TabId | null;
-  const tab: TabId = TABS.some(t => t.id === tabParam) ? (tabParam as TabId) : 'explore';
+  const rawTab = params.get('tab');
+  const tabParam = rawTab === 'explore' ? 'all' : rawTab; // old links
+  const tab: TabId = tabParam && ALL_TABS.includes(tabParam) ? (tabParam as TabId) : 'goals';
+  const goalId = params.get('goal');
   const setTab = useCallback((t: TabId) => {
-    setParams(t === 'explore' ? {} : { tab: t }, { replace: false });
+    setParams(t === 'goals' ? (goalId ? { goal: goalId } : {}) : { tab: t }, { replace: false });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [setParams]);
+  }, [setParams, goalId]);
+  const setGoal = useCallback((g: string | null) => setParams(g ? { goal: g } : {}, { replace: true }), [setParams]);
 
   // Data: render bundled copy immediately, then replace with server data.
   const [catalog, setCatalog] = useState(bundledCatalog);
@@ -77,7 +83,7 @@ export default function InvestExplorer({ user }: { user: any }) {
   }, []);
 
   // Compare list
-  const [compare, setCompare] = useState<string[]>(() => safeStorage(LS_COMPARE, ['ppf', 'sfbfd', 'index']));
+  const [compare, setCompare] = useState<string[]>(() => safeStorage<string[]>(LS_COMPARE, []));
   const toggleCompare = useCallback((id: string) => {
     setCompare(prev => {
       const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id].slice(-4);
@@ -122,6 +128,10 @@ export default function InvestExplorer({ user }: { user: any }) {
     setOpen(null);
     setTab('growth');
   };
+  const seeAll = (g: Goal | null) => {
+    setFilters({ ...DEFAULT_FILTERS, ...(g?.filters || {}) });
+    setTab('all');
+  };
 
   // Stock AI tie-in: what the user's tracked portfolio looks like.
   const [holdings, setHoldings] = useState<{ value: number; count: number } | null>(null);
@@ -141,10 +151,8 @@ export default function InvestExplorer({ user }: { user: any }) {
 
   const repo = rates.rates.policy?.find(r => r.key === 'repo');
   const ppf = rates.rates.small_savings?.find(r => r.key === 'ppf');
-  const scss = rates.rates.small_savings?.find(r => r.key === 'scss');
   const topFd = rates.rates.bank_fd?.[0];
   const nifty = live?.prices.NIFTYBEES;
-  const gold = live?.prices.GOLDBEES;
 
   return (
     <div className="min-h-[100dvh] bg-canvas">
@@ -153,32 +161,32 @@ export default function InvestExplorer({ user }: { user: any }) {
         description="Compare FDs, PPF, SCSS, mutual funds, gold, REITs, bonds, NPS and global investing from India by return, risk, lock-in and tax, with current rates."
         canonicalPath="/invest"
       />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 space-y-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 space-y-6">
         {/* Header */}
-        <header className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-2xl space-y-2">
-            <p className="flex items-center gap-2 text-sm font-semibold text-accent"><Compass className="h-4 w-4" /> Invest Explorer</p>
-            <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink sm:text-4xl text-balance">Every way to invest from India, side by side</h1>
-            <p className="text-muted">What each option typically returns, what can go wrong, how it is taxed, and today's best rates. Beyond stocks: FDs, government schemes, bonds, gold, REITs, retirement and global markets.</p>
-          </div>
+        <header className="max-w-2xl space-y-2">
+          <p className="flex items-center gap-2 text-sm font-semibold text-accent"><Compass className="h-4 w-4" aria-hidden="true" /> Invest Explorer</p>
+          <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink text-balance sm:text-[2.5rem] sm:leading-[1.1]">Where should your money go?</h1>
+          <p className="text-muted">Pick what the money is for and see three options worth a look, with typical returns, risks and tax. Or browse all {catalog.options.length}, from FDs to global funds.</p>
         </header>
 
-        {/* Pulse strip */}
-        <section aria-label="Key rates and live prices" className="rounded-card border border-line bg-surface grid grid-cols-2 divide-line sm:grid-cols-3 lg:grid-cols-6 lg:divide-x">
-          <PulseItem label="RBI repo rate" value={repo ? `${repo.rate.toFixed(2)}%` : '—'} />
-          <PulseItem label="PPF" value={ppf ? `${ppf.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">tax-free</span>} />
-          <PulseItem label="Senior Citizen Savings" value={scss ? `${scss.rate.toFixed(2)}%` : '—'} />
-          <PulseItem label="Top bank FD" value={topFd ? `${topFd.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">{topFd?.label.replace(' Small Finance Bank', ' SFB')}</span>} />
-          <PulseItem live label="Nifty 50 ETF" value={nifty ? fmtPrice(nifty.price) : '—'} sub={nifty ? pct(nifty.change_pct) : <span className="text-muted">loading</span>} />
-          <PulseItem live label="Gold ETF" value={gold ? fmtPrice(gold.price) : '—'} sub={gold ? pct(gold.change_pct) : <span className="text-muted">loading</span>} />
+        {/* Four numbers people check most; the full list lives under Today's rates */}
+        <section aria-label="Key rates and live prices">
+          <div className="grid grid-cols-2 divide-line overflow-hidden rounded-card border border-line bg-surface sm:grid-cols-4 sm:divide-x">
+            <PulseItem label="RBI repo rate" value={repo ? `${repo.rate.toFixed(2)}%` : '—'} />
+            <PulseItem label="PPF" value={ppf ? `${ppf.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">tax-free</span>} />
+            <PulseItem label="Top bank FD" value={topFd ? `${topFd.rate.toFixed(2)}%` : '—'} sub={<span className="text-muted">{topFd?.label.replace(' Small Finance Bank', ' SFB')}</span>} />
+            <PulseItem live label="Nifty 50 ETF" value={nifty ? fmtPrice(nifty.price) : '—'} sub={nifty ? pct(nifty.change_pct) : <span className="text-muted">loading</span>} />
+          </div>
+          {rates.status.small_savings?.stale && (
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-caution" aria-hidden="true" />{rates.status.small_savings.message}
+            </p>
+          )}
         </section>
-        {rates.status.small_savings?.stale && (
-          <p className="rounded-control border border-caution/30 bg-caution/10 px-4 py-2.5 text-sm text-caution">{rates.status.small_savings.message}</p>
-        )}
 
         {/* Portfolio tie-in */}
         {holdings && (
-          <section className="rounded-card border border-accent/30 bg-accent/[0.06] flex flex-wrap items-center justify-between gap-4 p-5">
+          <section className="rounded-card border border-line bg-surface flex flex-wrap items-center justify-between gap-4 p-5">
             <div className="flex items-start gap-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
               <div>
@@ -186,8 +194,8 @@ export default function InvestExplorer({ user }: { user: any }) {
                 <p className="text-sm text-muted">Explore the safer options people pair with stocks to cushion a market fall.</p>
               </div>
             </div>
-            <button type="button" onClick={() => { setFilters({ ...DEFAULT_FILTERS, needs: ['safe'] }); setTab('explore'); }}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-control bg-cobalt px-4 text-sm font-semibold text-white hover:brightness-110">
+            <button type="button" onClick={() => { setFilters({ ...DEFAULT_FILTERS, needs: ['safe'] }); setTab('all'); }}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-control border border-line bg-surface px-4 text-sm font-semibold text-ink hover:border-ink/30">
               See low-risk options
             </button>
           </section>
@@ -197,22 +205,35 @@ export default function InvestExplorer({ user }: { user: any }) {
         <nav className="scrollbar-hide -mx-4 flex gap-1 overflow-x-auto border-b border-line px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="Invest Explorer sections">
           {TABS.map(t => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
-              className={`whitespace-nowrap border-b-2 px-3 py-3 sm:px-4 text-sm font-semibold transition ${tab === t.id ? 'border-accent text-ink' : 'border-transparent text-muted hover:text-ink'}`}>
-              {t.label}{t.id === 'compare' && compare.length ? <span className="ml-1 num text-accent">({compare.length})</span> : null}
+              className={`whitespace-nowrap border-b-2 px-3 py-3 text-sm font-semibold transition sm:px-4 ${tab === t.id ? 'border-accent text-ink' : 'border-transparent text-muted hover:text-ink'}`}>
+              {t.id === 'all' ? `All ${catalog.options.length} options` : t.label}
+              {t.id === 'compare' && compare.length ? <span className="ml-1 num text-accent">({compare.length})</span> : null}
             </button>
           ))}
         </nav>
 
+        {tab in TOOLS && (
+          <button type="button" onClick={() => setTab('goals')} className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline underline-offset-2">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to goals
+            <span className="font-normal text-muted">/ {TOOLS[tab as keyof typeof TOOLS]}</span>
+          </button>
+        )}
+
         <div role="tabpanel">
-          {tab === 'explore' && (
+          {tab === 'goals' && (
+            <GoalsTab goalId={goalId} onGoal={setGoal} options={catalog.options} categories={catalog.categories} live={live} compare={compare}
+              profile={profile} onToggleCompare={toggleCompare} onOpen={setOpen} onSeeAll={seeAll}
+              onQuiz={() => setTab('profile')} onGrowth={() => setTab('growth')} onGlobal={() => setTab('global')} />
+          )}
+          {tab === 'all' && (
             <ExploreTab options={catalog.options} categories={catalog.categories} profile={profile} live={live} compare={compare}
-              filters={filters} setFilters={setFilters} onToggleCompare={toggleCompare} onOpen={setOpen} onTakeQuiz={() => setTab('profile')} />
+              filters={filters} setFilters={setFilters} onToggleCompare={toggleCompare} onOpen={setOpen} />
           )}
           {tab === 'profile' && (
             <RiskProfileTab answers={answers} profile={profile} options={catalog.options} signedIn={!!user} saving={saving} onAnswer={onAnswer}
-              onSeeMatches={() => { if (profile) setFilters({ ...DEFAULT_FILTERS, maxRisk: profile.maxRisk }); setTab('explore'); }} />
+              onSeeMatches={() => { if (profile) setFilters({ ...DEFAULT_FILTERS, maxRisk: profile.maxRisk, sort: 'fit' }); setTab('all'); }} />
           )}
-          {tab === 'compare' && <CompareTab items={compareItems} onRemove={toggleCompare} onBrowse={() => setTab('explore')} />}
+          {tab === 'compare' && <CompareTab items={compareItems} onRemove={toggleCompare} onBrowse={() => setTab('goals')} />}
           {tab === 'growth' && <GrowthTab options={catalog.options} series={series} setSeries={setSeries} defaultRate={midReturn} />}
           {tab === 'rates' && <RatesTab data={rates} />}
           {tab === 'global' && <GlobalTab live={live} />}
@@ -225,7 +246,7 @@ export default function InvestExplorer({ user }: { user: any }) {
       </div>
 
       {/* Compare tray: the options you picked collect here while you browse */}
-      {tab === 'explore' && compareItems.length > 0 && (
+      {(tab === 'goals' || tab === 'all') && compareItems.length > 0 && (
         <div className={`fixed inset-x-0 z-40 border-t border-line bg-canvas/90 backdrop-blur-[16px] ${user ? 'bottom-[calc(57px+env(safe-area-inset-bottom))] lg:bottom-0' : 'bottom-0 pb-[env(safe-area-inset-bottom)]'}`}>
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
             <p className="hidden shrink-0 text-xs font-medium text-muted sm:block">Comparing</p>
