@@ -208,3 +208,22 @@
 /* Long-form copy under the calculators */
 .calc-article h2 { margin-top: 2.25rem; }
 .calc-article h2:first-child { margin-top: 0; }
+
+/* Tools hub previews: draw, grow and rise once on load; reduced motion shows the end state */
+.tool-morph { transition: d 520ms cubic-bezier(.22, 1, .36, 1); }
+.tool-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tool-draw 1.1s cubic-bezier(.22, 1, .36, 1) 200ms forwards; }
+.tool-grow { transform: scaleY(0); animation: tool-grow 700ms cubic-bezier(.22, 1, .36, 1) calc(200ms + var(--d, 0ms)) forwards; }
+.tool-bar { animation: tool-bar 700ms cubic-bezier(.22, 1, .36, 1) calc(200ms + var(--d, 0ms)) both; transform-origin: left; }
+.tool-seg { opacity: 0; animation: tool-fade 500ms ease-out calc(250ms + var(--d, 0ms)) forwards; }
+.tool-rise { opacity: 0; animation: tool-rise 420ms cubic-bezier(.22, 1, .36, 1) var(--d, 0ms) forwards; }
+@keyframes tool-draw { to { stroke-dashoffset: 0; } }
+@keyframes tool-grow { to { transform: scaleY(1); } }
+@keyframes tool-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes tool-fade { to { opacity: 1; } }
+@keyframes tool-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .tool-morph { transition: none; }
+  .tool-draw, .tool-grow, .tool-bar, .tool-seg, .tool-rise { animation: none; opacity: 1; transform: none; stroke-dashoffset: 0; }
+  .tool-orbit { display: none; }
+  .tool-card, .tool-card * { transition-duration: 0ms !important; }
+}
